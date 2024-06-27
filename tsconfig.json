@@ -5,6 +5,11 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    "baseUrl": ".", // root of your "paths" below. Required if "paths" is defined
+    "rootDir": ".",
+    "paths": {
+      "src/*": ["./src/*"] // enables us to use @components/MyComponent
+    },
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -20,5 +25,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["**/*"],
+  "exclude": ["node_modules", "build"],
 }
