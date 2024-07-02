@@ -1,5 +1,8 @@
 import { expect, test } from 'vitest';
-import { asyncRequestListDeclarationDocuments, type ProcessResponse } from 'src/main';
+import {
+  asyncRequestListDeclarationDocuments,
+  type ProcessResponse,
+} from 'src/main';
 
 test('asyncRequestListDeclarationDocuments', async () => {
   const certificateUrl = import.meta.env.VITE_CERTIFICATE_URL;

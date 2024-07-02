@@ -3,14 +3,14 @@ import soap from 'soap';
 export type ProcessResponse = {
   IUT: string;
   esito: EsitoType;
-  data?: string //base64 encoded string
+  data?: string; //base64 encoded string
   dataRegistrazione: string; //Date in string format
-}
+};
 
 export type EsitoType = {
   codice: string;
   messaggio: string[];
-}
+};
 
 export async function asyncRequestListDeclarationDocuments(params: {
   data: {
@@ -107,7 +107,9 @@ async function _asyncBasePonimportMethod(params: {
       new soap.ClientSSLSecurityPFX(certificate, params.security.passphrase),
     );
 
-    const resultProcess = await client.processAsync(xmlParams) as ProcessResponse[];
+    const resultProcess = (await client.processAsync(
+      xmlParams,
+    )) as ProcessResponse[];
     return {
       type: 'success',
       message: resultProcess,
