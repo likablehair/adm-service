@@ -27,6 +27,7 @@
     "typescript": "^5.2.2",
     "typescript-eslint": "^7.14.1",
     "vite": "^5.3.1",
+    "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^1.6.0"
   },
   "engines": {
@@ -40,5 +41,8 @@
       "eslint --fix"
     ],
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "dependencies": {
+    "soap": "^1.0.4"
   }
 }
