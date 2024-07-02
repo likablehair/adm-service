@@ -7,25 +7,23 @@ export async function asyncRequestListDeclarationDocuments(params: {
   data: {
     xml: string;
     dichiarante: string;
-  },
+  };
   security: {
     certificate: Blob | string;
     passphrase: string;
-  }
+  };
 }): Promise<{
   type: string;
   message: unknown;
 }> {
-  
   const url = './assets/ponimport_reale.wsdl';
   const xmlParams = {
     serviceId: 'richiestaListaDocumentiDichiarazione',
-    data: params.data
-  }
+    data: params.data,
+  };
 
   try {
-
-    let certificate: Buffer | string | undefined = undefined
+    let certificate: Buffer | string | undefined = undefined;
 
     if (params.security.certificate instanceof Blob) {
       const arrayBuffer = await params.security.certificate.arrayBuffer();
@@ -36,23 +34,19 @@ export async function asyncRequestListDeclarationDocuments(params: {
 
     const client = await soap.createClientAsync(url);
     client.setSecurity(
-      new soap.ClientSSLSecurityPFX(
-        certificate,
-        params.security.passphrase
-      )
+      new soap.ClientSSLSecurityPFX(certificate, params.security.passphrase),
     );
 
     const resultProcess = await client.processAsync(xmlParams);
 
     return {
-      'type': 'success',
-      'message': resultProcess
+      type: 'success',
+      message: resultProcess,
     };
   } catch (err) {
     return {
-      'type': 'error',
-      'message': err
+      type: 'error',
+      message: err,
     };
   }
-  
 }
