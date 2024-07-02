@@ -1,9 +1,5 @@
 import { expect, test } from 'vitest';
-import { add, asyncRequestListDeclarationDocuments } from 'src/main';
-
-test('add', () => {
-  expect(add(2, 2)).toBe(4);
-});
+import { asyncRequestListDeclarationDocuments } from 'src/main';
 
 test('asyncRequestListDeclarationDocuments', async () => {
   const certificateUrl = import.meta.env.VITE_CERTIFICATE_URL;
@@ -32,4 +28,5 @@ test('asyncRequestListDeclarationDocuments', async () => {
 
   const result = await asyncRequestListDeclarationDocuments(xmlParams);
   console.log('result async', result);
+  expect(result.type).toBe('success');
 });
