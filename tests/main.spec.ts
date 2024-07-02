@@ -6,13 +6,13 @@ test('add', () => {
 });
 
 test('asyncRequestListDeclarationDocuments', async () => {
-  const certificateUrl = import.meta.env.VITE_CERTIFICATE_URL
+  const certificateUrl = import.meta.env.VITE_CERTIFICATE_URL;
   if (!certificateUrl) {
     console.error('ERROR: CERTIFICATE_URL not found');
     return;
   }
 
-  const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_PASSPHRASE
+  const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_PASSPHRASE;
   if (!certificatePassphrase) {
     console.error('ERROR: CERTIFICATE_PASSPHRASE not found');
     return;
