@@ -1,7 +1,8 @@
 import { expect, test } from 'vitest';
-import {
-  asyncRequestListDeclarationDocuments,
-  type ProcessResponse,
+
+import { 
+  RichiestaListaDocumentiDichiarazioniRequest,
+  ProcessResponse,
 } from 'src/main';
 
 test('asyncRequestListDeclarationDocuments', async () => {
@@ -17,7 +18,7 @@ test('asyncRequestListDeclarationDocuments', async () => {
     return;
   }
 
-  const xmlParams: Parameters<typeof asyncRequestListDeclarationDocuments>[0] =
+  const xmlParams =
     {
       data: {
         dichiarante: '01824540346',
@@ -29,7 +30,8 @@ test('asyncRequestListDeclarationDocuments', async () => {
       },
     };
 
-  const result = await asyncRequestListDeclarationDocuments(xmlParams);
+  const request = new RichiestaListaDocumentiDichiarazioniRequest();
+  const result = await request.processRequest(xmlParams);
   const esito = (result.message[0] as ProcessResponse).esito;
   console.log('result async', result);
   console.log('esito', esito);
