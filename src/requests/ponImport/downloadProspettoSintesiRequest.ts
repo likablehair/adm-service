@@ -1,6 +1,15 @@
 import BaseRequest, { ProcessResponse } from '../baseRequest';
 
-export default class DownloadProspettoSintesi extends BaseRequest {
+type DownloadProspetto = {
+  datiDichiarazione: {
+    mrn: string;
+  };
+  richiestaProspetto: {
+    IUT: string;
+  }
+}
+
+export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspetto> {
   constructor() {
     //super('https://www.ponimpresa.gov.it/wsdl/ponimport.wsdl');
     //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
@@ -17,11 +26,36 @@ export default class DownloadProspettoSintesi extends BaseRequest {
       passphrase: string;
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
-    return await this.asyncBaseProcessRequest({
-      data: params.data,
-      security: params.security,
-      serviceId: 'downloadProspettoSintesi',
-    });
+
+    try {
+      return await this.asyncBaseProcessRequest({
+        data: params.data,
+        security: params.security,
+        serviceId: 'downloadProspettoSintesi',
+      });
+    } catch (e) {
+      return { type: 'error', message: [] };
+    }
+  }
+
+  
+  protected createXMLForRequest(params: DownloadProspetto): string {
+    return `
+      <DownloadProspetto  
+        xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 
+        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it schema.xsd" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      >
+        <input xmlns="">
+          <datiDichiarazione>
+            <mrn>${params.datiDichiarazione.mrn}</mrn>
+          </datiDichiarazione>
+          <richiestaProspetto>
+            <IUT>${params.richiestaProspetto.IUT}</IUT>
+          </richiestaProspetto>
+        </input>
+      </DownloadProspetto>
+    `;
   }
 
   protected createSoapEnvelope(params: {

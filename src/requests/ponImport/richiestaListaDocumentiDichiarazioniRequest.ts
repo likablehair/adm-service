@@ -1,6 +1,10 @@
 import BaseRequest, { ProcessResponse } from '../baseRequest';
 
-export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseRequest {
+type RichiestaDocumentiDichiarazione = {
+  mrn: string;
+  utenteInvio: string;
+}
+export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseRequest<RichiestaDocumentiDichiarazione> {
   constructor() {
     //super('https://www.ponimpresa.gov.it/wsdl/ponimport.wsdl');
     //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
@@ -24,9 +28,25 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
         serviceId: 'richiestaListaDocumentiDichiarazione',
       });
     } catch (e) {
-      console.error('error', e);
       return { type: 'error', message: [] };
     }
+  }
+
+  protected createXMLForRequest(params: RichiestaDocumentiDichiarazione): string {
+    return `
+      <RichiestaDocumentiDichiarazione 
+        xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 
+        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it schema.xsd" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      >
+        <input xmlns="">
+          <richiesta>
+            <mrn>${params.mrn}</mrn>
+            <utenteInvio>${params.utenteInvio}</utenteInvio>
+          </richiesta>
+        </input>
+      </RichiestaDocumentiDichiarazione>
+    `;
   }
 
   protected createSoapEnvelope(params: {

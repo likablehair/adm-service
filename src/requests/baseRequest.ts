@@ -14,7 +14,7 @@ export type EsitoType = {
   messaggio: string[];
 };
 
-export default abstract class BaseRequest {
+export default abstract class BaseRequest<T> {
   private url: string;
 
   constructor(url: string) {
@@ -43,6 +43,8 @@ export default abstract class BaseRequest {
     serviceId: string;
   }): string;
 
+  protected abstract createXMLForRequest(params: T): string;
+
   protected async asyncBaseProcessRequest(params: {
     data: {
       xml: string;
@@ -62,9 +64,6 @@ export default abstract class BaseRequest {
       data: params.data,
     };
 
-    /*     const soapEnvelope = this.createSoapEnvelope(xmlParams);
-    console.log('soapEnvelope', soapEnvelope) */
-
     try {
       let certificate: Buffer | string | undefined = undefined;
 
@@ -75,13 +74,15 @@ export default abstract class BaseRequest {
         certificate = params.security.certificate;
       }
 
-      /*       const configuredHttpsAgent = new https.Agent({
-        pfx: certificate,
+/*       const buffer = Buffer.from(certificate);
+      const soapEnvelope = this.createSoapEnvelope(xmlParams);
+      const configuredHttpsAgent = new https.Agent({
+        pfx: buffer,
         passphrase: params.security.passphrase,
         host: 'interop.adm.gov.it',
         keepAlive: true,
       });
-
+      
       const config = {
         method: 'post',
         url: this.url,
