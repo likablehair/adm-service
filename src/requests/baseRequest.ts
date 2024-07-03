@@ -62,12 +62,12 @@ export default abstract class BaseRequest {
       data: params.data,
     };
 
-/*     const soapEnvelope = this.createSoapEnvelope(xmlParams);
+    /*     const soapEnvelope = this.createSoapEnvelope(xmlParams);
     console.log('soapEnvelope', soapEnvelope) */
 
     try {
       let certificate: Buffer | string | undefined = undefined;
-      
+
       if (params.security.certificate instanceof Blob) {
         const arrayBuffer = await params.security.certificate.arrayBuffer();
         certificate = Buffer.from(arrayBuffer);
@@ -75,7 +75,7 @@ export default abstract class BaseRequest {
         certificate = params.security.certificate;
       }
 
-/*       const configuredHttpsAgent = new https.Agent({
+      /*       const configuredHttpsAgent = new https.Agent({
         pfx: certificate,
         passphrase: params.security.passphrase,
         host: 'interop.adm.gov.it',
@@ -116,7 +116,7 @@ export default abstract class BaseRequest {
       };
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.error(err)
+        console.error(err);
         throw new Error(err.message);
       } else {
         throw new Error('Unknown error');

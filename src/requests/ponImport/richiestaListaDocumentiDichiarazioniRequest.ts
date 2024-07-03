@@ -4,7 +4,7 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
   constructor() {
     //super('https://www.ponimpresa.gov.it/wsdl/ponimport.wsdl');
     //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
-    super('./assets/ponimport_reale.wsdl')
+    super('./assets/ponimport_reale.wsdl');
   }
 
   async processRequest(params: {
@@ -23,14 +23,16 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
         security: params.security,
         serviceId: 'richiestaListaDocumentiDichiarazione',
       });
-    } catch(e) {
-      console.error('error', e)
-      return { type: 'error', message: [] }
+    } catch (e) {
+      console.error('error', e);
+      return { type: 'error', message: [] };
     }
-
   }
 
-  protected createSoapEnvelope(params: { data: { xml: string; dichiarante: string; }; serviceId: string; }): string {
+  protected createSoapEnvelope(params: {
+    data: { xml: string; dichiarante: string };
+    serviceId: string;
+  }): string {
     return `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
         <soapenv:Header/>
