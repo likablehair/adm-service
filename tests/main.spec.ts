@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { 
+import {
   RichiestaListaDocumentiDichiarazioniRequest,
   ProcessResponse,
 } from 'src/main';
@@ -18,17 +18,16 @@ test('asyncRequestListDeclarationDocuments', async () => {
     return;
   }
 
-  const xmlParams =
-    {
-      data: {
-        dichiarante: '01824540346',
-        xml: 'test',
-      },
-      security: {
-        certificate: certificateUrl,
-        passphrase: certificatePassphrase,
-      },
-    };
+  const xmlParams = {
+    data: {
+      dichiarante: '01824540346',
+      xml: 'test',
+    },
+    security: {
+      certificate: certificateUrl,
+      passphrase: certificatePassphrase,
+    },
+  };
 
   const request = new RichiestaListaDocumentiDichiarazioniRequest();
   const result = await request.processRequest(xmlParams);

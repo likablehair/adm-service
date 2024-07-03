@@ -14,8 +14,8 @@ export type EsitoType = {
 
 export default abstract class BaseRequest {
   private url: string;
-  
-  constructor (url: string) {
+
+  constructor(url: string) {
     this.url = url;
   }
 
@@ -33,7 +33,7 @@ export default abstract class BaseRequest {
     message: ProcessResponse[];
   }>;
 
-  protected async asyncBaseProcessRequest (params: {
+  protected async asyncBaseProcessRequest(params: {
     data: {
       xml: string;
       dichiarante: string;
@@ -51,22 +51,22 @@ export default abstract class BaseRequest {
       serviceId: params.serviceId,
       data: params.data,
     };
-  
+
     try {
       let certificate: Buffer | string | undefined = undefined;
-  
+
       if (params.security.certificate instanceof Blob) {
         const arrayBuffer = await params.security.certificate.arrayBuffer();
         certificate = Buffer.from(arrayBuffer);
       } else {
         certificate = params.security.certificate;
       }
-  
+
       const client = await soap.createClientAsync(this.url);
       client.setSecurity(
         new soap.ClientSSLSecurityPFX(certificate, params.security.passphrase),
       );
-  
+
       const resultProcess = (await client.processAsync(
         xmlParams,
       )) as ProcessResponse[];
