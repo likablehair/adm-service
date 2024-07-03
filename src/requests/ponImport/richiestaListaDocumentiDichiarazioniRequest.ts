@@ -6,14 +6,13 @@ type RichiestaDocumentiDichiarazione = {
 };
 export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseRequest<RichiestaDocumentiDichiarazione> {
   constructor() {
-    //super('https://www.ponimpresa.gov.it/wsdl/ponimport.wsdl');
     //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
     super('./assets/ponimport_reale.wsdl');
   }
 
   async processRequest(params: {
     data: {
-      xml: string;
+      xmlParams: RichiestaDocumentiDichiarazione;
       dichiarante: string;
     };
     security: {
@@ -22,8 +21,14 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
     try {
+
+      const generatedXml = this.createXMLForRequest(params.data.xmlParams);
+
       return await this.asyncBaseProcessRequest({
-        data: params.data,
+        data: {
+          xml: generatedXml,
+          dichiarante: params.data.dichiarante,
+        },
         security: params.security,
         serviceId: 'richiestaListaDocumentiDichiarazione',
       });

@@ -1,4 +1,5 @@
 import soap from 'soap';
+import XAdES from 'src/XAdES';
 /* import axios from 'axios';
 import https from 'https'; */
 
@@ -23,7 +24,7 @@ export default abstract class BaseRequest<T> {
 
   abstract processRequest(params: {
     data: {
-      xml: string;
+      xmlParams: T;
       dichiarante: string;
     };
     security: {
@@ -59,9 +60,37 @@ export default abstract class BaseRequest<T> {
     type: string;
     message: ProcessResponse[];
   }> {
+
+    const XAdESClass = new XAdES();
+    const signedKeyPair = await XAdESClass.generateKeyPair();
+    
+    if (!signedKeyPair) {
+      throw new Error('Error in generateKeyPair');
+    }
+    
+    const signedXML = await XAdESClass.signXML({
+      xmlString: params.data.xml,
+      keys: signedKeyPair.keys,
+      algorithm: {
+        name: signedKeyPair.algorithm.name,
+        hash: signedKeyPair.algorithm.hash.name,
+      },
+    });
+
+    console.log('signedXML', signedXML);
+
+    if (!signedXML) {
+      throw new Error('Error in signXML');
+    }
+
+    const signedXMLBase64 = btoa(signedXML);
+
     const xmlParams = {
       serviceId: params.serviceId,
-      data: params.data,
+      data: {
+        xml: signedXMLBase64,
+        dichiarante: params.data.dichiarante,
+      }
     };
 
     try {
@@ -120,6 +149,7 @@ export default abstract class BaseRequest<T> {
         console.error(err);
         throw new Error(err.message);
       } else {
+        console.error(err);
         throw new Error('Unknown error');
       }
     }

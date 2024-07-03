@@ -16,7 +16,7 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
 
   async processRequest(params: {
     data: {
-      xml: string;
+      xmlParams: Enquiry;
       dichiarante: string;
     };
     security: {
@@ -25,8 +25,14 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
     try {
+
+      const generatedXml = this.createXMLForRequest(params.data.xmlParams);
+
       return await this.asyncBaseProcessRequest({
-        data: params.data,
+        data: {
+          xml: generatedXml,
+          dichiarante: params.data.dichiarante,
+        },
         security: params.security,
         serviceId: 'listaDestautTIN',
       });

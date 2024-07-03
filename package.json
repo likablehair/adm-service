@@ -43,7 +43,10 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@peculiar/webcrypto": "^1.5.0",
     "axios": "^1.7.2",
-    "soap": "^1.0.4"
+    "node-fetch": "^3.3.2",
+    "soap": "^1.0.4",
+    "xadesjs": "^2.4.4"
   }
 }
