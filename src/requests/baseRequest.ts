@@ -1,4 +1,6 @@
 import soap from 'soap';
+/* import axios from 'axios';
+import https from 'https'; */
 
 export type ProcessResponse = {
   IUT: string;
@@ -33,6 +35,14 @@ export default abstract class BaseRequest {
     message: ProcessResponse[];
   }>;
 
+  protected abstract createSoapEnvelope(params: {
+    data: {
+      xml: string;
+      dichiarante: string;
+    };
+    serviceId: string;
+  }): string;
+
   protected async asyncBaseProcessRequest(params: {
     data: {
       xml: string;
@@ -52,15 +62,45 @@ export default abstract class BaseRequest {
       data: params.data,
     };
 
+/*     const soapEnvelope = this.createSoapEnvelope(xmlParams);
+    console.log('soapEnvelope', soapEnvelope) */
+
     try {
       let certificate: Buffer | string | undefined = undefined;
-
+      
       if (params.security.certificate instanceof Blob) {
         const arrayBuffer = await params.security.certificate.arrayBuffer();
         certificate = Buffer.from(arrayBuffer);
       } else {
         certificate = params.security.certificate;
       }
+
+/*       const configuredHttpsAgent = new https.Agent({
+        pfx: certificate,
+        passphrase: params.security.passphrase,
+        host: 'interop.adm.gov.it',
+        keepAlive: true,
+      });
+
+      const config = {
+        method: 'post',
+        url: this.url,
+        headers: {
+          'Content-Type': 'text/xml;charset=UTF-8',
+          'SOAPAction': 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
+        },
+        httpsAgent: configuredHttpsAgent,
+        data: soapEnvelope,
+      }
+
+      const response = await axios(config);
+
+      console.log('response', response.data)
+
+      return {
+        type: 'success',
+        message: [],
+      }; */
 
       const client = await soap.createClientAsync(this.url);
       client.setSecurity(
@@ -76,6 +116,7 @@ export default abstract class BaseRequest {
       };
     } catch (err: unknown) {
       if (err instanceof Error) {
+        console.error(err)
         throw new Error(err.message);
       } else {
         throw new Error('Unknown error');

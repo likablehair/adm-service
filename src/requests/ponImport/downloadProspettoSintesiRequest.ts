@@ -3,7 +3,8 @@ import BaseRequest, { ProcessResponse } from '../baseRequest';
 export default class DownloadProspettoSintesi extends BaseRequest {
   constructor() {
     //super('https://www.ponimpresa.gov.it/wsdl/ponimport.wsdl');
-    super('./assets/ponimport_reale.wsdl');
+    //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
+    super('./assets/ponimport_reale.wsdl')
   }
 
   async processRequest(params: {
@@ -21,5 +22,23 @@ export default class DownloadProspettoSintesi extends BaseRequest {
       security: params.security,
       serviceId: 'downloadProspettoSintesi',
     });
+  }
+
+  protected createSoapEnvelope(params: { data: { xml: string; dichiarante: string; }; serviceId: string; }): string {
+    return `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
+        <soapenv:Header/>
+        <soapenv:Body>
+          <type:Input>
+              <type:serviceId>${params.serviceId}</type:serviceId>
+              <!--1 or more repetitions:-->
+              <type:data>
+                <type:xml>${params.data.xml}</type:xml>
+                <type:dichiarante>${params.data.dichiarante}</type:dichiarante>
+              </type:data>
+          </type:Input>
+        </soapenv:Body>
+    </soapenv:Envelope>
+    `;
   }
 }

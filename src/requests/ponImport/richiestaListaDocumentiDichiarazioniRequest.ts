@@ -3,7 +3,8 @@ import BaseRequest, { ProcessResponse } from '../baseRequest';
 export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseRequest {
   constructor() {
     //super('https://www.ponimpresa.gov.it/wsdl/ponimport.wsdl');
-    super('./assets/ponimport_reale.wsdl');
+    //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
+    super('./assets/ponimport_reale.wsdl')
   }
 
   async processRequest(params: {
@@ -16,10 +17,34 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
       passphrase: string;
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
-    return await this.asyncBaseProcessRequest({
-      data: params.data,
-      security: params.security,
-      serviceId: 'richiestaListaDocumentiDichiarazione',
-    });
+    try {
+      return await this.asyncBaseProcessRequest({
+        data: params.data,
+        security: params.security,
+        serviceId: 'richiestaListaDocumentiDichiarazione',
+      });
+    } catch(e) {
+      console.error('error', e)
+      return { type: 'error', message: [] }
+    }
+
+  }
+
+  protected createSoapEnvelope(params: { data: { xml: string; dichiarante: string; }; serviceId: string; }): string {
+    return `
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
+        <soapenv:Header/>
+        <soapenv:Body>
+          <type:Input>
+              <type:serviceId>${params.serviceId}</type:serviceId>
+              <!--1 or more repetitions:-->
+              <type:data>
+                <type:xml>${params.data.xml}</type:xml>
+                <type:dichiarante>${params.data.dichiarante}</type:dichiarante>
+              </type:data>
+          </type:Input>
+        </soapenv:Body>
+    </soapenv:Envelope>
+    `;
   }
 }

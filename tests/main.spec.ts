@@ -31,8 +31,10 @@ test('asyncRequestListDeclarationDocuments', async () => {
 
   const request = new RichiestaListaDocumentiDichiarazioniRequest();
   const result = await request.processRequest(xmlParams);
-  const esito = (result.message[0] as ProcessResponse).esito;
+  if (result.type === 'success') {
+    const esito = (result.message[0] as ProcessResponse).esito;
+    console.log('esito', esito);
+  }
   console.log('result async', result);
-  console.log('esito', esito);
   expect(result.type).toBe('success');
 });
