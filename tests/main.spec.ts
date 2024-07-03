@@ -30,7 +30,7 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
     security: {
       certificate: certificateUrl,
       passphrase: certificatePassphrase,
-    }
+    },
   });
   if (result.type === 'success') {
     const esito = (result.message[0] as ProcessResponse).esito;
@@ -39,4 +39,3 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
   console.log('result async', result);
   expect(result.type).toBe('success');
 });
-

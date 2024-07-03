@@ -60,14 +60,13 @@ export default abstract class BaseRequest<T> {
     type: string;
     message: ProcessResponse[];
   }> {
-
     const XAdESClass = new XAdES();
     const signedKeyPair = await XAdESClass.generateKeyPair();
-    
+
     if (!signedKeyPair) {
       throw new Error('Error in generateKeyPair');
     }
-    
+
     const signedXML = await XAdESClass.signXML({
       xmlString: params.data.xml,
       keys: signedKeyPair.keys,
@@ -90,7 +89,7 @@ export default abstract class BaseRequest<T> {
       data: {
         xml: signedXMLBase64,
         dichiarante: params.data.dichiarante,
-      }
+      },
     };
 
     try {

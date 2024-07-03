@@ -21,7 +21,6 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
     try {
-
       const generatedXml = this.createXMLForRequest(params.data.xmlParams);
 
       return await this.asyncBaseProcessRequest({
