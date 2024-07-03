@@ -7,7 +7,7 @@ type Enquiry = {
   codUff: string;
   dataDa: string;
   dataA: string;
-}
+};
 
 export default class ListaDestautTIN extends BaseRequest<Enquiry> {
   constructor() {

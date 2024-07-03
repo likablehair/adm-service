@@ -2,7 +2,7 @@ import BaseRequest, { ProcessResponse } from '../baseRequest';
 
 type RichiestaProspetto = {
   mrn: string;
-}
+};
 
 export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaProspetto> {
   constructor() {

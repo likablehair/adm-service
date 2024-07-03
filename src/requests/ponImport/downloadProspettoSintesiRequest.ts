@@ -6,8 +6,8 @@ type DownloadProspetto = {
   };
   richiestaProspetto: {
     IUT: string;
-  }
-}
+  };
+};
 
 export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspetto> {
   constructor() {
@@ -26,7 +26,6 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
       passphrase: string;
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
-
     try {
       return await this.asyncBaseProcessRequest({
         data: params.data,
@@ -38,7 +37,6 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
     }
   }
 
-  
   protected createXMLForRequest(params: DownloadProspetto): string {
     return `
       <DownloadProspetto  

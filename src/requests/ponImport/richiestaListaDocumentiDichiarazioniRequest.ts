@@ -3,7 +3,7 @@ import BaseRequest, { ProcessResponse } from '../baseRequest';
 type RichiestaDocumentiDichiarazione = {
   mrn: string;
   utenteInvio: string;
-}
+};
 export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseRequest<RichiestaDocumentiDichiarazione> {
   constructor() {
     //super('https://www.ponimpresa.gov.it/wsdl/ponimport.wsdl');
@@ -32,7 +32,9 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
     }
   }
 
-  protected createXMLForRequest(params: RichiestaDocumentiDichiarazione): string {
+  protected createXMLForRequest(
+    params: RichiestaDocumentiDichiarazione,
+  ): string {
     return `
       <RichiestaDocumentiDichiarazione 
         xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 

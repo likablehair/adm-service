@@ -74,7 +74,7 @@ export default abstract class BaseRequest<T> {
         certificate = params.security.certificate;
       }
 
-/*       const buffer = Buffer.from(certificate);
+      /*       const buffer = Buffer.from(certificate);
       const soapEnvelope = this.createSoapEnvelope(xmlParams);
       const configuredHttpsAgent = new https.Agent({
         pfx: buffer,
