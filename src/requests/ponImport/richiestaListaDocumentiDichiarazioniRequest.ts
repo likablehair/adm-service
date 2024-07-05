@@ -16,8 +16,14 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
       dichiarante: string;
     };
     security: {
-      certificate: string | Blob;
-      passphrase: string;
+      admCertificate: {
+        path: string;
+        passphrase: string;
+      },
+      signCertificate: {
+        path: string;
+        passphrase: string;
+      }
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
     try {

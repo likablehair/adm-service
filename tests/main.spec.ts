@@ -18,6 +18,12 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
     return;
   }
 
+  const signCertificate = import.meta.env.VITE_SIGN_CERTIFICATE_URL;
+  if (!signCertificate) {
+    console.error('ERROR: CERTIFICATE_SIGN not found');
+    return;
+  }
+
   const request = new RichiestaListaDocumentiDichiarazioniRequest();
   const result = await request.processRequest({
     data: {
@@ -28,8 +34,14 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
       dichiarante: '01824540346',
     },
     security: {
-      certificate: certificateUrl,
-      passphrase: certificatePassphrase,
+      admCertificate: {
+        path: certificateUrl,
+        passphrase: certificatePassphrase,
+      },
+      signCertificate: {
+        path: certificateUrl,
+        passphrase: certificatePassphrase,
+      }
     },
   });
   if (result.type === 'success') {

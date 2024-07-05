@@ -28,8 +28,14 @@ export default abstract class BaseRequest<T> {
       dichiarante: string;
     };
     security: {
-      certificate: Blob | string;
-      passphrase: string;
+      admCertificate: {
+        path: string;
+        passphrase: string;
+      },
+      signCertificate: {
+        path: string;
+        passphrase: string;
+      }
     };
   }): Promise<{
     type: string;
@@ -52,8 +58,14 @@ export default abstract class BaseRequest<T> {
       dichiarante: string;
     };
     security: {
-      certificate: Blob | string;
-      passphrase: string;
+      admCertificate: {
+        path: string;
+        passphrase: string;
+      },
+      signCertificate: {
+        path: string;
+        passphrase: string;
+      }
     };
     serviceId: string;
   }): Promise<{
@@ -61,19 +73,11 @@ export default abstract class BaseRequest<T> {
     message: ProcessResponse[];
   }> {
     const XAdESClass = new XAdES();
-    const signedKeyPair = await XAdESClass.generateKeyPair();
-
-    if (!signedKeyPair) {
-      throw new Error('Error in generateKeyPair');
-    }
 
     const signedXML = await XAdESClass.signXML({
       xmlString: params.data.xml,
-      keys: signedKeyPair.keys,
-      algorithm: {
-        name: signedKeyPair.algorithm.name,
-        hash: signedKeyPair.algorithm.hash.name,
-      },
+      certPath: params.security.signCertificate.path,
+      passphrase: params.security.signCertificate.passphrase,
     });
 
     console.log('signedXML', signedXML);
@@ -93,14 +97,8 @@ export default abstract class BaseRequest<T> {
     };
 
     try {
-      let certificate: Buffer | string | undefined = undefined;
-
-      if (params.security.certificate instanceof Blob) {
-        const arrayBuffer = await params.security.certificate.arrayBuffer();
-        certificate = Buffer.from(arrayBuffer);
-      } else {
-        certificate = params.security.certificate;
-      }
+      const admCertificatePath = params.security.admCertificate.path;
+      const admCertificatePassphrase = params.security.admCertificate.passphrase;
 
       /*       const buffer = Buffer.from(certificate);
       const soapEnvelope = this.createSoapEnvelope(xmlParams);
@@ -133,7 +131,7 @@ export default abstract class BaseRequest<T> {
 
       const client = await soap.createClientAsync(this.url);
       client.setSecurity(
-        new soap.ClientSSLSecurityPFX(certificate, params.security.passphrase),
+        new soap.ClientSSLSecurityPFX(admCertificatePath, admCertificatePassphrase),
       );
 
       const resultProcess = (await client.processAsync(
