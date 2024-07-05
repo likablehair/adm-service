@@ -106,9 +106,8 @@ export default abstract class BaseRequest<T> {
 
       const newAdmCertificate = await this._encryption.convertPKCS12Encryption(
         admCertificatePath,
-        admCertificatePassphrase
-      )
-
+        admCertificatePassphrase,
+      );
 
       /*       const buffer = Buffer.from(certificate);
       const soapEnvelope = this.createSoapEnvelope(xmlParams);

@@ -2,12 +2,9 @@ import forge from 'node-forge';
 import * as fs from 'node:fs';
 
 export default class Encryption {
-  constructor() { }
+  constructor() {}
 
-  identifyCryptograhyStandard(
-    certificateBuffer: Buffer,
-    passphrase: string,
-  ) {
+  identifyCryptograhyStandard(certificateBuffer: Buffer, passphrase: string) {
     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
 
@@ -35,10 +32,7 @@ export default class Encryption {
     throw new Error('Cryptographic standard not identified');
   }
 
-  extractKeysFromPKCS12(
-    certificateBuffer: Buffer,
-    passphrase: string,
-  ) {
+  extractKeysFromPKCS12(certificateBuffer: Buffer, passphrase: string) {
     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
 
@@ -71,10 +65,7 @@ export default class Encryption {
     return { privateKey, publicKey };
   }
 
-  extractKeyAndCertFromPKCS12(
-    certificateBuffer: Buffer,
-    passphrase: string,
-  ) {
+  extractKeyAndCertFromPKCS12(certificateBuffer: Buffer, passphrase: string) {
     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
 
@@ -106,7 +97,6 @@ export default class Encryption {
     }
 
     return { privateKey, certificate };
-
   }
 
   extractKeysFromPKCS7(/* certificateBuffer: Buffer */) {
@@ -156,22 +146,18 @@ export default class Encryption {
       privateKey,
       [certificate],
       passphrase,
-      { 
+      {
         algorithm: 'aes256',
-        generateLocalKeyId: true, 
+        generateLocalKeyId: true,
       },
     );
 
     const p12Der = forge.asn1.toDer(p12Asn1).getBytes();
 
     const p12DerBuffer = Buffer.from(p12Der, 'binary');
-    
+
     //Optional - just to check if the file is created
-    fs.writeFileSync(
-      './certificates/p12Der.p12', 
-      p12DerBuffer,
-      { flag: 'w'}
-    );
+    fs.writeFileSync('./certificates/p12Der.p12', p12DerBuffer, { flag: 'w' });
 
     return p12DerBuffer;
   }
@@ -212,7 +198,7 @@ export default class Encryption {
     return { privateKey, publicKey };
   }
 
-   stringToArrayBuffer(data: string) {
+  stringToArrayBuffer(data: string) {
     const arrBuff = new ArrayBuffer(data.length);
     const writer = new Uint8Array(arrBuff);
     for (let i = 0, len = data.length; i < len; i++) {
@@ -221,7 +207,7 @@ export default class Encryption {
     return arrBuff;
   }
 
-   privateKeyToPkcs8(privateKey: forge.pki.PrivateKey) {
+  privateKeyToPkcs8(privateKey: forge.pki.PrivateKey) {
     const rsaPrivateKey = forge.pki.privateKeyToAsn1(privateKey);
     const privateKeyInfo = forge.pki.wrapRsaPrivateKey(rsaPrivateKey);
     const privateKeyInfoDer = forge.asn1.toDer(privateKeyInfo).getBytes();
@@ -229,10 +215,7 @@ export default class Encryption {
     return privateKeyInfoDerBuff;
   }
 
-  async convertPKCS12Encryption(
-    certPath: string,
-    passphrase: string,
-  ) {
+  async convertPKCS12Encryption(certPath: string, passphrase: string) {
     const certificateBuffer = fs.readFileSync(certPath);
     const { privateKey, certificate } = this.extractKeyAndCertFromPKCS12(
       certificateBuffer,
@@ -243,7 +226,4 @@ export default class Encryption {
 
     return newP12;
   }
-
-  
-
 }

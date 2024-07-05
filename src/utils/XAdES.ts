@@ -3,8 +3,8 @@ import { Crypto } from '@peculiar/webcrypto';
 import Encryption from 'src/utils/encryption';
 
 export default class XAdES {
-  private _encryption; 
-  
+  private _encryption;
+
   constructor() {
     xadesjs.Application.setEngine('NodeJS', new Crypto());
     this._encryption = new Encryption();
