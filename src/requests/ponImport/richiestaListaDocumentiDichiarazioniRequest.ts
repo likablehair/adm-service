@@ -19,11 +19,11 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
       admCertificate: {
         path: string;
         passphrase: string;
-      },
+      };
       signCertificate: {
         path: string;
         passphrase: string;
-      }
+      };
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
     try {

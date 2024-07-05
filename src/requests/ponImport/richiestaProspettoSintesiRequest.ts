@@ -19,11 +19,11 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
       admCertificate: {
         path: string;
         passphrase: string;
-      },
+      };
       signCertificate: {
         path: string;
         passphrase: string;
-      }
+      };
     };
   }): Promise<{ type: string; message: ProcessResponse[] }> {
     try {

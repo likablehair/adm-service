@@ -31,11 +31,11 @@ export default abstract class BaseRequest<T> {
       admCertificate: {
         path: string;
         passphrase: string;
-      },
+      };
       signCertificate: {
         path: string;
         passphrase: string;
-      }
+      };
     };
   }): Promise<{
     type: string;
@@ -61,11 +61,11 @@ export default abstract class BaseRequest<T> {
       admCertificate: {
         path: string;
         passphrase: string;
-      },
+      };
       signCertificate: {
         path: string;
         passphrase: string;
-      }
+      };
     };
     serviceId: string;
   }): Promise<{
@@ -98,7 +98,8 @@ export default abstract class BaseRequest<T> {
 
     try {
       const admCertificatePath = params.security.admCertificate.path;
-      const admCertificatePassphrase = params.security.admCertificate.passphrase;
+      const admCertificatePassphrase =
+        params.security.admCertificate.passphrase;
 
       /*       const buffer = Buffer.from(certificate);
       const soapEnvelope = this.createSoapEnvelope(xmlParams);
@@ -131,7 +132,10 @@ export default abstract class BaseRequest<T> {
 
       const client = await soap.createClientAsync(this.url);
       client.setSecurity(
-        new soap.ClientSSLSecurityPFX(admCertificatePath, admCertificatePassphrase),
+        new soap.ClientSSLSecurityPFX(
+          admCertificatePath,
+          admCertificatePassphrase,
+        ),
       );
 
       const resultProcess = (await client.processAsync(

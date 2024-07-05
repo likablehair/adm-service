@@ -41,7 +41,7 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
       signCertificate: {
         path: certificateUrl,
         passphrase: certificatePassphrase,
-      }
+      },
     },
   });
   if (result.type === 'success') {

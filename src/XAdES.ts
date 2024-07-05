@@ -32,15 +32,11 @@ export default class XAdES {
         'pkcs8',
         privateKeyDer,
         algorithm,
-        false, 
-        ["sign"]
-      )
-
-      const signature = await signedXml.Sign(
-        algorithm,
-        cryptoKey,
-        xmlDoc,
+        false,
+        ['sign'],
       );
+
+      const signature = await signedXml.Sign(algorithm, cryptoKey, xmlDoc);
 
       const xmlSignature = signature.GetXml();
 
@@ -48,7 +44,7 @@ export default class XAdES {
         const signatureValue = xmlSignature
           .getElementsByTagName('ds:SignatureValue')
           .item(0);
-        
+
         if (signatureValue) {
           signatureValue.setAttribute('Id', signature.Id + '-SIGVALUE');
         }
@@ -60,7 +56,10 @@ export default class XAdES {
     }
   }
 
-  private _identifyCryptograhyStandard(certificateBuffer: Buffer, passphrase: string) {
+  private _identifyCryptograhyStandard(
+    certificateBuffer: Buffer,
+    passphrase: string,
+  ) {
     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
 
@@ -88,7 +87,10 @@ export default class XAdES {
     throw new Error('Cryptographic standard not identified');
   }
 
-  private _extractKeysFromPKCS12(certificateBuffer: Buffer, passphrase: string) {
+  private _extractKeysFromPKCS12(
+    certificateBuffer: Buffer,
+    passphrase: string,
+  ) {
     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
 
@@ -123,7 +125,7 @@ export default class XAdES {
 
   private _extractKeysFromPKCS7(/* certificateBuffer: Buffer */) {
     //WIP
-/*     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
+    /*     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
 
     const p7 = forge.pkcs7.messageFromAsn1(certificateAsn1); */
@@ -131,7 +133,7 @@ export default class XAdES {
     const privateKey: forge.pki.PrivateKey | undefined = undefined;
     const publicKey: forge.pki.PublicKey | undefined = undefined;
 
-/*     for (const recipient of p7.content) {
+    /*     for (const recipient of p7.content) {
       if (recipient) {
         const decrypted = recipient.decrypt('passphrase');
         if (decrypted) {
@@ -152,16 +154,14 @@ export default class XAdES {
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
 
     const certificate = forge.pki.certificateFromAsn1(certificateAsn1);
-    
 
-    return { privateKey: certificate.privateKey, publicKey: certificate.publicKey };
+    return {
+      privateKey: certificate.privateKey,
+      publicKey: certificate.publicKey,
+    };
   }
 
-  private async _retrieveKeyFromCert(
-    certPath: string,
-    passphrase: string,
-  ) {
-
+  private async _retrieveKeyFromCert(certPath: string, passphrase: string) {
     const certificateBuffer = fs.readFileSync(certPath);
     const cryptographyStandard = this._identifyCryptograhyStandard(
       certificateBuffer,
@@ -179,10 +179,12 @@ export default class XAdES {
         ));
         break;
       case 'PKCS7':
-        ({ privateKey, publicKey } = this._extractKeysFromPKCS7(/* certificateBuffer */));
+        ({ privateKey, publicKey } =
+          this._extractKeysFromPKCS7(/* certificateBuffer */));
         break;
       case 'X509':
-        ({ privateKey, publicKey } = this._extractKeysFromX509(certificateBuffer));
+        ({ privateKey, publicKey } =
+          this._extractKeysFromX509(certificateBuffer));
         break;
       default:
         throw new Error('Cryptographic standard not identified');
@@ -195,14 +197,14 @@ export default class XAdES {
     return { privateKey, publicKey };
   }
 
-  private _stringToArrayBuffer(data: string){
+  private _stringToArrayBuffer(data: string) {
     const arrBuff = new ArrayBuffer(data.length);
     const writer = new Uint8Array(arrBuff);
     for (let i = 0, len = data.length; i < len; i++) {
-        writer[i] = data.charCodeAt(i);
+      writer[i] = data.charCodeAt(i);
     }
     return arrBuff;
- }
+  }
 
   private _privateKeyToPkcs8(privateKey: forge.pki.PrivateKey) {
     const rsaPrivateKey = forge.pki.privateKeyToAsn1(privateKey);
