@@ -1,5 +1,6 @@
 import soap from 'soap';
-import XAdES from 'src/XAdES';
+import XAdES from 'src/utils/XAdES';
+import Encryption from 'src/utils/encryption';
 /* import axios from 'axios';
 import https from 'https'; */
 
@@ -17,9 +18,11 @@ export type EsitoType = {
 
 export default abstract class BaseRequest<T> {
   private url: string;
+  private _encryption;
 
   constructor(url: string) {
     this.url = url;
+    this._encryption = new Encryption();
   }
 
   abstract processRequest(params: {
@@ -101,6 +104,12 @@ export default abstract class BaseRequest<T> {
       const admCertificatePassphrase =
         params.security.admCertificate.passphrase;
 
+      const newAdmCertificate = await this._encryption.convertPKCS12Encryption(
+        admCertificatePath,
+        admCertificatePassphrase
+      )
+
+
       /*       const buffer = Buffer.from(certificate);
       const soapEnvelope = this.createSoapEnvelope(xmlParams);
       const configuredHttpsAgent = new https.Agent({
@@ -133,7 +142,7 @@ export default abstract class BaseRequest<T> {
       const client = await soap.createClientAsync(this.url);
       client.setSecurity(
         new soap.ClientSSLSecurityPFX(
-          admCertificatePath,
+          newAdmCertificate,
           admCertificatePassphrase,
         ),
       );
