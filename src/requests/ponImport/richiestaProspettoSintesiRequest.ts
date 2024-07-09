@@ -1,4 +1,7 @@
-import BaseRequest, { ProcessRequestType, ProcessResponseType } from '../baseRequest';
+import BaseRequest, {
+  ProcessRequestType,
+  ProcessResponseType,
+} from '../baseRequest';
 
 type RichiestaProspetto = {
   mrn: string;
@@ -9,15 +12,15 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     const superArgs = {
       axiosUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
       soapUrl: './assets/ponimport_reale.wsdl',
-    }
-    super(superArgs.axiosUrl, superArgs.soapUrl)
+    };
+    super(superArgs.axiosUrl, superArgs.soapUrl);
   }
 
-  async processRequest(params:
-    Omit<ProcessRequestType<RichiestaProspetto>, 'serviceId'>
-  ): Promise<{ 
-    type: string; 
-    message: ProcessResponseType | undefined
+  async processRequest(
+    params: Omit<ProcessRequestType<RichiestaProspetto>, 'serviceId'>,
+  ): Promise<{
+    type: string;
+    message: ProcessResponseType | undefined;
   }> {
     try {
       const generatedXml = this.createXMLForRequest(params.data.xml);
@@ -52,8 +55,8 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
   }
 
   // This method is not used in the current implementation - Axios
-  protected createSoapEnvelope(params: 
-    Omit<ProcessRequestType<string>, 'security'>
+  protected createSoapEnvelope(
+    params: Omit<ProcessRequestType<string>, 'security'>,
   ): string {
     return `
       <soap:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">

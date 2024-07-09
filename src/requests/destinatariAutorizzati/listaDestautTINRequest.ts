@@ -1,4 +1,7 @@
-import BaseRequest, { ProcessRequestType, ProcessResponseType } from '../baseRequest';
+import BaseRequest, {
+  ProcessRequestType,
+  ProcessResponseType,
+} from '../baseRequest';
 
 type Enquiry = {
   tin: string;
@@ -12,17 +15,18 @@ type Enquiry = {
 export default class ListaDestautTIN extends BaseRequest<Enquiry> {
   constructor() {
     const superArgs = {
-      axiosUrl: 'https://interop.adm.gov.it/DestinariAutorizzatiServiceWeb/services/DestinatariAutorizzatiService',
+      axiosUrl:
+        'https://interop.adm.gov.it/DestinariAutorizzatiServiceWeb/services/DestinatariAutorizzatiService',
       soapUrl: './assets/DestinatariAutorizzatiService.wsdl',
-    }
-    super(superArgs.axiosUrl, superArgs.soapUrl)
+    };
+    super(superArgs.axiosUrl, superArgs.soapUrl);
   }
 
-  async processRequest(params: 
-    Omit<ProcessRequestType<Enquiry>, 'serviceId'>
-  ): Promise<{ 
-    type: string; 
-    message: ProcessResponseType | undefined
+  async processRequest(
+    params: Omit<ProcessRequestType<Enquiry>, 'serviceId'>,
+  ): Promise<{
+    type: string;
+    message: ProcessResponseType | undefined;
   }> {
     try {
       const generatedXml = this.createXMLForRequest(params.data.xml);
@@ -54,8 +58,8 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
   }
 
   // This method is not used in the current implementation - Axios
-  protected createSoapEnvelope(params: 
-    Omit<ProcessRequestType<string>, 'security'>
+  protected createSoapEnvelope(
+    params: Omit<ProcessRequestType<string>, 'security'>,
   ): string {
     return `
       <soap:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">

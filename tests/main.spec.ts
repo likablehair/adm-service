@@ -1,8 +1,6 @@
 import { expect, test } from 'vitest';
 
-import {
-  RichiestaListaDocumentiDichiarazioniRequest,
-} from 'src/main';
+import { RichiestaListaDocumentiDichiarazioniRequest } from 'src/main';
 
 test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
   const certificateUrl = import.meta.env.VITE_CERTIFICATE_URL;
@@ -44,7 +42,7 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
     },
   });
   if (result.type === 'success') {
-    const esito = result.message?.esito
+    const esito = result.message?.esito;
     console.log('esito', esito);
   }
   console.log('result async', result);

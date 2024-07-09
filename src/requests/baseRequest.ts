@@ -20,7 +20,7 @@ export type ProcessRequestType<T> = {
     };
   };
   serviceId: string;
-}
+};
 
 export type ProcessResponseType = {
   IUT: string | null;
@@ -62,21 +62,21 @@ export default abstract class BaseRequest<T> {
     this._encryption = new Encryption();
   }
 
-  abstract processRequest(params: 
-    Omit<ProcessRequestType<T>, 'serviceId'>
+  abstract processRequest(
+    params: Omit<ProcessRequestType<T>, 'serviceId'>,
   ): Promise<{
     type: string;
     message: ProcessResponseType | undefined;
   }>;
 
-  protected abstract createSoapEnvelope(params: 
-    Omit<ProcessRequestType<string>, 'security'>
+  protected abstract createSoapEnvelope(
+    params: Omit<ProcessRequestType<string>, 'security'>,
   ): string;
 
   protected abstract createXMLForRequest(params: T): string;
 
-  protected async asyncBaseProcessRequest(params: 
-    ProcessRequestType<string>
+  protected async asyncBaseProcessRequest(
+    params: ProcessRequestType<string>,
   ): Promise<{
     type: string;
     message: ProcessResponseType;
@@ -124,7 +124,6 @@ export default abstract class BaseRequest<T> {
           },
         },
       });
-
     } catch (err: unknown) {
       if (err instanceof Error) {
         console.error(err);
@@ -145,20 +144,18 @@ export default abstract class BaseRequest<T> {
           params.security.admCertificate.passphrase,
         ),
       );
-  
-      const resultProcess = (await client.processAsync(
-        params.xmlParams,
-      ))
+
+      const resultProcess = await client.processAsync(params.xmlParams);
 
       const message: ProcessResponseType = {
         ...resultProcess[0],
-        xml: resultProcess[1]
-      }
-      
+        xml: resultProcess[1],
+      };
+
       return {
         type: 'success',
         message: message,
-      }
+      };
     } catch (err: unknown) {
       if (err instanceof Error) {
         throw new Error(err.message);
@@ -166,7 +163,6 @@ export default abstract class BaseRequest<T> {
         throw new Error('Unknown error');
       }
     }
-
   }
 
   // This method is not used in the current implementation
@@ -179,17 +175,17 @@ export default abstract class BaseRequest<T> {
         host: 'interop.adm.gov.it',
         keepAlive: true,
       });
-      
+
       const config = {
         method: 'post',
         url: this._axiosUrl,
         headers: {
           'Content-Type': 'text/xml;charset=UTF-8',
-          'SOAPAction': 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
+          SOAPAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
         },
         httpsAgent: configuredHttpsAgent,
         data: soapEnvelope,
-      }
+      };
 
       const response = await axios(config);
       const xmlResponse = response.data;
@@ -201,29 +197,33 @@ export default abstract class BaseRequest<T> {
       const output = body[0].childNodes[0];
       const outputNodes = output.childNodes;
 
-
       for (let i = 0; i < outputNodes.length; i++) {
         const node = outputNodes[i];
-        
+
         if (node.nodeType === 1) {
           const nodeNameWithoutPrefix = node.nodeName.split(':')[1];
 
-          if (nodeNameWithoutPrefix as keyof ProcessResponseType === 'esito') {
+          if (
+            (nodeNameWithoutPrefix as keyof ProcessResponseType) === 'esito'
+          ) {
             const eistoNodes = node.childNodes;
             const esito = <EsitoType>{};
-            
+
             for (let j = 0; j < eistoNodes.length; j++) {
               const esitoChild = eistoNodes[j];
               if (esitoChild.nodeType === 1) {
-                const esitoChildNameWithoutPrefix = esitoChild.nodeName.split(':')[1];
-                esito[esitoChildNameWithoutPrefix as keyof EsitoType] = esitoChild.textContent;
+                const esitoChildNameWithoutPrefix =
+                  esitoChild.nodeName.split(':')[1];
+                esito[esitoChildNameWithoutPrefix as keyof EsitoType] =
+                  esitoChild.textContent;
               }
             }
-            data["esito"] = esito;
+            data['esito'] = esito;
           } else {
-            data[nodeNameWithoutPrefix as keyof Omit<ProcessResponseType,'esito'>] = node.textContent;
+            data[
+              nodeNameWithoutPrefix as keyof Omit<ProcessResponseType, 'esito'>
+            ] = node.textContent;
           }
-
         }
       }
 
@@ -231,9 +231,8 @@ export default abstract class BaseRequest<T> {
 
       return {
         type: 'success',
-        message: data
+        message: data,
       };
-
     } catch (err: unknown) {
       if (err instanceof Error) {
         throw new Error(err.message);

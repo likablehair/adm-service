@@ -4,4 +4,7 @@ export { default as DownloadProspettoSintesiRequest } from './requests/ponImport
 
 export { default as ListaDestautTIN } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
-export type { ProcessResponseType, ProcessRequestType } from './requests/baseRequest';
+export type {
+  ProcessResponseType,
+  ProcessRequestType,
+} from './requests/baseRequest';
