@@ -1,33 +1,27 @@
-import BaseRequest, { ProcessResponse } from '../baseRequest';
+import BaseRequest, { ProcessResponseType, ProcessRequestType } from '../baseRequest';
 
 type RichiestaDocumentiDichiarazione = {
   mrn: string;
   utenteInvio: string;
 };
+
 export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseRequest<RichiestaDocumentiDichiarazione> {
   constructor() {
-    //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
-    super('./assets/ponimport_reale.wsdl');
+    const superArgs = {
+      axiosUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
+      soapUrl: './assets/ponimport_reale.wsdl',
+    }
+    super(superArgs.axiosUrl, superArgs.soapUrl)
   }
 
-  async processRequest(params: {
-    data: {
-      xmlParams: RichiestaDocumentiDichiarazione;
-      dichiarante: string;
-    };
-    security: {
-      admCertificate: {
-        path: string;
-        passphrase: string;
-      };
-      signCertificate: {
-        path: string;
-        passphrase: string;
-      };
-    };
-  }): Promise<{ type: string; message: ProcessResponse[] }> {
+  async processRequest(params:
+    Omit<ProcessRequestType<RichiestaDocumentiDichiarazione>, 'serviceId'>
+  ): Promise<{ 
+    type: string; 
+    message: ProcessResponseType | undefined 
+  }> {
     try {
-      const generatedXml = this.createXMLForRequest(params.data.xmlParams);
+      const generatedXml = this.createXMLForRequest(params.data.xml);
 
       return await this.asyncBaseProcessRequest({
         data: {
@@ -38,7 +32,7 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
         serviceId: 'richiestaListaDocumentiDichiarazione',
       });
     } catch (e) {
-      return { type: 'error', message: [] };
+      return { type: 'error', message: undefined };
     }
   }
 
@@ -61,10 +55,10 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
     `;
   }
 
-  protected createSoapEnvelope(params: {
-    data: { xml: string; dichiarante: string };
-    serviceId: string;
-  }): string {
+  // This method is not used in the current implementation - Axios
+  protected createSoapEnvelope(params: 
+    Omit<ProcessRequestType<string>, 'security'>
+  ): string {
     return `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
         <soapenv:Header/>

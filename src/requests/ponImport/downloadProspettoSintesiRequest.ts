@@ -1,4 +1,4 @@
-import BaseRequest, { ProcessResponse } from '../baseRequest';
+import BaseRequest, { ProcessRequestType, ProcessResponseType } from '../baseRequest';
 
 type DownloadProspetto = {
   datiDichiarazione: {
@@ -11,28 +11,21 @@ type DownloadProspetto = {
 
 export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspetto> {
   constructor() {
-    //super('https://interop.adm.gov.it/ponimportsoap/services/ponimport');
-    super('./assets/ponimport_reale.wsdl');
+    const superArgs = {
+      axiosUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
+      soapUrl: './assets/ponimport_reale.wsdl',
+    }
+    super(superArgs.axiosUrl, superArgs.soapUrl)
   }
 
-  async processRequest(params: {
-    data: {
-      xmlParams: DownloadProspetto;
-      dichiarante: string;
-    };
-    security: {
-      admCertificate: {
-        path: string;
-        passphrase: string;
-      };
-      signCertificate: {
-        path: string;
-        passphrase: string;
-      };
-    };
-  }): Promise<{ type: string; message: ProcessResponse[] }> {
+  async processRequest(params: 
+    Omit<ProcessRequestType<DownloadProspetto>, 'serviceId'>
+  ): Promise<{ 
+    type: string; 
+    message: ProcessResponseType | undefined 
+  }> {
     try {
-      const generatedXml = this.createXMLForRequest(params.data.xmlParams);
+      const generatedXml = this.createXMLForRequest(params.data.xml);
 
       return await this.asyncBaseProcessRequest({
         data: {
@@ -43,7 +36,7 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
         serviceId: 'downloadProspettoSintesi',
       });
     } catch (e) {
-      return { type: 'error', message: [] };
+      return { type: 'error', message: undefined };
     }
   }
 
@@ -66,10 +59,10 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
     `;
   }
 
-  protected createSoapEnvelope(params: {
-    data: { xml: string; dichiarante: string };
-    serviceId: string;
-  }): string {
+  // This method is not used in the current implementation - Axios
+  protected createSoapEnvelope(params: 
+    Omit<ProcessRequestType<string>, 'security'>
+  ): string {
     return `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
         <soapenv:Header/>

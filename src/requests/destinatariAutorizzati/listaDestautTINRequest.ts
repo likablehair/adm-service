@@ -1,4 +1,4 @@
-import BaseRequest, { ProcessResponse } from '../baseRequest';
+import BaseRequest, { ProcessRequestType, ProcessResponseType } from '../baseRequest';
 
 type Enquiry = {
   tin: string;
@@ -11,27 +11,21 @@ type Enquiry = {
 
 export default class ListaDestautTIN extends BaseRequest<Enquiry> {
   constructor() {
-    super('./assets/DestinatariAutorizzatiService.wsdl');
+    const superArgs = {
+      axiosUrl: 'https://interop.adm.gov.it/DestinariAutorizzatiServiceWeb/services/DestinatariAutorizzatiService',
+      soapUrl: './assets/DestinatariAutorizzatiService.wsdl',
+    }
+    super(superArgs.axiosUrl, superArgs.soapUrl)
   }
 
-  async processRequest(params: {
-    data: {
-      xmlParams: Enquiry;
-      dichiarante: string;
-    };
-    security: {
-      admCertificate: {
-        path: string;
-        passphrase: string;
-      };
-      signCertificate: {
-        path: string;
-        passphrase: string;
-      };
-    };
-  }): Promise<{ type: string; message: ProcessResponse[] }> {
+  async processRequest(params: 
+    Omit<ProcessRequestType<Enquiry>, 'serviceId'>
+  ): Promise<{ 
+    type: string; 
+    message: ProcessResponseType | undefined
+  }> {
     try {
-      const generatedXml = this.createXMLForRequest(params.data.xmlParams);
+      const generatedXml = this.createXMLForRequest(params.data.xml);
 
       return await this.asyncBaseProcessRequest({
         data: {
@@ -42,7 +36,7 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
         serviceId: 'listaDestautTIN',
       });
     } catch (e) {
-      return { type: 'error', message: [] };
+      return { type: 'error', message: undefined };
     }
   }
 
@@ -59,10 +53,10 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
     `;
   }
 
-  protected createSoapEnvelope(params: {
-    data: { xml: string; dichiarante: string };
-    serviceId: string;
-  }): string {
+  // This method is not used in the current implementation - Axios
+  protected createSoapEnvelope(params: 
+    Omit<ProcessRequestType<string>, 'security'>
+  ): string {
     return `
       <soap:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
       <soap:Header/>

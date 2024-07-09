@@ -2,7 +2,6 @@ import { expect, test } from 'vitest';
 
 import {
   RichiestaListaDocumentiDichiarazioniRequest,
-  ProcessResponse,
 } from 'src/main';
 
 test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
@@ -27,7 +26,7 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
   const request = new RichiestaListaDocumentiDichiarazioniRequest();
   const result = await request.processRequest({
     data: {
-      xmlParams: {
+      xml: {
         mrn: 'test',
         utenteInvio: 'test',
       },
@@ -45,7 +44,7 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
     },
   });
   if (result.type === 'success') {
-    const esito = (result.message[0] as ProcessResponse).esito;
+    const esito = result.message?.esito
     console.log('esito', esito);
   }
   console.log('result async', result);
