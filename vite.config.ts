@@ -13,5 +13,5 @@ export default defineConfig({
     },
   },
   resolve: { alias: { src: resolve('src/') } },
-  plugins: [dts()]
+  plugins: [dts()],
 });
