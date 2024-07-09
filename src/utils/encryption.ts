@@ -11,15 +11,15 @@ export default class Encryption {
       forge.pkcs12.pkcs12FromAsn1(certificateAsn1, passphrase);
       return 'PKCS12';
     } catch (error) {
-      console.log('Not a PKCS12')
+      console.log('Not a PKCS12');
     }
 
     try {
       const privateKeyPem = certificateBuffer.toString();
-      forge.pki.privateKeyFromPem(privateKeyPem)
+      forge.pki.privateKeyFromPem(privateKeyPem);
       return 'PRIVATE_KEY_PEM';
     } catch (error) {
-      console.log('Not a PRIVATE_KEY_PEM')
+      console.log('Not a PRIVATE_KEY_PEM');
     }
 
     throw new Error('Cryptographic standard not identified');
@@ -61,7 +61,7 @@ export default class Encryption {
   extractKeysFromPEM(certificateBuffer: Buffer) {
     const certificatePem = certificateBuffer.toString();
     const privateKey = forge.pki.privateKeyFromPem(certificatePem);
-    
+
     return { privateKey };
   }
 
@@ -127,7 +127,10 @@ export default class Encryption {
     let privateKey: forge.pki.PrivateKey | undefined = undefined;
     let publicKey: forge.pki.PublicKey | undefined = undefined;
 
-    const standard = this.identifyCryptograhyStandard(certificateBuffer, passphrase);
+    const standard = this.identifyCryptograhyStandard(
+      certificateBuffer,
+      passphrase,
+    );
 
     switch (standard) {
       case 'PKCS12':
