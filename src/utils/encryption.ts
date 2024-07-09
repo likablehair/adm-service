@@ -5,28 +5,21 @@ export default class Encryption {
   constructor() {}
 
   identifyCryptograhyStandard(certificateBuffer: Buffer, passphrase: string) {
-    const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
-    const certificateAsn1 = forge.asn1.fromDer(certificateDer);
-
     try {
+      const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
+      const certificateAsn1 = forge.asn1.fromDer(certificateDer);
       forge.pkcs12.pkcs12FromAsn1(certificateAsn1, passphrase);
       return 'PKCS12';
     } catch (error) {
-      console.log('Error in identifyCryptograhyStandard', error);
+      console.log('Not a PKCS12')
     }
 
     try {
-      forge.pkcs7.messageFromAsn1(certificateAsn1);
-      return 'PKCS7';
+      const privateKeyPem = certificateBuffer.toString();
+      forge.pki.privateKeyFromPem(privateKeyPem)
+      return 'PRIVATE_KEY_PEM';
     } catch (error) {
-      console.log('Error in identifyCryptograhyStandard', error);
-    }
-
-    try {
-      forge.pki.certificateFromAsn1(certificateAsn1);
-      return 'X509';
-    } catch (error) {
-      console.log('Error in identifyCryptograhyStandard', error);
+      console.log('Not a PRIVATE_KEY_PEM')
     }
 
     throw new Error('Cryptographic standard not identified');
@@ -65,6 +58,13 @@ export default class Encryption {
     return { privateKey, publicKey };
   }
 
+  extractKeysFromPEM(certificateBuffer: Buffer) {
+    const certificatePem = certificateBuffer.toString();
+    const privateKey = forge.pki.privateKeyFromPem(certificatePem);
+    
+    return { privateKey };
+  }
+
   extractKeyAndCertFromPKCS12(certificateBuffer: Buffer, passphrase: string) {
     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
     const certificateAsn1 = forge.asn1.fromDer(certificateDer);
@@ -99,44 +99,6 @@ export default class Encryption {
     return { privateKey, certificate };
   }
 
-  extractKeysFromPKCS7(/* certificateBuffer: Buffer */) {
-    //WIP
-    /*     const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
-    const certificateAsn1 = forge.asn1.fromDer(certificateDer);
-
-    const p7 = forge.pkcs7.messageFromAsn1(certificateAsn1); */
-
-    const privateKey: forge.pki.PrivateKey | undefined = undefined;
-    const publicKey: forge.pki.PublicKey | undefined = undefined;
-
-    /*     for (const recipient of p7.content) {
-      if (recipient) {
-        const decrypted = recipient.decrypt('passphrase');
-        if (decrypted) {
-          privateKey = decrypted;
-        }
-      }
-    }
-
-    if (!privateKey) {
-      throw new Error(' key not found in the p7 file');
-    } */
-
-    return { privateKey, publicKey };
-  }
-
-  extractKeysFromX509(certificateBuffer: Buffer) {
-    const certificateDer = forge.util.binary.raw.encode(certificateBuffer);
-    const certificateAsn1 = forge.asn1.fromDer(certificateDer);
-
-    const certificate = forge.pki.certificateFromAsn1(certificateAsn1);
-
-    return {
-      privateKey: certificate.privateKey,
-      publicKey: certificate.publicKey,
-    };
-  }
-
   createPKCS12(
     privateKey: forge.pki.PrivateKey,
     certificate: forge.pki.Certificate,
@@ -156,36 +118,26 @@ export default class Encryption {
 
     const p12DerBuffer = Buffer.from(p12Der, 'binary');
 
-    //Optional - just to check if the file is created
-    fs.writeFileSync('./certificates/p12Der.p12', p12DerBuffer, { flag: 'w' });
-
     return p12DerBuffer;
   }
 
   async retrieveKeyFromCert(certPath: string, passphrase: string) {
     const certificateBuffer = fs.readFileSync(certPath);
-    const cryptographyStandard = this.identifyCryptograhyStandard(
-      certificateBuffer,
-      passphrase,
-    );
 
     let privateKey: forge.pki.PrivateKey | undefined = undefined;
     let publicKey: forge.pki.PublicKey | undefined = undefined;
 
-    switch (cryptographyStandard) {
+    const standard = this.identifyCryptograhyStandard(certificateBuffer, passphrase);
+
+    switch (standard) {
       case 'PKCS12':
         ({ privateKey, publicKey } = this.extractKeysFromPKCS12(
           certificateBuffer,
           passphrase,
         ));
         break;
-      case 'PKCS7':
-        ({ privateKey, publicKey } =
-          this.extractKeysFromPKCS7(/* certificateBuffer */));
-        break;
-      case 'X509':
-        ({ privateKey, publicKey } =
-          this.extractKeysFromX509(certificateBuffer));
+      case 'PRIVATE_KEY_PEM':
+        ({ privateKey } = this.extractKeysFromPEM(certificateBuffer));
         break;
       default:
         throw new Error('Cryptographic standard not identified');

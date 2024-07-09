@@ -13,7 +13,7 @@ export default class XAdES {
   public async signXML(params: {
     xmlString: string;
     certPath: string;
-    passphrase?: string;
+    passphrase: string;
   }) {
     const algorithm = {
       name: 'RSASSA-PKCS1-v1_5',
@@ -25,8 +25,8 @@ export default class XAdES {
       const signedXml = new xadesjs.SignedXml();
 
       const { privateKey } = await this._encryption.retrieveKeyFromCert(
-        import.meta.env.VITE_CERTIFICATE_URL,
-        import.meta.env.VITE_CERTIFICATE_PASSPHRASE,
+        params.certPath,
+        params.passphrase,
       );
 
       const privateKeyDer = this._encryption.privateKeyToPkcs8(privateKey);

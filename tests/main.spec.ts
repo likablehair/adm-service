@@ -36,7 +36,7 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
         passphrase: certificatePassphrase,
       },
       signCertificate: {
-        path: certificateUrl,
+        path: signCertificate,
         passphrase: certificatePassphrase,
       },
     },
