@@ -23,9 +23,7 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
     super(superArgs.axiosUrl, superArgs.soapUrl);
   }
 
-  async processRequest(
-    params: ProcessRequestType<Enquiry>,
-  ): Promise<{
+  async processRequest(params: ProcessRequestType<Enquiry>): Promise<{
     type: string;
     message: ProcessResponseType | undefined;
   }> {

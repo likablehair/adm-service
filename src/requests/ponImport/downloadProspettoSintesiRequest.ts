@@ -22,9 +22,7 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
     super(superArgs.axiosUrl, superArgs.soapUrl);
   }
 
-  async processRequest(
-    params: ProcessRequestType<DownloadProspetto>,
-  ): Promise<{
+  async processRequest(params: ProcessRequestType<DownloadProspetto>): Promise<{
     type: string;
     message: ProcessResponseType | undefined;
   }> {

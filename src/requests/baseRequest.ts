@@ -35,7 +35,10 @@ export type EsitoType = {
   messaggio: string | null;
 };
 
-export type ProcessRequestType<T> = Omit<BaseProcessRequestType<T>, 'serviceId'>
+export type ProcessRequestType<T> = Omit<
+  BaseProcessRequestType<T>,
+  'serviceId'
+>;
 
 type HTTPRequestType = {
   xmlParams: {
@@ -64,9 +67,7 @@ export default abstract class BaseRequest<T> {
     this._encryption = new Encryption();
   }
 
-  abstract processRequest(
-    params: ProcessRequestType<T>,
-  ): Promise<{
+  abstract processRequest(params: ProcessRequestType<T>): Promise<{
     type: string;
     message: ProcessResponseType | undefined;
   }>;

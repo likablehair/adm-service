@@ -8,10 +8,10 @@ export type {
   ProcessResponseType,
   BaseProcessRequestType,
   ProcessRequestType,
-  EsitoType
+  EsitoType,
 } from './requests/baseRequest';
 
-export type { RichiestaDocumentiDichiarazione } from './requests/ponImport/richiestaListaDocumentiDichiarazioniRequest'; 
+export type { RichiestaDocumentiDichiarazione } from './requests/ponImport/richiestaListaDocumentiDichiarazioniRequest';
 export type { RichiestaProspetto } from './requests/ponImport/richiestaProspettoSintesiRequest';
 export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSintesiRequest';
 
