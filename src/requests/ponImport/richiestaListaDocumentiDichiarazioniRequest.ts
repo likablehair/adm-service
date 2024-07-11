@@ -1,9 +1,10 @@
 import BaseRequest, {
   ProcessResponseType,
+  BaseProcessRequestType,
   ProcessRequestType,
 } from '../baseRequest';
 
-type RichiestaDocumentiDichiarazione = {
+export type RichiestaDocumentiDichiarazione = {
   mrn: string;
   utenteInvio: string;
 };
@@ -18,10 +19,7 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
   }
 
   async processRequest(
-    params: Omit<
-      ProcessRequestType<RichiestaDocumentiDichiarazione>,
-      'serviceId'
-    >,
+    params: ProcessRequestType<RichiestaDocumentiDichiarazione>,
   ): Promise<{
     type: string;
     message: ProcessResponseType | undefined;
@@ -63,7 +61,7 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
 
   // This method is not used in the current implementation - Axios
   protected createSoapEnvelope(
-    params: Omit<ProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequestType<string>, 'security'>,
   ): string {
     return `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">

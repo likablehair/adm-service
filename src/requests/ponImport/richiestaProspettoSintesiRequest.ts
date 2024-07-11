@@ -1,9 +1,10 @@
 import BaseRequest, {
-  ProcessRequestType,
+  BaseProcessRequestType,
   ProcessResponseType,
+  ProcessRequestType,
 } from '../baseRequest';
 
-type RichiestaProspetto = {
+export type RichiestaProspetto = {
   mrn: string;
 };
 
@@ -17,7 +18,7 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
   }
 
   async processRequest(
-    params: Omit<ProcessRequestType<RichiestaProspetto>, 'serviceId'>,
+    params: ProcessRequestType<RichiestaProspetto>,
   ): Promise<{
     type: string;
     message: ProcessResponseType | undefined;
@@ -56,7 +57,7 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
 
   // This method is not used in the current implementation - Axios
   protected createSoapEnvelope(
-    params: Omit<ProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequestType<string>, 'security'>,
   ): string {
     return `
       <soap:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">

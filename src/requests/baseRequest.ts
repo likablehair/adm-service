@@ -4,7 +4,7 @@ import Encryption from 'src/utils/encryption';
 import axios from 'axios';
 import https from 'https';
 
-export type ProcessRequestType<T> = {
+export type BaseProcessRequestType<T> = {
   data: {
     xml: T;
     dichiarante: string;
@@ -35,6 +35,8 @@ export type EsitoType = {
   messaggio: string | null;
 };
 
+export type ProcessRequestType<T> = Omit<BaseProcessRequestType<T>, 'serviceId'>
+
 type HTTPRequestType = {
   xmlParams: {
     serviceId: string;
@@ -63,20 +65,20 @@ export default abstract class BaseRequest<T> {
   }
 
   abstract processRequest(
-    params: Omit<ProcessRequestType<T>, 'serviceId'>,
+    params: ProcessRequestType<T>,
   ): Promise<{
     type: string;
     message: ProcessResponseType | undefined;
   }>;
 
   protected abstract createSoapEnvelope(
-    params: Omit<ProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequestType<string>, 'security'>,
   ): string;
 
   protected abstract createXMLForRequest(params: T): string;
 
   protected async asyncBaseProcessRequest(
-    params: ProcessRequestType<string>,
+    params: BaseProcessRequestType<string>,
   ): Promise<{
     type: string;
     message: ProcessResponseType;
