@@ -92,8 +92,10 @@ export default abstract class BaseRequest<T> {
 
       let signCertificateBuffer: Buffer;
       if (params.security.signCertificate.path) {
-        signCertificateBuffer = fs.readFileSync(params.security.signCertificate.path);
-      } else if (params.security.signCertificate.file){
+        signCertificateBuffer = fs.readFileSync(
+          params.security.signCertificate.path,
+        );
+      } else if (params.security.signCertificate.file) {
         signCertificateBuffer = params.security.signCertificate.file;
       } else {
         throw new Error('Certificate not found');
@@ -104,15 +106,15 @@ export default abstract class BaseRequest<T> {
         certFile: signCertificateBuffer,
         passphrase: params.security.signCertificate.passphrase,
       });
-  
+
       console.log('signedXML', signedXML);
-  
+
       if (!signedXML) {
         throw new Error('Error in signXML');
       }
-  
+
       const signedXMLBase64 = btoa(signedXML);
-  
+
       const xmlParams = {
         serviceId: params.serviceId,
         data: {
@@ -123,8 +125,10 @@ export default abstract class BaseRequest<T> {
 
       let certificateBuffer: Buffer;
       if (params.security.admCertificate.path) {
-        certificateBuffer = fs.readFileSync(params.security.admCertificate.path);
-      } else if (params.security.admCertificate.file){
+        certificateBuffer = fs.readFileSync(
+          params.security.admCertificate.path,
+        );
+      } else if (params.security.admCertificate.file) {
         certificateBuffer = params.security.admCertificate.file;
       } else {
         throw new Error('Certificate not found');

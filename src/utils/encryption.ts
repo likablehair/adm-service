@@ -121,18 +121,15 @@ export default class Encryption {
     return p12DerBuffer;
   }
 
-  async retrieveKeyFromCert(
-    params: {
-      certPath?: string,
-      certFile?: Buffer,
-      passphrase: string
-    }
-  ) {
-    
+  async retrieveKeyFromCert(params: {
+    certPath?: string;
+    certFile?: Buffer;
+    passphrase: string;
+  }) {
     let certificateBuffer: Buffer;
     if (params.certPath) {
       certificateBuffer = fs.readFileSync(params.certPath);
-    } else if (params.certFile){
+    } else if (params.certFile) {
       certificateBuffer = params.certFile;
     } else {
       throw new Error('Certificate not found');
@@ -185,15 +182,14 @@ export default class Encryption {
   }
 
   async convertPKCS12Encryption(params: {
-    certPath?: string,
-    certFile?: Buffer,
-    passphrase: string
+    certPath?: string;
+    certFile?: Buffer;
+    passphrase: string;
   }) {
-    
     let certificateBuffer: Buffer;
     if (params.certPath) {
       certificateBuffer = fs.readFileSync(params.certPath);
-    } else if (params.certFile){
+    } else if (params.certFile) {
       certificateBuffer = params.certFile;
     } else {
       throw new Error('Certificate not found');
@@ -204,7 +200,11 @@ export default class Encryption {
       params.passphrase,
     );
 
-    const newP12 = this.createPKCS12(privateKey, certificate, params.passphrase);
+    const newP12 = this.createPKCS12(
+      privateKey,
+      certificate,
+      params.passphrase,
+    );
 
     return newP12;
   }
