@@ -121,22 +121,36 @@ export default class Encryption {
     return p12DerBuffer;
   }
 
-  async retrieveKeyFromCert(certPath: string, passphrase: string) {
-    const certificateBuffer = fs.readFileSync(certPath);
+  async retrieveKeyFromCert(
+    params: {
+      certPath?: string,
+      certFile?: Buffer,
+      passphrase: string
+    }
+  ) {
+    
+    let certificateBuffer: Buffer;
+    if (params.certPath) {
+      certificateBuffer = fs.readFileSync(params.certPath);
+    } else if (params.certFile){
+      certificateBuffer = params.certFile;
+    } else {
+      throw new Error('Certificate not found');
+    }
 
     let privateKey: forge.pki.PrivateKey | undefined = undefined;
     let publicKey: forge.pki.PublicKey | undefined = undefined;
 
     const standard = this.identifyCryptograhyStandard(
       certificateBuffer,
-      passphrase,
+      params.passphrase,
     );
 
     switch (standard) {
       case 'PKCS12':
         ({ privateKey, publicKey } = this.extractKeysFromPKCS12(
           certificateBuffer,
-          passphrase,
+          params.passphrase,
         ));
         break;
       case 'PRIVATE_KEY_PEM':
@@ -170,14 +184,27 @@ export default class Encryption {
     return privateKeyInfoDerBuff;
   }
 
-  async convertPKCS12Encryption(certPath: string, passphrase: string) {
-    const certificateBuffer = fs.readFileSync(certPath);
+  async convertPKCS12Encryption(params: {
+    certPath?: string,
+    certFile?: Buffer,
+    passphrase: string
+  }) {
+    
+    let certificateBuffer: Buffer;
+    if (params.certPath) {
+      certificateBuffer = fs.readFileSync(params.certPath);
+    } else if (params.certFile){
+      certificateBuffer = params.certFile;
+    } else {
+      throw new Error('Certificate not found');
+    }
+
     const { privateKey, certificate } = this.extractKeyAndCertFromPKCS12(
       certificateBuffer,
-      passphrase,
+      params.passphrase,
     );
 
-    const newP12 = this.createPKCS12(privateKey, certificate, passphrase);
+    const newP12 = this.createPKCS12(privateKey, certificate, params.passphrase);
 
     return newP12;
   }

@@ -3,6 +3,7 @@ import XAdES from 'src/utils/XAdES';
 import Encryption from 'src/utils/encryption';
 import axios from 'axios';
 import https from 'https';
+import * as fs from 'node:fs';
 
 export type BaseProcessRequestType<T> = {
   data: {
@@ -11,11 +12,13 @@ export type BaseProcessRequestType<T> = {
   };
   security: {
     admCertificate: {
-      path: string;
+      path?: string;
+      file?: Buffer;
       passphrase: string;
     };
     signCertificate: {
-      path: string;
+      path?: string;
+      file?: Buffer;
       passphrase: string;
     };
   };
@@ -84,41 +87,58 @@ export default abstract class BaseRequest<T> {
     type: string;
     message: ProcessResponseType;
   }> {
-    const XAdESClass = new XAdES();
-
-    const signedXML = await XAdESClass.signXML({
-      xmlString: params.data.xml,
-      certPath: params.security.signCertificate.path,
-      passphrase: params.security.signCertificate.passphrase,
-    });
-
-    console.log('signedXML', signedXML);
-
-    if (!signedXML) {
-      throw new Error('Error in signXML');
-    }
-
-    const signedXMLBase64 = btoa(signedXML);
-
-    const xmlParams = {
-      serviceId: params.serviceId,
-      data: {
-        xml: signedXMLBase64,
-        dichiarante: params.data.dichiarante,
-      },
-    };
-
     try {
-      const admCertificatePath = params.security.admCertificate.path;
+      const XAdESClass = new XAdES();
+
+      let signCertificateBuffer: Buffer;
+      if (params.security.signCertificate.path) {
+        signCertificateBuffer = fs.readFileSync(params.security.signCertificate.path);
+      } else if (params.security.signCertificate.file){
+        signCertificateBuffer = params.security.signCertificate.file;
+      } else {
+        throw new Error('Certificate not found');
+      }
+
+      const signedXML = await XAdESClass.signXML({
+        xmlString: params.data.xml,
+        certFile: signCertificateBuffer,
+        passphrase: params.security.signCertificate.passphrase,
+      });
+  
+      console.log('signedXML', signedXML);
+  
+      if (!signedXML) {
+        throw new Error('Error in signXML');
+      }
+  
+      const signedXMLBase64 = btoa(signedXML);
+  
+      const xmlParams = {
+        serviceId: params.serviceId,
+        data: {
+          xml: signedXMLBase64,
+          dichiarante: params.data.dichiarante,
+        },
+      };
+
+      let certificateBuffer: Buffer;
+      if (params.security.admCertificate.path) {
+        certificateBuffer = fs.readFileSync(params.security.admCertificate.path);
+      } else if (params.security.admCertificate.file){
+        certificateBuffer = params.security.admCertificate.file;
+      } else {
+        throw new Error('Certificate not found');
+      }
+
       const admCertificatePassphrase =
         params.security.admCertificate.passphrase;
 
-      const newAdmCertificate = await this._encryption.convertPKCS12Encryption(
-        admCertificatePath,
-        admCertificatePassphrase,
-      );
+      const newAdmCertificate = await this._encryption.convertPKCS12Encryption({
+        certFile: certificateBuffer,
+        passphrase: admCertificatePassphrase,
+      });
 
-      return await this._soapRequest({
+      return await this._axiosRequest({
         xmlParams,
         security: {
           admCertificate: {

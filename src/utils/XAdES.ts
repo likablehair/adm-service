@@ -13,7 +13,8 @@ export default class XAdES {
 
   public async signXML(params: {
     xmlString: string;
-    certPath: string;
+    certPath?: string;
+    certFile?: Buffer;
     passphrase: string;
   }) {
     const algorithm = {
@@ -25,10 +26,11 @@ export default class XAdES {
       const xmlDoc = xadesjs.Parse(params.xmlString);
       const signedXml = new xadesjs.SignedXml();
 
-      const { privateKey } = await this._encryption.retrieveKeyFromCert(
-        params.certPath,
-        params.passphrase,
-      );
+      const { privateKey } = await this._encryption.retrieveKeyFromCert({
+        certPath: params.certPath,
+        certFile: params.certFile,
+        passphrase: params.passphrase,
+      });
 
       const privateKeyDer = this._encryption.privateKeyToPkcs8(privateKey);
       const cryptoKey = await crypto.subtle.importKey(
