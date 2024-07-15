@@ -37,7 +37,7 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
       });
     } catch (e) {
       if (e instanceof Error) {
-        console.log("STACK TRACE: ", e.stack);
+        console.log('STACK TRACE: ', e.stack);
       }
       return { type: 'error', message: undefined };
     }

@@ -31,13 +31,14 @@ export default class XAdES {
       );
 
       const privateKeyDer = this._encryption.privateKeyToPkcs8(privateKey);
-      const cryptoKey = await /* xadesjs.Application. */crypto.subtle.importKey(
-        'pkcs8',
-        privateKeyDer,
-        algorithm,
-        false,
-        ['sign'],
-      );
+      const cryptoKey =
+        await /* xadesjs.Application. */ crypto.subtle.importKey(
+          'pkcs8',
+          privateKeyDer,
+          algorithm,
+          false,
+          ['sign'],
+        );
 
       const signature = await signedXml.Sign(algorithm, cryptoKey, xmlDoc);
 
