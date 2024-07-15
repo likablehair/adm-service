@@ -13,6 +13,7 @@
     "test": "vitest run"
   },
   "main": "./dist/adm-service.js",
+  "module": "./dist/adm-service.js",
   "types": "./dist/src/main.d.ts",
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
