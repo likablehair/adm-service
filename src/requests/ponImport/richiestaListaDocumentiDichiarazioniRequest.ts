@@ -36,6 +36,9 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
         serviceId: 'richiestaListaDocumentiDichiarazione',
       });
     } catch (e) {
+      if (e instanceof Error) {
+        console.log("STACK TRACE: ", e.stack);
+      }
       return { type: 'error', message: undefined };
     }
   }

@@ -11,6 +11,7 @@ export default defineConfig({
     rollupOptions: {
       external: [...builtinModules, /^node:/],
     },
+    sourcemap: true,
   },
   resolve: { alias: { src: resolve('src/') } },
   plugins: [dts()],
