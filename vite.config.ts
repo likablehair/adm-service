@@ -14,11 +14,11 @@ export default defineConfig({
     sourcemap: true,
     outDir: 'dist',
   },
-  resolve: { 
-    alias: { 
+  resolve: {
+    alias: {
       src: resolve('src/'),
-      public: resolve(__dirname, '/public/') 
-    } 
+      public: resolve(__dirname, '/public/'),
+    },
   },
   plugins: [dts()],
 });

@@ -69,7 +69,7 @@ export default abstract class BaseRequest<T> {
   constructor(httpsUrl: string, soapUrl: string, httpSoapAction: string) {
     this._httpsUrl = httpsUrl;
     this._soapUrl = soapUrl;
-    this._httpSoapAction = httpSoapAction
+    this._httpSoapAction = httpSoapAction;
     this._encryption = new Encryption();
   }
 
@@ -167,7 +167,8 @@ export default abstract class BaseRequest<T> {
 
   private async _soapRequest(params: HTTPRequestType) {
     try {
-      const localUrl = import.meta.env.DEV ? resolve('public', this._soapUrl) 
+      const localUrl = import.meta.env.DEV
+        ? resolve('public', this._soapUrl)
         : resolve(__dirname, this._soapUrl);
 
       const client = await soap.createClientAsync(localUrl);
@@ -207,7 +208,7 @@ export default abstract class BaseRequest<T> {
         host: 'interop.adm.gov.it',
         keepAlive: true,
       });
-      
+
       const response = await fetch(this._httpsUrl, {
         method: 'POST',
         headers: {
@@ -215,7 +216,7 @@ export default abstract class BaseRequest<T> {
           SOAPAction: this._httpSoapAction,
         },
         body: soapEnvelope,
-        agent: configuredHttpsAgent
+        agent: configuredHttpsAgent,
       });
 
       const xmlResponse = await response.text();

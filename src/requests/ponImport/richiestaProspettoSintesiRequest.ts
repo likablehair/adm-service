@@ -13,7 +13,7 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     const superArgs = {
       httpsUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
       soapUrl: 'ponimport_reale.wsdl',
-      httpSoapAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport'
+      httpSoapAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
     };
     super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
   }

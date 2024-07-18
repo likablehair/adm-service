@@ -19,7 +19,8 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
       httpsUrl:
         'https://interop.adm.gov.it/DestinariAutorizzatiServiceWeb/services/DestinatariAutorizzatiService',
       soapUrl: 'DestinatariAutorizzatiService.wsdl',
-      httpSoapAction: 'http://process.destinatariautorizzatiservice.domest.sogei.it/wsdl/DestinatariAutorizzatiService'
+      httpSoapAction:
+        'http://process.destinatariautorizzatiservice.domest.sogei.it/wsdl/DestinatariAutorizzatiService',
     };
     super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
   }

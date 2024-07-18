@@ -9,7 +9,7 @@
     "rootDir": ".",
     "paths": {
       "src/*": ["./src/*"], // enables us to use @components/MyComponent
-      "public/*": ["./public/*"],
+      "public/*": ["./public/*"]
     },
 
     /* Bundler mode */
