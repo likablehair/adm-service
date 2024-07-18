@@ -16,11 +16,12 @@ export type Enquiry = {
 export default class ListaDestautTIN extends BaseRequest<Enquiry> {
   constructor() {
     const superArgs = {
-      axiosUrl:
+      httpsUrl:
         'https://interop.adm.gov.it/DestinariAutorizzatiServiceWeb/services/DestinatariAutorizzatiService',
-      soapUrl: './assets/DestinatariAutorizzatiService.wsdl',
+      soapUrl: 'DestinatariAutorizzatiService.wsdl',
+      httpSoapAction: 'http://process.destinatariautorizzatiservice.domest.sogei.it/wsdl/DestinatariAutorizzatiService'
     };
-    super(superArgs.axiosUrl, superArgs.soapUrl);
+    super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
   }
 
   async processRequest(params: ProcessRequestType<Enquiry>): Promise<{
@@ -56,7 +57,6 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
     `;
   }
 
-  // This method is not used in the current implementation - Axios
   protected createSoapEnvelope(
     params: Omit<BaseProcessRequestType<string>, 'security'>,
   ): string {

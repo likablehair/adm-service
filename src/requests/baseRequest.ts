@@ -1,9 +1,10 @@
-import soap from 'soap';
+import * as soap from 'soap';
 import XAdES from 'src/utils/XAdES';
 import Encryption from 'src/utils/encryption';
-import axios from 'axios';
 import https from 'https';
+import fetch from 'node-fetch';
 import * as fs from 'node:fs';
+import { resolve } from 'path';
 
 export type BaseProcessRequestType<T> = {
   data: {
@@ -60,13 +61,15 @@ type HTTPRequestType = {
 };
 
 export default abstract class BaseRequest<T> {
-  private _axiosUrl: string;
+  private _httpsUrl: string;
+  private _httpSoapAction: string;
   private _soapUrl: string;
   private _encryption;
 
-  constructor(axiosUrl: string, soapUrl: string) {
-    this._axiosUrl = axiosUrl;
+  constructor(httpsUrl: string, soapUrl: string, httpSoapAction: string) {
+    this._httpsUrl = httpsUrl;
     this._soapUrl = soapUrl;
+    this._httpSoapAction = httpSoapAction
     this._encryption = new Encryption();
   }
 
@@ -164,7 +167,10 @@ export default abstract class BaseRequest<T> {
 
   private async _soapRequest(params: HTTPRequestType) {
     try {
-      const client = await soap.createClientAsync(this._soapUrl);
+      const localUrl = import.meta.env.DEV ? resolve('public', this._soapUrl) 
+        : resolve(__dirname, this._soapUrl);
+
+      const client = await soap.createClientAsync(localUrl);
       client.setSecurity(
         new soap.ClientSSLSecurityPFX(
           params.security.admCertificate.file,
@@ -185,14 +191,13 @@ export default abstract class BaseRequest<T> {
       };
     } catch (err: unknown) {
       if (err instanceof Error) {
+        console.log('Error in _soapRequest', err.stack);
         throw new Error(err.message);
       } else {
         throw new Error('Unknown error');
       }
     }
   }
-
-  // This method is not used in the current implementation
   private async _axiosRequest(params: HTTPRequestType) {
     try {
       const soapEnvelope = this.createSoapEnvelope(params.xmlParams);
@@ -202,20 +207,18 @@ export default abstract class BaseRequest<T> {
         host: 'interop.adm.gov.it',
         keepAlive: true,
       });
-
-      const config = {
-        method: 'post',
-        url: this._axiosUrl,
+      
+      const response = await fetch(this._httpsUrl, {
+        method: 'POST',
         headers: {
           'Content-Type': 'text/xml;charset=UTF-8',
-          SOAPAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
+          SOAPAction: this._httpSoapAction,
         },
-        httpsAgent: configuredHttpsAgent,
-        data: soapEnvelope,
-      };
+        body: soapEnvelope,
+        agent: configuredHttpsAgent
+      });
 
-      const response = await axios(config);
-      const xmlResponse = response.data;
+      const xmlResponse = await response.text();
 
       const xmlDoc = new DOMParser().parseFromString(xmlResponse, 'text/xml');
       const data = <ProcessResponseType>{};

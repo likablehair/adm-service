@@ -12,7 +12,13 @@ export default defineConfig({
       external: [...builtinModules, /^node:/],
     },
     sourcemap: true,
+    outDir: 'dist',
   },
-  resolve: { alias: { src: resolve('src/') } },
+  resolve: { 
+    alias: { 
+      src: resolve('src/'),
+      public: resolve(__dirname, '/public/') 
+    } 
+  },
   plugins: [dts()],
 });

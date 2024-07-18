@@ -11,10 +11,11 @@ export type RichiestaProspetto = {
 export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaProspetto> {
   constructor() {
     const superArgs = {
-      axiosUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
-      soapUrl: './assets/ponimport_reale.wsdl',
+      httpsUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
+      soapUrl: 'ponimport_reale.wsdl',
+      httpSoapAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport'
     };
-    super(superArgs.axiosUrl, superArgs.soapUrl);
+    super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
   }
 
   async processRequest(
@@ -55,7 +56,6 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     `;
   }
 
-  // This method is not used in the current implementation - Axios
   protected createSoapEnvelope(
     params: Omit<BaseProcessRequestType<string>, 'security'>,
   ): string {

@@ -1,10 +1,11 @@
 import { expect, test } from 'vitest';
 
 import { RichiestaListaDocumentiDichiarazioniRequest } from 'src/main';
+import * as fs from 'node:fs';
 
 test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
-  const certificateUrl = import.meta.env.VITE_CERTIFICATE_URL;
-  if (!certificateUrl) {
+  const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
+  if (!certificatePath) {
     console.error('ERROR: CERTIFICATE_URL not found');
     return;
   }
@@ -15,11 +16,14 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
     return;
   }
 
-  const signCertificate = import.meta.env.VITE_SIGN_CERTIFICATE_URL;
-  if (!signCertificate) {
+  const signCertificatePath = import.meta.env.VITE_SIGN_CERTIFICATE_URL;
+  if (!signCertificatePath) {
     console.error('ERROR: CERTIFICATE_SIGN not found');
     return;
   }
+
+  const admCertificate = fs.readFileSync(certificatePath);
+  const signCertificate = fs.readFileSync(signCertificatePath);
 
   const request = new RichiestaListaDocumentiDichiarazioniRequest();
   const result = await request.processRequest({
@@ -32,12 +36,12 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
     },
     security: {
       admCertificate: {
-        path: certificateUrl,
         passphrase: certificatePassphrase,
+        file: admCertificate,
       },
       signCertificate: {
-        path: signCertificate,
         passphrase: certificatePassphrase,
+        file: signCertificate,
       },
     },
   });

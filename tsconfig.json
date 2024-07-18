@@ -8,7 +8,8 @@
     "baseUrl": ".", // root of your "paths" below. Required if "paths" is defined
     "rootDir": ".",
     "paths": {
-      "src/*": ["./src/*"] // enables us to use @components/MyComponent
+      "src/*": ["./src/*"], // enables us to use @components/MyComponent
+      "public/*": ["./public/*"],
     },
 
     /* Bundler mode */
