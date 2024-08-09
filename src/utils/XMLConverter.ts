@@ -79,28 +79,30 @@ export type Dichiarazione = {
             CodicePaeseDestinazione: string;
             CodiceRegioneDestinazione: string;
           };
-        }[]
-      }[]
-    }[]
+        }[];
+      }[];
+    }[];
   };
 };
 
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import { parseStringPromise } from 'xml2js';
 
 export default class XMLConverter {
   constructor() {}
 
-  async run(params: {xmlFilePath?: string, xmlData?: string}): Promise<Dichiarazione> {
+  async run(params: {
+    xmlFilePath?: string;
+    xmlData?: string;
+  }): Promise<Dichiarazione> {
     try {
-      let data: string
-      // if(!!params.xmlFilePath)  
+      let data: string;
+      // if(!!params.xmlFilePath)
       //   data = fs.readFileSync(params.xmlFilePath, 'utf-8');
 
-      if(!params.xmlData)
-        throw new Error('xmlData not loaded')
-      else data = params.xmlData
-      
+      if (!params.xmlData) throw new Error('xmlData not loaded');
+      else data = params.xmlData;
+
       const jsonData = await parseStringPromise(data);
 
       return jsonData;
