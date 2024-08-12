@@ -17,5 +17,5 @@ export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSi
 
 export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
-export type { Dichiarazione } from './utils/XMLConverter';
-export { default as run } from './utils/XMLConverter';
+export type { AdmDeclarationMapped } from './utils/XMLConverter';
+export { default as XMLConverter } from './utils/XMLConverter';
