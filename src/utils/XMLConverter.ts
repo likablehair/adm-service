@@ -92,11 +92,11 @@ export type Dichiarazione = {
             CodiceRegioneDestinazione: string;
           };
           InformazioniMessaggio: {
-            NumeroArticolo: string
+            NumeroArticolo: string;
             RegimeDoganale: {
               RegimeRichiesto: string;
               RegimePrecedente: string;
-            }
+            };
           };
         }[];
       };
@@ -113,7 +113,7 @@ export type AdmDeclarationMapped = {
     country: string;
     address: string;
     city: string;
-    postalCode: string
+    postalCode: string;
   };
   goods: {
     ncCode: string;
@@ -143,7 +143,7 @@ export default class XMLConverter {
       if (!params.xmlData) throw new Error('xmlData not loaded');
       else data = params.xmlData;
 
-      const jsonData = await parseStringPromise(data, {explicitArray: false});
+      const jsonData = await parseStringPromise(data, { explicitArray: false });
       const result = this.map(jsonData);
 
       return result;
@@ -154,8 +154,9 @@ export default class XMLConverter {
   }
 
   async map(jsonData: Dichiarazione): Promise<AdmDeclarationMapped> {
-    
-    const  esportatore = jsonData.Messaggio.DichiarazioneH1.DatiH1.IntestazioneH1.Parti.Esportatore;
+    const esportatore =
+      jsonData.Messaggio.DichiarazioneH1.DatiH1.IntestazioneH1.Parti
+        .Esportatore;
 
     const data: AdmDeclarationMapped = {
       mrn: '',
@@ -181,27 +182,30 @@ export default class XMLConverter {
       country: string;
       netWeight: string;
       customsRegime: string | '';
-      requestedRegime: string| '';
-      previousRegime: string| '';
+      requestedRegime: string | '';
+      previousRegime: string | '';
     }[] = [];
 
     for (let i = 0; i < articoli.length; i++) {
-
       goods.push({
         ncCode: articoli[i].IdentificazioneMerci.CodiceNC,
         taricCode: articoli[i].IdentificazioneMerci.CodiceTaric,
-        identificationCode: articoli[i].IdentificazioneMerci.CodiceNC + articoli[i].IdentificazioneMerci.CodiceTaric,
+        identificationCode:
+          articoli[i].IdentificazioneMerci.CodiceNC +
+          articoli[i].IdentificazioneMerci.CodiceTaric,
         description: articoli[i].IdentificazioneMerci.DescrizioneMerci,
         country: esportatore.Paese,
         netWeight: articoli[i].IdentificazioneMerci.MassaNetta,
-        customsRegime:  articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto + articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
-        requestedRegime: articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto,
-        previousRegime: articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente 
+        customsRegime:
+          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto +
+          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
+        requestedRegime:
+          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto,
+        previousRegime:
+          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
       });
     }
     data.goods = goods;
     return data;
   }
 }
-
-

@@ -2,7 +2,7 @@ import { expect, test } from 'vitest';
 
 import { RichiestaListaDocumentiDichiarazioniRequest } from 'src/main';
 import * as fs from 'node:fs';
-import XMLConverter, { AdmDeclarationMapped, Dichiarazione } from 'src/utils/XMLConverter';
+import XMLConverter from 'src/utils/XMLConverter';
 
 test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -3249,6 +3249,5 @@ test('Translate XML', async () => {
   </DichiarazioneH1>
   </Messaggio>`;
 
-  const result = await converterXML.run({ xmlData: data });
-
+  await converterXML.run({ xmlData: data });
 });
