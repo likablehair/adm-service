@@ -84,6 +84,7 @@ export default abstract class BaseRequest<T> {
 
   protected abstract createXMLForRequest(params: T): string;
 
+
   protected async asyncBaseProcessRequest(
     params: BaseProcessRequestType<string>,
   ): Promise<{
@@ -272,4 +273,7 @@ export default abstract class BaseRequest<T> {
       }
     }
   }
+
+  protected abstract convertXMLResponse(params: T): string;
+
 }

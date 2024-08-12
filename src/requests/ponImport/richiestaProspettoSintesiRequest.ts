@@ -75,4 +75,9 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
   </soapenv:Envelope>
     `;
   }
+
+  protected convertXMLResponse() : string {
+    return ''
+  }
+
 }

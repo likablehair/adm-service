@@ -16,3 +16,6 @@ export type { RichiestaProspetto } from './requests/ponImport/richiestaProspetto
 export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSintesiRequest';
 
 export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINRequest';
+
+export type { Dichiarazione } from './utils/XMLConverter'
+export { default as run } from './utils/XMLConverter'

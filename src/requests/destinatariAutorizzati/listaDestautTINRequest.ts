@@ -77,4 +77,8 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
   </soapenv:Envelope>
     `;
   }
+
+  protected convertXMLResponse() : string {
+    return ''
+  }
 }

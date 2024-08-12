@@ -55,8 +55,6 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
 });
 
 test('Translate XML', async () => {
-  // const xmlFilePath = '/Users/filippopassalacqua/filop/projects/lh/aerre-customs/adm-service/tests/H1_24ITQTC04WJ97190R7.xml';
-
   const converterXML = new XMLConverter();
   const data = `
   <Messaggio xsi:noNamespaceSchemaLocation="dichiarazione.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -3253,5 +3251,5 @@ test('Translate XML', async () => {
 
   const result: Dichiarazione = await converterXML.run({ xmlData: data });
 
-  console.log(result.Messaggio.DichiarazioneH1[0].DatiH1[0].ArticoloH1.length);
+  console.log(result.Messaggio.DichiarazioneH1[0].DatiH1[0].ArticoloH1);
 });
