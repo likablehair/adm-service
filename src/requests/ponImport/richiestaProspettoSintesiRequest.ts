@@ -76,8 +76,7 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     `;
   }
 
-  protected convertXMLResponse() : string {
-    return ''
+  protected convertXMLResponse(): string {
+    return '';
   }
-
 }

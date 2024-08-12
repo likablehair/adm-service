@@ -78,7 +78,7 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
     `;
   }
 
-  protected convertXMLResponse() : string {
-    return ''
+  protected convertXMLResponse(): string {
+    return '';
   }
 }
