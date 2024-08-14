@@ -1,7 +1,7 @@
 {
-  "name": "adm-service",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@likable-hair/adm-service",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vitest",
@@ -53,5 +53,19 @@
     "soap": "^1.0.4",
     "xadesjs": "^2.4.4",
     "xml2js": "^0.6.2"
-  }
+  },
+  "description": "Adm service for Adm API",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/likablehair/adm-service.git"
+  },
+  "author": "Filippo Passalacqua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/likablehair/adm-service/issues"
+  },
+  "homepage": "https://github.com/likablehair/adm-service#readme"
 }
