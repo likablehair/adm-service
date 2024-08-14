@@ -205,6 +205,7 @@ export default class XMLConverter {
           articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
       });
     }
+    
     data.goods = goods;
     return data;
   }
