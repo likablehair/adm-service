@@ -8,10 +8,14 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
+    "prepublishOnly": "npm run build",
     "format": "prettier --write .",
     "prepare": "husky",
     "test": "vitest run"
   },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/adm-service.cjs",
   "module": "./dist/adm-service.cjs",
   "types": "./dist/src/main.d.ts",
