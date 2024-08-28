@@ -172,7 +172,7 @@ export default class XMLConverter {
       goods: [],
     };
 
-    const articoli = jsonData.Messaggio.DichiarazioneH1.DatiH1.ArticoloH1;
+    const articoloH1 = jsonData.Messaggio.DichiarazioneH1.DatiH1.ArticoloH1;
 
     const goods: {
       ncCode: string;
@@ -185,6 +185,8 @@ export default class XMLConverter {
       requestedRegime: string | '';
       previousRegime: string | '';
     }[] = [];
+
+    const articoli = await this.ensureArray(articoloH1);
 
     for (let i = 0; i < articoli.length; i++) {
       goods.push({
@@ -208,5 +210,15 @@ export default class XMLConverter {
 
     data.goods = goods;
     return data;
+  }
+
+  async ensureArray(input: Dichiarazione['Messaggio']['DichiarazioneH1']['DatiH1']['ArticoloH1']) {
+    if (Array.isArray(input)) {
+      return input;
+    } else if (input !== undefined && input !== null) {
+      return [input];
+    } else {
+      return [];
+    }
   }
 }
