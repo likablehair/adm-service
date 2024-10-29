@@ -1,4 +1,4 @@
-import { parseStringPromise } from "xml2js";
+import { parseStringPromise } from 'xml2js';
 
 export type BaseXMLSignatureEnvelopeParams = {
   xmlSignatureType: 'XMLENVELOPED' | 'XMLENVELOPING' | 'XMLDETACHED_INTERNAL';
@@ -48,50 +48,49 @@ export type XMLSignatureEnvelopeParams =
   | DirectoryNameParams
   | StreamParams;
 
-
 export type XMLSignatureResponseBase = {
   'S:Envelope': {
     'S:Body': {
       'ns2:xmlsignatureResponse': {
-        'return': {
-          'return_code': string;
-          'status': string;
-        }
-      }
-    }
-  }
-}
+        return: {
+          return_code: string;
+          status: string;
+        };
+      };
+    };
+  };
+};
 
 export type XMLSignatureResponseError = {
   'S:Envelope': {
     'S:Body': {
       'ns2:xmlsignatureResponse': {
-        'return': {
-          'description': string;
-          'return_code': string;
-          'status': 'KO';
-        }
-      }
-    }
-  }
-}
+        return: {
+          description: string;
+          return_code: string;
+          status: 'KO';
+        };
+      };
+    };
+  };
+};
 
 export type XMLSignatureResponseSuccess = {
   'S:Envelope': {
     'S:Body': {
       'ns2:xmlsignatureResponse': {
-        'return': {
-          'binaryoutput': string;
-          'return_code': string;
-          'status': 'OK';
-        }
-      }
-    }
-  }
-}
+        return: {
+          binaryoutput: string;
+          return_code: string;
+          status: 'OK';
+        };
+      };
+    };
+  };
+};
 
-export type XMLSignatureResponse = 
-  | XMLSignatureResponseError 
+export type XMLSignatureResponse =
+  | XMLSignatureResponseError
   | XMLSignatureResponseSuccess;
 
 export default class ArubaSign {
@@ -210,21 +209,31 @@ export default class ArubaSign {
     try {
       const data: string = params.xmlResponse;
 
-      const jsonData: XMLSignatureResponse = await parseStringPromise(data, { explicitArray: false });
-      
-      const status = jsonData['S:Envelope']['S:Body']['ns2:xmlsignatureResponse']['return']['status'];
+      const jsonData: XMLSignatureResponse = await parseStringPromise(data, {
+        explicitArray: false,
+      });
+
+      const status =
+        jsonData['S:Envelope']['S:Body']['ns2:xmlsignatureResponse']['return'][
+          'status'
+        ];
 
       if (status === 'KO') {
-        const description = jsonData['S:Envelope']['S:Body']['ns2:xmlsignatureResponse']['return']['description'];
+        const description =
+          jsonData['S:Envelope']['S:Body']['ns2:xmlsignatureResponse'][
+            'return'
+          ]['description'];
         throw new Error(description);
       } else {
-        const binaryOutput = jsonData['S:Envelope']['S:Body']['ns2:xmlsignatureResponse']['return']['binaryoutput'];
+        const binaryOutput =
+          jsonData['S:Envelope']['S:Body']['ns2:xmlsignatureResponse'][
+            'return'
+          ]['binaryoutput'];
         return binaryOutput;
       }
-
     } catch (err: unknown) {
       if (err instanceof Error) {
-        const errorMessage = "Error in ArubaSign: " + err.message;
+        const errorMessage = 'Error in ArubaSign: ' + err.message;
         throw new Error(errorMessage);
       } else {
         throw new Error('Unknown error in parsing XML response from ArubaSign');

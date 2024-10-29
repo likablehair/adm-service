@@ -30,7 +30,7 @@ export type BaseProcessRequestType<T> = {
       userPWD?: string;
       delegatedUser?: string;
       delegatedPassword?: string;
-    }
+    };
   };
   serviceId: string;
 };
@@ -121,7 +121,7 @@ export default abstract class BaseRequest<T> {
       });
 
       //KEEP COMMENT until we have the credentials
-/*       const binaryXML = Buffer.from(params.data.xml).toString('base64');
+      /*       const binaryXML = Buffer.from(params.data.xml).toString('base64');
       const signedXML = await arubaSign.xmlSignature({
         inputType: 'BYNARYNET',
         binaryInput: binaryXML,

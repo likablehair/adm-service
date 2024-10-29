@@ -33,8 +33,6 @@ test('Sign an XML (credentials error)', async () => {
         typeOtpAuth,
       },
       xmlSignatureType: 'XMLENVELOPING',
-    })
-  )
-  .rejects
-  .toThrowError('Invalid')
+    }),
+  ).rejects.toThrowError('Invalid');
 });
