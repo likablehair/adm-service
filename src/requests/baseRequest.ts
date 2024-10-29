@@ -116,7 +116,7 @@ export default abstract class BaseRequest<T> {
         throw new Error('Error in signXML');
       }
 
-      const signedXMLBase64 = btoa(signedXML);
+      const signedXMLBase64 = Buffer.from(signedXML).toString('base64');
 
       const xmlParams = {
         serviceId: params.serviceId,
@@ -145,7 +145,7 @@ export default abstract class BaseRequest<T> {
         passphrase: admCertificatePassphrase,
       });
 
-      return await this._axiosRequest({
+      return await this._fetchRequest({
         xmlParams,
         security: {
           admCertificate: {
@@ -199,7 +199,7 @@ export default abstract class BaseRequest<T> {
       }
     }
   }
-  private async _axiosRequest(params: HTTPRequestType) {
+  private async _fetchRequest(params: HTTPRequestType) {
     try {
       const soapEnvelope = this.createSoapEnvelope(params.xmlParams);
       const configuredHttpsAgent = new https.Agent({
