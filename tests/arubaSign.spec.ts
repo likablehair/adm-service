@@ -19,7 +19,7 @@ test('Sign an XML', async () => {
   `;
 
   const binaryXML = Buffer.from(xmlTest).toString('base64');
-  
+
   const signedXML = await arubaSign.xmlSignature({
     inputType: 'BYNARYNET',
     binaryInput: binaryXML,
@@ -31,8 +31,8 @@ test('Sign an XML', async () => {
       delegatedPassword,
       typeOtpAuth,
     },
-    xmlSignatureType: 'XMLENVELOPED'
-  })
+    xmlSignatureType: 'XMLENVELOPED',
+  });
 
   console.log(signedXML);
-})
+});

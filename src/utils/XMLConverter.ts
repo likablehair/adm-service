@@ -212,7 +212,9 @@ export default class XMLConverter {
     return data;
   }
 
-  async ensureArray(input: Dichiarazione['Messaggio']['DichiarazioneH1']['DatiH1']['ArticoloH1']) {
+  async ensureArray(
+    input: Dichiarazione['Messaggio']['DichiarazioneH1']['DatiH1']['ArticoloH1'],
+  ) {
     if (Array.isArray(input)) {
       return input;
     } else if (input !== undefined && input !== null) {
