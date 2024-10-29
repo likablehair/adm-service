@@ -5,6 +5,7 @@ import https from 'https';
 import fetch from 'node-fetch';
 import * as fs from 'node:fs';
 import { resolve } from 'path';
+/* import ArubaSign from 'src/utils/ArubaSign'; */
 
 export type BaseProcessRequestType<T> = {
   data: {
@@ -22,6 +23,14 @@ export type BaseProcessRequestType<T> = {
       file?: Buffer;
       passphrase: string;
     };
+    identity?: {
+      otpPWD: string;
+      typeOtpAuth: string;
+      user: string;
+      userPWD?: string;
+      delegatedUser?: string;
+      delegatedPassword?: string;
+    }
   };
   serviceId: string;
 };
@@ -92,6 +101,7 @@ export default abstract class BaseRequest<T> {
   }> {
     try {
       const XAdESClass = new XAdES();
+      //const arubaSign = new ArubaSign();
 
       let signCertificateBuffer: Buffer;
       if (params.security.signCertificate.path) {
@@ -109,6 +119,17 @@ export default abstract class BaseRequest<T> {
         certFile: signCertificateBuffer,
         passphrase: params.security.signCertificate.passphrase,
       });
+
+      //KEEP COMMENT until we have the credentials
+/*       const binaryXML = Buffer.from(params.data.xml).toString('base64');
+      const signedXML = await arubaSign.xmlSignature({
+        inputType: 'BYNARYNET',
+        binaryInput: binaryXML,
+        xmlSignatureType: 'XMLENVELOPING',
+        identity: {
+          ...params.security.identity
+        }
+      }) */
 
       console.log('signedXML', signedXML);
 

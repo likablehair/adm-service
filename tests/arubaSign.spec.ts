@@ -1,8 +1,8 @@
-import { test } from 'vitest';
+import { expect, test } from 'vitest';
 
 import ArubaSign from 'src/utils/ArubaSign';
 
-test('Sign an XML', async () => {
+test('Sign an XML (credentials error)', async () => {
   const arubaSign = new ArubaSign();
 
   const otpPWD = import.meta.env.VITE_ARUBA_OTP_PWD;
@@ -20,19 +20,21 @@ test('Sign an XML', async () => {
 
   const binaryXML = Buffer.from(xmlTest).toString('base64');
 
-  const signedXML = await arubaSign.xmlSignature({
-    inputType: 'BYNARYNET',
-    binaryInput: binaryXML,
-    identity: {
-      otpPWD,
-      user,
-      userPWD,
-      delegatedUser,
-      delegatedPassword,
-      typeOtpAuth,
-    },
-    xmlSignatureType: 'XMLENVELOPED',
-  });
-
-  console.log(signedXML);
+  await expect(
+    arubaSign.xmlSignature({
+      inputType: 'BYNARYNET',
+      binaryInput: binaryXML,
+      identity: {
+        otpPWD,
+        user,
+        userPWD,
+        delegatedUser,
+        delegatedPassword,
+        typeOtpAuth,
+      },
+      xmlSignatureType: 'XMLENVELOPING',
+    })
+  )
+  .rejects
+  .toThrowError('Invalid')
 });
