@@ -18,9 +18,7 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
   }
 
-  async processRequest(
-    params: ProcessRequest<RichiestaProspetto>,
-  ): Promise<{
+  async processRequest(params: ProcessRequest<RichiestaProspetto>): Promise<{
     type: string;
     message: ProcessResponse | undefined;
   }> {

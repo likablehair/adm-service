@@ -98,7 +98,7 @@ export default class ArubaSign {
 
   constructor() {
     //Use when we have the prod credentials
-/*     this._httpsUrl =
+    /*     this._httpsUrl =
       'https://arss.arubapec.it:443/ArubaSignService/ArubaSignService'; */
     this._httpsUrl =
       'https://arss.demo.firma-automatica.it:443/ArubaSignService/ArubaSignService';

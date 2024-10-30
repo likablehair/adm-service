@@ -45,7 +45,7 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
       xml: {
         mrn,
       },
-      dichiarante
+      dichiarante,
     },
     security: {
       admCertificate: {
@@ -59,18 +59,18 @@ test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
         delegatedUser,
         delegatedPassword,
         typeOtpAuth,
-        delegatedDomain
-      }
+        delegatedDomain,
+      },
     },
   });
-  
+
   console.log('result async', result);
   expect(result.type).toBe('success');
 });
 
 test('Translate XML', async () => {
   const converterXML = new XMLConverter();
-  
+
   //Must be a string with the XML content, not the path
   const xml = import.meta.env.VITE_XML_TEST;
   if (!xml) {

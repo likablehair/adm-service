@@ -14,9 +14,9 @@ export type RichiestaDocumentiDichiarazioneLRN = {
   mrn?: never;
   lrn: string;
   utenteInvio: string;
-}
+};
 
-export type RichiestaDocumentiDichiarazione = 
+export type RichiestaDocumentiDichiarazione =
   | RichiestaDocumentiDichiarazioneMRN
   | RichiestaDocumentiDichiarazioneLRN;
 
@@ -67,13 +67,13 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
         <input xmlns="">
           <richiesta>
             ${
-              params.mrn ? 
-                `<mrn>${params.mrn}</mrn>` : 
-                `
+              params.mrn
+                ? `<mrn>${params.mrn}</mrn>`
+                : `
                   <lrn>${params.lrn}</lrn>
                   <utenteInvio>${params.utenteInvio}</utenteInvio>
                 `
-              }
+            }
           </richiesta>
         </input>
       </RichiestaDocumentiDichiarazione>

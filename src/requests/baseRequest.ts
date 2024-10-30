@@ -39,13 +39,13 @@ export type ProcessResponseFromXML = {
         'ns2:esito': {
           'ns2:codice': string;
           'ns2:messaggio': string;
-        }
+        };
         'ns2:data'?: string;
         'ns2:dataRegistrazione': string;
       };
-    }
-  }
-}
+    };
+  };
+};
 
 export type ProcessResponse = {
   IUT: string | null;
@@ -60,10 +60,7 @@ export type Esito = {
   messaggio: string | null;
 };
 
-export type ProcessRequest<T> = Omit<
-  BaseProcessRequest<T>,
-  'serviceId'
->;
+export type ProcessRequest<T> = Omit<BaseProcessRequest<T>, 'serviceId'>;
 
 type HTTPRequestType = {
   xmlParams: {
@@ -120,8 +117,8 @@ export default abstract class BaseRequest<T> {
         binaryInput: binaryXML,
         xmlSignatureType: 'XMLENVELOPED',
         identity: params.security.identity,
-        signatureProfile: 'ETSI_TS_103171_v2_1_1'
-      })
+        signatureProfile: 'ETSI_TS_103171_v2_1_1',
+      });
 
       if (!signedCodedXML) {
         throw new Error('Error in signXML');
@@ -232,16 +229,30 @@ export default abstract class BaseRequest<T> {
 
       const xmlResponse = await response.text();
 
-      const jsonData: ProcessResponseFromXML = await parseStringPromise(xmlResponse, {
-        explicitArray: false,
-      });
+      const jsonData: ProcessResponseFromXML = await parseStringPromise(
+        xmlResponse,
+        {
+          explicitArray: false,
+        },
+      );
 
-      const IUT = jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:IUT'];
-      const dataRegistrazione = jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:dataRegistrazione'];
-      const data = jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:data'];
+      const IUT =
+        jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:IUT'];
+      const dataRegistrazione =
+        jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output'][
+          'ns2:dataRegistrazione'
+        ];
+      const data =
+        jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:data'];
       const esito = {
-        codice: jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:esito']['ns2:codice'],
-        messaggio: jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:esito']['ns2:messaggio'],
+        codice:
+          jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output'][
+            'ns2:esito'
+          ]['ns2:codice'],
+        messaggio:
+          jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output'][
+            'ns2:esito'
+          ]['ns2:messaggio'],
       };
       const xml = xmlResponse;
 
@@ -251,7 +262,7 @@ export default abstract class BaseRequest<T> {
         dataRegistrazione,
         esito,
         xml,
-      }
+      };
 
       return {
         type: 'success',

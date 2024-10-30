@@ -31,10 +31,10 @@ test('Sign an XML', async () => {
         delegatedUser,
         delegatedPassword,
         typeOtpAuth,
-        delegatedDomain
+        delegatedDomain,
       },
       xmlSignatureType: 'XMLENVELOPED',
-      signatureProfile: 'ETSI_TS_103171_v2_1_1'
+      signatureProfile: 'ETSI_TS_103171_v2_1_1',
     }),
   ).resolves.toBeString();
 });
@@ -42,13 +42,13 @@ test('Sign an XML', async () => {
 test('Sign an XML (credentials error)', async () => {
   const arubaSign = new ArubaSign();
 
-  const otpPWD = ''
-  const user = ''
-  const userPWD = ''
-  const delegatedUser = ''
-  const delegatedPassword = ''
-  const delegatedDomain = ''
-  const typeOtpAuth = ''
+  const otpPWD = '';
+  const user = '';
+  const userPWD = '';
+  const delegatedUser = '';
+  const delegatedPassword = '';
+  const delegatedDomain = '';
+  const typeOtpAuth = '';
 
   const xmlTest = `
     <root>
@@ -69,10 +69,10 @@ test('Sign an XML (credentials error)', async () => {
         delegatedUser,
         delegatedPassword,
         typeOtpAuth,
-        delegatedDomain
+        delegatedDomain,
       },
       xmlSignatureType: 'XMLENVELOPED',
-      signatureProfile: 'ETSI_TS_103171_v2_1_1'
+      signatureProfile: 'ETSI_TS_103171_v2_1_1',
     }),
   ).rejects.toThrowError();
 });
