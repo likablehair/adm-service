@@ -1,13 +1,24 @@
 import BaseRequest, {
-  ProcessResponseType,
-  BaseProcessRequestType,
-  ProcessRequestType,
+  ProcessResponse,
+  BaseProcessRequest,
+  ProcessRequest,
 } from '../baseRequest';
 
-export type RichiestaDocumentiDichiarazione = {
+export type RichiestaDocumentiDichiarazioneMRN = {
   mrn: string;
-  utenteInvio: string;
+  lrn?: never;
+  utenteInvio?: never;
 };
+
+export type RichiestaDocumentiDichiarazioneLRN = {
+  mrn?: never;
+  lrn: string;
+  utenteInvio: string;
+}
+
+export type RichiestaDocumentiDichiarazione = 
+  | RichiestaDocumentiDichiarazioneMRN
+  | RichiestaDocumentiDichiarazioneLRN;
 
 export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseRequest<RichiestaDocumentiDichiarazione> {
   constructor() {
@@ -20,10 +31,10 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
   }
 
   async processRequest(
-    params: ProcessRequestType<RichiestaDocumentiDichiarazione>,
+    params: ProcessRequest<RichiestaDocumentiDichiarazione>,
   ): Promise<{
     type: string;
-    message: ProcessResponseType | undefined;
+    message: ProcessResponse | undefined;
   }> {
     try {
       const generatedXml = this.createXMLForRequest(params.data.xml);
@@ -50,13 +61,19 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
     return `
       <RichiestaDocumentiDichiarazione 
         xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 
-        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it schema.xsd" 
+        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it richiesta-lista-documenti-dichiarazione.xsd" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       >
         <input xmlns="">
           <richiesta>
-            <mrn>${params.mrn}</mrn>
-            <utenteInvio>${params.utenteInvio}</utenteInvio>
+            ${
+              params.mrn ? 
+                `<mrn>${params.mrn}</mrn>` : 
+                `
+                  <lrn>${params.lrn}</lrn>
+                  <utenteInvio>${params.utenteInvio}</utenteInvio>
+                `
+              }
           </richiesta>
         </input>
       </RichiestaDocumentiDichiarazione>
@@ -64,7 +81,7 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
   }
 
   protected createSoapEnvelope(
-    params: Omit<BaseProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequest<string>, 'security'>,
   ): string {
     return `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">

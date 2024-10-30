@@ -1,7 +1,7 @@
 import BaseRequest, {
-  BaseProcessRequestType,
-  ProcessResponseType,
-  ProcessRequestType,
+  BaseProcessRequest,
+  ProcessResponse,
+  ProcessRequest,
 } from '../baseRequest';
 
 export type DownloadProspetto = {
@@ -23,9 +23,9 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
     super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
   }
 
-  async processRequest(params: ProcessRequestType<DownloadProspetto>): Promise<{
+  async processRequest(params: ProcessRequest<DownloadProspetto>): Promise<{
     type: string;
-    message: ProcessResponseType | undefined;
+    message: ProcessResponse | undefined;
   }> {
     try {
       const generatedXml = this.createXMLForRequest(params.data.xml);
@@ -47,7 +47,7 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
     return `
       <DownloadProspetto  
         xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 
-        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it schema.xsd" 
+        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it downloadProspettoContabileSintesi.xsd" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       >
         <input xmlns="">
@@ -63,7 +63,7 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
   }
 
   protected createSoapEnvelope(
-    params: Omit<BaseProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequest<string>, 'security'>,
   ): string {
     return `
       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">

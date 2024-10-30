@@ -1,7 +1,7 @@
 import BaseRequest, {
-  BaseProcessRequestType,
-  ProcessResponseType,
-  ProcessRequestType,
+  BaseProcessRequest,
+  ProcessResponse,
+  ProcessRequest,
 } from '../baseRequest';
 
 export type RichiestaProspetto = {
@@ -19,10 +19,10 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
   }
 
   async processRequest(
-    params: ProcessRequestType<RichiestaProspetto>,
+    params: ProcessRequest<RichiestaProspetto>,
   ): Promise<{
     type: string;
-    message: ProcessResponseType | undefined;
+    message: ProcessResponse | undefined;
   }> {
     try {
       const generatedXml = this.createXMLForRequest(params.data.xml);
@@ -42,35 +42,35 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
 
   protected createXMLForRequest(params: RichiestaProspetto): string {
     return `
-      <RichiestaProspetto 
+      <RichiestaProspetto
         xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 
-        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it schema.xsd" 
+        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it richiestaProspettoContabileSintesi.xsd" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       >
         <input xmlns="">
-          <richiesta>
+          <datiDichiarazione>
             <mrn>${params.mrn}</mrn>
-          </richiesta>
+          </datiDichiarazione>
         </input>
       </RichiestaProspetto>
     `;
   }
 
   protected createSoapEnvelope(
-    params: Omit<BaseProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequest<string>, 'security'>,
   ): string {
     return `
-      <soap:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
-      <soap:Header/>
-      <soap:Body>
-        <type:Input>
-            <type:serviceId>${params.serviceId}</type:serviceId>
-            <!--1 or more repetitions:-->
-            <type:data>
-              <type:xml>${params.data.xml}</type:xml>
-              <type:dichiarante>${params.data.dichiarante}</type:dichiarante>
-            </type:data>
-        </type:Input>
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
+        <soapenv:Header/>
+        <soapenv:Body>
+          <type:Input>
+              <type:serviceId>${params.serviceId}</type:serviceId>
+              <!--1 or more repetitions:-->
+              <type:data>
+                <type:xml>${params.data.xml}</type:xml>
+                <type:dichiarante>${params.data.dichiarante}</type:dichiarante>
+              </type:data>
+          </type:Input>
       </soapenv:Body>
   </soapenv:Envelope>
     `;

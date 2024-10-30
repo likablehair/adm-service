@@ -1,7 +1,7 @@
 import BaseRequest, {
-  BaseProcessRequestType,
-  ProcessResponseType,
-  ProcessRequestType,
+  BaseProcessRequest,
+  ProcessResponse,
+  ProcessRequest,
 } from '../baseRequest';
 
 export type Enquiry = {
@@ -25,9 +25,9 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
     super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
   }
 
-  async processRequest(params: ProcessRequestType<Enquiry>): Promise<{
+  async processRequest(params: ProcessRequest<Enquiry>): Promise<{
     type: string;
-    message: ProcessResponseType | undefined;
+    message: ProcessResponse | undefined;
   }> {
     try {
       const generatedXml = this.createXMLForRequest(params.data.xml);
@@ -59,7 +59,7 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
   }
 
   protected createSoapEnvelope(
-    params: Omit<BaseProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequest<string>, 'security'>,
   ): string {
     return `
       <soap:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">

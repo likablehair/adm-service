@@ -1,13 +1,13 @@
 import * as soap from 'soap';
-import XAdES from 'src/utils/XAdES';
 import Encryption from 'src/utils/encryption';
 import https from 'https';
 import fetch from 'node-fetch';
 import * as fs from 'node:fs';
 import { resolve } from 'path';
-/* import ArubaSign from 'src/utils/ArubaSign'; */
+import ArubaSign from 'src/utils/ArubaSign';
+import { parseStringPromise } from 'xml2js';
 
-export type BaseProcessRequestType<T> = {
+export type BaseProcessRequest<T> = {
   data: {
     xml: T;
     dichiarante: string;
@@ -18,38 +18,50 @@ export type BaseProcessRequestType<T> = {
       file?: Buffer;
       passphrase: string;
     };
-    signCertificate: {
-      path?: string;
-      file?: Buffer;
-      passphrase: string;
-    };
-    identity?: {
+    identity: {
       otpPWD: string;
       typeOtpAuth: string;
       user: string;
       userPWD?: string;
       delegatedUser?: string;
       delegatedPassword?: string;
+      delegatedDomain?: string;
     };
   };
   serviceId: string;
 };
 
-export type ProcessResponseType = {
+export type ProcessResponseFromXML = {
+  'soapenv:Envelope': {
+    'soapenv:Body': {
+      'ns2:Output': {
+        'ns2:IUT': string;
+        'ns2:esito': {
+          'ns2:codice': string;
+          'ns2:messaggio': string;
+        }
+        'ns2:data'?: string;
+        'ns2:dataRegistrazione': string;
+      };
+    }
+  }
+}
+
+export type ProcessResponse = {
   IUT: string | null;
-  esito: EsitoType | null;
+  esito: Esito | null;
   data?: string | null; //base64 encoded string
   dataRegistrazione: string | null; //Date in string format,
   xml: string | null;
 };
 
-export type EsitoType = {
+export type Esito = {
   codice: string | null;
   messaggio: string | null;
 };
 
-export type ProcessRequestType<T> = Omit<
-  BaseProcessRequestType<T>,
+export type ProcessRequest<T> = Omit<
+  BaseProcessRequest<T>,
   'serviceId'
 >;
 
@@ -82,67 +94,43 @@ export default abstract class BaseRequest<T> {
     this._encryption = new Encryption();
   }
 
-  abstract processRequest(params: ProcessRequestType<T>): Promise<{
+  abstract processRequest(params: ProcessRequest<T>): Promise<{
     type: string;
-    message: ProcessResponseType | undefined;
+    message: ProcessResponse | undefined;
   }>;
 
   protected abstract createSoapEnvelope(
-    params: Omit<BaseProcessRequestType<string>, 'security'>,
+    params: Omit<BaseProcessRequest<string>, 'security'>,
   ): string;
 
   protected abstract createXMLForRequest(params: T): string;
 
   protected async asyncBaseProcessRequest(
-    params: BaseProcessRequestType<string>,
+    params: BaseProcessRequest<string>,
   ): Promise<{
     type: string;
-    message: ProcessResponseType;
+    message: ProcessResponse;
   }> {
     try {
-      const XAdESClass = new XAdES();
-      //const arubaSign = new ArubaSign();
+      const arubaSign = new ArubaSign();
 
-      let signCertificateBuffer: Buffer;
-      if (params.security.signCertificate.path) {
-        signCertificateBuffer = fs.readFileSync(
-          params.security.signCertificate.path,
-        );
-      } else if (params.security.signCertificate.file) {
-        signCertificateBuffer = params.security.signCertificate.file;
-      } else {
-        throw new Error('Certificate not found');
-      }
-
-      const signedXML = await XAdESClass.signXML({
-        xmlString: params.data.xml,
-        certFile: signCertificateBuffer,
-        passphrase: params.security.signCertificate.passphrase,
-      });
-
-      //KEEP COMMENT until we have the credentials
-      /*       const binaryXML = Buffer.from(params.data.xml).toString('base64');
-      const signedXML = await arubaSign.xmlSignature({
+      const binaryXML = Buffer.from(params.data.xml).toString('base64');
+      const signedCodedXML = await arubaSign.xmlSignature({
         inputType: 'BYNARYNET',
         binaryInput: binaryXML,
-        xmlSignatureType: 'XMLENVELOPING',
-        identity: {
-          ...params.security.identity
-        }
-      }) */
+        xmlSignatureType: 'XMLENVELOPED',
+        identity: params.security.identity,
+        signatureProfile: 'ETSI_TS_103171_v2_1_1'
+      })
 
-      console.log('signedXML', signedXML);
-
-      if (!signedXML) {
+      if (!signedCodedXML) {
         throw new Error('Error in signXML');
       }
-
-      const signedXMLBase64 = Buffer.from(signedXML).toString('base64');
 
       const xmlParams = {
         serviceId: params.serviceId,
         data: {
-          xml: signedXMLBase64,
+          xml: signedCodedXML,
           dichiarante: params.data.dichiarante,
         },
       };
@@ -186,6 +174,7 @@ export default abstract class BaseRequest<T> {
     }
   }
 
+  //DEPRECATED
   private async _soapRequest(params: HTTPRequestType) {
     try {
       const localUrl = import.meta.env.DEV
@@ -202,7 +191,7 @@ export default abstract class BaseRequest<T> {
 
       const resultProcess = await client.processAsync(params.xmlParams);
 
-      const message: ProcessResponseType = {
+      const message: ProcessResponse = {
         ...resultProcess[0],
         xml: resultProcess[1],
       };
@@ -223,6 +212,7 @@ export default abstract class BaseRequest<T> {
   private async _fetchRequest(params: HTTPRequestType) {
     try {
       const soapEnvelope = this.createSoapEnvelope(params.xmlParams);
+
       const configuredHttpsAgent = new https.Agent({
         pfx: params.security.admCertificate.file,
         passphrase: params.security.admCertificate.passphrase,
@@ -242,48 +232,30 @@ export default abstract class BaseRequest<T> {
 
       const xmlResponse = await response.text();
 
-      const xmlDoc = new DOMParser().parseFromString(xmlResponse, 'text/xml');
-      const data = <ProcessResponseType>{};
+      const jsonData: ProcessResponseFromXML = await parseStringPromise(xmlResponse, {
+        explicitArray: false,
+      });
 
-      const body = xmlDoc.getElementsByTagName('soapenv:Body');
-      const output = body[0].childNodes[0];
-      const outputNodes = output.childNodes;
+      const IUT = jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:IUT'];
+      const dataRegistrazione = jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:dataRegistrazione'];
+      const data = jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:data'];
+      const esito = {
+        codice: jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:esito']['ns2:codice'],
+        messaggio: jsonData['soapenv:Envelope']['soapenv:Body']['ns2:Output']['ns2:esito']['ns2:messaggio'],
+      };
+      const xml = xmlResponse;
 
-      for (let i = 0; i < outputNodes.length; i++) {
-        const node = outputNodes[i];
-
-        if (node.nodeType === 1) {
-          const nodeNameWithoutPrefix = node.nodeName.split(':')[1];
-
-          if (
-            (nodeNameWithoutPrefix as keyof ProcessResponseType) === 'esito'
-          ) {
-            const eistoNodes = node.childNodes;
-            const esito = <EsitoType>{};
-
-            for (let j = 0; j < eistoNodes.length; j++) {
-              const esitoChild = eistoNodes[j];
-              if (esitoChild.nodeType === 1) {
-                const esitoChildNameWithoutPrefix =
-                  esitoChild.nodeName.split(':')[1];
-                esito[esitoChildNameWithoutPrefix as keyof EsitoType] =
-                  esitoChild.textContent;
-              }
-            }
-            data['esito'] = esito;
-          } else {
-            data[
-              nodeNameWithoutPrefix as keyof Omit<ProcessResponseType, 'esito'>
-            ] = node.textContent;
-          }
-        }
+      const responseObject: ProcessResponse = {
+        IUT,
+        data,
+        dataRegistrazione,
+        esito,
+        xml,
       }
-
-      data['xml'] = xmlResponse;
 
       return {
         type: 'success',
-        message: data,
+        message: responseObject,
       };
     } catch (err: unknown) {
       if (err instanceof Error) {

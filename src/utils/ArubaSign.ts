@@ -97,8 +97,11 @@ export default class ArubaSign {
   private _httpsUrl: string;
 
   constructor() {
+    //Use when we have the prod credentials
+/*     this._httpsUrl =
+      'https://arss.arubapec.it:443/ArubaSignService/ArubaSignService'; */
     this._httpsUrl =
-      'https://arss.arubapec.it:443/ArubaSignService/ArubaSignService';
+      'https://arss.demo.firma-automatica.it:443/ArubaSignService/ArubaSignService';
   }
 
   public async xmlSignature(
@@ -132,10 +135,14 @@ export default class ArubaSign {
     signRequestV2Content += `
       <certID>AS0</certID>
       <identity>
-        <otpPWD>${params.identity.otpPWD}</otpPWD>
+        <otpPwd>${params.identity.otpPWD}</otpPwd>
         <typeOtpAuth>${params.identity.typeOtpAuth}</typeOtpAuth>
         <user>${params.identity.user}</user>
-        <userPWD>${params.identity.userPWD}</userPWD>
+        ${
+          params.identity.userPWD
+            ? `<userPWD>${params.identity.userPWD}</userPWD>`
+            : ''
+        }
         ${
           params.identity.delegatedUser
             ? `<delegated_user>${params.identity.delegatedUser}</delegated_user>`
@@ -160,6 +167,11 @@ export default class ArubaSign {
 
     parameterContent += `
       <type>${params.xmlSignatureType}</type>
+      ${
+        params.signatureProfile
+          ? `<signatureProfile>${params.signatureProfile}</signatureProfile>`
+          : ''
+      }
     `;
 
     return `

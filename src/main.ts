@@ -5,10 +5,11 @@ export { default as DownloadProspettoSintesiRequest } from './requests/ponImport
 export { default as ListaDestautTIN } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
 export type {
-  ProcessResponseType,
-  BaseProcessRequestType,
-  ProcessRequestType,
-  EsitoType,
+  ProcessResponse,
+  ProcessResponseFromXML,
+  BaseProcessRequest,
+  ProcessRequest,
+  Esito,
 } from './requests/baseRequest';
 
 export type { RichiestaDocumentiDichiarazione } from './requests/ponImport/richiestaListaDocumentiDichiarazioniRequest';
