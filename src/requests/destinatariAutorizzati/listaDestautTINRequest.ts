@@ -3,6 +3,7 @@ import BaseRequest, {
   ProcessResponse,
   ProcessRequest,
 } from '../baseRequest';
+import destinatariAutorizzatiCodiciEsito from '../destinatariAutorizzati/destinatariAutorizzatiCodiciEsito.json';
 
 export type Enquiry = {
   tin: string;
@@ -21,12 +22,15 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
       soapUrl: 'DestinatariAutorizzatiService.wsdl',
       httpSoapAction:
         'http://process.destinatariautorizzatiservice.domest.sogei.it/wsdl/DestinatariAutorizzatiService',
+      successCodes: destinatariAutorizzatiCodiciEsito.success,
+      errorCodes: destinatariAutorizzatiCodiciEsito.error,
     };
-    super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
+    super(superArgs.httpsUrl, superArgs.soapUrl, 
+      superArgs.httpSoapAction, superArgs.successCodes, superArgs.errorCodes);
   }
 
   async processRequest(params: ProcessRequest<Enquiry>): Promise<{
-    type: string;
+    type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
     try {

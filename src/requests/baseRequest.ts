@@ -83,16 +83,23 @@ export default abstract class BaseRequest<T> {
   private _httpSoapAction: string;
   private _soapUrl: string;
   private _encryption;
+  private _successCodes: string[];
+  private _errorCodes: string[];
 
-  constructor(httpsUrl: string, soapUrl: string, httpSoapAction: string) {
+  constructor(httpsUrl: string, soapUrl: string, 
+    httpSoapAction: string, successCodes: string[],
+    errorCodes: string[]
+  ) {
     this._httpsUrl = httpsUrl;
     this._soapUrl = soapUrl;
     this._httpSoapAction = httpSoapAction;
     this._encryption = new Encryption();
+    this._successCodes = successCodes;
+    this._errorCodes = errorCodes;
   }
 
   abstract processRequest(params: ProcessRequest<T>): Promise<{
-    type: string;
+    type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }>;
 
@@ -105,7 +112,7 @@ export default abstract class BaseRequest<T> {
   protected async asyncBaseProcessRequest(
     params: BaseProcessRequest<string>,
   ): Promise<{
-    type: string;
+    type: 'success' | 'error' | 'unknown';
     message: ProcessResponse;
   }> {
     try {
@@ -206,7 +213,11 @@ export default abstract class BaseRequest<T> {
       }
     }
   }
-  private async _fetchRequest(params: HTTPRequestType) {
+
+  private async _fetchRequest(params: HTTPRequestType): Promise<{
+    type: 'success' | 'error' | 'unknown';
+    message: ProcessResponse;
+  }> {
     try {
       const soapEnvelope = this.createSoapEnvelope(params.xmlParams);
 
@@ -264,10 +275,22 @@ export default abstract class BaseRequest<T> {
         xml,
       };
 
-      return {
-        type: 'success',
-        message: responseObject,
-      };
+      if (this._successCodes.includes(esito.codice)) {
+        return {
+          type: 'success',
+          message: responseObject,
+        };
+      } else if (this._errorCodes.includes(esito.codice)) {
+        return {
+          type: 'error',
+          message: responseObject,
+        }
+      } else {
+        return {
+          type: 'unknown',
+          message: responseObject,
+        }
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         throw new Error(err.message);

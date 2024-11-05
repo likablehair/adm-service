@@ -3,6 +3,7 @@ import BaseRequest, {
   BaseProcessRequest,
   ProcessRequest,
 } from '../baseRequest';
+import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
 
 export type RichiestaDocumentiDichiarazioneMRN = {
   mrn: string;
@@ -26,14 +27,17 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
       httpsUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
       soapUrl: 'ponimport_reale.wsdl',
       httpSoapAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
+      successCodes: ponImportCodiciEsito.success,
+      errorCodes: ponImportCodiciEsito.error,
     };
-    super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
+    super(superArgs.httpsUrl, superArgs.soapUrl, 
+      superArgs.httpSoapAction, superArgs.successCodes, superArgs.errorCodes);
   }
 
   async processRequest(
     params: ProcessRequest<RichiestaDocumentiDichiarazione>,
   ): Promise<{
-    type: string;
+    type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
     try {

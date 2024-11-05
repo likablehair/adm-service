@@ -20,3 +20,5 @@ export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINR
 
 export type { AdmDeclarationMapped } from './utils/XMLConverter';
 export { default as XMLConverter } from './utils/XMLConverter';
+
+export { default as RequestAndDownloadDeclarationPDF } from './automations/requestAndDownloadDeclarationPDF';

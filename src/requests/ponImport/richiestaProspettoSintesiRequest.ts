@@ -3,6 +3,7 @@ import BaseRequest, {
   ProcessResponse,
   ProcessRequest,
 } from '../baseRequest';
+import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
 
 export type RichiestaProspetto = {
   mrn: string;
@@ -14,12 +15,15 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
       httpsUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
       soapUrl: 'ponimport_reale.wsdl',
       httpSoapAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
+      succesCodes: ponImportCodiciEsito.success,
+      errorCodes: ponImportCodiciEsito.error
     };
-    super(superArgs.httpsUrl, superArgs.soapUrl, superArgs.httpSoapAction);
+    super(superArgs.httpsUrl, superArgs.soapUrl, 
+      superArgs.httpSoapAction, superArgs.succesCodes, superArgs.errorCodes);
   }
 
   async processRequest(params: ProcessRequest<RichiestaProspetto>): Promise<{
-    type: string;
+    type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
     try {
