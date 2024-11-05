@@ -16,10 +16,15 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
       soapUrl: 'ponimport_reale.wsdl',
       httpSoapAction: 'http://ponimport.ssi.sogei.it/wsdl/PONImport',
       succesCodes: ponImportCodiciEsito.success,
-      errorCodes: ponImportCodiciEsito.error
+      errorCodes: ponImportCodiciEsito.error,
     };
-    super(superArgs.httpsUrl, superArgs.soapUrl, 
-      superArgs.httpSoapAction, superArgs.succesCodes, superArgs.errorCodes);
+    super(
+      superArgs.httpsUrl,
+      superArgs.soapUrl,
+      superArgs.httpSoapAction,
+      superArgs.succesCodes,
+      superArgs.errorCodes,
+    );
   }
 
   async processRequest(params: ProcessRequest<RichiestaProspetto>): Promise<{

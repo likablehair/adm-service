@@ -25,8 +25,13 @@ export default class ListaDestautTIN extends BaseRequest<Enquiry> {
       successCodes: destinatariAutorizzatiCodiciEsito.success,
       errorCodes: destinatariAutorizzatiCodiciEsito.error,
     };
-    super(superArgs.httpsUrl, superArgs.soapUrl, 
-      superArgs.httpSoapAction, superArgs.successCodes, superArgs.errorCodes);
+    super(
+      superArgs.httpsUrl,
+      superArgs.soapUrl,
+      superArgs.httpSoapAction,
+      superArgs.successCodes,
+      superArgs.errorCodes,
+    );
   }
 
   async processRequest(params: ProcessRequest<Enquiry>): Promise<{

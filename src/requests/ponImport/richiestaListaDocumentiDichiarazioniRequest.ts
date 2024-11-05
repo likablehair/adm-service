@@ -30,8 +30,13 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
       successCodes: ponImportCodiciEsito.success,
       errorCodes: ponImportCodiciEsito.error,
     };
-    super(superArgs.httpsUrl, superArgs.soapUrl, 
-      superArgs.httpSoapAction, superArgs.successCodes, superArgs.errorCodes);
+    super(
+      superArgs.httpsUrl,
+      superArgs.soapUrl,
+      superArgs.httpSoapAction,
+      superArgs.successCodes,
+      superArgs.errorCodes,
+    );
   }
 
   async processRequest(

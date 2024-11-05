@@ -23,8 +23,13 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
       succesCodes: ponImportCodiciEsito.success,
       errorCodes: ponImportCodiciEsito.error,
     };
-    super(superArgs.httpsUrl, superArgs.soapUrl, 
-      superArgs.httpSoapAction, superArgs.succesCodes, superArgs.errorCodes);
+    super(
+      superArgs.httpsUrl,
+      superArgs.soapUrl,
+      superArgs.httpSoapAction,
+      superArgs.succesCodes,
+      superArgs.errorCodes,
+    );
   }
 
   async processRequest(params: ProcessRequest<DownloadProspetto>): Promise<{

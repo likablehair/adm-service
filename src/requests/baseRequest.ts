@@ -86,9 +86,12 @@ export default abstract class BaseRequest<T> {
   private _successCodes: string[];
   private _errorCodes: string[];
 
-  constructor(httpsUrl: string, soapUrl: string, 
-    httpSoapAction: string, successCodes: string[],
-    errorCodes: string[]
+  constructor(
+    httpsUrl: string,
+    soapUrl: string,
+    httpSoapAction: string,
+    successCodes: string[],
+    errorCodes: string[],
   ) {
     this._httpsUrl = httpsUrl;
     this._soapUrl = soapUrl;
@@ -284,12 +287,12 @@ export default abstract class BaseRequest<T> {
         return {
           type: 'error',
           message: responseObject,
-        }
+        };
       } else {
         return {
           type: 'unknown',
           message: responseObject,
-        }
+        };
       }
     } catch (err: unknown) {
       if (err instanceof Error) {

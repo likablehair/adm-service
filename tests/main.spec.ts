@@ -82,9 +82,10 @@ test('Translate XML', async () => {
   await converterXML.run({ xmlData: xml });
 });
 
-test('Automation for requesting and downloading a declaration PDF', 
+test(
+  'Automation for requesting and downloading a declaration PDF',
   {
-    timeout: 15000
+    timeout: 15000,
   },
   async () => {
     const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -147,5 +148,5 @@ test('Automation for requesting and downloading a declaration PDF',
     });
 
     expectTypeOf(result).toBeString();
-  }
+  },
 );
