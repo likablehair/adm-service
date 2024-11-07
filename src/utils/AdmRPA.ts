@@ -3,7 +3,6 @@ import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 export default class AdmRPA {
-
   constructor() {
     puppeteer.use(StealthPlugin());
   }
@@ -13,7 +12,7 @@ export default class AdmRPA {
     security: {
       username: string;
       password: string;
-    }
+    };
   }) {
     try {
       const browser = await puppeteer.launch({
@@ -78,10 +77,7 @@ export default class AdmRPA {
     return cookies;
   }
 
-  async accessToGestioneDocumenti(params: {
-    page: Page;
-    dichiarante: string;
-  }) {
+  async accessToGestioneDocumenti(params: { page: Page; dichiarante: string }) {
     const url =
       'https://sso.adm.gov.it/pud2interop85cast?Location=https://web.adm.gov.it/ponimport/xhtml/index.xhtml';
     await params.page.goto(url);
@@ -116,9 +112,7 @@ export default class AdmRPA {
     return params.page;
   }
 
-  async aggregatedSearch(params: {
-    page: Page
-  }) {
+  async aggregatedSearch(params: { page: Page }) {
     const ricercaAggregataTabXPath =
       'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
     const ricercaAggregataButtonXPath =
