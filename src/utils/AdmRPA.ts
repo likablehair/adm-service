@@ -4,7 +4,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 export type DeclarationTableRow = {
   [key: string]: string;
-}
+};
 
 export type Declaration = {
   declaratingOperator: string;
@@ -17,27 +17,27 @@ export type Declaration = {
   version: string;
   edStatus: string;
   detailsButtonClass: string;
-}
+};
 
 const declarationTableHeaderMap: Record<string, keyof Declaration> = {
   'Declarating Operator': 'declaratingOperator',
-  'Dichiarante': 'declaratingOperator',
-  'Mrn': 'mrn',
-  'Lrn': 'lrn',
-  'Type': 'operationScope',
-  'Ambito': 'operationScope',
+  Dichiarante: 'declaratingOperator',
+  Mrn: 'mrn',
+  Lrn: 'lrn',
+  Type: 'operationScope',
+  Ambito: 'operationScope',
   'Acceptance Date and Hours': 'acceptanceDate',
   'Data e Ora Accettazione': 'acceptanceDate',
   'Office Code': 'officeCode',
   'Codice Ufficio': 'officeCode',
   'Articles Number': 'articlesNumber',
   'Numero Articoli': 'articlesNumber',
-  'Ver': 'version',
+  Ver: 'version',
   'ED Status': 'edStatus',
   'Stato FE': 'edStatus',
-  'Details': 'detailsButtonClass',
-  'Dettagli': 'detailsButtonClass',
-}
+  Details: 'detailsButtonClass',
+  Dettagli: 'detailsButtonClass',
+};
 
 export default class AdmRPA {
   constructor() {
@@ -127,13 +127,13 @@ export default class AdmRPA {
     await this._retry({
       promiseFactory: () => params.page.goto(url),
       retryCount: 5,
-      retryMs: 500
-    })
+      retryMs: 500,
+    });
 
-    await params.page.type('input[name="IDToken1"]', params.username)
-    await params.page.type('input[name="IDToken2"]', params.password)
-    
-    const accessButtonXPath = 'xpath///*[@id="tab-1"]/form/div/a/button'
+    await params.page.type('input[name="IDToken1"]', params.username);
+    await params.page.type('input[name="IDToken2"]', params.password);
+
+    const accessButtonXPath = 'xpath///*[@id="tab-1"]/form/div/a/button';
 
     await params.page.waitForSelector(accessButtonXPath);
     await params.page.click(accessButtonXPath);
@@ -141,8 +141,8 @@ export default class AdmRPA {
     const response = await this._retry({
       promiseFactory: () => params.page.waitForNavigation(),
       retryCount: 3,
-      retryMs: 500
-    })
+      retryMs: 500,
+    });
 
     //Remember to remove the headers log
     const requestHeaders = response?.request().headers();
@@ -158,7 +158,8 @@ export default class AdmRPA {
       'https://sso.adm.gov.it/pud2interop85cast?Location=https://web.adm.gov.it/ponimport/xhtml/index.xhtml';
     await params.page.goto(url);
 
-    const dropdownLabelDichiaranteXPath = 'xpath///*[@id="formDel:j_idt47_label"]';
+    const dropdownLabelDichiaranteXPath =
+      'xpath///*[@id="formDel:j_idt47_label"]';
     const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante}[role="option"]`;
     const buttonConfirmXPath = 'xpath///*[@id="formDel:idGoto"]/span';
 
@@ -184,17 +185,17 @@ export default class AdmRPA {
     await this._retry({
       promiseFactory: () => params.page.waitForNavigation(),
       retryCount: 3,
-      retryMs: 500
-    })
+      retryMs: 500,
+    });
 
     console.log('navigated');
 
     return params.page;
   }
 
-  async aggregatedSearch(params: { 
-    page: Page,
-    date?: Date
+  async aggregatedSearch(params: {
+    page: Page;
+    date?: Date;
   }): Promise<Declaration[]> {
     const ricercaAggregataTabXPath =
       'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
@@ -216,13 +217,15 @@ export default class AdmRPA {
         throw new Error('Invalid date: date is in the future');
       }
 
-      const dateFromInputXPath = 'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
+      const dateFromInputXPath =
+        'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
       await params.page.waitForSelector(dateFromInputXPath);
       await params.page.click(dateFromInputXPath);
 
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const datePickerCalendarXPath = 'xpath///*[@id="ui-datepicker-div"]/table';
+      const datePickerCalendarXPath =
+        'xpath///*[@id="ui-datepicker-div"]/table';
       await params.page.waitForSelector(datePickerCalendarXPath);
 
       const day = params.date.getDate();
@@ -234,11 +237,12 @@ export default class AdmRPA {
       const monthDifferece = currentMonth - month;
       const yearDifference = currentYear - year;
 
-      const dateDifferenceIteration = monthDifferece + (yearDifference * 12);
+      const dateDifferenceIteration = monthDifferece + yearDifference * 12;
 
       if (dateDifferenceIteration > 0) {
-        const previousMonthButtonXPath = 'xpath///*[@id="ui-datepicker-div"]/div/a[1]';
-        
+        const previousMonthButtonXPath =
+          'xpath///*[@id="ui-datepicker-div"]/div/a[1]';
+
         //Iterate over the months
         for (let i = 0; i < dateDifferenceIteration; i++) {
           await params.page.waitForSelector(previousMonthButtonXPath);
@@ -268,25 +272,30 @@ export default class AdmRPA {
     await params.page.click(ricercaAggregataButtonXPath);
 
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    
+
     const resultFoundText = await params.page.evaluate(() => {
-      const resultFoundText = document.querySelector('#formResult\\:panelRisultati_content') as HTMLElement | undefined; 
+      const resultFoundText = document.querySelector(
+        '#formResult\\:panelRisultati_content',
+      ) as HTMLElement | undefined;
       if (resultFoundText) {
         return resultFoundText.innerText.split('\n')[0];
       } else {
-        return undefined
+        return undefined;
       }
-    })
+    });
 
     let mrnNumber: number = 0;
     if (resultFoundText) {
       const splittedResultFoundText = resultFoundText.split(/\s|&nbsp;/g);
-      mrnNumber = Number(splittedResultFoundText[splittedResultFoundText.length - 1]);
+      mrnNumber = Number(
+        splittedResultFoundText[splittedResultFoundText.length - 1],
+      );
     }
 
     if (mrnNumber > 5) {
       //Set the number of rows to 30 (max option available)
-      const rowsPerPageDropdownXPath = 'xpath///*[@id="formResult:dataResult:j_id44"]';
+      const rowsPerPageDropdownXPath =
+        'xpath///*[@id="formResult:dataResult:j_id44"]';
       await params.page.waitForSelector(rowsPerPageDropdownXPath);
       await params.page.click(rowsPerPageDropdownXPath);
 
@@ -302,10 +311,11 @@ export default class AdmRPA {
     for (let i = 0; i < iterationNumber; i++) {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const contentPanelDataXPath = 'xpath///*[@id="formResult:dataResult_data"]';
+      const contentPanelDataXPath =
+        'xpath///*[@id="formResult:dataResult_data"]';
 
       await params.page.waitForSelector(contentPanelDataXPath);
-  
+
       const tableData = await params.page.evaluate(() => {
         const rows = document.querySelectorAll(
           '#formResult\\:dataResult_data tr',
@@ -314,14 +324,14 @@ export default class AdmRPA {
           '#formResult\\:dataResult_data',
         );
         const headerCells = tbody?.closest('table')?.querySelectorAll('th');
-  
+
         const headersData: string[] = [];
         headerCells?.forEach((header) => {
           headersData.push(header.innerText.trim().toString());
         });
-  
+
         const data: DeclarationTableRow[] = [];
-  
+
         rows.forEach((row) => {
           const cells = row.querySelectorAll('td');
           const rowData: Declaration = {
@@ -336,32 +346,33 @@ export default class AdmRPA {
             edStatus: '',
             detailsButtonClass: '',
           };
-  
+
           cells.forEach((cell, index) => {
             const headerName = declarationTableHeaderMap[headersData[index]];
             rowData[headerName] = cell.innerText.trim();
           });
-  
+
           data.push(rowData);
         });
-  
+
         return data;
       });
 
       declarationTableData = [...declarationTableData, ...tableData];
 
       if (i < iterationNumber - 1) {
-        const nextPageButtonXPath = 'xpath///*[@id="formResult:dataResult_paginator_bottom"]/a[3]';
+        const nextPageButtonXPath =
+          'xpath///*[@id="formResult:dataResult_paginator_bottom"]/a[3]';
         await params.page.waitForSelector(nextPageButtonXPath);
         await params.page.click(nextPageButtonXPath);
       }
     }
 
     const declarationData = declarationTableData.map((declaration) => {
-      return this._mapDeclarationTableHeaders({ 
-        declarationTableRow: declaration
-      })
-    })
+      return this._mapDeclarationTableHeaders({
+        declarationTableRow: declaration,
+      });
+    });
 
     console.log('declarationData', declarationData);
 
@@ -369,10 +380,10 @@ export default class AdmRPA {
   }
 
   private _getDatePositionInDatepicker(params: {
-    day: number, 
-    month: number, 
-    year: number
-  }): { row: number, column: number } {
+    day: number;
+    month: number;
+    year: number;
+  }): { row: number; column: number } {
     const firstDayOfMonth = new Date(params.year, params.month - 1, 1);
     let firstDay = firstDayOfMonth.getDay();
 
@@ -386,7 +397,7 @@ export default class AdmRPA {
       throw new Error('Invalid day');
     }
 
-    const position = params.day + firstDay
+    const position = params.day + firstDay;
     const row = Math.ceil((position - 1) / 7);
     const column = (position - 1) % 7;
 
@@ -407,7 +418,7 @@ export default class AdmRPA {
       version: '',
       edStatus: '',
       detailsButtonClass: '',
-    }
+    };
 
     for (const key in params.declarationTableRow) {
       const standardKey = declarationTableHeaderMap[key];
@@ -420,7 +431,7 @@ export default class AdmRPA {
   private async _retry<T>({
     promiseFactory,
     retryCount = 3,
-    retryMs = 200
+    retryMs = 200,
   }: {
     promiseFactory: () => Promise<T>;
     retryCount?: number;
@@ -436,12 +447,12 @@ export default class AdmRPA {
       console.log('retrying', retryCount);
 
       await new Promise((resolve) => setTimeout(resolve, retryMs));
-      
+
       return await this._retry({
         promiseFactory: promiseFactory,
         retryCount: retryCount - 1,
-        retryMs: retryMs
-      })
+        retryMs: retryMs,
+      });
     }
   }
 }
