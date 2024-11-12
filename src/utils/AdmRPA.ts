@@ -52,22 +52,20 @@ export default class AdmRPA {
       username: string;
       password: string;
     };
-    browser?: Browser
+    browser?: Browser;
   }): Promise<string[]> {
     try {
-      let browser: Browser
+      let browser: Browser;
       if (!params.browser) {
         browser = await puppeteer.launch({
           headless: 'shell',
-          args: [
-            '--lang=it-IT'
-          ],
+          args: ['--lang=it-IT'],
           env: {
             LANGUAGE: 'it_IT',
           },
-        });   
+        });
       } else {
-        browser = params.browser
+        browser = params.browser;
       }
 
       console.log('browser launched');
@@ -140,14 +138,14 @@ export default class AdmRPA {
         retryCount: 5,
         retryMs: 500,
       });
-  
+
       await params.page.type('input[name="IDToken1"]', params.username);
       await params.page.type('input[name="IDToken2"]', params.password);
-  
+
       const accessButtonXPath = 'xpath///*[@id="tab-1"]/form/div/a/button';
-  
+
       await params.page.waitForSelector(accessButtonXPath);
-  
+
       await Promise.all([
         this._retry({
           promiseFactory: () => params.page.waitForNavigation(),
@@ -155,10 +153,10 @@ export default class AdmRPA {
           retryMs: 500,
         }),
         params.page.click(accessButtonXPath),
-      ])
-      
+      ]);
+
       const cookies = await params.page.cookies();
-  
+
       return cookies;
     } catch (error) {
       console.error(error);
@@ -166,13 +164,10 @@ export default class AdmRPA {
     }
   }
 
-  async accessToGestioneDocumenti(params: { 
-    page: Page; 
-    dichiarante: string 
-  }) {
+  async accessToGestioneDocumenti(params: { page: Page; dichiarante: string }) {
     try {
       const url =
-      'https://sso.adm.gov.it/pud2interop85cast?Location=https://web.adm.gov.it/ponimport/xhtml/index.xhtml';
+        'https://sso.adm.gov.it/pud2interop85cast?Location=https://web.adm.gov.it/ponimport/xhtml/index.xhtml';
 
       await params.page.goto(url);
 
@@ -196,7 +191,7 @@ export default class AdmRPA {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       await params.page.waitForSelector(buttonConfirmXPath);
-      
+
       console.log('clicked on button');
 
       await Promise.all([
@@ -206,7 +201,7 @@ export default class AdmRPA {
           retryMs: 500,
         }),
         params.page.click(buttonConfirmXPath),
-      ])
+      ]);
 
       console.log('navigated');
 
