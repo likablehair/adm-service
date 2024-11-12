@@ -1,4 +1,4 @@
-import { Cookie, Page } from 'puppeteer';
+import { Browser, Cookie, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
@@ -52,21 +52,29 @@ export default class AdmRPA {
       username: string;
       password: string;
     };
+    browser?: Browser
   }): Promise<string[]> {
     try {
-      const browser = await puppeteer.launch({
-        headless: 'shell',
-        args: ['--lang=it-IT'],
-        env: {
-          LANGUAGE: 'it_IT',
-        },
-      });
+      let browser: Browser
+      if (!params.browser) {
+        browser = await puppeteer.launch({
+          headless: 'shell',
+          args: [
+            '--lang=it-IT'
+          ],
+          env: {
+            LANGUAGE: 'it_IT',
+          },
+        });   
+      } else {
+        browser = params.browser
+      }
 
       console.log('browser launched');
       const page = await browser.newPage();
 
       await page.setExtraHTTPHeaders({
-        'Accept-Language': 'it-IT,it;q=0.9,en;q=0.8',
+        'Accept-Language': 'it-IT,it;q=0.9',
       });
 
       const cookies = await this.loginADM({
@@ -108,7 +116,9 @@ export default class AdmRPA {
 
       const mrnList = declarations.map((declaration) => declaration.mrn);
 
-      await browser.close();
+      if (!params.browser) {
+        await browser.close();
+      }
 
       return mrnList;
     } catch (error) {
@@ -122,261 +132,282 @@ export default class AdmRPA {
     username: string;
     password: string;
   }): Promise<Cookie[]> {
-    const url = 'https://iampe.adm.gov.it/sam/UI/Login?realm=/adm';
+    try {
+      const url = 'https://iampe.adm.gov.it/sam/UI/Login?realm=/adm';
 
-    await this._retry({
-      promiseFactory: () => params.page.goto(url),
-      retryCount: 5,
-      retryMs: 500,
-    });
-
-    await params.page.type('input[name="IDToken1"]', params.username);
-    await params.page.type('input[name="IDToken2"]', params.password);
-
-    const accessButtonXPath = 'xpath///*[@id="tab-1"]/form/div/a/button';
-
-    await params.page.waitForSelector(accessButtonXPath);
-    await params.page.click(accessButtonXPath);
-
-    const response = await this._retry({
-      promiseFactory: () => params.page.waitForNavigation(),
-      retryCount: 3,
-      retryMs: 500,
-    });
-
-    //Remember to remove the headers log
-    const requestHeaders = response?.request().headers();
-    console.log('headers', requestHeaders);
-
-    const cookies = await params.page.cookies();
-
-    return cookies;
+      await this._retry({
+        promiseFactory: () => params.page.goto(url),
+        retryCount: 5,
+        retryMs: 500,
+      });
+  
+      await params.page.type('input[name="IDToken1"]', params.username);
+      await params.page.type('input[name="IDToken2"]', params.password);
+  
+      const accessButtonXPath = 'xpath///*[@id="tab-1"]/form/div/a/button';
+  
+      await params.page.waitForSelector(accessButtonXPath);
+  
+      await Promise.all([
+        this._retry({
+          promiseFactory: () => params.page.waitForNavigation(),
+          retryCount: 3,
+          retryMs: 500,
+        }),
+        params.page.click(accessButtonXPath),
+      ])
+      
+      const cookies = await params.page.cookies();
+  
+      return cookies;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
-  async accessToGestioneDocumenti(params: { page: Page; dichiarante: string }) {
-    const url =
+  async accessToGestioneDocumenti(params: { 
+    page: Page; 
+    dichiarante: string 
+  }) {
+    try {
+      const url =
       'https://sso.adm.gov.it/pud2interop85cast?Location=https://web.adm.gov.it/ponimport/xhtml/index.xhtml';
-    await params.page.goto(url);
 
-    const dropdownLabelDichiaranteXPath =
-      'xpath///*[@id="formDel:j_idt47_label"]';
-    const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante}[role="option"]`;
-    const buttonConfirmXPath = 'xpath///*[@id="formDel:idGoto"]/span';
+      await params.page.goto(url);
 
-    await params.page.waitForSelector(dropdownLabelDichiaranteXPath);
-    await params.page.click(dropdownLabelDichiaranteXPath);
+      const dropdownLabelDichiaranteXPath =
+        'xpath///*[@id="formDel:j_idt47_label"]';
+      const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante}[role="option"]`;
+      const buttonConfirmXPath = 'xpath///*[@id="formDel:idGoto"]/span';
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+      await params.page.waitForSelector(dropdownLabelDichiaranteXPath);
+      await params.page.click(dropdownLabelDichiaranteXPath);
 
-    console.log('clicked on label');
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    await params.page.waitForSelector(dropdownOptionDichiaranteXPath);
-    await params.page.click(dropdownOptionDichiaranteXPath);
+      console.log('clicked on label');
 
-    console.log('clicked on option');
+      await params.page.waitForSelector(dropdownOptionDichiaranteXPath);
+      await params.page.click(dropdownOptionDichiaranteXPath);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log('clicked on option');
 
-    await params.page.waitForSelector(buttonConfirmXPath);
-    await params.page.click(buttonConfirmXPath);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    console.log('clicked on button');
+      await params.page.waitForSelector(buttonConfirmXPath);
+      
+      console.log('clicked on button');
 
-    await this._retry({
-      promiseFactory: () => params.page.waitForNavigation(),
-      retryCount: 3,
-      retryMs: 500,
-    });
+      await Promise.all([
+        this._retry({
+          promiseFactory: () => params.page.waitForNavigation(),
+          retryCount: 3,
+          retryMs: 500,
+        }),
+        params.page.click(buttonConfirmXPath),
+      ])
 
-    console.log('navigated');
+      console.log('navigated');
 
-    return params.page;
+      return params.page;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
   async aggregatedSearch(params: {
     page: Page;
     date?: Date;
   }): Promise<Declaration[]> {
-    const ricercaAggregataTabXPath =
-      'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
-    const ricercaAggregataButtonXPath =
-      'xpath///*[@id="formAvan:accordionTab:buttonRicercaAgg"]/span';
+    try {
+      const ricercaAggregataTabXPath =
+        'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
+      const ricercaAggregataButtonXPath =
+        'xpath///*[@id="formAvan:accordionTab:buttonRicercaAgg"]/span';
 
-    await params.page.waitForSelector(ricercaAggregataTabXPath);
-    await params.page.click(ricercaAggregataTabXPath);
+      await params.page.waitForSelector(ricercaAggregataTabXPath);
+      await params.page.click(ricercaAggregataTabXPath);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    //Check if the dateFrom is provided
-    if (params.date) {
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-      params.date.setHours(0, 0, 0, 0);
+      //Check if the dateFrom is provided
+      if (params.date) {
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        params.date.setHours(0, 0, 0, 0);
 
-      if (params.date > currentDate) {
-        throw new Error('Invalid date: date is in the future');
+        if (params.date > currentDate) {
+          throw new Error('Invalid date: date is in the future');
+        }
+
+        const dateFromInputXPath =
+          'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
+        await params.page.waitForSelector(dateFromInputXPath);
+        await params.page.click(dateFromInputXPath);
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        const datePickerCalendarXPath =
+          'xpath///*[@id="ui-datepicker-div"]/table';
+        await params.page.waitForSelector(datePickerCalendarXPath);
+
+        const day = params.date.getDate();
+        const month = params.date.getMonth() + 1;
+        const year = params.date.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1;
+        const currentYear = currentDate.getFullYear();
+
+        const monthDifferece = currentMonth - month;
+        const yearDifference = currentYear - year;
+
+        const dateDifferenceIteration = monthDifferece + yearDifference * 12;
+
+        if (dateDifferenceIteration > 0) {
+          const previousMonthButtonXPath =
+            'xpath///*[@id="ui-datepicker-div"]/div/a[1]';
+
+          //Iterate over the months
+          for (let i = 0; i < dateDifferenceIteration; i++) {
+            await params.page.waitForSelector(previousMonthButtonXPath);
+            await params.page.click(previousMonthButtonXPath);
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
+
+        const datePosition = this._getDatePositionInDatepicker({
+          day,
+          month,
+          year,
+        });
+
+        const dateCellXPath = `xpath///*[@id="ui-datepicker-div"]/table/tbody/tr[${
+          datePosition.row
+        }]/td[${datePosition.column}]`;
+
+        await params.page.waitForSelector(dateCellXPath);
+        await params.page.click(dateCellXPath);
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
       }
 
-      const dateFromInputXPath =
-        'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
-      await params.page.waitForSelector(dateFromInputXPath);
-      await params.page.click(dateFromInputXPath);
+      await params.page.waitForSelector(ricercaAggregataButtonXPath);
+      await params.page.click(ricercaAggregataButtonXPath);
 
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      const datePickerCalendarXPath =
-        'xpath///*[@id="ui-datepicker-div"]/table';
-      await params.page.waitForSelector(datePickerCalendarXPath);
+      const resultFoundText = await params.page.evaluate(() => {
+        const resultFoundText = document.querySelector(
+          '#formResult\\:panelRisultati_content',
+        ) as HTMLElement | undefined;
+        if (resultFoundText) {
+          return resultFoundText.innerText.split('\n')[0];
+        } else {
+          return undefined;
+        }
+      });
 
-      const day = params.date.getDate();
-      const month = params.date.getMonth() + 1;
-      const year = params.date.getFullYear();
-      const currentMonth = currentDate.getMonth() + 1;
-      const currentYear = currentDate.getFullYear();
+      let mrnNumber: number = 0;
+      if (resultFoundText) {
+        const splittedResultFoundText = resultFoundText.split(/\s|&nbsp;/g);
+        mrnNumber = Number(
+          splittedResultFoundText[splittedResultFoundText.length - 1],
+        );
+      }
 
-      const monthDifferece = currentMonth - month;
-      const yearDifference = currentYear - year;
+      if (mrnNumber > 5) {
+        //Set the number of rows to 30 (max option available)
+        const rowsPerPageDropdownXPath =
+          'xpath///*[@id="formResult:dataResult:j_id44"]';
+        await params.page.waitForSelector(rowsPerPageDropdownXPath);
+        await params.page.click(rowsPerPageDropdownXPath);
 
-      const dateDifferenceIteration = monthDifferece + yearDifference * 12;
+        await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      if (dateDifferenceIteration > 0) {
-        const previousMonthButtonXPath =
-          'xpath///*[@id="ui-datepicker-div"]/div/a[1]';
+        await params.page.select(rowsPerPageDropdownXPath, '30');
+      }
 
-        //Iterate over the months
-        for (let i = 0; i < dateDifferenceIteration; i++) {
-          await params.page.waitForSelector(previousMonthButtonXPath);
-          await params.page.click(previousMonthButtonXPath);
+      const iterationNumber = Math.ceil(mrnNumber / 30);
 
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+      let declarationTableData: DeclarationTableRow[] = [];
+      //Iterate over the table pages
+      for (let i = 0; i < iterationNumber; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        const contentPanelDataXPath =
+          'xpath///*[@id="formResult:dataResult_data"]';
+
+        await params.page.waitForSelector(contentPanelDataXPath);
+
+        const tableData = await params.page.evaluate(() => {
+          const rows = document.querySelectorAll(
+            '#formResult\\:dataResult_data tr',
+          );
+          const tbody = document.querySelector<HTMLTableSectionElement>(
+            '#formResult\\:dataResult_data',
+          );
+          const headerCells = tbody?.closest('table')?.querySelectorAll('th');
+
+          const headersData: string[] = [];
+          headerCells?.forEach((header) => {
+            headersData.push(header.innerText.trim().toString());
+          });
+
+          const data: DeclarationTableRow[] = [];
+
+          rows.forEach((row) => {
+            const cells = row.querySelectorAll('td');
+            const rowData: DeclarationTableRow = {
+              declaratingOperator: '',
+              mrn: '',
+              lrn: '',
+              operationScope: '',
+              acceptanceDate: '',
+              officeCode: '',
+              articlesNumber: '',
+              version: '',
+              edStatus: '',
+              detailsButtonClass: '',
+            };
+
+            cells.forEach((cell, index) => {
+              const headerName = headersData[index];
+              rowData[headerName] = cell.innerText.trim();
+            });
+
+            data.push(rowData);
+          });
+
+          return data;
+        });
+
+        declarationTableData = [...declarationTableData, ...tableData];
+
+        if (i < iterationNumber - 1) {
+          const nextPageButtonXPath =
+            'xpath///*[@id="formResult:dataResult_paginator_bottom"]/a[3]';
+          await params.page.waitForSelector(nextPageButtonXPath);
+          await params.page.click(nextPageButtonXPath);
         }
       }
 
-      const datePosition = this._getDatePositionInDatepicker({
-        day,
-        month,
-        year,
-      });
+      console.log('declarationTableData', declarationTableData);
 
-      const dateCellXPath = `xpath///*[@id="ui-datepicker-div"]/table/tbody/tr[${
-        datePosition.row
-      }]/td[${datePosition.column}]`;
-
-      await params.page.waitForSelector(dateCellXPath);
-      await params.page.click(dateCellXPath);
-
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    }
-
-    await params.page.waitForSelector(ricercaAggregataButtonXPath);
-    await params.page.click(ricercaAggregataButtonXPath);
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    const resultFoundText = await params.page.evaluate(() => {
-      const resultFoundText = document.querySelector(
-        '#formResult\\:panelRisultati_content',
-      ) as HTMLElement | undefined;
-      if (resultFoundText) {
-        return resultFoundText.innerText.split('\n')[0];
-      } else {
-        return undefined;
-      }
-    });
-
-    let mrnNumber: number = 0;
-    if (resultFoundText) {
-      const splittedResultFoundText = resultFoundText.split(/\s|&nbsp;/g);
-      mrnNumber = Number(
-        splittedResultFoundText[splittedResultFoundText.length - 1],
-      );
-    }
-
-    if (mrnNumber > 5) {
-      //Set the number of rows to 30 (max option available)
-      const rowsPerPageDropdownXPath =
-        'xpath///*[@id="formResult:dataResult:j_id44"]';
-      await params.page.waitForSelector(rowsPerPageDropdownXPath);
-      await params.page.click(rowsPerPageDropdownXPath);
-
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      await params.page.select(rowsPerPageDropdownXPath, '30');
-    }
-
-    const iterationNumber = Math.ceil(mrnNumber / 30);
-
-    let declarationTableData: DeclarationTableRow[] = [];
-    //Iterate over the table pages
-    for (let i = 0; i < iterationNumber; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const contentPanelDataXPath =
-        'xpath///*[@id="formResult:dataResult_data"]';
-
-      await params.page.waitForSelector(contentPanelDataXPath);
-
-      const tableData = await params.page.evaluate(() => {
-        const rows = document.querySelectorAll(
-          '#formResult\\:dataResult_data tr',
-        );
-        const tbody = document.querySelector<HTMLTableSectionElement>(
-          '#formResult\\:dataResult_data',
-        );
-        const headerCells = tbody?.closest('table')?.querySelectorAll('th');
-
-        const headersData: string[] = [];
-        headerCells?.forEach((header) => {
-          headersData.push(header.innerText.trim().toString());
+      const declarationData = declarationTableData.map((declaration) => {
+        return this._mapDeclarationTableHeaders({
+          declarationTableRow: declaration,
         });
-
-        const data: DeclarationTableRow[] = [];
-
-        rows.forEach((row) => {
-          const cells = row.querySelectorAll('td');
-          const rowData: Declaration = {
-            declaratingOperator: '',
-            mrn: '',
-            lrn: '',
-            operationScope: '',
-            acceptanceDate: '',
-            officeCode: '',
-            articlesNumber: '',
-            version: '',
-            edStatus: '',
-            detailsButtonClass: '',
-          };
-
-          cells.forEach((cell, index) => {
-            const headerName = declarationTableHeaderMap[headersData[index]];
-            rowData[headerName] = cell.innerText.trim();
-          });
-
-          data.push(rowData);
-        });
-
-        return data;
       });
 
-      declarationTableData = [...declarationTableData, ...tableData];
+      console.log('declarationData', declarationData);
 
-      if (i < iterationNumber - 1) {
-        const nextPageButtonXPath =
-          'xpath///*[@id="formResult:dataResult_paginator_bottom"]/a[3]';
-        await params.page.waitForSelector(nextPageButtonXPath);
-        await params.page.click(nextPageButtonXPath);
-      }
+      return declarationData;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
-
-    const declarationData = declarationTableData.map((declaration) => {
-      return this._mapDeclarationTableHeaders({
-        declarationTableRow: declaration,
-      });
-    });
-
-    console.log('declarationData', declarationData);
-
-    return declarationData;
   }
 
   private _getDatePositionInDatepicker(params: {
