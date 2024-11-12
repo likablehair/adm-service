@@ -5,7 +5,7 @@ import XMLConverter from 'src/utils/XMLConverter';
 import RichiestaProspettoSintesi from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RequestAndDownloadDeclarationPDF } from 'src/main';
 
-test('RichiestaListaDocumentiDichiarazioniRequest', async () => {
+test('RichiestaProspettoSintesiRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
   if (!certificatePath) {
     console.error('ERROR: CERTIFICATE_URL not found');
