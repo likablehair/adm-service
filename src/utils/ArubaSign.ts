@@ -97,11 +97,8 @@ export default class ArubaSign {
   private _httpsUrl: string;
 
   constructor() {
-    //Use when we have the prod credentials
-    /*     this._httpsUrl =
-      'https://arss.arubapec.it:443/ArubaSignService/ArubaSignService'; */
     this._httpsUrl =
-      'https://arss.demo.firma-automatica.it:443/ArubaSignService/ArubaSignService';
+      'https://arss.arubapec.it:443/ArubaSignService/ArubaSignService';
   }
 
   public async xmlSignature(
@@ -160,7 +157,6 @@ export default class ArubaSign {
         }
       </identity>
       <transport>${params.inputType}</transport>
-      <signatureLevel>LT</signatureLevel>
     `;
 
     let parameterContent = '';
