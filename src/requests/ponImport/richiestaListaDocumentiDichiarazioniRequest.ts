@@ -109,7 +109,4 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
     `;
   }
 
-  protected convertXMLResponse(): string {
-    return '';
-  }
 }

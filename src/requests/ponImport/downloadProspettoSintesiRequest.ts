@@ -91,7 +91,4 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
     `;
   }
 
-  protected convertXMLResponse(): string {
-    return '';
-  }
 }

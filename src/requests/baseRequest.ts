@@ -303,5 +303,4 @@ export default abstract class BaseRequest<T> {
     }
   }
 
-  protected abstract convertXMLResponse(params: T): string;
 }
