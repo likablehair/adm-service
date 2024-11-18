@@ -19,7 +19,9 @@ export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSi
 export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
 export type { AdmDeclarationMapped } from './utils/XMLConverter';
+
 export { default as XMLConverter } from './utils/XMLConverter';
+export { default as PDFConverter } from './utils/PDFConverter';
 
 export { default as AdmRPA } from './utils/AdmRPA';
 

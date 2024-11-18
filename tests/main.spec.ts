@@ -4,6 +4,7 @@ import * as fs from 'node:fs';
 import XMLConverter from 'src/utils/XMLConverter';
 import RichiestaProspettoSintesi from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RequestAndDownloadDeclarationPDF } from 'src/main';
+import PDFConverter from 'src/utils/PDFConverter';
 
 test('RichiestaProspettoSintesiRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -65,7 +66,7 @@ test('RichiestaProspettoSintesiRequest', async () => {
     },
   });
 
-  console.log('result async', result);
+  // console.log('result async', result);
   expect(result.type).toBe('success');
 });
 
@@ -81,6 +82,8 @@ test('Translate XML', async () => {
 
   await converterXML.run({ xmlData: xml });
 });
+
+let pdfDownloadedPath = '';
 
 test(
   'Automation for requesting and downloading a declaration PDF',
@@ -123,7 +126,7 @@ test(
     const admCertificate = fs.readFileSync(certificatePath);
 
     const automation = new RequestAndDownloadDeclarationPDF();
-    const result = await automation.process({
+    const pdfPath = await automation.process({
       data: {
         xml: {
           mrn,
@@ -147,6 +150,14 @@ test(
       },
     });
 
-    expectTypeOf(result).toBeString();
+    pdfDownloadedPath = pdfPath
+
+    expectTypeOf(pdfPath).toBeString();
   },
 );
+
+
+test('Translate PDF', async () => {
+  const converterPDF = new PDFConverter();
+  await converterPDF.run({ data: { path: pdfDownloadedPath } });
+});
