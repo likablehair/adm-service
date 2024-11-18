@@ -4,9 +4,8 @@ import RichiestaProspettoSintesi, {
   RichiestaProspetto,
 } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 
-import {parseStringPromise}  from 'xml2js';
+import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-
 
 export default class RequestAndDownloadDeclarationPDF {
   async process(params: ProcessRequest<RichiestaProspetto>): Promise<string> {
@@ -63,16 +62,17 @@ export default class RequestAndDownloadDeclarationPDF {
     }
   }
 
-  async save (request: string): Promise<string> {
+  async save(request: string): Promise<string> {
     try {
-
-      const xmlFilePath = 'download.pdf'; 
-      const buffer = Buffer.from(request, 'base64') 
-      await fsPromises.writeFile(xmlFilePath, buffer)
+      const xmlFilePath = 'download.pdf';
+      const buffer = Buffer.from(request, 'base64');
+      await fsPromises.writeFile(xmlFilePath, buffer);
       const xmlContent = await fsPromises.readFile(xmlFilePath, 'utf8');
       await fsPromises.unlink(xmlFilePath);
 
-      const parsed = await parseStringPromise(xmlContent, { explicitArray: false });
+      const parsed = await parseStringPromise(xmlContent, {
+        explicitArray: false,
+      });
       const dowloaded = parsed['ns0:DownloadProspetto'];
       const data = dowloaded.output.datiDichiarazione;
       const attachment = dowloaded.output.allegato;
@@ -82,16 +82,15 @@ export default class RequestAndDownloadDeclarationPDF {
       await fsPromises.writeFile(pdfFileName, pdfContent);
 
       const jsonData = {
-          mrn: data.mrn,
-          rev: data.revisione,
-          type: dowloaded.output.TipologiaProspetto,
-          filename: attachment.nomeFile,
-          exit: dowloaded.output.esito,
+        mrn: data.mrn,
+        rev: data.revisione,
+        type: dowloaded.output.TipologiaProspetto,
+        filename: attachment.nomeFile,
+        exit: dowloaded.output.esito,
       };
-    
+
       // console.log(JSON.stringify(jsonData, null, 4));
-      return jsonData.filename
-      
+      return jsonData.filename;
     } catch (err: unknown) {
       if (err instanceof Error) {
         throw new Error(err.message);

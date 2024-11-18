@@ -150,12 +150,11 @@ test(
       },
     });
 
-    pdfDownloadedPath = pdfPath
+    pdfDownloadedPath = pdfPath;
 
     expectTypeOf(pdfPath).toBeString();
   },
 );
-
 
 test('Translate PDF', async () => {
   const converterPDF = new PDFConverter();
