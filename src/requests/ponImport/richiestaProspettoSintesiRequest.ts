@@ -27,7 +27,9 @@ export default class RichiestaProspettoSintesiRequest extends BaseRequest<Richie
     );
   }
 
-  async processRequest(params: ProcessRequest<RichiestaProspettoSintesi>): Promise<{
+  async processRequest(
+    params: ProcessRequest<RichiestaProspettoSintesi>,
+  ): Promise<{
     type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {

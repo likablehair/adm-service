@@ -110,7 +110,6 @@ export interface DeclarationJson {
   }[];
 }
 
-
 class PDFConverter {
   private getMappedPosition(
     x: number,

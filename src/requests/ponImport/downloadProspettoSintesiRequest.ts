@@ -90,5 +90,4 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
     </soapenv:Envelope>
     `;
   }
-
 }

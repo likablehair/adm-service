@@ -23,5 +23,4 @@ export { default as XMLConverter } from './utils/XMLConverter';
 export { default as PDFConverter } from './utils/PDFConverter';
 export { default as AdmRPA } from './utils/AdmRPA';
 
- export { default as ProspettoSintesiManager } from './managers/ProspettoSintesiManager';
-
+export { default as ProspettoSintesiManager } from './managers/ProspettoSintesiManager';

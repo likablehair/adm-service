@@ -108,5 +108,4 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
     </soapenv:Envelope>
     `;
   }
-
 }

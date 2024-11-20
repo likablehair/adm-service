@@ -155,14 +155,14 @@ test(
     MRN_TEST = result.mrn;
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
-
   },
 );
 
 test('Translate PDF', async () => {
   const converterPDF = new PDFConverter();
-  const admDeclarationMapped: AdmDeclarationMapped = await converterPDF.run({ data: { path: PDF_PATH } });
+  const admDeclarationMapped: AdmDeclarationMapped = await converterPDF.run({
+    data: { path: PDF_PATH },
+  });
 
   expect(admDeclarationMapped.mrn).toBe(MRN_TEST);
-
 });
