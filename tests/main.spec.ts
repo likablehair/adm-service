@@ -1,10 +1,10 @@
-import { expect, expectTypeOf, test } from 'vitest';
+import { expect, test } from 'vitest';
 
 import * as fs from 'node:fs';
-import XMLConverter from 'src/utils/XMLConverter';
-import RichiestaProspettoSintesi from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
-import { RequestAndDownloadDeclarationPDF } from 'src/main';
+import XMLConverter, { AdmDeclarationMapped } from 'src/utils/XMLConverter';
+import RichiestaProspettoSintesiRequest from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import PDFConverter from 'src/utils/PDFConverter';
+import ProspettoSintesiManager from 'src/managers/ProspettoSintesiManager';
 
 test('RichiestaProspettoSintesiRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -41,7 +41,7 @@ test('RichiestaProspettoSintesiRequest', async () => {
 
   const admCertificate = fs.readFileSync(certificatePath);
 
-  const request = new RichiestaProspettoSintesi();
+  const request = new RichiestaProspettoSintesiRequest();
   const result = await request.processRequest({
     data: {
       xml: {
@@ -83,7 +83,8 @@ test('Translate XML', async () => {
   await converterXML.run({ xmlData: xml });
 });
 
-let pdfDownloadedPath = '';
+let PDF_PATH = '';
+let MRN_TEST = '';
 
 test(
   'Automation for requesting and downloading a declaration PDF',
@@ -125,8 +126,8 @@ test(
 
     const admCertificate = fs.readFileSync(certificatePath);
 
-    const automation = new RequestAndDownloadDeclarationPDF();
-    const pdfPath = await automation.process({
+    const manager = new ProspettoSintesiManager();
+    const result = await manager.process({
       data: {
         xml: {
           mrn,
@@ -150,13 +151,18 @@ test(
       },
     });
 
-    pdfDownloadedPath = pdfPath;
+    PDF_PATH = result.filename;
+    MRN_TEST = result.mrn;
+    expect(result.exit.code).toBe('CM_000');
+    expect(result.exit.message).toBe('Operazione effettuata con successo');
 
-    expectTypeOf(pdfPath).toBeString();
   },
 );
 
 test('Translate PDF', async () => {
   const converterPDF = new PDFConverter();
-  await converterPDF.run({ data: { path: pdfDownloadedPath } });
+  const admDeclarationMapped: AdmDeclarationMapped = await converterPDF.run({ data: { path: PDF_PATH } });
+
+  expect(admDeclarationMapped.mrn).toBe(MRN_TEST);
+
 });

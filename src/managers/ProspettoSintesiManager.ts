@@ -1,16 +1,30 @@
 import { ProcessRequest } from 'src/requests/baseRequest';
 import DownloadProspettoSintesi from 'src/requests/ponImport/downloadProspettoSintesiRequest';
-import RichiestaProspettoSintesi, {
-  RichiestaProspetto,
+import RichiestaProspettoSintesiRequest, {
+  RichiestaProspettoSintesi,
 } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
 
-export default class RequestAndDownloadDeclarationPDF {
-  async process(params: ProcessRequest<RichiestaProspetto>): Promise<string> {
+export type ProspettoSintesiResult = {
+  mrn: string;
+  rev: string;
+  type: string;
+  filename: string;
+  exit: {
+    code: string;
+    message: string;
+  };
+};
+
+export default class ProspettoSintesiManager {
+  async process( 
+    params: ProcessRequest<RichiestaProspettoSintesi>,
+  ): Promise<ProspettoSintesiResult> {
     try {
-      const richiestaProspettoSintesiRequest = new RichiestaProspettoSintesi();
+      const richiestaProspettoSintesiRequest =
+        new RichiestaProspettoSintesiRequest();
       const richiestaProspetto =
         await richiestaProspettoSintesiRequest.processRequest(params);
 
@@ -62,35 +76,39 @@ export default class RequestAndDownloadDeclarationPDF {
     }
   }
 
-  async save(request: string): Promise<string> {
+  protected async save(request: string): Promise<ProspettoSintesiResult> {
     try {
-      const xmlFilePath = 'download.pdf';
+      const xmlFilePath = 'tmp.pdf';
+
       const buffer = Buffer.from(request, 'base64');
       await fsPromises.writeFile(xmlFilePath, buffer);
+
       const xmlContent = await fsPromises.readFile(xmlFilePath, 'utf8');
       await fsPromises.unlink(xmlFilePath);
 
       const parsed = await parseStringPromise(xmlContent, {
         explicitArray: false,
       });
-      const dowloaded = parsed['ns0:DownloadProspetto'];
-      const data = dowloaded.output.datiDichiarazione;
-      const attachment = dowloaded.output.allegato;
-      const pdfFileName: string = attachment.nomeFile || 'decoded-content.pdf';
+      const downloaded = parsed['ns0:DownloadProspetto'];
+      const data = downloaded.output.datiDichiarazione;
+      const attachment = downloaded.output.allegato;
+      const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
 
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
       await fsPromises.writeFile(pdfFileName, pdfContent);
 
-      const jsonData = {
+      const result: ProspettoSintesiResult = {
         mrn: data.mrn,
         rev: data.revisione,
-        type: dowloaded.output.TipologiaProspetto,
+        type: downloaded.output.TipologiaProspetto,
         filename: attachment.nomeFile,
-        exit: dowloaded.output.esito,
+        exit: {
+          code: downloaded.output.esito.codiceErrore,
+          message: downloaded.output.esito.messaggioErrore,
+        },
       };
 
-      // console.log(JSON.stringify(jsonData, null, 4));
-      return jsonData.filename;
+      return result;
     } catch (err: unknown) {
       if (err instanceof Error) {
         throw new Error(err.message);
@@ -99,4 +117,5 @@ export default class RequestAndDownloadDeclarationPDF {
       }
     }
   }
+
 }

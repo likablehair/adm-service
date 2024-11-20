@@ -5,11 +5,11 @@ import BaseRequest, {
 } from '../baseRequest';
 import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
 
-export type RichiestaProspetto = {
+export type RichiestaProspettoSintesi = {
   mrn: string;
 };
 
-export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaProspetto> {
+export default class RichiestaProspettoSintesiRequest extends BaseRequest<RichiestaProspettoSintesi> {
   constructor() {
     const superArgs = {
       httpsUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
@@ -27,7 +27,7 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     );
   }
 
-  async processRequest(params: ProcessRequest<RichiestaProspetto>): Promise<{
+  async processRequest(params: ProcessRequest<RichiestaProspettoSintesi>): Promise<{
     type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
@@ -47,7 +47,7 @@ export default class RichiestaProspettoSintesi extends BaseRequest<RichiestaPros
     }
   }
 
-  protected createXMLForRequest(params: RichiestaProspetto): string {
+  protected createXMLForRequest(params: RichiestaProspettoSintesi): string {
     return `
       <RichiestaProspetto
         xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 

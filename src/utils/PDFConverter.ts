@@ -1,5 +1,7 @@
 import { _cells } from './DeclarationCellsMapper';
 import PDFParser from 'pdf2json';
+import { AdmDeclarationMapped } from './XMLConverter';
+import * as fsPromises from 'fs/promises';
 
 export type DeclarationRawJson = {
   Transcoder: string;
@@ -108,29 +110,6 @@ export interface DeclarationJson {
   }[];
 }
 
-export type AdmDeclarationMapped = {
-  mrn: string;
-  date: string;
-  exporter: {
-    companyName: string;
-    vatNumber: string;
-    country: string;
-    address: string;
-    city: string;
-    postalCode: string;
-  };
-  goods: {
-    ncCode: string;
-    taricCode: string;
-    identificationCode: string;
-    description: string;
-    country: string;
-    netWeight: string;
-    customsRegime: string;
-    requestedRegime: string;
-    previousRegime: string;
-  }[];
-};
 
 class PDFConverter {
   private getMappedPosition(
@@ -277,9 +256,8 @@ class PDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      // console.log(declarationEntity)
+      await fsPromises.unlink(params.data.path);
       const admDeclarationMapped = await this.map(declarationEntity);
-      // console.log(admDeclarationMapped)
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('Error parsing PDF:' + error); // Returning an empty object
