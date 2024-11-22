@@ -56,25 +56,7 @@ export type DeclarationRawJson = {
   ];
 };
 
-export interface Good {
-  nr: string;
-  cn: string;
-  grossWeight: string;
-  netWeight: string;
-  description: string;
-  price: string;
-  shippingCountry: string;
-  destinationCountry: string;
-  destinationProvince: string;
-  originCountry: string;
-  directEmission: number;
-  indirectEmission: number;
-  totalEmission: number;
-  directEmissionIntensity: number;
-  indirectEmissionIntensity: number;
-  isCbam: boolean;
-  category: string;
-}
+
 
 export interface DeclarationJson {
   date: Date;
@@ -90,10 +72,14 @@ export interface DeclarationJson {
   };
   declaration: { date: string; mrn: string };
   exporter: {
-    companyName: string;
+    companyName1: string;
+    companyName2: string;
+    companyName3: string;
     vatNumber: string;
     country: string;
-    address: string;
+    address1: string;
+    address2: string;
+    address3: string;
     city: string;
     postalCode: string;
   };
@@ -102,6 +88,12 @@ export interface DeclarationJson {
     taricCode: string;
     identificationCode: string;
     description: string;
+    description1: string;
+    description2: string;
+    description3: string;
+    description4: string;
+    description5: string;
+    description6: string;
     country: string;
     netWeight: string;
     customsRegime: string;
@@ -137,11 +129,15 @@ class PDFConverter {
     return {};
   }
   private async map(input: DeclarationJson): Promise<AdmDeclarationMapped> {
+    
+    let companyName: string[] =  [input.exporter?.companyName1, input.exporter?.companyName2, input.exporter?.companyName3]
+    let address: string[] =  [input.exporter?.address1, input.exporter?.address2, input.exporter?.address3]
+
     const exporter = {
-      companyName: input.exporter?.companyName || '',
+      companyName: companyName.join(' '),
       vatNumber: input.exporter?.vatNumber || '',
       country: input.exporter?.country || '',
-      address: input.exporter?.address || '',
+      address: address.join(' '),
       city: input.exporter?.city || '',
       postalCode: input.exporter?.postalCode || '',
     };
@@ -153,11 +149,23 @@ class PDFConverter {
       const requestedRegime = good.customsRegime.slice(0, 2).trim();
       const previousRegime = good.customsRegime.slice(-2).trim();
       const customsRegime = `${requestedRegime}${previousRegime}`;
+
+
+    let description: string[] =  [good.description,
+                                  good.description1,
+                                  good.description2, 
+                                  good.description3,
+                                  good.description4,
+                                  good.description5,
+                                  good.description6]
+
+      console.log(description)
+
       return {
         ncCode,
         taricCode,
         identificationCode: good.ncCode,
-        description: good.description,
+        description: description.join(' ').trim(),
         country: good.country,
         netWeight: good.netWeight,
         customsRegime: customsRegime,
@@ -212,7 +220,6 @@ class PDFConverter {
 
         for (let i = 0; i < pages.length; i++) {
           const page = pages[i];
-
           if (page.Texts) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
             const goodObject: any = {};
@@ -220,7 +227,7 @@ class PDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              // console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              console.log({ "x": textElement.x, "y": textElement.y, "text": text })
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
 
@@ -232,13 +239,17 @@ class PDFConverter {
                 continue;
               } else if (!!mappedPosition.entity && !!mappedPosition.column) {
                 if (i > 0) {
+
                   if (!declarationEntity[mappedPosition.entity])
                     declarationEntity[mappedPosition.entity] = [];
+
                   if (Array.isArray(declarationEntity[mappedPosition.entity])) {
                     goodObject[mappedPosition.column] = text.trim();
 
+                    // console.log(mappedPosition.column + ' : ' + text.trim())
                     if (Object.keys(goodObject).length === totColumnsMapped)
                       declarationEntity[mappedPosition.entity].push(goodObject);
+                    
                   }
                 } else {
                   if (!declarationEntity[mappedPosition.entity])
@@ -257,6 +268,8 @@ class PDFConverter {
 
       await fsPromises.unlink(params.data.path);
       const admDeclarationMapped = await this.map(declarationEntity);
+      console.log(admDeclarationMapped)
+
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('Error parsing PDF:' + error); // Returning an empty object

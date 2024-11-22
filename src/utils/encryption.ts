@@ -205,6 +205,7 @@ export default class Encryption {
       certificate,
       params.passphrase,
     );
+    // fs.writeFileSync(params.passphrase +'.p12', newP12);
 
     return newP12;
   }
