@@ -127,12 +127,12 @@ class PDFConverter {
     return {};
   }
   private async map(input: DeclarationJson): Promise<AdmDeclarationMapped> {
-    let companyName: string[] = [
+    const companyName: string[] = [
       input.exporter?.companyName1,
       input.exporter?.companyName2,
       input.exporter?.companyName3,
     ];
-    let address: string[] = [
+    const address: string[] = [
       input.exporter?.address1,
       input.exporter?.address2,
       input.exporter?.address3,
@@ -155,7 +155,7 @@ class PDFConverter {
       const previousRegime = good.customsRegime.slice(-2).trim();
       const customsRegime = `${requestedRegime}${previousRegime}`;
 
-      let description: string[] = [
+      const description: string[] = [
         good.description,
         good.description1,
         good.description2,
@@ -223,7 +223,6 @@ class PDFConverter {
         const pages = declarationRawJson.Pages;
 
         for (let i = 0; i < pages.length; i++) {
-
           const page = pages[i];
           if (page.Texts) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -233,31 +232,38 @@ class PDFConverter {
               const text = decodeURIComponent(textElement.R[0].T);
 
               // console.log({ "x": textElement.x, "y": textElement.y, "text": text })
-              const mappedPosition: { entity?: string; column?: string } = this.getMappedPosition(textElement.x, textElement.y);
+              const mappedPosition: { entity?: string; column?: string } =
+                this.getMappedPosition(textElement.x, textElement.y);
 
-              if (!!mappedPosition.entity) {
-                const totColumnsMapped = _cells.filter((el) => el.entity === mappedPosition.entity).length;
+              const totColumnsMapped = _cells.filter(
+                (el) => el.entity === mappedPosition.entity,
+              ).length;
 
-                if (!mappedPosition.column || !text.trim()) {
-                  continue;
-                } else if (!!mappedPosition.entity && !!mappedPosition.column) {
-                  if (i > 0) {
-                    if (!declarationEntity[mappedPosition.entity])  declarationEntity[mappedPosition.entity] = [];
+              if (!mappedPosition.column || !text.trim()) {
+                continue;
+              } else if (!!mappedPosition.entity && !!mappedPosition.column) {
+                if (i > 0) {
+                  if (!declarationEntity[mappedPosition.entity])
+                    declarationEntity[mappedPosition.entity] = [];
 
-                    if (Array.isArray(declarationEntity[mappedPosition.entity])) {
-                      goodObject[mappedPosition.column] = text.trim();
+                  if (Array.isArray(declarationEntity[mappedPosition.entity])) {
+                    goodObject[mappedPosition.column] = text.trim();
 
-                      if(mappedPosition.entity === 'goods')
-                      // console.log(Object.keys(goodObject).length + ' / ' + totColumnsMapped);
-                       if (Object.keys(goodObject).length === totColumnsMapped)
-                        declarationEntity[mappedPosition.entity].push(goodObject);
+                    if (mappedPosition.entity === 'goods')
+                      if (Object.keys(goodObject).length === totColumnsMapped)
+                        // console.log(Object.keys(goodObject).length + ' / ' + totColumnsMapped);
+                        declarationEntity[mappedPosition.entity].push(
+                          goodObject,
+                        );
 
-                       console.log(goodObject);
-                    }
-                  } else {
-                    if (!declarationEntity[mappedPosition.entity]) declarationEntity[mappedPosition.entity] = {};
-                    declarationEntity[mappedPosition.entity][mappedPosition.column] = text.trim();
+                    console.log(goodObject);
                   }
+                } else {
+                  if (!declarationEntity[mappedPosition.entity])
+                    declarationEntity[mappedPosition.entity] = {};
+                  declarationEntity[mappedPosition.entity][
+                    mappedPosition.column
+                  ] = text.trim();
                 }
               }
             }
