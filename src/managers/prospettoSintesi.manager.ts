@@ -25,7 +25,9 @@ export default class ProspettoSintesiManager {
     try {
       const downloadedPDF: string = await this.download(params);
       const savedPDF: ProspettoSintesiResult = await this.save(downloadedPDF);
-      return await this.convert({ data : {path: savedPDF.path}});
+      const admDeclarationMapped: AdmDeclarationMapped =  await this.convert({ data : {path: savedPDF.path}});
+      await fsPromises.unlink(savedPDF.path);
+      return admDeclarationMapped
     } catch (err: unknown) {
       if (err instanceof Error) {
         throw new Error(err.message);

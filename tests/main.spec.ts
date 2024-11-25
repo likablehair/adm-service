@@ -5,7 +5,6 @@ import XMLConverter, {
   AdmDeclarationMapped,
 } from 'src/converters/XMLConverter';
 import RichiestaProspettoSintesiRequest from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
-import PDFConverter from 'src/converters/PDFConverter';
 import ProspettoSintesiManager, { ProspettoSintesiResult } from 'src/managers/prospettoSintesi.manager';
 
 test('RichiestaProspettoSintesiRequest', async () => {
@@ -85,9 +84,6 @@ test('Convert XML', async () => {
   await converterXML.run({ xmlData: xml });
 });
 
-let PDF_PATH = '';
-let MRN_TEST = '';
-
 test(
   'Import Declaration PDF',
   {
@@ -157,22 +153,9 @@ test(
     
     const result: ProspettoSintesiResult = await manager.save(downloadedPDF);
     const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({ data : {path: result.path}});
-    
-    
-    MRN_TEST = result.mrn;
-    PDF_PATH = result.path;
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
     expect(admDeclarationMapped.mrn).toBe(import.meta.env.VITE_MRN_TEST);
   },
 );
-
-test('Convert PDF', async () => {
-  const converterPDF = new PDFConverter();
-  const admDeclarationMapped: AdmDeclarationMapped = await converterPDF.run({
-    data: { path: PDF_PATH },
-  });
-
-  expect(admDeclarationMapped.mrn).toBe(MRN_TEST);
-});

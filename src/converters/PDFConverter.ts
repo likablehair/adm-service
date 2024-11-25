@@ -1,7 +1,6 @@
 import { _cells } from './DeclarationCellsMapper';
 import PDFParser from 'pdf2json';
 import { AdmDeclarationMapped } from './XMLConverter';
-import * as fsPromises from 'fs/promises';
 
 export type DeclarationRawJson = {
   Transcoder: string;
@@ -167,12 +166,11 @@ class PDFConverter {
       ];
 
       const country: string =
-      good.country1?.trim() || 
-      good.country2?.trim() || 
-      good.country3?.trim() || 
-      good.country4?.trim() || 
-      '';
-
+        good.country1?.trim() ||
+        good.country2?.trim() ||
+        good.country3?.trim() ||
+        good.country4?.trim() ||
+        '';
 
       return {
         ncCode,
@@ -241,7 +239,8 @@ class PDFConverter {
               const text = decodeURIComponent(textElement.R[0].T);
 
               // console.log({ "x": textElement.x, "y": textElement.y, "text": text })
-              const mappedPosition: { entity?: string; column?: string } = this.getMappedPosition(textElement.x, textElement.y);
+              const mappedPosition: { entity?: string; column?: string } =
+                this.getMappedPosition(textElement.x, textElement.y);
 
               if (!mappedPosition.column || !text.trim()) {
                 continue;
@@ -253,11 +252,17 @@ class PDFConverter {
                   if (Array.isArray(declarationEntity[mappedPosition.entity])) {
                     goodObject[mappedPosition.column] = text.trim();
 
-                    const lastItem = declarationEntity[mappedPosition.entity].slice(-1)[0]; 
-                    const isNewItem = !lastItem || lastItem.nr !== goodObject.nr; 
+                    const lastItem =
+                      declarationEntity[mappedPosition.entity].slice(-1)[0];
+                      
+                    const isNewItem =
+                      !lastItem ||
+                      ( lastItem.nr !== goodObject.nr &&
+                        !! goodObject.ncCode && goodObject.ncCode.length > 0 && goodObject.ncCode.length <= 10 &&
+                        !isNaN(parseFloat(goodObject.netWeight)));
 
-                    if (isNewItem) 
-                        declarationEntity[mappedPosition.entity].push(goodObject);
+                    if (isNewItem)
+                      declarationEntity[mappedPosition.entity].push(goodObject);
                   }
                 } else {
                   if (!declarationEntity[mappedPosition.entity])
@@ -274,7 +279,7 @@ class PDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      await fsPromises.unlink(params.data.path);
+      
       const admDeclarationMapped = await this.map(declarationEntity);
 
       return admDeclarationMapped;
