@@ -6,7 +6,7 @@ import XMLConverter, {
 } from 'src/converters/XMLConverter';
 import RichiestaProspettoSintesiRequest from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import PDFConverter from 'src/converters/PDFConverter';
-import ProspettoSintesiManager from 'src/managers/prospettoSintesi.manager';
+import ProspettoSintesiManager, { ProspettoSintesiResult } from 'src/managers/prospettoSintesi.manager';
 
 test('RichiestaProspettoSintesiRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -72,7 +72,7 @@ test('RichiestaProspettoSintesiRequest', async () => {
   expect(result.type).toBe('success');
 });
 
-test('Translate XML', async () => {
+test('Convert XML', async () => {
   const converterXML = new XMLConverter();
 
   //Must be a string with the XML content, not the path
@@ -89,7 +89,7 @@ let PDF_PATH = '';
 let MRN_TEST = '';
 
 test(
-  'Automation for requesting and downloading a declaration PDF',
+  'Import Declaration PDF',
   {
     timeout: 15000,
   },
@@ -129,7 +129,7 @@ test(
     const admCertificate = fs.readFileSync(certificatePath);
 
     const manager = new ProspettoSintesiManager();
-    const result = await manager.process({
+    const downloadedPDF = await manager.download({
       data: {
         xml: {
           mrn,
@@ -153,14 +153,22 @@ test(
       },
     });
 
-    PDF_PATH = result.filename;
+
+    
+    const result: ProspettoSintesiResult = await manager.save(downloadedPDF);
+    const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({ data : {path: result.path}});
+    
+    
     MRN_TEST = result.mrn;
+    PDF_PATH = result.path;
+
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
+    expect(admDeclarationMapped.mrn).toBe(import.meta.env.VITE_MRN_TEST);
   },
 );
 
-test('Translate PDF', async () => {
+test('Convert PDF', async () => {
   const converterPDF = new PDFConverter();
   const admDeclarationMapped: AdmDeclarationMapped = await converterPDF.run({
     data: { path: PDF_PATH },

@@ -6,12 +6,13 @@ import RichiestaProspettoSintesiRequest, {
 
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
+import { AdmDeclarationMapped, PDFConverter } from 'src/main';
 
 export type ProspettoSintesiResult = {
   mrn: string;
   rev: string;
   type: string;
-  filename: string;
+  path: string;
   exit: {
     code: string;
     message: string;
@@ -19,9 +20,23 @@ export type ProspettoSintesiResult = {
 };
 
 export default class ProspettoSintesiManager {
-  async process(
+
+  async import(params: ProcessRequest<RichiestaProspettoSintesi>): Promise<AdmDeclarationMapped> {
+    try {
+      const downloadedPDF: string = await this.download(params);
+      const savedPDF: ProspettoSintesiResult = await this.save(downloadedPDF);
+      return await this.convert({ data : {path: savedPDF.path}});
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      } else {
+        throw new Error('Unknown error');
+      }
+    }
+  }
+  async download(
     params: ProcessRequest<RichiestaProspettoSintesi>,
-  ): Promise<ProspettoSintesiResult> {
+  ): Promise<string> {
     try {
       const richiestaProspettoSintesiRequest =
         new RichiestaProspettoSintesiRequest();
@@ -66,7 +81,7 @@ export default class ProspettoSintesiManager {
         throw new Error('PDF not found');
       }
 
-      return await this.save(downloadProspetto.message.data);
+      return downloadProspetto.message.data;
     } catch (err: unknown) {
       if (err instanceof Error) {
         throw new Error(err.message);
@@ -76,7 +91,7 @@ export default class ProspettoSintesiManager {
     }
   }
 
-  protected async save(request: string): Promise<ProspettoSintesiResult> {
+  async save(request: string): Promise<ProspettoSintesiResult> {
     try {
       const xmlFilePath = 'tmp.pdf';
 
@@ -101,7 +116,7 @@ export default class ProspettoSintesiManager {
         mrn: data.mrn,
         rev: data.revisione,
         type: downloaded.output.TipologiaProspetto,
-        filename: attachment.nomeFile,
+        path: attachment.nomeFile,
         exit: {
           code: downloaded.output.esito.codiceErrore,
           message: downloaded.output.esito.messaggioErrore,
@@ -116,5 +131,10 @@ export default class ProspettoSintesiManager {
         throw new Error('Unknown error');
       }
     }
+  }
+
+  async convert(params: { data: { path: string } }) {
+    const converterPDF = new PDFConverter();
+    return await converterPDF.run({ data: { path: params.data.path }});
   }
 }
