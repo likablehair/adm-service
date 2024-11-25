@@ -19,7 +19,7 @@ export const _cells: {
   {
     entity: 'exporter',
     column: 'companyName3',
-    xRange: [2.159, 2.159],
+xRange: [2.159, 2.159], 
     yRange: [23.025, 23.025],
   },
   {

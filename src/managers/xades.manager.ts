@@ -1,14 +1,14 @@
 import * as xadesjs from 'xadesjs';
-import Encryption from 'src/utils/encryption';
 import { webcrypto } from 'crypto';
+import EncryptionManager from './encryption.manager';
 
-export default class XAdES {
+export default class XADESManager {
   private _encryption;
 
   constructor() {
     const crypto = webcrypto as unknown as Crypto;
     xadesjs.Application.setEngine('OpenSSL', crypto);
-    this._encryption = new Encryption();
+    this._encryption = new EncryptionManager();
   }
 
   public async signXML(params: {

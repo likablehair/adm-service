@@ -1,8 +1,8 @@
+import ArubaSignatureManager from 'src/managers/arubaSignature.manager';
 import { expect, expectTypeOf, test } from 'vitest';
-import ArubaSign from 'src/utils/ArubaSign';
 
 test('Sign an XML', async () => {
-  const arubaSign = new ArubaSign();
+  const arubaSign = new ArubaSignatureManager();
 
   const otpPWD = import.meta.env.VITE_ARUBA_OTP_PWD;
   const user = import.meta.env.VITE_ARUBA_USER;
@@ -40,7 +40,7 @@ test('Sign an XML', async () => {
 });
 
 test('Sign an XML (credentials error)', async () => {
-  const arubaSign = new ArubaSign();
+  const arubaSign = new ArubaSignatureManager();
 
   const otpPWD = '';
   const user = '';

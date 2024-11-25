@@ -1,11 +1,11 @@
 import * as soap from 'soap';
-import Encryption from 'src/utils/encryption';
 import https from 'https';
 import fetch from 'node-fetch';
 import * as fs from 'node:fs';
 import { resolve } from 'path';
-import ArubaSign from 'src/utils/ArubaSign';
 import { parseStringPromise } from 'xml2js';
+import EncryptionManager from 'src/managers/encryption.manager';
+import ArubaSignatureManager from 'src/managers/arubaSignature.manager';
 
 export type BaseProcessRequest<T> = {
   data: {
@@ -96,7 +96,7 @@ export default abstract class BaseRequest<T> {
     this._httpsUrl = httpsUrl;
     this._soapUrl = soapUrl;
     this._httpSoapAction = httpSoapAction;
-    this._encryption = new Encryption();
+    this._encryption = new EncryptionManager();
     this._successCodes = successCodes;
     this._errorCodes = errorCodes;
   }
@@ -119,7 +119,7 @@ export default abstract class BaseRequest<T> {
     message: ProcessResponse;
   }> {
     try {
-      const arubaSign = new ArubaSign();
+      const arubaSign = new ArubaSignatureManager();
 
       const binaryXML = Buffer.from(params.data.xml).toString('base64');
       const signedCodedXML = await arubaSign.xmlSignature({
@@ -233,6 +233,7 @@ export default abstract class BaseRequest<T> {
 
       const response = await fetch(this._httpsUrl, {
         method: 'POST',
+
         headers: {
           'Content-Type': 'text/xml;charset=UTF-8',
           SOAPAction: this._httpSoapAction,

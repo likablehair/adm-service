@@ -39,7 +39,7 @@ const declarationTableHeaderMap: Record<string, keyof Declaration> = {
   Dettagli: 'detailsButtonClass',
 };
 
-export default class AdmRPA {
+export default class AdmRobotProcessAutomationManager {
   constructor() {
     puppeteer.use(StealthPlugin());
   }

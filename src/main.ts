@@ -3,6 +3,7 @@ export { default as RichiestaProspettoSintesiRequest } from './requests/ponImpor
 export { default as DownloadProspettoSintesiRequest } from './requests/ponImport/downloadProspettoSintesiRequest';
 export { default as ListaDestautTIN } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
+
 export type {
   ProcessResponse,
   ProcessResponseFromXML,
@@ -17,10 +18,10 @@ export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSi
 
 export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
-export type { AdmDeclarationMapped } from './utils/XMLConverter';
+export type { AdmDeclarationMapped } from './converters/XMLConverter';
 
-export { default as XMLConverter } from './utils/XMLConverter';
-export { default as PDFConverter } from './utils/PDFConverter';
-export { default as AdmRPA } from './utils/AdmRPA';
+export { default as XMLConverter } from './converters/XMLConverter';
+export { default as PDFConverter } from './converters/PDFConverter';
+export { default as AdmRPA } from './managers/admRobotProcessAutomation.manager';
 
-export { default as ProspettoSintesiManager } from './managers/ProspettoSintesiManager';
+export { default as ProspettoSintesiManager } from './managers/prospettoSintesi.manager';

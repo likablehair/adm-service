@@ -19,6 +19,8 @@ export type ProspettoSintesiResult = {
 };
 
 export default class ProspettoSintesiManager {
+
+  
   async process(
     params: ProcessRequest<RichiestaProspettoSintesi>,
   ): Promise<ProspettoSintesiResult> {

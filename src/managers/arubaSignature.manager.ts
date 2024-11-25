@@ -93,7 +93,7 @@ export type XMLSignatureResponse =
   | XMLSignatureResponseError
   | XMLSignatureResponseSuccess;
 
-export default class ArubaSign {
+export default class ArubaSignatureManager {
   private _httpsUrl: string;
 
   constructor() {

@@ -1,7 +1,7 @@
 import forge from 'node-forge';
 import * as fs from 'node:fs';
 
-export default class Encryption {
+export default class EncryptionManager {
   constructor() {}
 
   identifyCryptograhyStandard(certificateBuffer: Buffer, passphrase: string) {
