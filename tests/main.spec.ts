@@ -1,7 +1,9 @@
 import { expect, test } from 'vitest';
 
 import * as fs from 'node:fs';
-import XMLConverter, { AdmDeclarationMapped } from 'src/converters/XMLConverter';
+import XMLConverter, {
+  AdmDeclarationMapped,
+} from 'src/converters/XMLConverter';
 import RichiestaProspettoSintesiRequest from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import PDFConverter from 'src/converters/PDFConverter';
 import ProspettoSintesiManager from 'src/managers/prospettoSintesi.manager';
@@ -92,8 +94,6 @@ test(
     timeout: 15000,
   },
   async () => {
-
-    
     const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
     if (!certificatePath) {
       console.error('ERROR: CERTIFICATE_URL not found');

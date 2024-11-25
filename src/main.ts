@@ -3,7 +3,6 @@ export { default as RichiestaProspettoSintesiRequest } from './requests/ponImpor
 export { default as DownloadProspettoSintesiRequest } from './requests/ponImport/downloadProspettoSintesiRequest';
 export { default as ListaDestautTIN } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
-
 export type {
   ProcessResponse,
   ProcessResponseFromXML,
