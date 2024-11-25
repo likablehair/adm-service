@@ -78,12 +78,6 @@ export const _cells: {
   },
   {
     entity: 'goods',
-    column: 'grossWeight',
-    xRange: [6.247, 6.247],
-    yRange: [16.381, 16.381],
-  },
-  {
-    entity: 'goods',
     column: 'netWeight',
     xRange: [10.335, 10.335],
     yRange: [16.381, 16.381],
@@ -100,24 +94,6 @@ export const _cells: {
   //   xRange: [2.159, 2.159],
   //   yRange: [18.174, 18.174],
   // },
-  {
-    entity: 'goods',
-    column: 'shippingCountry',
-    xRange: [2.159, 2.159],
-    yRange: [19.968, 19.968],
-  },
-  {
-    entity: 'goods',
-    column: 'destinationCountry',
-    xRange: [6.247, 6.247],
-    yRange: [19.968, 19.968],
-  },
-  {
-    entity: 'goods',
-    column: 'destinationProvince',
-    xRange: [10.335, 10.335],
-    yRange: [19.968, 19.968],
-  },
   {
     entity: 'goods',
     column: 'country',

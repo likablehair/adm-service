@@ -56,8 +56,6 @@ export type DeclarationRawJson = {
   ];
 };
 
-
-
 export interface DeclarationJson {
   date: Date;
   declarationId: number;
@@ -129,9 +127,16 @@ class PDFConverter {
     return {};
   }
   private async map(input: DeclarationJson): Promise<AdmDeclarationMapped> {
-    
-    let companyName: string[] =  [input.exporter?.companyName1, input.exporter?.companyName2, input.exporter?.companyName3]
-    let address: string[] =  [input.exporter?.address1, input.exporter?.address2, input.exporter?.address3]
+    let companyName: string[] = [
+      input.exporter?.companyName1,
+      input.exporter?.companyName2,
+      input.exporter?.companyName3,
+    ];
+    let address: string[] = [
+      input.exporter?.address1,
+      input.exporter?.address2,
+      input.exporter?.address3,
+    ];
 
     const exporter = {
       companyName: companyName.join(' '),
@@ -150,16 +155,15 @@ class PDFConverter {
       const previousRegime = good.customsRegime.slice(-2).trim();
       const customsRegime = `${requestedRegime}${previousRegime}`;
 
-
-    let description: string[] =  [good.description,
-                                  good.description1,
-                                  good.description2, 
-                                  good.description3,
-                                  good.description4,
-                                  good.description5,
-                                  good.description6]
-
-      console.log(description)
+      let description: string[] = [
+        good.description,
+        good.description1,
+        good.description2,
+        good.description3,
+        good.description4,
+        good.description5,
+        good.description6,
+      ];
 
       return {
         ncCode,
@@ -219,6 +223,7 @@ class PDFConverter {
         const pages = declarationRawJson.Pages;
 
         for (let i = 0; i < pages.length; i++) {
+
           const page = pages[i];
           if (page.Texts) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -227,36 +232,32 @@ class PDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              console.log({ "x": textElement.x, "y": textElement.y, "text": text })
-              const mappedPosition: { entity?: string; column?: string } =
-                this.getMappedPosition(textElement.x, textElement.y);
+              // console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              const mappedPosition: { entity?: string; column?: string } = this.getMappedPosition(textElement.x, textElement.y);
 
-              const totColumnsMapped = _cells.filter(
-                (el) => el.entity === mappedPosition.entity,
-              ).length;
+              if (!!mappedPosition.entity) {
+                const totColumnsMapped = _cells.filter((el) => el.entity === mappedPosition.entity).length;
 
-              if (!mappedPosition.column || !text.trim()) {
-                continue;
-              } else if (!!mappedPosition.entity && !!mappedPosition.column) {
-                if (i > 0) {
+                if (!mappedPosition.column || !text.trim()) {
+                  continue;
+                } else if (!!mappedPosition.entity && !!mappedPosition.column) {
+                  if (i > 0) {
+                    if (!declarationEntity[mappedPosition.entity])  declarationEntity[mappedPosition.entity] = [];
 
-                  if (!declarationEntity[mappedPosition.entity])
-                    declarationEntity[mappedPosition.entity] = [];
+                    if (Array.isArray(declarationEntity[mappedPosition.entity])) {
+                      goodObject[mappedPosition.column] = text.trim();
 
-                  if (Array.isArray(declarationEntity[mappedPosition.entity])) {
-                    goodObject[mappedPosition.column] = text.trim();
+                      if(mappedPosition.entity === 'goods')
+                      // console.log(Object.keys(goodObject).length + ' / ' + totColumnsMapped);
+                       if (Object.keys(goodObject).length === totColumnsMapped)
+                        declarationEntity[mappedPosition.entity].push(goodObject);
 
-                    // console.log(mappedPosition.column + ' : ' + text.trim())
-                    if (Object.keys(goodObject).length === totColumnsMapped)
-                      declarationEntity[mappedPosition.entity].push(goodObject);
-                    
+                       console.log(goodObject);
+                    }
+                  } else {
+                    if (!declarationEntity[mappedPosition.entity]) declarationEntity[mappedPosition.entity] = {};
+                    declarationEntity[mappedPosition.entity][mappedPosition.column] = text.trim();
                   }
-                } else {
-                  if (!declarationEntity[mappedPosition.entity])
-                    declarationEntity[mappedPosition.entity] = {};
-                  declarationEntity[mappedPosition.entity][
-                    mappedPosition.column
-                  ] = text.trim();
                 }
               }
             }
@@ -268,7 +269,7 @@ class PDFConverter {
 
       await fsPromises.unlink(params.data.path);
       const admDeclarationMapped = await this.map(declarationEntity);
-      console.log(admDeclarationMapped)
+      console.log(admDeclarationMapped);
 
       return admDeclarationMapped;
     } catch (error) {
