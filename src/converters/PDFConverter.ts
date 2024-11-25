@@ -91,8 +91,10 @@ export interface DeclarationJson {
     description3: string;
     description4: string;
     description5: string;
-    description6: string;
-    country: string;
+    country1: string;
+    country2: string;
+    country3: string;
+    country4: string;
     netWeight: string;
     customsRegime: string;
     requestedRegime: string;
@@ -162,15 +164,22 @@ class PDFConverter {
         good.description3,
         good.description4,
         good.description5,
-        good.description6,
       ];
+
+      const country: string =
+      good.country1?.trim() || 
+      good.country2?.trim() || 
+      good.country3?.trim() || 
+      good.country4?.trim() || 
+      '';
+
 
       return {
         ncCode,
         taricCode,
         identificationCode: good.ncCode,
         description: description.join(' ').trim(),
-        country: good.country,
+        country: country,
         netWeight: good.netWeight,
         customsRegime: customsRegime,
         requestedRegime: requestedRegime,
@@ -232,12 +241,7 @@ class PDFConverter {
               const text = decodeURIComponent(textElement.R[0].T);
 
               // console.log({ "x": textElement.x, "y": textElement.y, "text": text })
-              const mappedPosition: { entity?: string; column?: string } =
-                this.getMappedPosition(textElement.x, textElement.y);
-
-              const totColumnsMapped = _cells.filter(
-                (el) => el.entity === mappedPosition.entity,
-              ).length;
+              const mappedPosition: { entity?: string; column?: string } = this.getMappedPosition(textElement.x, textElement.y);
 
               if (!mappedPosition.column || !text.trim()) {
                 continue;
@@ -249,14 +253,11 @@ class PDFConverter {
                   if (Array.isArray(declarationEntity[mappedPosition.entity])) {
                     goodObject[mappedPosition.column] = text.trim();
 
-                    if (mappedPosition.entity === 'goods')
-                      if (Object.keys(goodObject).length === totColumnsMapped)
-                        // console.log(Object.keys(goodObject).length + ' / ' + totColumnsMapped);
-                        declarationEntity[mappedPosition.entity].push(
-                          goodObject,
-                        );
+                    const lastItem = declarationEntity[mappedPosition.entity].slice(-1)[0]; 
+                    const isNewItem = !lastItem || lastItem.nr !== goodObject.nr; 
 
-                    console.log(goodObject);
+                    if (isNewItem) 
+                        declarationEntity[mappedPosition.entity].push(goodObject);
                   }
                 } else {
                   if (!declarationEntity[mappedPosition.entity])
@@ -275,7 +276,6 @@ class PDFConverter {
 
       await fsPromises.unlink(params.data.path);
       const admDeclarationMapped = await this.map(declarationEntity);
-      console.log(admDeclarationMapped);
 
       return admDeclarationMapped;
     } catch (error) {
