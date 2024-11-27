@@ -43,6 +43,8 @@ test('RichiestaProspettoSintesiRequest', async () => {
   const admCertificate = fs.readFileSync(certificatePath);
 
   const request = new RichiestaProspettoSintesiRequest();
+
+  
   const result = await request.processRequest({
     data: {
       xml: {
@@ -125,7 +127,8 @@ test(
     const admCertificate = fs.readFileSync(certificatePath);
 
     const manager = new ProspettoSintesiManager();
-    const downloadedPDF = await manager.download({
+
+    const params = {
       data: {
         xml: {
           mrn,
@@ -146,8 +149,9 @@ test(
           typeOtpAuth,
           delegatedDomain,
         },
-      },
-    });
+      }
+    }
+    const downloadedPDF = await manager.download(params);
 
 
     
