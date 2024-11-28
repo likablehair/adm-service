@@ -326,11 +326,8 @@ class PDFConverter {
       } else {
         throw new Error('No Pages found in the PDF.');
       }
-
       
       const admDeclarationMapped = await this.map(declarationEntity);
-
-      console.log(admDeclarationMapped)
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('Error parsing PDF:' + error); // Returning an empty object
