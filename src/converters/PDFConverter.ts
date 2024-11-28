@@ -72,13 +72,23 @@ export interface DeclarationJson {
     companyName1: string;
     companyName2: string;
     companyName3: string;
+    companyName4: string;
     vatNumber: string;
-    country: string;
+    country1: string;
+    country2: string;
     address1: string;
     address2: string;
     address3: string;
-    city: string;
-    postalCode: string;
+    address4: string;
+    address5: string;
+    address6: string;
+    city1: string;
+    city2: string;
+    city3: string;
+    city4: string;
+    postalCode1: string;
+    postalCode2: string;
+    postalCode3: string;
   };
   goods: {
     ncCode: string;
@@ -90,10 +100,18 @@ export interface DeclarationJson {
     description3: string;
     description4: string;
     description5: string;
+    description6: string;
+    description7: string;
+    description8: string;
     country1: string;
     country2: string;
     country3: string;
     country4: string;
+    country5: string;
+    country6: string;
+    country7: string;
+    country8: string;
+    country9: string;
     netWeight: string;
     customsRegime: string;
     requestedRegime: string;
@@ -132,20 +150,42 @@ class PDFConverter {
       input.exporter?.companyName1,
       input.exporter?.companyName2,
       input.exporter?.companyName3,
+      input.exporter?.companyName4,
     ];
     const address: string[] = [
       input.exporter?.address1,
       input.exporter?.address2,
       input.exporter?.address3,
+      input.exporter?.address4,
+      input.exporter?.address5,
+      input.exporter?.address6,
     ];
 
+    const city: string[] = [
+      input.exporter?.city1,
+      input.exporter?.city2,
+      input.exporter?.city3,
+      input.exporter?.city4,
+    ];
+
+    const country: string =
+      input.exporter?.country1?.trim() ||
+      input.exporter?.country2?.trim() ||
+      '';
+
+      const postalCode: string =
+      input.exporter?.postalCode1?.trim() ||
+      input.exporter?.postalCode2?.trim() ||
+      input.exporter?.postalCode3?.trim() ||
+      '';
+
     const exporter = {
-      companyName: companyName.join(' '),
+      companyName: companyName.join(' ').trim(),
       vatNumber: input.exporter?.vatNumber || '',
-      country: input.exporter?.country || '',
+      country: country.trim(),
       address: address.join(' '),
-      city: input.exporter?.city || '',
-      postalCode: input.exporter?.postalCode || '',
+      city: city.join(' ').trim(),
+      postalCode: postalCode
     };
 
     const goods = input.goods.map((good) => {
@@ -163,6 +203,9 @@ class PDFConverter {
         good.description3,
         good.description4,
         good.description5,
+        good.description6,
+        good.description7,
+        good.description8,
       ];
 
       const country: string =
@@ -170,6 +213,11 @@ class PDFConverter {
         good.country2?.trim() ||
         good.country3?.trim() ||
         good.country4?.trim() ||
+        good.country5?.trim() ||
+        good.country6?.trim() ||
+        good.country7?.trim() ||
+        good.country8?.trim() ||
+        good.country9?.trim() ||
         '';
 
       return {
@@ -238,7 +286,7 @@ class PDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              // console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              // if(j < 100) console.log({ "x": textElement.x, "y": textElement.y, "text": text })
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
 
@@ -282,6 +330,7 @@ class PDFConverter {
       
       const admDeclarationMapped = await this.map(declarationEntity);
 
+      console.log(admDeclarationMapped)
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('Error parsing PDF:' + error); // Returning an empty object
