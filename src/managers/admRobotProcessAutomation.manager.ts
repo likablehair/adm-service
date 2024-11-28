@@ -171,7 +171,7 @@ export default class AdmRobotProcessAutomationManager {
 
       await params.page.goto(url);
 
-      const dropdownLabelDichiaranteXPath = 'xpath///*[@id="formDel:j_idt50_label"]';
+      const dropdownLabelDichiaranteXPath = 'xpath///*[@id="formDel:j_idt47_label"]';
       const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante}[role="option"]`;
       const buttonConfirmXPath = 'xpath///*[@id="formDel:idGoto"]/span';
 
