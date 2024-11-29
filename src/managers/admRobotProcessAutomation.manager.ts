@@ -68,7 +68,9 @@ export default class AdmRobotProcessAutomationManager {
         browser = params.browser;
       }
 
-      console.info(`[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} starting...`);
+      console.info(
+        `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} starting...`,
+      );
       const page = await browser.newPage();
 
       await page.setExtraHTTPHeaders({
@@ -119,16 +121,22 @@ export default class AdmRobotProcessAutomationManager {
       }
 
       const mrnList = declarations.map((declaration) => {
-        console.info(`[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} found MRN: ${declaration.mrn}`);
+        console.info(
+          `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} found MRN: ${declaration.mrn}`,
+        );
         return declaration.mrn;
       });
-      console.info(`[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} total MRNs: ${mrnList.length}`);
+      console.info(
+        `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} total MRNs: ${mrnList.length}`,
+      );
 
       if (!params.browser) {
         await browser.close();
       }
 
-      console.info(`[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} ended successfully!`);
+      console.info(
+        `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} ended successfully!`,
+      );
 
       return mrnList;
     } catch (error) {
