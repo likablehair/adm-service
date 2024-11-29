@@ -23,5 +23,8 @@ export { default as XMLConverter } from './converters/XMLConverter';
 export { default as PDFConverter } from './converters/PDFConverter';
 export { default as AdmRPA } from './managers/admRobotProcessAutomation.manager';
 
-export type { ProspettoSintesiResult, ImportDeclarationResult } from './managers/prospettoSintesi.manager';
+export type {
+  ProspettoSintesiResult,
+  ImportDeclarationResult,
+} from './managers/prospettoSintesi.manager';
 export { default as ProspettoSintesiManager } from './managers/prospettoSintesi.manager';

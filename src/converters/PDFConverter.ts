@@ -173,7 +173,7 @@ class PDFConverter {
       input.exporter?.country2?.trim() ||
       '';
 
-      const postalCode: string =
+    const postalCode: string =
       input.exporter?.postalCode1?.trim() ||
       input.exporter?.postalCode2?.trim() ||
       input.exporter?.postalCode3?.trim() ||
@@ -185,7 +185,7 @@ class PDFConverter {
       country: country.trim(),
       address: address.join(' '),
       city: city.join(' ').trim(),
-      postalCode: postalCode
+      postalCode: postalCode,
     };
 
     const goods = input.goods.map((good) => {
@@ -302,11 +302,13 @@ class PDFConverter {
 
                     const lastItem =
                       declarationEntity[mappedPosition.entity].slice(-1)[0];
-                      
+
                     const isNewItem =
                       !lastItem ||
-                      ( lastItem.nr !== goodObject.nr &&
-                        !! goodObject.ncCode && goodObject.ncCode.length > 0 && goodObject.ncCode.length <= 10 &&
+                      (lastItem.nr !== goodObject.nr &&
+                        !!goodObject.ncCode &&
+                        goodObject.ncCode.length > 0 &&
+                        goodObject.ncCode.length <= 10 &&
                         !isNaN(parseFloat(goodObject.netWeight)));
 
                     if (isNewItem)
@@ -326,7 +328,7 @@ class PDFConverter {
       } else {
         throw new Error('No Pages found in the PDF.');
       }
-      
+
       const admDeclarationMapped = await this.map(declarationEntity);
       return admDeclarationMapped;
     } catch (error) {

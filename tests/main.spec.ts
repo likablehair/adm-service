@@ -5,7 +5,9 @@ import XMLConverter, {
   AdmDeclarationMapped,
 } from 'src/converters/XMLConverter';
 import RichiestaProspettoSintesiRequest from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
-import ProspettoSintesiManager, { ProspettoSintesiResult } from 'src/managers/prospettoSintesi.manager';
+import ProspettoSintesiManager, {
+  ProspettoSintesiResult,
+} from 'src/managers/prospettoSintesi.manager';
 
 test('RichiestaProspettoSintesiRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -44,7 +46,6 @@ test('RichiestaProspettoSintesiRequest', async () => {
 
   const request = new RichiestaProspettoSintesiRequest();
 
-  
   const result = await request.processRequest({
     data: {
       xml: {
@@ -149,14 +150,14 @@ test(
           typeOtpAuth,
           delegatedDomain,
         },
-      }
-    }
+      },
+    };
     const downloadedPDF = await manager.download(params);
 
-
-    
     const result: ProspettoSintesiResult = await manager.save(downloadedPDF);
-    const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({ data : {path: result.path}});
+    const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({
+      data: { path: result.path },
+    });
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');

@@ -53,7 +53,7 @@ export const _cells: {
     xRange: [10.335, 10.335],
     yRange: [22.322, 22.322],
   },
-  
+
   {
     entity: 'exporter',
     column: 'city2',
@@ -71,7 +71,7 @@ export const _cells: {
     entity: 'exporter',
     column: 'city4',
     xRange: [10.335, 10.335],
-    yRange: [23.219, 23.219,],
+    yRange: [23.219, 23.219],
   },
 
   {
@@ -101,14 +101,14 @@ export const _cells: {
   {
     entity: 'exporter',
     column: 'country1',
-    xRange: [2.159,  2.159],
-    yRange: [23.219, 23.219,],
+    xRange: [2.159, 2.159],
+    yRange: [23.219, 23.219],
   },
   {
     entity: 'exporter',
     column: 'country2',
-    xRange: [2.159,  2.159],
-    yRange: [23.546, 23.546,],
+    xRange: [2.159, 2.159],
+    yRange: [23.546, 23.546],
   },
   {
     entity: 'goods',
@@ -157,7 +157,7 @@ export const _cells: {
     column: 'description3',
     xRange: [2.159, 2.159],
     yRange: [19.627, 19.627],
-  },  
+  },
   {
     entity: 'goods',
     column: 'description4',
@@ -169,7 +169,7 @@ export const _cells: {
     column: 'description5',
     xRange: [2.159, 2.159],
     yRange: [21.127, 21.127],
-  },  
+  },
 
   {
     entity: 'goods',
@@ -188,7 +188,7 @@ export const _cells: {
     column: 'description8',
     xRange: [2.159, 2.159],
     yRange: [22.627, 22.627],
-  },  
+  },
   {
     entity: 'goods',
     column: 'country1',

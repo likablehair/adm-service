@@ -119,10 +119,7 @@ export default class AdmRobotProcessAutomationManager {
       }
 
       const mrnList = declarations.map((declaration) => {
-        console.info(
-          `[${new Date().toISOString()}] MRN: `,
-          declaration.mrn,
-        );
+        console.info(`[${new Date().toISOString()}] MRN: `, declaration.mrn);
 
         return declaration.mrn;
       });
@@ -184,11 +181,14 @@ export default class AdmRobotProcessAutomationManager {
         'https://sso.adm.gov.it/pud2interop85cast?Location=https://web.adm.gov.it/ponimport/xhtml/index.xhtml';
 
       await params.page.goto(url);
-      const dropdownLabelDichiaranteCSS = '#formDel label.ui-selectonemenu-label';
+      const dropdownLabelDichiaranteCSS =
+        '#formDel label.ui-selectonemenu-label';
       const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante}[role="option"]`;
       const buttonConfirmXPath = 'xpath///*[@id="formDel:idGoto"]/span';
 
-      await params.page.waitForSelector(dropdownLabelDichiaranteCSS, {visible: true});
+      await params.page.waitForSelector(dropdownLabelDichiaranteCSS, {
+        visible: true,
+      });
       await params.page.click(dropdownLabelDichiaranteCSS);
 
       await new Promise((resolve) => setTimeout(resolve, 1500));

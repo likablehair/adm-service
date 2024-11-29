@@ -20,27 +20,37 @@ export type ProspettoSintesiResult = {
   };
 };
 
-export type ImportDeclarationResult ={
-   admDeclarationMapped: AdmDeclarationMapped; 
-   file: {
-    buffer: Buffer, 
-    from: { path:string;}
-    extension: string
-  } 
-}
+export type ImportDeclarationResult = {
+  admDeclarationMapped: AdmDeclarationMapped;
+  file: {
+    buffer: Buffer;
+    from: { path: string };
+    extension: string;
+  };
+};
 
 export default class ProspettoSintesiManager {
-
-  async import(params: ProcessRequest<RichiestaProspettoSintesi>): Promise<ImportDeclarationResult> {
+  async import(
+    params: ProcessRequest<RichiestaProspettoSintesi>,
+  ): Promise<ImportDeclarationResult> {
     try {
       const downloadedPDF: string = await this.download(params);
       const savedPDF: ProspettoSintesiResult = await this.save(downloadedPDF);
-      const admDeclarationMapped: AdmDeclarationMapped =  await this.convert({ data : {path: savedPDF.path}});
+      const admDeclarationMapped: AdmDeclarationMapped = await this.convert({
+        data: { path: savedPDF.path },
+      });
       await fsPromises.unlink(savedPDF.path);
 
-      return { admDeclarationMapped, file: { buffer: savedPDF.buffer, from: { path: savedPDF.path} , extension: 'pdf'} }
+      return {
+        admDeclarationMapped,
+        file: {
+          buffer: savedPDF.buffer,
+          from: { path: savedPDF.path },
+          extension: 'pdf',
+        },
+      };
     } catch (err: unknown) {
-        console.log(err)
+      console.log(err);
       if (err instanceof Error) {
         throw new Error(err.message);
       } else {
@@ -52,9 +62,10 @@ export default class ProspettoSintesiManager {
     params: ProcessRequest<RichiestaProspettoSintesi>,
   ): Promise<string> {
     try {
-      const richiestaProspettoSintesiRequest = new RichiestaProspettoSintesiRequest();
-      const richiestaProspetto = await richiestaProspettoSintesiRequest.processRequest(params);
-
+      const richiestaProspettoSintesiRequest =
+        new RichiestaProspettoSintesiRequest();
+      const richiestaProspetto =
+        await richiestaProspettoSintesiRequest.processRequest(params);
 
       if (richiestaProspetto.type !== 'success') {
         throw new Error('RichiestaProspettoSintesi failed');
@@ -149,6 +160,6 @@ export default class ProspettoSintesiManager {
 
   async convert(params: { data: { path: string } }) {
     const converterPDF = new PDFConverter();
-    return await converterPDF.run({ data: { path: params.data.path }});
+    return await converterPDF.run({ data: { path: params.data.path } });
   }
 }
