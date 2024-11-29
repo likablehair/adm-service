@@ -7,14 +7,12 @@ test('MRN List', { timeout: 200000 }, async () => {
   const admPassword = import.meta.env.VITE_ADM_PASSWORD;
 
   const admRPA = new AdmRobotProcessAutomationManager();
-  const cookies = await admRPA.getMRNList({
+  await admRPA.getMRNList({
     dichiarante,
-    dateFrom: new Date('2024-11-11'),
+    dateFrom: new Date('2024-11-29'),
     security: {
       username: admUsername,
       password: admPassword,
     },
   });
-
-  console.log(cookies);
 });

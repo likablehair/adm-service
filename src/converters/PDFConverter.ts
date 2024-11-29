@@ -286,7 +286,7 @@ class PDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              // if(j < 100) console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              //if(j < 100) console.log({ "x": textElement.x, "y": textElement.y, "text": text })
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
 

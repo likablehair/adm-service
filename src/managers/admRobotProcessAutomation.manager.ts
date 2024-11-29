@@ -58,7 +58,7 @@ export default class AdmRobotProcessAutomationManager {
       let browser: Browser;
       if (!params.browser) {
         browser = await puppeteer.launch({
-          headless: 'shell',
+          headless: false, //'shell',
           args: ['--lang=it-IT'],
           env: {
             LANGUAGE: 'it_IT',
@@ -68,7 +68,7 @@ export default class AdmRobotProcessAutomationManager {
         browser = params.browser;
       }
 
-      console.log('browser launched');
+      console.info(`[${new Date().toISOString()}] RPA starting...`);
       const page = await browser.newPage();
 
       await page.setExtraHTTPHeaders({
@@ -112,12 +112,20 @@ export default class AdmRobotProcessAutomationManager {
         });
       }
 
-      const mrnList = declarations.map((declaration) => declaration.mrn);
+      const mrnList = declarations.map((declaration) => {
+        console.info(
+          `[${new Date().toISOString()}] MRN: `,
+          declaration.mrn,
+        );
+
+        return declaration.mrn;
+      });
 
       if (!params.browser) {
         await browser.close();
       }
 
+      console.info(`[${new Date().toISOString()}] RPA ended successfully`);
       return mrnList;
     } catch (error) {
       console.error(error);
@@ -170,28 +178,20 @@ export default class AdmRobotProcessAutomationManager {
         'https://sso.adm.gov.it/pud2interop85cast?Location=https://web.adm.gov.it/ponimport/xhtml/index.xhtml';
 
       await params.page.goto(url);
-
-      const dropdownLabelDichiaranteXPath = 'xpath///*[@id="formDel:j_idt47_label"]';
+      const dropdownLabelDichiaranteCSS = '#formDel label.ui-selectonemenu-label';
       const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante}[role="option"]`;
       const buttonConfirmXPath = 'xpath///*[@id="formDel:idGoto"]/span';
 
-      await params.page.waitForSelector(dropdownLabelDichiaranteXPath);
-      await params.page.click(dropdownLabelDichiaranteXPath);
+      await params.page.waitForSelector(dropdownLabelDichiaranteCSS, {visible: true});
+      await params.page.click(dropdownLabelDichiaranteCSS);
 
       await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      console.log('clicked on label');
 
       await params.page.waitForSelector(dropdownOptionDichiaranteXPath);
       await params.page.click(dropdownOptionDichiaranteXPath);
 
-      console.log('clicked on option');
-
       await new Promise((resolve) => setTimeout(resolve, 1500));
-
       await params.page.waitForSelector(buttonConfirmXPath);
-
-      console.log('clicked on button');
 
       await Promise.all([
         this._retry({
@@ -201,8 +201,6 @@ export default class AdmRobotProcessAutomationManager {
         }),
         params.page.click(buttonConfirmXPath),
       ]);
-
-      console.log('navigated');
 
       return params.page;
     } catch (error) {
@@ -387,15 +385,17 @@ export default class AdmRobotProcessAutomationManager {
         }
       }
 
-      console.log('declarationTableData', declarationTableData);
-
       const declarationData = declarationTableData.map((declaration) => {
         return this._mapDeclarationTableHeaders({
           declarationTableRow: declaration,
         });
       });
 
-      console.log('declarationData', declarationData);
+      console.info(
+        `[${new Date().toISOString()}] RPA has found`,
+        declarationData.length,
+        ' declaration',
+      );
 
       return declarationData;
     } catch (error) {
