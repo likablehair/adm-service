@@ -106,9 +106,15 @@ export default class AdmRobotProcessAutomationManager {
           currentDate.setDate(currentDate.getDate() + 1);
         }
       } else {
+        let currentDate = new Date();
+        if (params.dateFrom) {
+          currentDate = new Date(params.dateFrom);
+        }
+        currentDate.setHours(0, 0, 0, 0);
+
         declarations = await this.aggregatedSearch({
           page: gestioneDocumentiPage,
-          date: params.dateFrom,
+          date: currentDate,
         });
       }
 
