@@ -107,7 +107,7 @@ export type Dichiarazione = {
 export type AdmDeclarationMapped = {
   mrn: string;
   date: string;
-  exporter: {
+  supplier: {
     companyName: string;
     vatNumber: string;
     country: string;
@@ -161,7 +161,7 @@ export default class XMLConverter {
     const data: AdmDeclarationMapped = {
       mrn: '',
       date: '',
-      exporter: {
+      supplier: {
         companyName: esportatore.Nome,
         vatNumber: '',
         country: esportatore.Paese,

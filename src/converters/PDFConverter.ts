@@ -68,7 +68,7 @@ export interface DeclarationJson {
     y?: number;
   };
   declaration: { date: string; mrn: string };
-  exporter: {
+  supplier: {
     companyName1: string;
     companyName2: string;
     companyName3: string;
@@ -147,41 +147,41 @@ class PDFConverter {
   }
   private async map(input: DeclarationJson): Promise<AdmDeclarationMapped> {
     const companyName: string[] = [
-      input.exporter?.companyName1,
-      input.exporter?.companyName2,
-      input.exporter?.companyName3,
-      input.exporter?.companyName4,
+      input.supplier?.companyName1,
+      input.supplier?.companyName2,
+      input.supplier?.companyName3,
+      input.supplier?.companyName4,
     ];
     const address: string[] = [
-      input.exporter?.address1,
-      input.exporter?.address2,
-      input.exporter?.address3,
-      input.exporter?.address4,
-      input.exporter?.address5,
-      input.exporter?.address6,
+      input.supplier?.address1,
+      input.supplier?.address2,
+      input.supplier?.address3,
+      input.supplier?.address4,
+      input.supplier?.address5,
+      input.supplier?.address6,
     ];
 
     const city: string[] = [
-      input.exporter?.city1,
-      input.exporter?.city2,
-      input.exporter?.city3,
-      input.exporter?.city4,
+      input.supplier?.city1,
+      input.supplier?.city2,
+      input.supplier?.city3,
+      input.supplier?.city4,
     ];
 
     const country: string =
-      input.exporter?.country1?.trim() ||
-      input.exporter?.country2?.trim() ||
+      input.supplier?.country1?.trim() ||
+      input.supplier?.country2?.trim() ||
       '';
 
     const postalCode: string =
-      input.exporter?.postalCode1?.trim() ||
-      input.exporter?.postalCode2?.trim() ||
-      input.exporter?.postalCode3?.trim() ||
+      input.supplier?.postalCode1?.trim() ||
+      input.supplier?.postalCode2?.trim() ||
+      input.supplier?.postalCode3?.trim() ||
       '';
 
-    const exporter = {
+    const supplier = {
       companyName: companyName.join(' ').trim(),
-      vatNumber: input.exporter?.vatNumber || '',
+      vatNumber: input.supplier?.vatNumber || '',
       country: country.trim(),
       address: address.join(' '),
       city: city.join(' ').trim(),
@@ -236,7 +236,7 @@ class PDFConverter {
     return {
       mrn: input.declaration.mrn,
       date: input.declaration.date,
-      exporter,
+      supplier,
       goods,
     };
   }
