@@ -94,7 +94,7 @@ export const _cells: {
   },
   {
     entity: 'supplier',
-    column: 'city',
+    column: 'city1',
     xRange: [10.335, 10.335],
     yRange: [23.874, 23.874],
   },
@@ -109,6 +109,12 @@ export const _cells: {
     column: 'country2',
     xRange: [2.159, 2.159],
     yRange: [23.546, 23.546],
+  },
+  {
+    entity: 'supplier',
+    column: 'country3',
+    xRange: [2.159, 2.159],
+    yRange: [23.874, 23.874],
   },
   {
     entity: 'goods',
