@@ -76,6 +76,7 @@ export interface DeclarationJson {
     vatNumber: string;
     country1: string;
     country2: string;
+    country3: string;
     address1: string;
     address2: string;
     address3: string;
@@ -171,6 +172,7 @@ class PDFConverter {
     const country: string =
       input.supplier?.country1?.trim() ||
       input.supplier?.country2?.trim() ||
+      input.supplier?.country3?.trim() ||
       '';
 
     const postalCode: string =
@@ -286,7 +288,10 @@ class PDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              //if(j < 100) console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              // if(i == 0){
+              //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              // }
+              
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
 
