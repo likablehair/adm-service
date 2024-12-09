@@ -217,7 +217,7 @@ export default class AdmRobotProcessAutomationManager {
       } else if (params.dateFrom) {
         dateFrom = new Date(params.dateFrom);
         dateTo = new Date(dateFrom);
-      } 
+      }
 
       dateFrom.setHours(6, 0, 0, 0);
       dateTo.setHours(6, 0, 0, 0);
@@ -236,22 +236,26 @@ export default class AdmRobotProcessAutomationManager {
       let declarationData: Declaration[] = [];
 
       while (iterationDate <= dateTo) {
-        const ricercaAggregataContentXPath = 'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata"]';
-      
+        const ricercaAggregataContentXPath =
+          'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata"]';
+
         const ricercaAggregataTabXPath =
-        'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
-  
-        const isHidden = await params.page.waitForSelector(ricercaAggregataContentXPath, {
-          hidden: true
-        }).then(() => true).catch(() => false);
-  
+          'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
+
+        const isHidden = await params.page
+          .waitForSelector(ricercaAggregataContentXPath, {
+            hidden: true,
+          })
+          .then(() => true)
+          .catch(() => false);
+
         if (isHidden) {
           await params.page.waitForSelector(ricercaAggregataTabXPath);
           await params.page.click(ricercaAggregataTabXPath);
-  
+
           await new Promise((resolve) => setTimeout(resolve, 1500));
         }
-  
+
         const ricercaAggregataButtonXPath =
           'xpath///*[@id="formAvan:accordionTab:buttonRicercaAgg"]/span';
 
@@ -259,9 +263,9 @@ export default class AdmRobotProcessAutomationManager {
           'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
         await params.page.waitForSelector(dateFromInputXPath);
         await params.page.click(dateFromInputXPath);
-  
+
         await new Promise((resolve) => setTimeout(resolve, 1500));
-  
+
         const datePickerCalendarXPath =
           'xpath///*[@id="ui-datepicker-div"]/table';
         await params.page.waitForSelector(datePickerCalendarXPath);
@@ -269,7 +273,7 @@ export default class AdmRobotProcessAutomationManager {
         const day = iterationDate.getDate();
         const month = iterationDate.getMonth() + 1;
         const year = iterationDate.getFullYear();
-        
+
         const currentMonth = datePickerDate.getMonth() + 1;
         const currentYear = datePickerDate.getFullYear();
 
@@ -305,7 +309,7 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.click(dateCellXPath);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        
+
         await params.page.waitForSelector(ricercaAggregataButtonXPath);
         await params.page.click(ricercaAggregataButtonXPath);
 
@@ -313,22 +317,23 @@ export default class AdmRobotProcessAutomationManager {
 
         //Wait for the table, otherwise the result will be always 0
         const resultTableCss = '#formResult div.ui-datatable';
-        const tableVisible = await params.page.waitForSelector(resultTableCss, {
-          visible: true
-        })
-        .then(() => true)
-        .catch(() => false);
+        const tableVisible = await params.page
+          .waitForSelector(resultTableCss, {
+            visible: true,
+          })
+          .then(() => true)
+          .catch(() => false);
 
         if (!tableVisible) {
           const logDate = iterationDate.toISOString().split('T')[0];
           console.info(
             `[${new Date().toISOString()}] RPA aggregatedSearch for date ${logDate}: 0 declarations found`,
           );
-      
+
           //Close the search tab
           await params.page.waitForSelector(ricercaAggregataTabXPath);
           await params.page.click(ricercaAggregataTabXPath);
-  
+
           datePickerDate = new Date(iterationDate);
           datePickerDate.setHours(6, 0, 0, 0);
           iterationDate.setDate(iterationDate.getDate() + 1);
@@ -357,13 +362,17 @@ export default class AdmRobotProcessAutomationManager {
         if (mrnNumber > rowsPerPageValue) {
           //Set the number of rows to 30 (max option available)
           rowsPerPageValue = 30;
-          const rowsPerPageDropdownCss = '#formResult select.ui-paginator-rpp-options';
+          const rowsPerPageDropdownCss =
+            '#formResult select.ui-paginator-rpp-options';
           await params.page.waitForSelector(rowsPerPageDropdownCss);
           await params.page.click(rowsPerPageDropdownCss);
 
           await new Promise((resolve) => setTimeout(resolve, 1500));
-          
-          await params.page.select(rowsPerPageDropdownCss, rowsPerPageValue.toString());
+
+          await params.page.select(
+            rowsPerPageDropdownCss,
+            rowsPerPageValue.toString(),
+          );
         }
 
         const iterationNumber = Math.ceil(mrnNumber / rowsPerPageValue);
@@ -436,7 +445,6 @@ export default class AdmRobotProcessAutomationManager {
           });
         });
 
-      
         declarationData = [...declarationData, ...loopDeclarations];
 
         const logDate = iterationDate.toISOString().split('T')[0];
@@ -458,7 +466,7 @@ export default class AdmRobotProcessAutomationManager {
         datePickerDate.setHours(6, 0, 0, 0);
         iterationDate.setDate(iterationDate.getDate() + 1);
       }
-      
+
       return declarationData;
     } catch (error) {
       console.error(error);
@@ -487,7 +495,7 @@ export default class AdmRobotProcessAutomationManager {
     const position = params.day + firstDay;
     const row = Math.ceil((position - 1) / 7);
     let column = (position - 1) % 7;
-    
+
     if (column === 0) {
       column = 7;
     }
