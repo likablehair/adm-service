@@ -90,12 +90,14 @@ export default class AdmRobotProcessAutomationManager {
         dichiarante: params.dichiarante,
       });
 
+      //Since the hour is not necessary, set to 6:00 AM
+      //to avoid timezone issues
       let declarations: Declaration[] = [];
       if (params.dateFrom && params.dateTo) {
         const currentDate = new Date(params.dateFrom);
         const dateTo = new Date(params.dateTo);
-        dateTo.setHours(0, 0, 0, 0);
-        currentDate.setHours(0, 0, 0, 0);
+        dateTo.setHours(6, 0, 0, 0);
+        currentDate.setHours(6, 0, 0, 0);
 
         while (currentDate <= dateTo) {
           const declarationsFromDate = await this.aggregatedSearch({
@@ -112,7 +114,7 @@ export default class AdmRobotProcessAutomationManager {
         if (params.dateFrom) {
           currentDate = new Date(params.dateFrom);
         }
-        currentDate.setHours(0, 0, 0, 0);
+        currentDate.setHours(6, 0, 0, 0);
 
         declarations = await this.aggregatedSearch({
           page: gestioneDocumentiPage,
@@ -242,8 +244,8 @@ export default class AdmRobotProcessAutomationManager {
       //Check if the dateFrom is provided
       if (params.date) {
         const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
-        params.date.setHours(0, 0, 0, 0);
+        currentDate.setHours(6, 0, 0, 0);
+        params.date.setHours(6, 0, 0, 0);
 
         if (params.date > currentDate) {
           throw new Error('Invalid date: date is in the future');
