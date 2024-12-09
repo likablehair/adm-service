@@ -90,37 +90,12 @@ export default class AdmRobotProcessAutomationManager {
         dichiarante: params.dichiarante,
       });
 
-      //Since the hour is not necessary, set to 6:00 AM
-      //to avoid timezone issues
       let declarations: Declaration[] = [];
-      if (params.dateFrom && params.dateTo) {
-        const currentDate = new Date(params.dateFrom);
-        const dateTo = new Date(params.dateTo);
-        dateTo.setHours(6, 0, 0, 0);
-        currentDate.setHours(6, 0, 0, 0);
-
-        while (currentDate <= dateTo) {
-          const declarationsFromDate = await this.aggregatedSearch({
-            page: gestioneDocumentiPage,
-            date: currentDate,
-          });
-
-          declarations = [...declarations, ...declarationsFromDate];
-
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-      } else {
-        let currentDate = new Date();
-        if (params.dateFrom) {
-          currentDate = new Date(params.dateFrom);
-        }
-        currentDate.setHours(6, 0, 0, 0);
-
-        declarations = await this.aggregatedSearch({
-          page: gestioneDocumentiPage,
-          date: currentDate,
-        });
-      }
+      declarations = await this.aggregatedSearch({
+        page: gestioneDocumentiPage,
+        dateFrom: params.dateFrom,
+        dateTo: params.dateTo,
+      });
 
       const mrnList = declarations.map((declaration) => {
         console.info(
@@ -228,45 +203,75 @@ export default class AdmRobotProcessAutomationManager {
 
   async aggregatedSearch(params: {
     page: Page;
-    date?: Date;
+    dateFrom?: Date;
+    dateTo?: Date;
   }): Promise<Declaration[]> {
     try {
-      const ricercaAggregataTabXPath =
-        'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
-      const ricercaAggregataButtonXPath =
-        'xpath///*[@id="formAvan:accordionTab:buttonRicercaAgg"]/span';
-
-      await params.page.waitForSelector(ricercaAggregataTabXPath);
-      await params.page.click(ricercaAggregataTabXPath);
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      let dateFrom = new Date();
+      let dateTo = new Date();
 
       //Check if the dateFrom is provided
-      if (params.date) {
-        const currentDate = new Date();
-        currentDate.setHours(6, 0, 0, 0);
-        params.date.setHours(6, 0, 0, 0);
+      if (params.dateFrom && params.dateTo) {
+        dateFrom = new Date(params.dateFrom);
+        dateTo = new Date(params.dateTo);
+      } else if (params.dateFrom) {
+        dateFrom = new Date(params.dateFrom);
+        dateTo = new Date(dateFrom);
+      } 
 
-        if (params.date > currentDate) {
-          throw new Error('Invalid date: date is in the future');
+      dateFrom.setHours(6, 0, 0, 0);
+      dateTo.setHours(6, 0, 0, 0);
+
+      if (dateFrom > dateTo) {
+        throw new Error('Invalid date: date is in the future');
+      }
+
+      const iterationDate = new Date(dateFrom);
+      iterationDate.setHours(6, 0, 0, 0);
+
+      let datePickerDate = new Date();
+      datePickerDate.setHours(6, 0, 0, 0);
+
+      let rowsPerPageValue = 5;
+      let declarationData: Declaration[] = [];
+
+      while (iterationDate <= dateTo) {
+        const ricercaAggregataContentXPath = 'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata"]';
+      
+        const ricercaAggregataTabXPath =
+        'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
+  
+        const isHidden = await params.page.waitForSelector(ricercaAggregataContentXPath, {
+          hidden: true
+        }).then(() => true).catch(() => false);
+  
+        if (isHidden) {
+          await params.page.waitForSelector(ricercaAggregataTabXPath);
+          await params.page.click(ricercaAggregataTabXPath);
+  
+          await new Promise((resolve) => setTimeout(resolve, 1500));
         }
+  
+        const ricercaAggregataButtonXPath =
+          'xpath///*[@id="formAvan:accordionTab:buttonRicercaAgg"]/span';
 
         const dateFromInputXPath =
           'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
         await params.page.waitForSelector(dateFromInputXPath);
         await params.page.click(dateFromInputXPath);
-
+  
         await new Promise((resolve) => setTimeout(resolve, 1500));
-
+  
         const datePickerCalendarXPath =
           'xpath///*[@id="ui-datepicker-div"]/table';
         await params.page.waitForSelector(datePickerCalendarXPath);
 
-        const day = params.date.getDate();
-        const month = params.date.getMonth() + 1;
-        const year = params.date.getFullYear();
-        const currentMonth = currentDate.getMonth() + 1;
-        const currentYear = currentDate.getFullYear();
+        const day = iterationDate.getDate();
+        const month = iterationDate.getMonth() + 1;
+        const year = iterationDate.getFullYear();
+        
+        const currentMonth = datePickerDate.getMonth() + 1;
+        const currentYear = datePickerDate.getFullYear();
 
         const monthDifferece = currentMonth - month;
         const yearDifference = currentYear - year;
@@ -300,114 +305,160 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.click(dateCellXPath);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
-      }
+        
+        await params.page.waitForSelector(ricercaAggregataButtonXPath);
+        await params.page.click(ricercaAggregataButtonXPath);
 
-      await params.page.waitForSelector(ricercaAggregataButtonXPath);
-      await params.page.click(ricercaAggregataButtonXPath);
+        await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+        //Wait for the table, otherwise the result will be always 0
+        const resultTableCss = '#formResult div.ui-datatable';
+        const tableVisible = await params.page.waitForSelector(resultTableCss, {
+          visible: true
+        })
+        .then(() => true)
+        .catch(() => false);
 
-      const resultFoundText = await params.page.evaluate(() => {
-        const resultFoundText = document.querySelector(
-          '#formResult\\:panelRisultati_content',
-        ) as HTMLElement | undefined;
-        if (resultFoundText) {
-          return resultFoundText.innerText.split('\n')[0];
-        } else {
-          return undefined;
+        if (!tableVisible) {
+          const logDate = iterationDate.toISOString().split('T')[0];
+          console.info(
+            `[${new Date().toISOString()}] RPA aggregatedSearch for date ${logDate}: 0 declarations found`,
+          );
+      
+          //Close the search tab
+          await params.page.waitForSelector(ricercaAggregataTabXPath);
+          await params.page.click(ricercaAggregataTabXPath);
+  
+          datePickerDate = new Date(iterationDate);
+          datePickerDate.setHours(6, 0, 0, 0);
+          iterationDate.setDate(iterationDate.getDate() + 1);
+          continue;
         }
-      });
 
-      let mrnNumber: number = 0;
-      if (resultFoundText) {
-        const splittedResultFoundText = resultFoundText.split(/\s|&nbsp;/g);
-        mrnNumber = Number(
-          splittedResultFoundText[splittedResultFoundText.length - 1],
-        );
-      }
+        const resultFoundText = await params.page.evaluate(() => {
+          const resultFoundText = document.querySelector(
+            '#formResult\\:panelRisultati_content',
+          ) as HTMLElement | undefined;
+          if (resultFoundText) {
+            return resultFoundText.innerText.split('\n')[0];
+          } else {
+            return undefined;
+          }
+        });
 
-      if (mrnNumber > 5) {
-        //Set the number of rows to 30 (max option available)
-        const rowsPerPageDropdownXPath =
-          'xpath///*[@id="formResult:dataResult:j_id44"]';
-        await params.page.waitForSelector(rowsPerPageDropdownXPath);
-        await params.page.click(rowsPerPageDropdownXPath);
-
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        await params.page.select(rowsPerPageDropdownXPath, '30');
-      }
-
-      const iterationNumber = Math.ceil(mrnNumber / 30);
-
-      let declarationTableData: DeclarationTableRow[] = [];
-      //Iterate over the table pages
-      for (let i = 0; i < iterationNumber; i++) {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-
-        const contentPanelDataXPath =
-          'xpath///*[@id="formResult:dataResult_data"]';
-
-        await params.page.waitForSelector(contentPanelDataXPath);
-
-        const tableData = await params.page.evaluate(() => {
-          const rows = document.querySelectorAll(
-            '#formResult\\:dataResult_data tr',
+        let mrnNumber: number = 0;
+        if (resultFoundText) {
+          const splittedResultFoundText = resultFoundText.split(/\s|&nbsp;/g);
+          mrnNumber = Number(
+            splittedResultFoundText[splittedResultFoundText.length - 1],
           );
-          const tbody = document.querySelector<HTMLTableSectionElement>(
-            '#formResult\\:dataResult_data',
-          );
-          const headerCells = tbody?.closest('table')?.querySelectorAll('th');
+        }
 
-          const headersData: string[] = [];
-          headerCells?.forEach((header) => {
-            headersData.push(header.innerText.trim().toString());
-          });
+        if (mrnNumber > rowsPerPageValue) {
+          //Set the number of rows to 30 (max option available)
+          rowsPerPageValue = 30;
+          const rowsPerPageDropdownCss = '#formResult select.ui-paginator-rpp-options';
+          await params.page.waitForSelector(rowsPerPageDropdownCss);
+          await params.page.click(rowsPerPageDropdownCss);
 
-          const data: DeclarationTableRow[] = [];
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          
+          await params.page.select(rowsPerPageDropdownCss, rowsPerPageValue.toString());
+        }
 
-          rows.forEach((row) => {
-            const cells = row.querySelectorAll('td');
-            const rowData: DeclarationTableRow = {
-              declaratingOperator: '',
-              mrn: '',
-              lrn: '',
-              operationScope: '',
-              acceptanceDate: '',
-              officeCode: '',
-              articlesNumber: '',
-              version: '',
-              edStatus: '',
-              detailsButtonClass: '',
-            };
+        const iterationNumber = Math.ceil(mrnNumber / rowsPerPageValue);
 
-            cells.forEach((cell, index) => {
-              const headerName = headersData[index];
-              rowData[headerName] = cell.innerText.trim();
+        let declarationTableData: DeclarationTableRow[] = [];
+        //Iterate over the table pages
+        for (let i = 0; i < iterationNumber; i++) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+
+          const contentPanelDataXPath =
+            'xpath///*[@id="formResult:dataResult_data"]';
+
+          await params.page.waitForSelector(contentPanelDataXPath);
+
+          const tableData = await params.page.evaluate(() => {
+            const rows = document.querySelectorAll(
+              '#formResult\\:dataResult_data tr',
+            );
+            const tbody = document.querySelector<HTMLTableSectionElement>(
+              '#formResult\\:dataResult_data',
+            );
+            const headerCells = tbody?.closest('table')?.querySelectorAll('th');
+
+            const headersData: string[] = [];
+            headerCells?.forEach((header) => {
+              headersData.push(header.innerText.trim().toString());
             });
 
-            data.push(rowData);
+            const data: DeclarationTableRow[] = [];
+
+            rows.forEach((row) => {
+              const cells = row.querySelectorAll('td');
+              const rowData: DeclarationTableRow = {
+                declaratingOperator: '',
+                mrn: '',
+                lrn: '',
+                operationScope: '',
+                acceptanceDate: '',
+                officeCode: '',
+                articlesNumber: '',
+                version: '',
+                edStatus: '',
+                detailsButtonClass: '',
+              };
+
+              cells.forEach((cell, index) => {
+                const headerName = headersData[index];
+                rowData[headerName] = cell.innerText.trim();
+              });
+
+              data.push(rowData);
+            });
+
+            return data;
           });
 
-          return data;
-        });
+          declarationTableData = [...declarationTableData, ...tableData];
 
-        declarationTableData = [...declarationTableData, ...tableData];
-
-        if (i < iterationNumber - 1) {
-          const nextPageButtonXPath =
-            'xpath///*[@id="formResult:dataResult_paginator_bottom"]/a[3]';
-          await params.page.waitForSelector(nextPageButtonXPath);
-          await params.page.click(nextPageButtonXPath);
+          if (i < iterationNumber - 1) {
+            const nextPageButtonXPath =
+              'xpath///*[@id="formResult:dataResult_paginator_bottom"]/a[3]';
+            await params.page.waitForSelector(nextPageButtonXPath);
+            await params.page.click(nextPageButtonXPath);
+          }
         }
-      }
 
-      const declarationData = declarationTableData.map((declaration) => {
-        return this._mapDeclarationTableHeaders({
-          declarationTableRow: declaration,
+        const loopDeclarations = declarationTableData.map((declaration) => {
+          return this._mapDeclarationTableHeaders({
+            declarationTableRow: declaration,
+          });
         });
-      });
 
+      
+        declarationData = [...declarationData, ...loopDeclarations];
+
+        const logDate = iterationDate.toISOString().split('T')[0];
+        console.info(
+          `[${new Date().toISOString()}] RPA aggregatedSearch for date ${logDate}: ${loopDeclarations.length} declarations found`,
+        );
+
+        if (iterationNumber > 1) {
+          const paginatorFirstButtonCss = '#formResult .ui-paginator-first';
+          await params.page.waitForSelector(paginatorFirstButtonCss);
+          await params.page.click(paginatorFirstButtonCss);
+        }
+
+        //Close the search tab
+        await params.page.waitForSelector(ricercaAggregataTabXPath);
+        await params.page.click(ricercaAggregataTabXPath);
+
+        datePickerDate = new Date(iterationDate);
+        datePickerDate.setHours(6, 0, 0, 0);
+        iterationDate.setDate(iterationDate.getDate() + 1);
+      }
+      
       return declarationData;
     } catch (error) {
       console.error(error);
@@ -435,7 +486,11 @@ export default class AdmRobotProcessAutomationManager {
 
     const position = params.day + firstDay;
     const row = Math.ceil((position - 1) / 7);
-    const column = (position - 1) % 7;
+    let column = (position - 1) % 7;
+    
+    if (column === 0) {
+      column = 7;
+    }
 
     return { row, column };
   }
