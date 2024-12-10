@@ -67,7 +67,11 @@ export interface DeclarationJson {
     x?: number;
     y?: number;
   };
-  declaration: { date: string; mrn: string };
+  declaration: { 
+    date1: string;
+    date2: string;
+    mrn: string 
+  };
   supplier: {
     companyName1: string;
     companyName2: string;
@@ -190,6 +194,11 @@ class PDFConverter {
       postalCode: postalCode,
     };
 
+    const date: string =
+      input.declaration.date1 ||
+      input.declaration.date2 ||
+      ''
+
     const goods = input.goods.map((good) => {
       const ncCode = good.ncCode.slice(0, -2);
       const taricCode = good.ncCode.slice(-2);
@@ -237,7 +246,7 @@ class PDFConverter {
 
     return {
       mrn: input.declaration.mrn,
-      date: input.declaration.date,
+      date: date,
       supplier,
       goods,
     };
