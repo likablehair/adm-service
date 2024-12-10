@@ -264,9 +264,15 @@ export const _cells: {
   },
   {
     entity: 'declaration',
-    column: 'date',
+    column: 'date1',
     xRange: [11.966, 11.966],
     yRange: [13.121, 13.121],
+  },
+  {
+    entity: 'declaration',
+    column: 'date2',
+    xRange: [11.966, 11.966],
+    yRange: [12.793, 12.793],
   },
   {
     entity: 'declaration',
