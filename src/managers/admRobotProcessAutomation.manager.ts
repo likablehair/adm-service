@@ -83,7 +83,7 @@ export default class AdmRobotProcessAutomationManager {
         password: params.security.password,
       });
 
-      page.setCookie(...cookies);
+      await page.setCookie(...cookies);
 
       const gestioneDocumentiPage = await this.accessToGestioneDocumenti({
         page,
