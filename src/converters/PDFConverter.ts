@@ -199,19 +199,21 @@ class PDFConverter {
       input.declaration.date1 || input.declaration.date2 || '';
 
     const goods = input.goods.map((good) => {
-      const ncCode = input.declaration.track == 'H7' ?
-        good.ncCode :
-        good.ncCode.slice(0, -2);
-      const taricCode = input.declaration.track == 'H7' ?
-        '' :
-        good.ncCode.slice(-2);
+      const ncCode =
+        input.declaration.track == 'H7'
+          ? good.ncCode
+          : good.ncCode.slice(0, -2);
+      const taricCode =
+        input.declaration.track == 'H7' ? '' : good.ncCode.slice(-2);
 
-      const requestedRegime = input.declaration.track == 'H7' ?
-        '' :
-        good.customsRegime.slice(0, 2).trim();
-      const previousRegime = input.declaration.track == 'H7' ?
-        '' :
-        good.customsRegime.slice(-2).trim();
+      const requestedRegime =
+        input.declaration.track == 'H7'
+          ? ''
+          : good.customsRegime.slice(0, 2).trim();
+      const previousRegime =
+        input.declaration.track == 'H7'
+          ? ''
+          : good.customsRegime.slice(-2).trim();
       const customsRegime = `${requestedRegime}${previousRegime}`;
 
       const description: string[] = [
