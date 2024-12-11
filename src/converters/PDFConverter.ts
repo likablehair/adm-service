@@ -71,6 +71,7 @@ export interface DeclarationJson {
     date1: string;
     date2: string;
     mrn: string 
+    track: string;
   };
   supplier: {
     companyName1: string;
@@ -249,6 +250,7 @@ class PDFConverter {
       date: date,
       supplier,
       goods,
+      track: input.declaration.track
     };
   }
   public async run(params: {

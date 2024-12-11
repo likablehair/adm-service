@@ -281,6 +281,12 @@ export const _cells: {
     yRange: [14.81, 14.81],
   },
   {
+    entity: 'declaration',
+    column: 'track',
+    xRange: [31.312, 31.312],
+    yRange: [7.478, 7.478],
+  },
+  {
     entity: 'importer',
     column: 'country',
     xRange: [18.511, 18.511],
