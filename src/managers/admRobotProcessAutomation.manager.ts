@@ -19,6 +19,18 @@ export type Declaration = {
   detailsButtonClass: string;
 };
 
+export type AggregatedSearchType = {
+  declarations: Declaration[];
+  realTotalDeclarations: number;
+  date: Date;
+}
+
+export type MRNProcessed = {
+  mrnList: string[],
+  date: Date,
+  realTotalDeclarationNumber: number,
+}
+
 const declarationTableHeaderMap: Record<string, keyof Declaration> = {
   'Declarating Operator': 'declaratingOperator',
   Dichiarante: 'declaratingOperator',
@@ -53,7 +65,7 @@ export default class AdmRobotProcessAutomationManager {
       password: string;
     };
     browser?: Browser;
-  }): Promise<string[]> {
+  }): Promise<MRNProcessed[]> {
     try {
       let browser: Browser;
       if (!params.browser) {
@@ -90,21 +102,39 @@ export default class AdmRobotProcessAutomationManager {
         dichiarante: params.dichiarante,
       });
 
-      let declarations: Declaration[] = [];
-      declarations = await this.aggregatedSearch({
+      let aggregatedSearchResult: AggregatedSearchType[] = [];
+      aggregatedSearchResult = await this.aggregatedSearch({
         page: gestioneDocumentiPage,
         dateFrom: params.dateFrom,
         dateTo: params.dateTo,
       });
 
-      const mrnList = declarations.map((declaration) => {
-        console.info(
-          `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} found MRN: ${declaration.mrn}`,
-        );
-        return declaration.mrn;
+      const mrnProcessed: MRNProcessed[] = aggregatedSearchResult.map((result) => {
+        const declarations = result.declarations;
+        const date = result.date;
+        const realTotalDeclarations = result.realTotalDeclarations;
+
+        const mrnList = declarations.map((declaration) => {
+          console.info(
+            `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} found MRN: ${declaration.mrn}`,
+          );
+
+          return declaration.mrn;
+        });
+
+        return {
+          mrnList,
+          date,
+          realTotalDeclarationNumber: realTotalDeclarations,
+        }
       });
+
+      const totalMrn = mrnProcessed.reduce((acc, curr) => {
+        return acc + curr.mrnList.length;
+      }, 0);
+      
       console.info(
-        `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} total MRNs: ${mrnList.length}`,
+        `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} total MRNs: ${totalMrn}`,
       );
 
       if (!params.browser) {
@@ -115,7 +145,7 @@ export default class AdmRobotProcessAutomationManager {
         `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} ended successfully!`,
       );
 
-      return mrnList;
+      return mrnProcessed;
     } catch (error) {
       console.error(error);
       throw error;
@@ -205,7 +235,7 @@ export default class AdmRobotProcessAutomationManager {
     page: Page;
     dateFrom?: Date;
     dateTo?: Date;
-  }): Promise<Declaration[]> {
+  }): Promise<AggregatedSearchType[]> {
     try {
       let dateFrom = new Date();
       let dateTo = new Date();
@@ -233,8 +263,13 @@ export default class AdmRobotProcessAutomationManager {
       datePickerDate.setHours(6, 0, 0, 0);
 
       let rowsPerPageValue = 5;
-      let declarationData: Declaration[] = [];
+      let declarationData: {
+        declarations: Declaration[],
+        realTotalDeclarations: number,
+        date: Date,
+      }[] = [];
 
+      //Test
       while (iterationDate <= dateTo) {
         const ricercaAggregataContentXPath =
           'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata"]';
@@ -445,7 +480,14 @@ export default class AdmRobotProcessAutomationManager {
           });
         });
 
-        declarationData = [...declarationData, ...loopDeclarations];
+        declarationData = [
+          ...declarationData, 
+          {
+            declarations: loopDeclarations,
+            realTotalDeclarations: mrnNumber,
+            date: new Date(iterationDate),
+          }
+        ];
 
         const logDate = iterationDate.toISOString().split('T')[0];
         console.info(

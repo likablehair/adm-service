@@ -21,6 +21,12 @@ export type { AdmDeclarationMapped } from './converters/XMLConverter';
 
 export { default as XMLConverter } from './converters/XMLConverter';
 export { default as PDFConverter } from './converters/PDFConverter';
+
+export type {
+  MRNProcessed,
+  AggregatedSearchType,
+  Declaration
+} from './managers/admRobotProcessAutomation.manager';
 export { default as AdmRPA } from './managers/admRobotProcessAutomation.manager';
 
 export type {
