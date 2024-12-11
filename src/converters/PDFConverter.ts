@@ -70,6 +70,7 @@ export interface DeclarationJson {
   declaration: {
     date1: string;
     date2: string;
+    date3: string;
     mrn: string;
     track: string;
   };
@@ -196,7 +197,10 @@ class PDFConverter {
     };
 
     const date: string =
-      input.declaration.date1 || input.declaration.date2 || '';
+      input.declaration.date1 || 
+      input.declaration.date2 || 
+      input.declaration.date3 || 
+      '';
 
     const goods = input.goods.map((good) => {
       const ncCode =
