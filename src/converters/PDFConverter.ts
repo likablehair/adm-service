@@ -197,9 +197,9 @@ class PDFConverter {
     };
 
     const date: string =
-      input.declaration.date1 || 
-      input.declaration.date2 || 
-      input.declaration.date3 || 
+      input.declaration.date1 ||
+      input.declaration.date2 ||
+      input.declaration.date3 ||
       '';
 
     const goods = input.goods.map((good) => {
