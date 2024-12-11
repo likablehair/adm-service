@@ -23,13 +23,13 @@ export type AggregatedSearchType = {
   declarations: Declaration[];
   realTotalDeclarations: number;
   date: Date;
-}
+};
 
 export type MRNProcessed = {
-  mrnList: string[],
-  date: Date,
-  realTotalDeclarationNumber: number,
-}
+  mrnList: string[];
+  date: Date;
+  realTotalDeclarationNumber: number;
+};
 
 const declarationTableHeaderMap: Record<string, keyof Declaration> = {
   'Declarating Operator': 'declaratingOperator',
@@ -109,30 +109,32 @@ export default class AdmRobotProcessAutomationManager {
         dateTo: params.dateTo,
       });
 
-      const mrnProcessed: MRNProcessed[] = aggregatedSearchResult.map((result) => {
-        const declarations = result.declarations;
-        const date = result.date;
-        const realTotalDeclarations = result.realTotalDeclarations;
+      const mrnProcessed: MRNProcessed[] = aggregatedSearchResult.map(
+        (result) => {
+          const declarations = result.declarations;
+          const date = result.date;
+          const realTotalDeclarations = result.realTotalDeclarations;
 
-        const mrnList = declarations.map((declaration) => {
-          console.info(
-            `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} found MRN: ${declaration.mrn}`,
-          );
+          const mrnList = declarations.map((declaration) => {
+            console.info(
+              `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} found MRN: ${declaration.mrn}`,
+            );
 
-          return declaration.mrn;
-        });
+            return declaration.mrn;
+          });
 
-        return {
-          mrnList,
-          date,
-          realTotalDeclarationNumber: realTotalDeclarations,
-        }
-      });
+          return {
+            mrnList,
+            date,
+            realTotalDeclarationNumber: realTotalDeclarations,
+          };
+        },
+      );
 
       const totalMrn = mrnProcessed.reduce((acc, curr) => {
         return acc + curr.mrnList.length;
       }, 0);
-      
+
       console.info(
         `[${new Date().toISOString()}] RPA with user ${params.security.username} for ${params.dichiarante} total MRNs: ${totalMrn}`,
       );
@@ -264,9 +266,9 @@ export default class AdmRobotProcessAutomationManager {
 
       let rowsPerPageValue = 5;
       let declarationData: {
-        declarations: Declaration[],
-        realTotalDeclarations: number,
-        date: Date,
+        declarations: Declaration[];
+        realTotalDeclarations: number;
+        date: Date;
       }[] = [];
 
       //Test
@@ -481,12 +483,12 @@ export default class AdmRobotProcessAutomationManager {
         });
 
         declarationData = [
-          ...declarationData, 
+          ...declarationData,
           {
             declarations: loopDeclarations,
             realTotalDeclarations: mrnNumber,
             date: new Date(iterationDate),
-          }
+          },
         ];
 
         const logDate = iterationDate.toISOString().split('T')[0];

@@ -67,10 +67,10 @@ export interface DeclarationJson {
     x?: number;
     y?: number;
   };
-  declaration: { 
+  declaration: {
     date1: string;
     date2: string;
-    mrn: string 
+    mrn: string;
   };
   supplier: {
     companyName1: string;
@@ -195,9 +195,7 @@ class PDFConverter {
     };
 
     const date: string =
-      input.declaration.date1 ||
-      input.declaration.date2 ||
-      ''
+      input.declaration.date1 || input.declaration.date2 || '';
 
     const goods = input.goods.map((good) => {
       const ncCode = good.ncCode.slice(0, -2);
@@ -300,7 +298,7 @@ class PDFConverter {
               // if(i == 0){
               //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
               // }
-              
+
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
 

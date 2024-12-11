@@ -159,7 +159,7 @@ test(
     const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({
       data: { path: result.path },
     });
-    await fsPromises.unlink(result.path)
+    await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');

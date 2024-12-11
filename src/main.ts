@@ -25,7 +25,7 @@ export { default as PDFConverter } from './converters/PDFConverter';
 export type {
   MRNProcessed,
   AggregatedSearchType,
-  Declaration
+  Declaration,
 } from './managers/admRobotProcessAutomation.manager';
 export { default as AdmRPA } from './managers/admRobotProcessAutomation.manager';
 
