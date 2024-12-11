@@ -199,11 +199,19 @@ class PDFConverter {
       input.declaration.date1 || input.declaration.date2 || '';
 
     const goods = input.goods.map((good) => {
-      const ncCode = good.ncCode.slice(0, -2);
-      const taricCode = good.ncCode.slice(-2);
+      const ncCode = input.declaration.track == 'H7' ?
+        good.ncCode :
+        good.ncCode.slice(0, -2);
+      const taricCode = input.declaration.track == 'H7' ?
+        '' :
+        good.ncCode.slice(-2);
 
-      const requestedRegime = good.customsRegime.slice(0, 2).trim();
-      const previousRegime = good.customsRegime.slice(-2).trim();
+      const requestedRegime = input.declaration.track == 'H7' ?
+        '' :
+        good.customsRegime.slice(0, 2).trim();
+      const previousRegime = input.declaration.track == 'H7' ?
+        '' :
+        good.customsRegime.slice(-2).trim();
       const customsRegime = `${requestedRegime}${previousRegime}`;
 
       const description: string[] = [
@@ -235,11 +243,11 @@ class PDFConverter {
         taricCode,
         identificationCode: good.ncCode,
         description: description.join(' ').trim(),
-        country: country,
+        country,
         netWeight: good.netWeight,
-        customsRegime: customsRegime,
-        requestedRegime: requestedRegime,
-        previousRegime: previousRegime,
+        customsRegime,
+        requestedRegime,
+        previousRegime,
       };
     });
 
