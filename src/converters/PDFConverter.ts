@@ -79,23 +79,32 @@ export interface DeclarationJson {
     companyName2: string;
     companyName3: string;
     companyName4: string;
+    companyName5: string;
     vatNumber: string;
     country1: string;
     country2: string;
     country3: string;
+    country4: string;
+    country5: string;
     address1: string;
     address2: string;
     address3: string;
     address4: string;
     address5: string;
     address6: string;
+    address7: string;
     city1: string;
     city2: string;
     city3: string;
     city4: string;
+    city5: string;
+    city6: string;
+    city7: string;
     postalCode1: string;
     postalCode2: string;
     postalCode3: string;
+    postalCode4: string;
+    postalCode5: string;
   };
   goods: {
     ncCode: string;
@@ -158,6 +167,7 @@ class PDFConverter {
       input.supplier?.companyName2,
       input.supplier?.companyName3,
       input.supplier?.companyName4,
+      input.supplier?.companyName5,
     ];
     const address: string[] = [
       input.supplier?.address1,
@@ -166,6 +176,7 @@ class PDFConverter {
       input.supplier?.address4,
       input.supplier?.address5,
       input.supplier?.address6,
+      input.supplier?.address7,
     ];
 
     const city: string[] = [
@@ -173,18 +184,25 @@ class PDFConverter {
       input.supplier?.city2,
       input.supplier?.city3,
       input.supplier?.city4,
+      input.supplier?.city5,
+      input.supplier?.city6,
+      input.supplier?.city7,
     ];
 
     const country: string =
       input.supplier?.country1?.trim() ||
       input.supplier?.country2?.trim() ||
       input.supplier?.country3?.trim() ||
+      input.supplier?.country4?.trim() ||
+      input.supplier?.country5?.trim() ||
       '';
 
     const postalCode: string =
       input.supplier?.postalCode1?.trim() ||
       input.supplier?.postalCode2?.trim() ||
       input.supplier?.postalCode3?.trim() ||
+      input.supplier?.postalCode4?.trim() ||
+      input.supplier?.postalCode5?.trim() ||
       '';
 
     const supplier = {
@@ -260,9 +278,9 @@ class PDFConverter {
     return {
       mrn: input.declaration.mrn,
       date: date,
+      track: input.declaration.track,
       supplier,
       goods,
-      track: input.declaration.track,
     };
   }
   public async run(params: {

@@ -30,6 +30,12 @@ export const _cells: {
   },
   {
     entity: 'supplier',
+    column: 'companyName5',
+    xRange: [2.159, 2.159],
+    yRange: [23.775, 23.775],
+  },
+  {
+    entity: 'supplier',
     column: 'address1',
     xRange: [10.335, 10.335],
     yRange: [22.65, 22.65],
@@ -56,6 +62,18 @@ export const _cells: {
 
   {
     entity: 'supplier',
+    column: 'address7',
+    xRange: [10.335, 10.335],
+    yRange: [23.4, 23.4],
+  },
+  {
+    entity: 'supplier',
+    column: 'city1',
+    xRange: [10.335, 10.335],
+    yRange: [23.874, 23.874],
+  },
+  {
+    entity: 'supplier',
     column: 'city2',
     xRange: [10.335, 10.335],
     yRange: [23.171, 23.171],
@@ -73,7 +91,24 @@ export const _cells: {
     xRange: [10.335, 10.335],
     yRange: [23.219, 23.219],
   },
-
+  {
+    entity: 'supplier',
+    column: 'city5',
+    xRange: [10.335, 10.335],
+    yRange: [24.624, 24.624],
+  },
+  {
+    entity: 'supplier',
+    column: 'city6',
+    xRange: [10.335, 10.335],
+    yRange: [23.827, 23.827],
+  },
+  {
+    entity: 'supplier',
+    column: 'city7',
+    xRange: [10.335, 10.335],
+    yRange: [24.577, 24.577],
+  },
   {
     entity: 'supplier',
     column: 'postalCode1',
@@ -94,9 +129,15 @@ export const _cells: {
   },
   {
     entity: 'supplier',
-    column: 'city1',
-    xRange: [10.335, 10.335],
-    yRange: [23.874, 23.874],
+    column: 'postalCode4',
+    xRange: [6.247, 6.247],
+    yRange: [24.624, 24.624],
+  },
+  {
+    entity: 'supplier',
+    column: 'postalCode5',
+    xRange: [6.247, 6.247],
+    yRange: [24.202, 24.202],
   },
   {
     entity: 'supplier',
@@ -115,6 +156,18 @@ export const _cells: {
     column: 'country3',
     xRange: [2.159, 2.159],
     yRange: [23.874, 23.874],
+  },
+  {
+    entity: 'supplier',
+    column: 'country4',
+    xRange: [2.159, 2.159],
+    yRange: [24.624, 24.624],
+  },
+  {
+    entity: 'supplier',
+    column: 'country5',
+    xRange: [2.159, 2.159],
+    yRange: [24.202, 24.202],
   },
   {
     entity: 'goods',
