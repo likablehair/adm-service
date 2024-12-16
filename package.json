@@ -1,7 +1,7 @@
 {
   "name": "@likable-hair/adm-service",
   "private": false,
-  "version": "1.0.14",
+  "version": "1.0.15",
   "type": "module",
   "scripts": {
     "dev": "vitest",

@@ -128,6 +128,15 @@ export interface DeclarationJson {
     country7: string;
     country8: string;
     country9: string;
+    prefixedCountry1: string;
+    prefixedCountry2: string;
+    prefixedCountry3: string;
+    prefixedCountry4: string;
+    prefixedCountry5: string;
+    prefixedCountry6: string;
+    prefixedCountry7: string;
+    prefixedCountry8: string;
+    prefixedCountry9: string;
     netWeight: string;
     customsRegime: string;
     requestedRegime: string;
@@ -260,6 +269,15 @@ class PDFConverter {
         good.country7?.trim() ||
         good.country8?.trim() ||
         good.country9?.trim() ||
+        good.prefixedCountry1?.trim() ||
+        good.prefixedCountry2?.trim() ||
+        good.prefixedCountry3?.trim() ||
+        good.prefixedCountry4?.trim() ||
+        good.prefixedCountry5?.trim() ||
+        good.prefixedCountry6?.trim() ||
+        good.prefixedCountry7?.trim() ||
+        good.prefixedCountry8?.trim() ||
+        good.prefixedCountry9?.trim() ||
         '';
 
       return {

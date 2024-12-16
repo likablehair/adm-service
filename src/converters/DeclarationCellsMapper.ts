@@ -305,6 +305,61 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'prefixedCountry1',
+    xRange: [18.511, 19.968],
+    yRange: [19.968, 19.968]
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry2',
+    xRange: [18.511, 19.968],
+    yRange: [20.623, 20.623],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry3',
+    xRange: [18.511, 19.968],
+    yRange: [22.873, 22.873],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry4',
+    xRange: [18.511, 19.968],
+    yRange: [22.123, 22.123],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry5',
+    xRange: [18.511, 19.968],
+    yRange: [21.373, 21.373],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry6',
+    xRange: [18.511, 19.968],
+    yRange: [23.623, 23.623],
+  },
+
+  {
+    entity: 'goods',
+    column: 'prefixedCountry7',
+    xRange: [18.511, 19.968],
+    yRange: [25.123, 25.123],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry8',
+    xRange: [18.511, 19.968],
+    yRange: [25.873, 25.873],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry9',
+    xRange: [18.511, 19.968],
+    yRange: [24.373, 24.373],
+  },
+  {
+    entity: 'goods',
     column: 'price',
     xRange: [26.687, 26.687],
     yRange: [19.968, 19.968],
