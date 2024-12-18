@@ -86,6 +86,7 @@ export interface DeclarationJson {
     country3: string;
     country4: string;
     country5: string;
+    country6: string;
     address1: string;
     address2: string;
     address3: string;
@@ -100,11 +101,13 @@ export interface DeclarationJson {
     city5: string;
     city6: string;
     city7: string;
+    city8: string;
     postalCode1: string;
     postalCode2: string;
     postalCode3: string;
     postalCode4: string;
     postalCode5: string;
+    postalCode6: string;
   };
   goods: {
     ncCode: string;
@@ -170,7 +173,7 @@ class PDFConverter {
     }
     return {};
   }
-  private async map(input: DeclarationJson): Promise<AdmDeclarationMapped> {
+  private map(input: DeclarationJson): AdmDeclarationMapped {
     const companyName: string[] = [
       input.supplier?.companyName1,
       input.supplier?.companyName2,
@@ -178,6 +181,7 @@ class PDFConverter {
       input.supplier?.companyName4,
       input.supplier?.companyName5,
     ];
+
     const address: string[] = [
       input.supplier?.address1,
       input.supplier?.address2,
@@ -196,6 +200,7 @@ class PDFConverter {
       input.supplier?.city5,
       input.supplier?.city6,
       input.supplier?.city7,
+      input.supplier?.city8,
     ];
 
     const country: string =
@@ -204,6 +209,7 @@ class PDFConverter {
       input.supplier?.country3?.trim() ||
       input.supplier?.country4?.trim() ||
       input.supplier?.country5?.trim() ||
+      input.supplier?.country6?.trim() ||
       '';
 
     const postalCode: string =
@@ -212,14 +218,15 @@ class PDFConverter {
       input.supplier?.postalCode3?.trim() ||
       input.supplier?.postalCode4?.trim() ||
       input.supplier?.postalCode5?.trim() ||
+      input.supplier?.postalCode6?.trim() ||
       '';
 
     const supplier = {
-      companyName: companyName.join(' ').trim(),
+      companyName: this.convertArrayToString(companyName),
       vatNumber: input.supplier?.vatNumber || '',
       country: country.trim(),
-      address: address.join(' '),
-      city: city.join(' ').trim(),
+      address: this.convertArrayToString(address),
+      city: this.convertArrayToString(city),
       postalCode: postalCode,
     };
 
@@ -234,17 +241,22 @@ class PDFConverter {
         input.declaration.track == 'H7'
           ? good.ncCode
           : good.ncCode.slice(0, -2);
+
       const taricCode =
-        input.declaration.track == 'H7' ? '' : good.ncCode.slice(-2);
+        input.declaration.track == 'H7'
+          ? '' 
+          : good.ncCode.slice(-2);
 
       const requestedRegime =
         input.declaration.track == 'H7'
           ? ''
           : good.customsRegime.slice(0, 2).trim();
+
       const previousRegime =
         input.declaration.track == 'H7'
           ? ''
           : good.customsRegime.slice(-2).trim();
+
       const customsRegime = `${requestedRegime}${previousRegime}`;
 
       const description: string[] = [
@@ -284,7 +296,7 @@ class PDFConverter {
         ncCode,
         taricCode,
         identificationCode: good.ncCode,
-        description: description.join(' ').trim(),
+        description: this.convertArrayToString(description),
         country,
         netWeight: good.netWeight,
         customsRegime,
@@ -300,6 +312,9 @@ class PDFConverter {
       supplier,
       goods,
     };
+  }
+  private convertArrayToString(array: string[]): string {
+    return array.filter(el => !!el).map(el => el.trim()).join(' ')
   }
   public async run(params: {
     data: {
@@ -393,7 +408,7 @@ class PDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      const admDeclarationMapped = await this.map(declarationEntity);
+      const admDeclarationMapped = this.map(declarationEntity);
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('Error parsing PDF:' + error); // Returning an empty object
