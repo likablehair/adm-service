@@ -113,7 +113,6 @@ export interface DeclarationJson {
     ncCode: string;
     taricCode: string;
     identificationCode: string;
-    description: string;
     description1: string;
     description2: string;
     description3: string;
@@ -123,6 +122,8 @@ export interface DeclarationJson {
     description7: string;
     description8: string;
     description9: string;
+    description10: string;
+    description11: string;
     country1: string;
     country2: string;
     country3: string;
@@ -261,7 +262,6 @@ class PDFConverter {
       const customsRegime = `${requestedRegime}${previousRegime}`;
 
       const description: string[] = [
-        good.description,
         good.description1,
         good.description2,
         good.description3,
@@ -271,6 +271,8 @@ class PDFConverter {
         good.description7,
         good.description8,
         good.description9,
+        good.description10,
+        good.description11,
       ];
 
       const country: string =
