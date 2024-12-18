@@ -325,7 +325,7 @@ export const _cells: {
     entity: 'goods',
     column: 'prefixedCountry1',
     xRange: [18.511, 19.968],
-    yRange: [19.968, 19.968]
+    yRange: [19.968, 19.968],
   },
   {
     entity: 'goods',

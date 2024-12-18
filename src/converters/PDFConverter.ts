@@ -244,7 +244,7 @@ class PDFConverter {
 
       const taricCode =
         input.declaration.track == 'H7'
-          ? '' 
+          ? ''
           : good.ncCode.slice(-2);
 
       const requestedRegime =
@@ -314,7 +314,10 @@ class PDFConverter {
     };
   }
   private convertArrayToString(array: string[]): string {
-    return array.filter(el => !!el).map(el => el.trim()).join(' ')
+    return array
+      .filter((el) => !!el)
+      .map((el) => el.trim())
+      .join(' ');
   }
   public async run(params: {
     data: {
