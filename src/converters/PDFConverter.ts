@@ -245,9 +245,7 @@ class PDFConverter {
           : good.ncCode.slice(0, -2);
 
       const taricCode =
-        input.declaration.track == 'H7'
-          ? ''
-          : good.ncCode.slice(-2);
+        input.declaration.track == 'H7' ? '' : good.ncCode.slice(-2);
 
       const requestedRegime =
         input.declaration.track == 'H7'
