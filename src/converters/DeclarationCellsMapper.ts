@@ -268,6 +268,12 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'description9',
+    xRange: [2.159, 2.159],
+    yRange: [18.198, 18.198],
+  },
+  {
+    entity: 'goods',
     column: 'country1',
     xRange: [14.423, 14.423],
     yRange: [19.968, 19.968],

@@ -122,6 +122,7 @@ export interface DeclarationJson {
     description6: string;
     description7: string;
     description8: string;
+    description9: string;
     country1: string;
     country2: string;
     country3: string;
@@ -269,6 +270,7 @@ class PDFConverter {
         good.description6,
         good.description7,
         good.description8,
+        good.description9,
       ];
 
       const country: string =
