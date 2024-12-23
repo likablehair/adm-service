@@ -35,7 +35,7 @@ export default class ProspettoSintesiManager {
   ): Promise<ImportDeclarationResult> {
     try {
       const downloadedPDF: string = await this.download(params);
-      const savedPDF: ProspettoSintesiResult = await this.save(downloadedPDF);
+      const savedPDF: ProspettoSintesiResult = await this.save(params.data.xml.mrn, downloadedPDF);
       const admDeclarationMapped: AdmDeclarationMapped = await this.convert({
         data: { path: savedPDF.path },
       });
@@ -115,9 +115,9 @@ export default class ProspettoSintesiManager {
     }
   }
 
-  async save(request: string): Promise<ProspettoSintesiResult> {
+  async save(mrn: string, request: string): Promise<ProspettoSintesiResult> {
     try {
-      const xmlFilePath = 'tmp.pdf';
+      const xmlFilePath = `${mrn}.pdf`;
 
       const buffer = Buffer.from(request, 'base64');
       await fsPromises.writeFile(xmlFilePath, buffer);

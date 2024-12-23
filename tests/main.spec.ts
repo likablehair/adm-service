@@ -155,7 +155,7 @@ test(
     };
     const downloadedPDF = await manager.download(params);
 
-    const result: ProspettoSintesiResult = await manager.save(downloadedPDF);
+    const result: ProspettoSintesiResult = await manager.save(params.data.xml.mrn, downloadedPDF);
     const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({
       data: { path: result.path },
     });
