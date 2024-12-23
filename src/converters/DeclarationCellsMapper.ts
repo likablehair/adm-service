@@ -30,6 +30,18 @@ export const _cells: {
   },
   {
     entity: 'supplier',
+    column: 'companyName5',
+    xRange: [2.159, 2.159],
+    yRange: [23.775, 23.775],
+  },
+  {
+    entity: 'supplier',
+    column: 'companyName6',
+    xRange: [2.159, 2.159],
+    yRange: [24.525, 24.525],
+  },
+  {
+    entity: 'supplier',
     column: 'address1',
     xRange: [10.335, 10.335],
     yRange: [22.65, 22.65],
@@ -56,6 +68,24 @@ export const _cells: {
 
   {
     entity: 'supplier',
+    column: 'address7',
+    xRange: [10.335, 10.335],
+    yRange: [23.4, 23.4],
+  },
+  {
+    entity: 'supplier',
+    column: 'address8',
+    xRange: [10.335, 10.335],
+    yRange: [23.775, 23.775],
+  },
+  {
+    entity: 'supplier',
+    column: 'city1',
+    xRange: [10.335, 10.335],
+    yRange: [23.874, 23.874],
+  },
+  {
+    entity: 'supplier',
     column: 'city2',
     xRange: [10.335, 10.335],
     yRange: [23.171, 23.171],
@@ -73,7 +103,36 @@ export const _cells: {
     xRange: [10.335, 10.335],
     yRange: [23.219, 23.219],
   },
-
+  {
+    entity: 'supplier',
+    column: 'city5',
+    xRange: [10.335, 10.335],
+    yRange: [24.624, 24.624],
+  },
+  {
+    entity: 'supplier',
+    column: 'city6',
+    xRange: [10.335, 10.335],
+    yRange: [23.827, 23.827],
+  },
+  {
+    entity: 'supplier',
+    column: 'city7',
+    xRange: [10.335, 10.335],
+    yRange: [24.577, 24.577],
+  },
+  {
+    entity: 'supplier',
+    column: 'city8',
+    xRange: [10.335, 10.335],
+    yRange: [25.327, 25.327],
+  },
+  {
+    entity: 'supplier',
+    column: 'city9',
+    xRange: [10.335, 10.335],
+    yRange: [25.374, 25.374],
+  },
   {
     entity: 'supplier',
     column: 'postalCode1',
@@ -94,9 +153,27 @@ export const _cells: {
   },
   {
     entity: 'supplier',
-    column: 'city1',
-    xRange: [10.335, 10.335],
-    yRange: [23.874, 23.874],
+    column: 'postalCode4',
+    xRange: [6.247, 6.247],
+    yRange: [24.624, 24.624],
+  },
+  {
+    entity: 'supplier',
+    column: 'postalCode5',
+    xRange: [6.247, 6.247],
+    yRange: [24.202, 24.202],
+  },
+  {
+    entity: 'supplier',
+    column: 'postalCode6',
+    xRange: [6.247, 6.247],
+    yRange: [24.952, 24.952],
+  },
+  {
+    entity: 'supplier',
+    column: 'postalCode7',
+    xRange: [6.247, 6.247],
+    yRange: [25.374, 25.374],
   },
   {
     entity: 'supplier',
@@ -115,6 +192,30 @@ export const _cells: {
     column: 'country3',
     xRange: [2.159, 2.159],
     yRange: [23.874, 23.874],
+  },
+  {
+    entity: 'supplier',
+    column: 'country4',
+    xRange: [2.159, 2.159],
+    yRange: [24.624, 24.624],
+  },
+  {
+    entity: 'supplier',
+    column: 'country5',
+    xRange: [2.159, 2.159],
+    yRange: [24.202, 24.202],
+  },
+  {
+    entity: 'supplier',
+    column: 'country6',
+    xRange: [2.159, 2.159],
+    yRange: [24.952, 24.952],
+  },
+  {
+    entity: 'supplier',
+    column: 'country7',
+    xRange: [2.159, 2.159],
+    yRange: [25.374, 25.374],
   },
   {
     entity: 'goods',
@@ -142,12 +243,6 @@ export const _cells: {
   },
   {
     entity: 'goods',
-    column: 'description',
-    xRange: [2.159, 2.159],
-    yRange: [18.174, 18.174],
-  },
-  {
-    entity: 'goods',
     column: 'description1',
     xRange: [2.159, 2.159],
     yRange: [18.127, 18.127],
@@ -156,44 +251,61 @@ export const _cells: {
     entity: 'goods',
     column: 'description2',
     xRange: [2.159, 2.159],
-    yRange: [18.877, 18.877],
+    yRange: [18.174, 18.174],
   },
   {
     entity: 'goods',
     column: 'description3',
     xRange: [2.159, 2.159],
-    yRange: [19.627, 19.627],
+    yRange: [18.198, 18.198],
   },
   {
     entity: 'goods',
     column: 'description4',
     xRange: [2.159, 2.159],
-    yRange: [20.377, 20.377],
+    yRange: [18.877, 18.877],
   },
   {
     entity: 'goods',
     column: 'description5',
     xRange: [2.159, 2.159],
-    yRange: [21.127, 21.127],
+    yRange: [19.627, 19.627],
   },
-
   {
     entity: 'goods',
     column: 'description6',
     xRange: [2.159, 2.159],
-    yRange: [21.877, 21.877],
+    yRange: [20.377, 20.377],
   },
   {
     entity: 'goods',
     column: 'description7',
     xRange: [2.159, 2.159],
-    yRange: [23.377, 23.377],
+    yRange: [21.127, 21.127],
   },
   {
     entity: 'goods',
     column: 'description8',
     xRange: [2.159, 2.159],
+    yRange: [21.877, 21.877],
+  },
+  {
+    entity: 'goods',
+    column: 'description9',
+    xRange: [2.159, 2.159],
     yRange: [22.627, 22.627],
+  },
+  {
+    entity: 'goods',
+    column: 'description10',
+    xRange: [2.159, 2.159],
+    yRange: [23.377, 23.377],
+  },
+  {
+    entity: 'goods',
+    column: 'description11',
+    xRange: [2.159, 2.159],
+    yRange: [24.127, 24.127],
   },
   {
     entity: 'goods',
@@ -252,6 +364,61 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'prefixedCountry1',
+    xRange: [18.511, 19.968],
+    yRange: [19.968, 19.968],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry2',
+    xRange: [18.511, 19.968],
+    yRange: [20.623, 20.623],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry3',
+    xRange: [18.511, 19.968],
+    yRange: [22.873, 22.873],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry4',
+    xRange: [18.511, 19.968],
+    yRange: [22.123, 22.123],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry5',
+    xRange: [18.511, 19.968],
+    yRange: [21.373, 21.373],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry6',
+    xRange: [18.511, 19.968],
+    yRange: [23.623, 23.623],
+  },
+
+  {
+    entity: 'goods',
+    column: 'prefixedCountry7',
+    xRange: [18.511, 19.968],
+    yRange: [25.123, 25.123],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry8',
+    xRange: [18.511, 19.968],
+    yRange: [25.873, 25.873],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry9',
+    xRange: [18.511, 19.968],
+    yRange: [24.373, 24.373],
+  },
+  {
+    entity: 'goods',
     column: 'price',
     xRange: [26.687, 26.687],
     yRange: [19.968, 19.968],
@@ -273,6 +440,12 @@ export const _cells: {
     column: 'date2',
     xRange: [11.966, 11.966],
     yRange: [12.793, 12.793],
+  },
+  {
+    entity: 'declaration',
+    column: 'date3',
+    xRange: [11.966, 11.966],
+    yRange: [13.496, 13.496],
   },
   {
     entity: 'declaration',
