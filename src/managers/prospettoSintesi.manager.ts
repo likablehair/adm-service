@@ -35,7 +35,10 @@ export default class ProspettoSintesiManager {
   ): Promise<ImportDeclarationResult> {
     try {
       const downloadedPDF: string = await this.download(params);
-      const savedPDF: ProspettoSintesiResult = await this.save(params.data.xml.mrn, downloadedPDF);
+      const savedPDF: ProspettoSintesiResult = await this.save(
+        params.data.xml.mrn,
+        downloadedPDF,
+      );
       const admDeclarationMapped: AdmDeclarationMapped = await this.convert({
         data: { path: savedPDF.path },
       });
