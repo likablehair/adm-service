@@ -80,6 +80,7 @@ export interface DeclarationJson {
     companyName3: string;
     companyName4: string;
     companyName5: string;
+    companyName6: string;
     vatNumber: string;
     country1: string;
     country2: string;
@@ -87,6 +88,7 @@ export interface DeclarationJson {
     country4: string;
     country5: string;
     country6: string;
+    country7: string;
     address1: string;
     address2: string;
     address3: string;
@@ -94,6 +96,7 @@ export interface DeclarationJson {
     address5: string;
     address6: string;
     address7: string;
+    address8: string;
     city1: string;
     city2: string;
     city3: string;
@@ -102,12 +105,14 @@ export interface DeclarationJson {
     city6: string;
     city7: string;
     city8: string;
+    city9: string;
     postalCode1: string;
     postalCode2: string;
     postalCode3: string;
     postalCode4: string;
     postalCode5: string;
     postalCode6: string;
+    postalCode7: string;
   };
   goods: {
     ncCode: string;
@@ -182,6 +187,7 @@ class PDFConverter {
       input.supplier?.companyName3,
       input.supplier?.companyName4,
       input.supplier?.companyName5,
+      input.supplier?.companyName6,
     ];
 
     const address: string[] = [
@@ -192,6 +198,7 @@ class PDFConverter {
       input.supplier?.address5,
       input.supplier?.address6,
       input.supplier?.address7,
+      input.supplier?.address8,
     ];
 
     const city: string[] = [
@@ -203,6 +210,7 @@ class PDFConverter {
       input.supplier?.city6,
       input.supplier?.city7,
       input.supplier?.city8,
+      input.supplier?.city9,
     ];
 
     const country: string =
@@ -212,6 +220,7 @@ class PDFConverter {
       input.supplier?.country4?.trim() ||
       input.supplier?.country5?.trim() ||
       input.supplier?.country6?.trim() ||
+      input.supplier?.country7?.trim() ||
       '';
 
     const postalCode: string =
@@ -221,12 +230,13 @@ class PDFConverter {
       input.supplier?.postalCode4?.trim() ||
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
+      input.supplier?.postalCode7?.trim() ||
       '';
 
     const supplier = {
       companyName: this.convertArrayToString(companyName),
-      vatNumber: input.supplier?.vatNumber || '',
-      country: country.trim(),
+      vatNumber: input.supplier?.vatNumber?.trim() || '',
+      country: country,
       address: this.convertArrayToString(address),
       city: this.convertArrayToString(city),
       postalCode: postalCode,
