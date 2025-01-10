@@ -26,7 +26,7 @@ export type {
   MRNProcessed,
   AggregatedSearchType,
   Declaration,
-  DeclarationType
+  DeclarationType,
 } from './managers/admRobotProcessAutomation.manager';
 export { default as AdmRPA } from './managers/admRobotProcessAutomation.manager';
 

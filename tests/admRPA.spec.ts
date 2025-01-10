@@ -14,7 +14,7 @@ test('MRN List', { timeout: 200000 }, async () => {
       username: admUsername,
       password: admPassword,
     },
-    type: 'import'
+    type: 'import',
   });
 
   await admRPA.getMRNList({
@@ -24,6 +24,6 @@ test('MRN List', { timeout: 200000 }, async () => {
       username: admUsername,
       password: admPassword,
     },
-    type: 'export'
+    type: 'export',
   });
 });

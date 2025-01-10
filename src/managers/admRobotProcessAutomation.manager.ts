@@ -31,7 +31,7 @@ export type MRNProcessed = {
   realTotalDeclarationNumber: number;
 };
 
-export type DeclarationType = 'import' | 'export'
+export type DeclarationType = 'import' | 'export';
 
 const declarationTableHeaderMap: Record<string, keyof Declaration> = {
   'Declarating Operator': 'declaratingOperator',
@@ -67,10 +67,10 @@ export default class AdmRobotProcessAutomationManager {
       password: string;
     };
     browser?: Browser;
-    type: DeclarationType
+    type: DeclarationType;
   }): Promise<MRNProcessed[]> {
     try {
-      const type = params.type
+      const type = params.type;
 
       let browser: Browser;
       if (!params.browser) {
@@ -112,7 +112,7 @@ export default class AdmRobotProcessAutomationManager {
         page: gestioneDocumentiPage,
         dateFrom: params.dateFrom,
         dateTo: params.dateTo,
-        type
+        type,
       });
 
       const mrnProcessed: MRNProcessed[] = aggregatedSearchResult.map(
@@ -243,10 +243,10 @@ export default class AdmRobotProcessAutomationManager {
     page: Page;
     dateFrom?: Date;
     dateTo?: Date;
-    type: DeclarationType
+    type: DeclarationType;
   }): Promise<AggregatedSearchType[]> {
     try {
-      const type = params.type
+      const type = params.type;
       let dateFrom = new Date();
       let dateTo = new Date();
 
@@ -356,10 +356,8 @@ export default class AdmRobotProcessAutomationManager {
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
         //select import or export
-        const dropdownLabelScopeCSS = 
-          '#formAvan label.ui-selectonemenu-label';
-        const dropdownOptionScopeXPath = 
-          `aria/${type == 'export' ? 'Esportazione' : 'Importazione'}[role="option"]`;
+        const dropdownLabelScopeCSS = '#formAvan label.ui-selectonemenu-label';
+        const dropdownOptionScopeXPath = `aria/${type == 'export' ? 'Esportazione' : 'Importazione'}[role="option"]`;
 
         await params.page.waitForSelector(dropdownLabelScopeCSS, {
           visible: true,
