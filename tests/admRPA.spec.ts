@@ -14,5 +14,16 @@ test('MRN List', { timeout: 200000 }, async () => {
       username: admUsername,
       password: admPassword,
     },
+    type: 'import'
+  });
+
+  await admRPA.getMRNList({
+    dichiarante,
+    dateFrom: new Date('2024-11-29'),
+    security: {
+      username: admUsername,
+      password: admPassword,
+    },
+    type: 'export'
   });
 });

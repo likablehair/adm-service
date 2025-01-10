@@ -31,6 +31,8 @@ export type MRNProcessed = {
   realTotalDeclarationNumber: number;
 };
 
+export type DeclarationType = 'import' | 'export'
+
 const declarationTableHeaderMap: Record<string, keyof Declaration> = {
   'Declarating Operator': 'declaratingOperator',
   Dichiarante: 'declaratingOperator',
@@ -65,8 +67,11 @@ export default class AdmRobotProcessAutomationManager {
       password: string;
     };
     browser?: Browser;
+    type: DeclarationType
   }): Promise<MRNProcessed[]> {
     try {
+      const type = params.type
+
       let browser: Browser;
       if (!params.browser) {
         browser = await puppeteer.launch({
@@ -107,6 +112,7 @@ export default class AdmRobotProcessAutomationManager {
         page: gestioneDocumentiPage,
         dateFrom: params.dateFrom,
         dateTo: params.dateTo,
+        type
       });
 
       const mrnProcessed: MRNProcessed[] = aggregatedSearchResult.map(
@@ -237,8 +243,10 @@ export default class AdmRobotProcessAutomationManager {
     page: Page;
     dateFrom?: Date;
     dateTo?: Date;
+    type: DeclarationType
   }): Promise<AggregatedSearchType[]> {
     try {
+      const type = params.type
       let dateFrom = new Date();
       let dateTo = new Date();
 
@@ -344,6 +352,24 @@ export default class AdmRobotProcessAutomationManager {
 
         await params.page.waitForSelector(dateCellXPath);
         await params.page.click(dateCellXPath);
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        //select import or export
+        const dropdownLabelScopeCSS = 
+          '#formAvan label.ui-selectonemenu-label';
+        const dropdownOptionScopeXPath = 
+          `aria/${type == 'export' ? 'Esportazione' : 'Importazione'}[role="option"]`;
+
+        await params.page.waitForSelector(dropdownLabelScopeCSS, {
+          visible: true,
+        });
+        await params.page.click(dropdownLabelScopeCSS);
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        await params.page.waitForSelector(dropdownOptionScopeXPath);
+        await params.page.click(dropdownOptionScopeXPath);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
