@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ie:CC599C xmlns:ie="http://ecs.dgtaxud.ec">
+	<messageSender>NECA.IT</messageSender>
+	<messageRecipient>accoglienza</messageRecipient>
+	<preparationDateAndTime>2023-03-31T15:36:06</preparationDateAndTime>
+	<messageIdentification>202303301036060</messageIdentification>
+	<messageType>CC599C</messageType>
+	<ExportOperation>
+		<MRN>23ITXXXXXXXXXXXXXX</MRN>
+		<transit>0</transit>
+	</ExportOperation>
+	<CustomsOfficeOfExport>
+		<referenceNumber>IT015102</referenceNumber>
+	</CustomsOfficeOfExport>
+	<CustomsOfficeOfExitActual>
+		<referenceNumber>IT015102</referenceNumber>
+	</CustomsOfficeOfExitActual>
+	<ExitControlResult>
+		<code>A2</code>
+		<exitDate>2023-03-31</exitDate>
+		<stateOfSeals>0</stateOfSeals>
+	</ExitControlResult>
+</ie:CC599C>
