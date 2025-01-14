@@ -12,9 +12,11 @@ export type RichiestaIvisto = {
 export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvisto> {
   constructor() {
     const superArgs = {
-      httpsUrl: 'https://interop.adm.gov.it/ExportServiceWeb/services/ExportService',
+      httpsUrl:
+        'https://interop.adm.gov.it/ExportServiceWeb/services/ExportService',
       soapUrl: '',
-      httpSoapAction: 'http://process.exportservice.domest.sogei.it/wsdl/ExportService',
+      httpSoapAction:
+        'http://process.exportservice.domest.sogei.it/wsdl/ExportService',
       succesCodes: ponImportCodiciEsito.success,
       errorCodes: ponImportCodiciEsito.error,
     };
@@ -27,9 +29,7 @@ export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvisto>
     );
   }
 
-  async processRequest(
-    params: ProcessRequest<RichiestaIvisto>,
-  ): Promise<{
+  async processRequest(params: ProcessRequest<RichiestaIvisto>): Promise<{
     type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
