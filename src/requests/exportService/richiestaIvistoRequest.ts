@@ -5,11 +5,11 @@ import BaseRequest, {
 } from '../baseRequest';
 import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
 
-export type RichiestaIvisto = {
+export type RichiestaIvistoParams = {
   mrn: string;
 };
 
-export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvisto> {
+export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvistoParams> {
   constructor() {
     const superArgs = {
       httpsUrl:
@@ -29,7 +29,7 @@ export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvisto>
     );
   }
 
-  async processRequest(params: ProcessRequest<RichiestaIvisto>): Promise<{
+  async processRequest(params: ProcessRequest<RichiestaIvistoParams>): Promise<{
     type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
@@ -42,14 +42,14 @@ export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvisto>
           dichiarante: params.data.dichiarante,
         },
         security: params.security,
-        serviceId: 'richiestaIvistoNonFirmata',
+        serviceId: 'richiestaIvisto',
       });
     } catch (e) {
       return { type: 'error', message: undefined };
     }
   }
 
-  protected createXMLForRequest(params: RichiestaIvisto): string {
+  protected createXMLForRequest(params: RichiestaIvistoParams): string {
     return `<mrn xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Input.xsd">${params.mrn}</mrn>`;
   }
 
@@ -57,19 +57,18 @@ export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvisto>
     params: Omit<BaseProcessRequest<string>, 'security'>,
   ): string {
     return `
-      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:type="http://ponimport.ssi.sogei.it/type/">
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:exp="http://exportservice.domest.sogei.it">
         <soapenv:Header/>
         <soapenv:Body>
-          <type:Input>
-              <type:serviceId>${params.serviceId}</type:serviceId>
-              <!--1 or more repetitions:-->
-              <type:data>
-                <type:xml>${params.data.xml}</type:xml>
-                <type:dichiarante>${params.data.dichiarante}</type:dichiarante>
-              </type:data>
-          </type:Input>
-      </soapenv:Body>
-  </soapenv:Envelope>
+            <exp:Input>
+              <exp:serviceId>${params.serviceId}</exp:serviceId>
+              <exp:data>
+                  <exp:xml>${params.data.xml}</exp:xml>
+                  <exp:dichiarante>${params.data.dichiarante}</exp:dichiarante>
+              </exp:data>
+            </exp:Input>
+        </soapenv:Body>
+      </soapenv:Envelope>
     `;
   }
 }
