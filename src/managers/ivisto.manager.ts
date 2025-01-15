@@ -54,7 +54,7 @@ export default class IvistoManager {
 
     const ieCC599C = jsonResult['ie:CC599C'];
 
-    return {
+    const result = {
       messageSender: ieCC599C.messageSender,
       messageRecipient: ieCC599C.messageRecipient,
       preparationDateAndTime: ieCC599C.preparationDateAndTime,
@@ -75,5 +75,7 @@ export default class IvistoManager {
         exitDate: ieCC599C.ExitControlResult.exitDate,
       },
     };
+
+    return result;
   }
 }

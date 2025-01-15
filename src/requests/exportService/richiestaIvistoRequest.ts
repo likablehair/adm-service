@@ -5,11 +5,11 @@ import BaseRequest, {
 } from '../baseRequest';
 import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
 
-export type RichiestaIvistoParams = {
+export type RichiestaIvisto = {
   mrn: string;
 };
 
-export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvistoParams> {
+export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvisto> {
   constructor() {
     const superArgs = {
       httpsUrl:
@@ -29,7 +29,7 @@ export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvistoP
     );
   }
 
-  async processRequest(params: ProcessRequest<RichiestaIvistoParams>): Promise<{
+  async processRequest(params: ProcessRequest<RichiestaIvisto>): Promise<{
     type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
@@ -49,7 +49,7 @@ export default class RichiestaIvistoRequest extends BaseRequest<RichiestaIvistoP
     }
   }
 
-  protected createXMLForRequest(params: RichiestaIvistoParams): string {
+  protected createXMLForRequest(params: RichiestaIvisto): string {
     return `<mrn xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Input.xsd">${params.mrn}</mrn>`;
   }
 

@@ -35,3 +35,8 @@ export type {
   ImportDeclarationResult,
 } from './managers/prospettoSintesi.manager';
 export { default as ProspettoSintesiManager } from './managers/prospettoSintesi.manager';
+
+export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';
+
+export type { IvistoResult, IvistoMapped } from './managers/ivisto.manager';
+export { default as IvistoManager } from './managers/prospettoSintesi.manager';
