@@ -64,7 +64,8 @@ export default class ProspettoContabileManager {
       // Wait 10 seconds before downloading the PDF (constraint from the ADM WS)
       await new Promise((resolve) => setTimeout(resolve, 10000));
 
-      const downloadProspettoContabileRequest = new DownloadProspettoContabile();
+      const downloadProspettoContabileRequest =
+        new DownloadProspettoContabile();
       const downloadProspetto =
         await downloadProspettoContabileRequest.processRequest({
           data: {
