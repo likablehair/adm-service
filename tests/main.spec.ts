@@ -11,6 +11,8 @@ import ProspettoSintesiManager, {
 } from 'src/managers/prospettoSintesi.manager';
 import RichiestaIvistoRequest from 'src/requests/exportService/richiestaIvistoRequest';
 import IvistoManager, { IvistoMapped } from 'src/managers/ivisto.manager';
+import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
+import ProspettoContabileManager from 'src/managers/prospettoContabile.manager';
 
 test('RichiestaIvistoRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -150,6 +152,70 @@ test('RichiestaProspettoSintesiRequest', async () => {
   expect(result.type).toBe('success');
 });
 
+test('RichiestaProspettoContabileRequest', async () => {
+  const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
+  if (!certificatePath) {
+    console.error('ERROR: CERTIFICATE_URL not found');
+    return;
+  }
+
+  const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_PASSPHRASE;
+  if (!certificatePassphrase) {
+    console.error('ERROR: CERTIFICATE_PASSPHRASE not found');
+    return;
+  }
+
+  const mrn = import.meta.env.VITE_MRN_TEST;
+  if (!mrn) {
+    console.error('ERROR: MRN_TEST not found');
+    return;
+  }
+
+  const dichiarante = import.meta.env.VITE_DICHIARANTE_TEST;
+  if (!dichiarante) {
+    console.error('ERROR: DICHIARANTE_TEST not found');
+    return;
+  }
+
+  const otpPWD = import.meta.env.VITE_ARUBA_OTP_PWD;
+  const user = import.meta.env.VITE_ARUBA_USER;
+  const userPWD = import.meta.env.VITE_ARUBA_USER_PWD;
+  const delegatedUser = import.meta.env.VITE_ARUBA_DELEGATED_USER;
+  const delegatedPassword = import.meta.env.VITE_ARUBA_DELEGATED_PASSWORD;
+  const delegatedDomain = import.meta.env.VITE_ARUBA_DELEGATED_DOMAIN;
+  const typeOtpAuth = import.meta.env.VITE_ARUBA_TYPE_OTP_AUTH;
+
+  const admCertificate = fs.readFileSync(certificatePath);
+
+  const request = new RichiestaProspettoContabileRequest();
+
+  const result = await request.processRequest({
+    data: {
+      xml: {
+        mrn,
+      },
+      dichiarante,
+    },
+    security: {
+      admCertificate: {
+        passphrase: certificatePassphrase,
+        file: admCertificate,
+      },
+      identity: {
+        otpPWD,
+        user,
+        userPWD,
+        delegatedUser,
+        delegatedPassword,
+        typeOtpAuth,
+        delegatedDomain,
+      },
+    },
+  });
+
+  expect(result.type).toBe('success');
+});
+
 test('Convert XML', async () => {
   const converterXML = new XMLConverter();
 
@@ -242,5 +308,83 @@ test(
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
     expect(admDeclarationMapped.mrn).toBe(import.meta.env.VITE_MRN_TEST);
+  },
+);
+
+test(
+  'Import Prospetto Contabile',
+  {
+    timeout: 15000,
+  },
+  async () => {
+    const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
+    if (!certificatePath) {
+      console.error('ERROR: CERTIFICATE_URL not found');
+      return;
+    }
+
+    const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_PASSPHRASE;
+    if (!certificatePassphrase) {
+      console.error('ERROR: CERTIFICATE_PASSPHRASE not found');
+      return;
+    }
+
+    const mrn = import.meta.env.VITE_MRN_TEST;
+    if (!mrn) {
+      console.error('ERROR: MRN_TEST not found');
+      return;
+    }
+
+    const dichiarante = import.meta.env.VITE_DICHIARANTE_TEST;
+    if (!dichiarante) {
+      console.error('ERROR: DICHIARANTE_TEST not found');
+      return;
+    }
+
+    const otpPWD = import.meta.env.VITE_ARUBA_OTP_PWD;
+    const user = import.meta.env.VITE_ARUBA_USER;
+    const userPWD = import.meta.env.VITE_ARUBA_USER_PWD;
+    const delegatedUser = import.meta.env.VITE_ARUBA_DELEGATED_USER;
+    const delegatedPassword = import.meta.env.VITE_ARUBA_DELEGATED_PASSWORD;
+    const delegatedDomain = import.meta.env.VITE_ARUBA_DELEGATED_DOMAIN;
+    const typeOtpAuth = import.meta.env.VITE_ARUBA_TYPE_OTP_AUTH;
+
+    const admCertificate = fs.readFileSync(certificatePath);
+
+    const manager = new ProspettoContabileManager();
+
+    const params = {
+      data: {
+        xml: {
+          mrn,
+        },
+        dichiarante,
+      },
+      security: {
+        admCertificate: {
+          passphrase: certificatePassphrase,
+          file: admCertificate,
+        },
+        identity: {
+          otpPWD,
+          user,
+          userPWD,
+          delegatedUser,
+          delegatedPassword,
+          typeOtpAuth,
+          delegatedDomain,
+        },
+      },
+    };
+    const downloadedPDF = await manager.download(params);
+
+    const result: ProspettoSintesiResult = await manager.save(
+      params.data.xml.mrn,
+      downloadedPDF,
+    );
+    await fsPromises.unlink(result.path);
+
+    expect(result.exit.code).toBe('CM_000');
+    expect(result.exit.message).toBe('Operazione effettuata con successo');
   },
 );
