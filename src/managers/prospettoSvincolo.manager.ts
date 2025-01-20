@@ -70,10 +70,6 @@ export default class ProspettoSvincoloManager {
         throw new Error('IUT not found');
       }
 
-      if (richiestaProspetto.type !== 'success') {
-        throw new Error('DownloadProspettoSvincolo failed');
-      }
-
       if (!richiestaProspetto.message?.data) {
         throw new Error('PDF not found');
       }
