@@ -1,5 +1,9 @@
 import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
-import BaseRequest, { BaseProcessRequest, ProcessRequest, ProcessResponse } from "../baseRequest";
+import BaseRequest, {
+  BaseProcessRequest,
+  ProcessRequest,
+  ProcessResponse,
+} from '../baseRequest';
 
 export type RichiestaProspettoSvincolo = {
   mrn: string;

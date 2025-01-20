@@ -14,7 +14,9 @@ import IvistoManager, { IvistoMapped } from 'src/managers/ivisto.manager';
 import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
 import ProspettoContabileManager from 'src/managers/prospettoContabile.manager';
 import RichiestaProspettoSvincoloRequest from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
-import ProspettoSvincoloManager, { ProspettoSvincoloResult } from 'src/managers/prospettoSvincolo.manager';
+import ProspettoSvincoloManager, {
+  ProspettoSvincoloResult,
+} from 'src/managers/prospettoSvincolo.manager';
 
 test('RichiestaIvistoRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;

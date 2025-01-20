@@ -1,5 +1,7 @@
-import { ProcessRequest } from "src/requests/baseRequest";
-import RichiestaProspettoSvincoloRequest, { RichiestaProspettoSvincolo } from "src/requests/ponImport/richiestaProspettoSvincoloRequest";
+import { ProcessRequest } from 'src/requests/baseRequest';
+import RichiestaProspettoSvincoloRequest, {
+  RichiestaProspettoSvincolo,
+} from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
 
@@ -59,7 +61,7 @@ export default class ProspettoSvincoloManager {
         new RichiestaProspettoSvincoloRequest();
       const richiestaProspetto =
         await richiestaProspettoSvincoloRequest.processRequest(params);
-        
+
       if (richiestaProspetto.type !== 'success') {
         throw new Error('RichiestaProspettoSvincolo failed');
       }
@@ -71,7 +73,7 @@ export default class ProspettoSvincoloManager {
       if (richiestaProspetto.type !== 'success') {
         throw new Error('DownloadProspettoSvincolo failed');
       }
-      
+
       if (!richiestaProspetto.message?.data) {
         throw new Error('PDF not found');
       }
