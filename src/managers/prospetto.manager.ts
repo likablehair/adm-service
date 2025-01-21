@@ -6,7 +6,9 @@ import {
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import ProspettoContabileManager from './prospettoContabile.manager';
-import ProspettoSvincoloManager, { ImportProspettoSvincoloResult } from './prospettoSvincolo.manager';
+import ProspettoSvincoloManager, {
+  ImportProspettoSvincoloResult,
+} from './prospettoSvincolo.manager';
 import { ImportProspettoContabileResult } from 'dist/src/main';
 
 export type ImportProspettoResult = {
@@ -39,19 +41,19 @@ export default class ProspettoManager {
       await sintesiManager.import(params);
 
     let fileContabile: ImportProspettoContabileResult | undefined = undefined,
-      fileSvincolo: ImportProspettoSvincoloResult | undefined = undefined
+      fileSvincolo: ImportProspettoSvincoloResult | undefined = undefined;
     try {
       const contabileManager = new ProspettoContabileManager();
       fileContabile = await contabileManager.import(params);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
 
     try {
       const svincoloManager = new ProspettoSvincoloManager();
       fileSvincolo = await svincoloManager.import(params);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
 
     return {
