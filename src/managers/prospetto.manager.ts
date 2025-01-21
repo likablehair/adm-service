@@ -6,15 +6,16 @@ import {
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import ProspettoContabileManager from './prospettoContabile.manager';
-import ProspettoSvincoloManager from './prospettoSvincolo.manager';
+import ProspettoSvincoloManager, { ImportProspettoSvincoloResult } from './prospettoSvincolo.manager';
+import { ImportProspettoContabileResult } from 'dist/src/main';
 
 export type ImportProspettoResult = {
-  fileSvincolo: {
+  fileSvincolo?: {
     buffer: Buffer;
     from: { path: string };
     extension: string;
   };
-  fileContabile: {
+  fileContabile?: {
     buffer: Buffer;
     from: { path: string };
     extension: string;
@@ -37,16 +38,26 @@ export default class ProspettoManager {
     const { file: fileSintesi, admDeclarationMapped } =
       await sintesiManager.import(params);
 
-    const contabileManager = new ProspettoContabileManager();
-    const { file: fileContabile } = await contabileManager.import(params);
+    let fileContabile: ImportProspettoContabileResult | undefined = undefined,
+      fileSvincolo: ImportProspettoSvincoloResult | undefined = undefined
+    try {
+      const contabileManager = new ProspettoContabileManager();
+      fileContabile = await contabileManager.import(params);
+    } catch (error) {
+      console.error(error)
+    }
 
-    const svincoloManager = new ProspettoSvincoloManager();
-    const { file: fileSvincolo } = await svincoloManager.import(params);
+    try {
+      const svincoloManager = new ProspettoSvincoloManager();
+      fileSvincolo = await svincoloManager.import(params);
+    } catch (error) {
+      console.error(error)
+    }
 
     return {
-      fileContabile,
+      fileContabile: fileContabile?.file,
       fileSintesi,
-      fileSvincolo,
+      fileSvincolo: fileSvincolo?.file,
       admDeclarationMapped,
     };
   }
