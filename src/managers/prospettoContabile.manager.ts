@@ -1,27 +1,12 @@
 import { ProcessRequest } from 'src/requests/baseRequest';
-import DownloadProspettoSintesi from 'src/requests/ponImport/downloadProspettoSintesiRequest';
-import RichiestaProspettoSintesiRequest, {
-  RichiestaProspettoSintesi,
-} from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
-
+import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-import { AdmDeclarationMapped, PDFConverter } from 'src/main';
+import { ProspettoSintesiResult } from 'src/main';
+import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
+import DownloadProspettoContabile from 'src/requests/ponImport/downloadProspettoContabileRequest';
 
-export type ProspettoSintesiResult = {
-  mrn: string;
-  rev: string;
-  type: string;
-  path: string;
-  buffer: Buffer;
-  exit: {
-    code: string;
-    message: string;
-  };
-};
-
-export type ImportDeclarationResult = {
-  admDeclarationMapped: AdmDeclarationMapped;
+export type ImportProspettoContabileResult = {
   file: {
     buffer: Buffer;
     from: { path: string };
@@ -29,23 +14,19 @@ export type ImportDeclarationResult = {
   };
 };
 
-export default class ProspettoSintesiManager {
+export default class ProspettoContabileManager {
   async import(
     params: ProcessRequest<RichiestaProspettoSintesi>,
-  ): Promise<ImportDeclarationResult> {
+  ): Promise<ImportProspettoContabileResult> {
     try {
       const downloadedPDF: string = await this.download(params);
       const savedPDF: ProspettoSintesiResult = await this.save(
         params.data.xml.mrn,
         downloadedPDF,
       );
-      const admDeclarationMapped: AdmDeclarationMapped = await this.convert({
-        data: { path: savedPDF.path },
-      });
       await fsPromises.unlink(savedPDF.path);
 
       return {
-        admDeclarationMapped,
         file: {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
@@ -65,13 +46,13 @@ export default class ProspettoSintesiManager {
     params: ProcessRequest<RichiestaProspettoSintesi>,
   ): Promise<string> {
     try {
-      const richiestaProspettoSintesiRequest =
-        new RichiestaProspettoSintesiRequest();
+      const richiestaProspettoContabileRequest =
+        new RichiestaProspettoContabileRequest();
       const richiestaProspetto =
-        await richiestaProspettoSintesiRequest.processRequest(params);
+        await richiestaProspettoContabileRequest.processRequest(params);
 
       if (richiestaProspetto.type !== 'success') {
-        throw new Error('RichiestaProspettoSintesi failed');
+        throw new Error('RichiestaProspettoContabile failed');
       }
 
       if (!richiestaProspetto.message?.IUT) {
@@ -83,9 +64,10 @@ export default class ProspettoSintesiManager {
       // Wait 10 seconds before downloading the PDF (constraint from the ADM WS)
       await new Promise((resolve) => setTimeout(resolve, 10000));
 
-      const downloadProspettoSintesiRequest = new DownloadProspettoSintesi();
+      const downloadProspettoContabileRequest =
+        new DownloadProspettoContabile();
       const downloadProspetto =
-        await downloadProspettoSintesiRequest.processRequest({
+        await downloadProspettoContabileRequest.processRequest({
           data: {
             dichiarante: params.data.dichiarante,
             xml: {
@@ -101,7 +83,7 @@ export default class ProspettoSintesiManager {
         });
 
       if (downloadProspetto.type !== 'success') {
-        throw new Error('DownloadProspettoSintesi failed');
+        throw new Error('DownloadProspettoContabile failed');
       }
 
       if (!downloadProspetto.message?.data) {
@@ -120,7 +102,7 @@ export default class ProspettoSintesiManager {
 
   async save(mrn: string, request: string): Promise<ProspettoSintesiResult> {
     try {
-      const xmlFilePath = `${mrn}_declaration.pdf`;
+      const xmlFilePath = `${mrn}_accounting.pdf`;
 
       const buffer = Buffer.from(request, 'base64');
       await fsPromises.writeFile(xmlFilePath, buffer);
@@ -159,10 +141,5 @@ export default class ProspettoSintesiManager {
         throw new Error('Unknown error');
       }
     }
-  }
-
-  async convert(params: { data: { path: string } }) {
-    const converterPDF = new PDFConverter();
-    return await converterPDF.run({ data: { path: params.data.path } });
   }
 }

@@ -36,7 +36,19 @@ export type {
 } from './managers/prospettoSintesi.manager';
 export { default as ProspettoSintesiManager } from './managers/prospettoSintesi.manager';
 
+export type { ImportProspettoContabileResult } from './managers/prospettoContabile.manager';
+export { default as ProspettoContabileManager } from './managers/prospettoContabile.manager';
+
+export type {
+  ProspettoSvincoloResult,
+  ImportProspettoSvincoloResult,
+} from './managers/prospettoSvincolo.manager';
+export { default as ProspettoSvincoloManager } from './managers/prospettoSvincolo.manager';
+
+export type { ImportProspettoResult } from './managers/prospetto.manager';
+export { default as ProspettoManager } from './managers/prospetto.manager';
+
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';
 
 export type { IvistoResult, IvistoMapped } from './managers/ivisto.manager';
-export { default as IvistoManager } from './managers/prospettoSintesi.manager';
+export { default as IvistoManager } from './managers/ivisto.manager';

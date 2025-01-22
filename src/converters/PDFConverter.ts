@@ -129,6 +129,7 @@ export interface DeclarationJson {
     description9: string;
     description10: string;
     description11: string;
+    description12: string;
     country1: string;
     country2: string;
     country3: string;
@@ -138,6 +139,7 @@ export interface DeclarationJson {
     country7: string;
     country8: string;
     country9: string;
+    country10: string;
     prefixedCountry1: string;
     prefixedCountry2: string;
     prefixedCountry3: string;
@@ -147,6 +149,7 @@ export interface DeclarationJson {
     prefixedCountry7: string;
     prefixedCountry8: string;
     prefixedCountry9: string;
+    prefixedCountry10: string;
     netWeight: string;
     customsRegime: string;
     requestedRegime: string;
@@ -231,7 +234,7 @@ class PDFConverter {
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
-      '';
+      '*';
 
     const supplier = {
       companyName: this.convertArrayToString(companyName),
@@ -281,6 +284,7 @@ class PDFConverter {
         good.description9,
         good.description10,
         good.description11,
+        good.description12,
       ];
 
       const country: string =
@@ -293,6 +297,7 @@ class PDFConverter {
         good.country7?.trim() ||
         good.country8?.trim() ||
         good.country9?.trim() ||
+        good.country10?.trim() ||
         good.prefixedCountry1?.trim() ||
         good.prefixedCountry2?.trim() ||
         good.prefixedCountry3?.trim() ||
@@ -302,6 +307,7 @@ class PDFConverter {
         good.prefixedCountry7?.trim() ||
         good.prefixedCountry8?.trim() ||
         good.prefixedCountry9?.trim() ||
+        good.prefixedCountry10?.trim() ||
         '';
 
       return {

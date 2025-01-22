@@ -309,6 +309,12 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'description12',
+    xRange: [2.159, 2.159],
+    yRange: [24.877, 24.877],
+  },
+  {
+    entity: 'goods',
     column: 'country1',
     xRange: [14.423, 14.423],
     yRange: [19.968, 19.968],
@@ -364,6 +370,12 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'country10',
+    xRange: [14.423, 14.423],
+    yRange: [26.623, 26.623],
+  },
+  {
+    entity: 'goods',
     column: 'prefixedCountry1',
     xRange: [18.511, 19.968],
     yRange: [19.968, 19.968],
@@ -416,6 +428,12 @@ export const _cells: {
     column: 'prefixedCountry9',
     xRange: [18.511, 19.968],
     yRange: [24.373, 24.373],
+  },
+  {
+    entity: 'goods',
+    column: 'prefixedCountry10',
+    xRange: [14.423, 14.423],
+    yRange: [26.623, 26.623],
   },
   {
     entity: 'goods',
