@@ -102,7 +102,7 @@ export default class ProspettoContabileManager {
 
   async save(mrn: string, request: string): Promise<ProspettoSintesiResult> {
     try {
-      const xmlFilePath = `${mrn}.pdf`;
+      const xmlFilePath = `${mrn}_accounting.pdf`;
 
       const buffer = Buffer.from(request, 'base64');
       await fsPromises.writeFile(xmlFilePath, buffer);

@@ -86,7 +86,7 @@ export default class ProspettoSvincoloManager {
 
   async save(mrn: string, request: string): Promise<ProspettoSvincoloResult> {
     try {
-      const xmlFilePath = `${mrn}.pdf`;
+      const xmlFilePath = `${mrn}_release.pdf`;
 
       const buffer = Buffer.from(request, 'base64');
       await fsPromises.writeFile(xmlFilePath, buffer);
