@@ -5,11 +5,10 @@ import {
 } from 'src/main';
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
-import ProspettoContabileManager from './prospettoContabile.manager';
+import ProspettoContabileManager, { ImportProspettoContabileResult } from './prospettoContabile.manager';
 import ProspettoSvincoloManager, {
   ImportProspettoSvincoloResult,
 } from './prospettoSvincolo.manager';
-import { ImportProspettoContabileResult } from 'dist/src/main';
 
 export type ImportProspettoResult = {
   fileSvincolo?: {
