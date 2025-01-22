@@ -234,7 +234,7 @@ class PDFConverter {
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
-      '';
+      '*';
 
     const supplier = {
       companyName: this.convertArrayToString(companyName),
