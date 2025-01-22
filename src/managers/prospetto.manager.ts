@@ -5,7 +5,9 @@ import {
 } from 'src/main';
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
-import ProspettoContabileManager, { ImportProspettoContabileResult } from './prospettoContabile.manager';
+import ProspettoContabileManager, {
+  ImportProspettoContabileResult,
+} from './prospettoContabile.manager';
 import ProspettoSvincoloManager, {
   ImportProspettoSvincoloResult,
 } from './prospettoSvincolo.manager';
