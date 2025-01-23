@@ -51,7 +51,7 @@ export default class RichiestaDaeDatRequest extends BaseRequest<RichiestaDaeDat>
     return `
       <RichiestaDaeDat
         xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 
-        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it richiesta-prospetto-svincolo.xsd" 
+        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it richiestaDaeDat.xsd" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       >
         <input xmlns="">
