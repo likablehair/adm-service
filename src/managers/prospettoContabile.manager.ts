@@ -5,13 +5,10 @@ import * as fsPromises from 'fs/promises';
 import { ProspettoSintesiResult } from 'src/main';
 import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
 import DownloadProspettoContabile from 'src/requests/ponImport/downloadProspettoContabileRequest';
+import { AdmFile } from './prospetto.manager';
 
 export type ImportProspettoContabileResult = {
-  file: {
-    buffer: Buffer;
-    from: { path: string };
-    extension: string;
-  };
+  file: AdmFile
 };
 
 export default class ProspettoContabileManager {
@@ -31,10 +28,10 @@ export default class ProspettoContabileManager {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
           extension: 'pdf',
+          docType: 'accounting'
         },
       };
     } catch (err: unknown) {
-      console.log(err);
       if (err instanceof Error) {
         throw new Error(err.message);
       } else {
