@@ -27,9 +27,7 @@ export default class RichiestaDaeDatRequest extends BaseRequest<RichiestaDaeDat>
     );
   }
 
-  async processRequest(
-    params: ProcessRequest<RichiestaDaeDat>,
-  ): Promise<{
+  async processRequest(params: ProcessRequest<RichiestaDaeDat>): Promise<{
     type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {

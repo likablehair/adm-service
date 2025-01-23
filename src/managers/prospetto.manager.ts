@@ -17,20 +17,20 @@ export const DOC_TYPES = [
   'declaration',
   'accounting',
   'release',
-  ...DAE_DAT_PDF_TYPES
-] as const
+  ...DAE_DAT_PDF_TYPES,
+] as const;
 
-export type docType = typeof DOC_TYPES[number]
+export type docType = (typeof DOC_TYPES)[number];
 
 export type AdmFile = {
   buffer: Buffer;
   from: { path: string };
   extension: string;
-  docType: docType
-}
+  docType: docType;
+};
 
 export type ImportProspettoResult = {
-  files?: AdmFile[]
+  files?: AdmFile[];
   admDeclarationMapped: AdmDeclarationMapped;
 };
 
@@ -59,12 +59,10 @@ export default class ProspettoManager {
     } catch (error) {
       // console.error(error);
     }
- 
-    const files = [
-      fileContabile?.file,
-      fileSvincolo?.file,
-      fileSintesi
-    ].filter(f => !!f)
+
+    const files = [fileContabile?.file, fileSvincolo?.file, fileSintesi].filter(
+      (f) => !!f,
+    );
 
     return {
       files,

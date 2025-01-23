@@ -22,7 +22,7 @@ export type ProspettoSintesiResult = {
 
 export type ImportDeclarationResult = {
   admDeclarationMapped: AdmDeclarationMapped;
-  file: AdmFile
+  file: AdmFile;
 };
 
 export default class ProspettoSintesiManager {
@@ -46,7 +46,7 @@ export default class ProspettoSintesiManager {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
           extension: 'pdf',
-          docType: 'declaration'
+          docType: 'declaration',
         },
       };
     } catch (err: unknown) {

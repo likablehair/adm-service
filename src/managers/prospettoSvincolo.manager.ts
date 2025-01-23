@@ -18,7 +18,7 @@ export type ProspettoSvincoloResult = {
 };
 
 export type ImportProspettoSvincoloResult = {
-  file: AdmFile
+  file: AdmFile;
 };
 
 export default class ProspettoSvincoloManager {
@@ -39,7 +39,7 @@ export default class ProspettoSvincoloManager {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
           extension: 'pdf',
-          docType: 'release'
+          docType: 'release',
         },
       };
     } catch (err: unknown) {
@@ -61,7 +61,7 @@ export default class ProspettoSvincoloManager {
 
       if (richiestaProspetto.message?.esito?.codice == '197') {
         //DO NOT MODIFY THE TEXT OF THIS ERROR
-        throw new Error('Prospetto Svincolo not present')
+        throw new Error('Prospetto Svincolo not present');
       }
 
       if (richiestaProspetto.type !== 'success') {

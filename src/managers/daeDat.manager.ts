@@ -1,18 +1,17 @@
 import { ProcessRequest } from 'src/requests/baseRequest';
-import RichiestaDaeDatRequest, { RichiestaDaeDat } from 'src/requests/ponImport/richiestaDaeDatRequest';
+import RichiestaDaeDatRequest, {
+  RichiestaDaeDat,
+} from 'src/requests/ponImport/richiestaDaeDatRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
 import { AdmFile } from './prospetto.manager';
 
-export const DAE_DAT_PDF_TYPES = [
-  'DAE',
-  'DAT'
-] as const
+export const DAE_DAT_PDF_TYPES = ['DAE', 'DAT'] as const;
 
 export type DaeDatResult = {
   mrn: string;
   rev: string;
-  pdfType: typeof DAE_DAT_PDF_TYPES[number];
+  pdfType: (typeof DAE_DAT_PDF_TYPES)[number];
   path: string;
   buffer: Buffer;
   exit: {
@@ -22,7 +21,7 @@ export type DaeDatResult = {
 };
 
 export type ImportDaeDatResult = {
-  file: AdmFile
+  file: AdmFile;
 };
 
 export default class DaeDatManager {
@@ -42,7 +41,7 @@ export default class DaeDatManager {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
           extension: 'pdf',
-          docType: savedPDF.pdfType
+          docType: savedPDF.pdfType,
         },
       };
     } catch (err: unknown) {
@@ -53,12 +52,9 @@ export default class DaeDatManager {
       }
     }
   }
-  async download(
-    params: ProcessRequest<RichiestaDaeDat>,
-  ): Promise<string> {
+  async download(params: ProcessRequest<RichiestaDaeDat>): Promise<string> {
     try {
-      const richiestaDaeDatRequest =
-        new RichiestaDaeDatRequest();
+      const richiestaDaeDatRequest = new RichiestaDaeDatRequest();
       const richiestaDaeDat =
         await richiestaDaeDatRequest.processRequest(params);
 
@@ -97,9 +93,9 @@ export default class DaeDatManager {
       const data = downloaded.output.dichiarazione;
       const attachment = downloaded.output.daeDat;
       const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
-      const pdfType = attachment.tipoPdf
+      const pdfType = attachment.tipoPdf;
 
-      if(!DAE_DAT_PDF_TYPES.includes(pdfType)){
+      if (!DAE_DAT_PDF_TYPES.includes(pdfType)) {
         throw new Error(`PDF Type "${pdfType}"is not valid`);
       }
 

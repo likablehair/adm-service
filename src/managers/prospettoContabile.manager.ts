@@ -8,7 +8,7 @@ import DownloadProspettoContabile from 'src/requests/ponImport/downloadProspetto
 import { AdmFile } from './prospetto.manager';
 
 export type ImportProspettoContabileResult = {
-  file: AdmFile
+  file: AdmFile;
 };
 
 export default class ProspettoContabileManager {
@@ -28,7 +28,7 @@ export default class ProspettoContabileManager {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
           extension: 'pdf',
-          docType: 'accounting'
+          docType: 'accounting',
         },
       };
     } catch (err: unknown) {
