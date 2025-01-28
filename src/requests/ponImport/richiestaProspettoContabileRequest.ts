@@ -1,4 +1,4 @@
-import { RichiestaProspettoSintesi } from 'dist/src/requests/ponImport/richiestaProspettoSintesiRequest';
+import { RichiestaProspettoSintesi } from './richiestaProspettoSintesiRequest';
 import BaseRequest, {
   BaseProcessRequest,
   ProcessResponse,
