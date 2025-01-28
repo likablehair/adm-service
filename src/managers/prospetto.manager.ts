@@ -45,11 +45,13 @@ export default class ProspettoManager {
       await sintesiManager.import(params);
 
     let fileContabile: AdmFile | undefined = undefined,
-      accountingStatementMapped: AccountingStatementMapped | undefined = undefined,
+      accountingStatementMapped: AccountingStatementMapped | undefined =
+        undefined,
       fileSvincolo: ImportProspettoSvincoloResult | undefined = undefined;
     try {
       const contabileManager = new ProspettoContabileManager();
-      ({ file: fileContabile, accountingStatementMapped } = await contabileManager.import(params));
+      ({ file: fileContabile, accountingStatementMapped } =
+        await contabileManager.import(params));
     } catch (error) {
       // console.error(error);
     }
@@ -68,7 +70,7 @@ export default class ProspettoManager {
     return {
       files,
       admDeclarationMapped,
-      accountingStatementMapped
+      accountingStatementMapped,
     };
   }
 }

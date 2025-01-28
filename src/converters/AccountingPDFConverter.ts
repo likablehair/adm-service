@@ -3,37 +3,37 @@ import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
 
 export type AccountingStatementMapped = {
-  totalDuties: string
-  totalVat: string | undefined
-  vatExemption: boolean
-  vatExemptionValue: string | undefined
-}
+  totalDuties: string;
+  totalVat: string | undefined;
+  vatExemption: boolean;
+  vatExemptionValue: string | undefined;
+};
 
 export interface AccountingJson {
   statement: {
-    totalDuties1: string
-    totalDuties2: string
-    totalDuties3: string
-    totalDuties4: string
-    tribute1: string
-    value1: string
-    tribute2: string
-    value2: string
-    tribute3: string
-    value3: string
-    tribute4: string
-    value4: string
-    tribute5: string
-    value5: string
-    tribute6: string
-    value6: string
-    tribute7: string
-    value7: string
-    tribute8: string
-    value8: string
-    tribute9: string
-    value9: string
-  }
+    totalDuties1: string;
+    totalDuties2: string;
+    totalDuties3: string;
+    totalDuties4: string;
+    tribute1: string;
+    value1: string;
+    tribute2: string;
+    value2: string;
+    tribute3: string;
+    value3: string;
+    tribute4: string;
+    value4: string;
+    tribute5: string;
+    value5: string;
+    tribute6: string;
+    value6: string;
+    tribute7: string;
+    value7: string;
+    tribute8: string;
+    value8: string;
+    tribute9: string;
+    value9: string;
+  };
 }
 
 class AccountingPDFConverter {
@@ -68,61 +68,65 @@ class AccountingPDFConverter {
       input.statement.totalDuties2?.trim() ||
       input.statement.totalDuties3?.trim() ||
       input.statement.totalDuties4?.trim() ||
-      ''
+      '';
 
-    const ivaLiquidation: {tribute: string, value: string}[] = [
+    const ivaLiquidation: { tribute: string; value: string }[] = [
       {
         tribute: input.statement.tribute1 || '',
-        value: input.statement.value1 || ''
+        value: input.statement.value1 || '',
       },
       {
         tribute: input.statement.tribute2 || '',
-        value: input.statement.value2 || ''
+        value: input.statement.value2 || '',
       },
       {
         tribute: input.statement.tribute3 || '',
-        value: input.statement.value3 || ''
+        value: input.statement.value3 || '',
       },
       {
         tribute: input.statement.tribute3 || '',
-        value: input.statement.value3 || ''
+        value: input.statement.value3 || '',
       },
       {
         tribute: input.statement.tribute4 || '',
-        value: input.statement.value4 || ''
+        value: input.statement.value4 || '',
       },
       {
         tribute: input.statement.tribute5 || '',
-        value: input.statement.value5 || ''
+        value: input.statement.value5 || '',
       },
       {
         tribute: input.statement.tribute6 || '',
-        value: input.statement.value6 || ''
+        value: input.statement.value6 || '',
       },
       {
         tribute: input.statement.tribute7 || '',
-        value: input.statement.value7 || ''
+        value: input.statement.value7 || '',
       },
       {
         tribute: input.statement.tribute8 || '',
-        value: input.statement.value8 || ''
+        value: input.statement.value8 || '',
       },
       {
         tribute: input.statement.tribute9 || '',
-        value: input.statement.value9 || ''
+        value: input.statement.value9 || '',
       },
-    ]
+    ];
 
-    const vatExemptionLiquidation = ivaLiquidation.find(il => il.tribute == '406')
+    const vatExemptionLiquidation = ivaLiquidation.find(
+      (il) => il.tribute == '406',
+    );
 
-    const totalVatLiquidation = ivaLiquidation.find(il => il.tribute == 'B00')
+    const totalVatLiquidation = ivaLiquidation.find(
+      (il) => il.tribute == 'B00',
+    );
 
     return {
       totalDuties,
       totalVat: totalVatLiquidation?.value,
       vatExemption: !!vatExemptionLiquidation,
-      vatExemptionValue: vatExemptionLiquidation?.value
-    }
+      vatExemptionValue: vatExemptionLiquidation?.value,
+    };
   }
   public async run(params: {
     data: {
@@ -151,7 +155,7 @@ class AccountingPDFConverter {
         await loadDeclarationFromPDF;
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const accountingEntity: any = {
-        statement: {}
+        statement: {},
       };
 
       if (!!declarationRawJson && declarationRawJson.Pages) {
@@ -176,9 +180,8 @@ class AccountingPDFConverter {
               } else if (!!mappedPosition.entity && !!mappedPosition.column) {
                 if (!accountingEntity[mappedPosition.entity])
                   accountingEntity[mappedPosition.entity] = {};
-                accountingEntity[mappedPosition.entity][
-                  mappedPosition.column
-                ] = text.trim();
+                accountingEntity[mappedPosition.entity][mappedPosition.column] =
+                  text.trim();
               }
             }
           }

@@ -517,14 +517,15 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
-    const accountingStatementMapped: AccountingStatementMapped = await manager.convert({
-      data: { path: result.path },
-    });
+    const accountingStatementMapped: AccountingStatementMapped =
+      await manager.convert({
+        data: { path: result.path },
+      });
     await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
-    expect(accountingStatementMapped).toBeDefined()
+    expect(accountingStatementMapped).toBeDefined();
   },
 );
 
