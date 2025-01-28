@@ -5,13 +5,12 @@ import {
 } from 'src/main';
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
-import ProspettoContabileManager, {
-  ImportProspettoContabileResult,
-} from './prospettoContabile.manager';
+import ProspettoContabileManager from './prospettoContabile.manager';
 import ProspettoSvincoloManager, {
   ImportProspettoSvincoloResult,
 } from './prospettoSvincolo.manager';
 import { DAE_DAT_PDF_TYPES } from './daeDat.manager';
+import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
 
 export const DOC_TYPES = [
   'declaration',
@@ -32,6 +31,7 @@ export type AdmFile = {
 export type ImportProspettoResult = {
   files?: AdmFile[];
   admDeclarationMapped: AdmDeclarationMapped;
+  accountingStatementMapped: AccountingStatementMapped | undefined;
 };
 
 export default class ProspettoManager {
@@ -44,11 +44,12 @@ export default class ProspettoManager {
     const { file: fileSintesi, admDeclarationMapped } =
       await sintesiManager.import(params);
 
-    let fileContabile: ImportProspettoContabileResult | undefined = undefined,
+    let fileContabile: AdmFile | undefined = undefined,
+      accountingStatementMapped: AccountingStatementMapped | undefined = undefined,
       fileSvincolo: ImportProspettoSvincoloResult | undefined = undefined;
     try {
       const contabileManager = new ProspettoContabileManager();
-      fileContabile = await contabileManager.import(params);
+      ({ file: fileContabile, accountingStatementMapped } = await contabileManager.import(params));
     } catch (error) {
       // console.error(error);
     }
@@ -60,13 +61,14 @@ export default class ProspettoManager {
       // console.error(error);
     }
 
-    const files = [fileContabile?.file, fileSvincolo?.file, fileSintesi].filter(
+    const files = [fileContabile, fileSvincolo?.file, fileSintesi].filter(
       (f) => !!f,
     );
 
     return {
       files,
       admDeclarationMapped,
+      accountingStatementMapped
     };
   }
 }

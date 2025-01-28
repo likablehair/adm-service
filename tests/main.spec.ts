@@ -19,6 +19,7 @@ import ProspettoSvincoloManager, {
 } from 'src/managers/prospettoSvincolo.manager';
 import RichiestaDaeDatRequest from 'src/requests/ponImport/richiestaDaeDatRequest';
 import DaeDatManager, { DaeDatResult } from 'src/managers/daeDat.manager';
+import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
 
 test('RichiestaIvistoRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -448,7 +449,7 @@ test(
 test(
   'Import Prospetto Contabile',
   {
-    timeout: 15000,
+    timeout: 20000,
   },
   async () => {
     const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
@@ -516,10 +517,14 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
+    const accountingStatementMapped: AccountingStatementMapped = await manager.convert({
+      data: { path: result.path },
+    });
     await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
+    expect(accountingStatementMapped).toBeDefined()
   },
 );
 
