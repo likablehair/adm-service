@@ -40,9 +40,9 @@ export type IvistoMapped = {
 };
 
 export default class IvistoManager {
-  async import(params: ProcessRequest<RichiestaIvisto>): Promise <IvistoMapped> {
+  async import(params: ProcessRequest<RichiestaIvisto>): Promise<IvistoMapped> {
     const request = new RichiestaIvistoRequest();
-    const result = await request.processRequest(params)
+    const result = await request.processRequest(params);
 
     if (result.type !== 'success') {
       throw new Error('DownloadProspettoSintesi failed');
@@ -57,7 +57,7 @@ export default class IvistoManager {
       data: result.message.data,
     });
 
-    return ivistoMapped
+    return ivistoMapped;
   }
 
   async convert(params: { mrn: string; data: string }): Promise<IvistoMapped> {

@@ -65,7 +65,6 @@ export const _cells: {
     yRange: [20.979, 20.979],
   },
 
-
   {
     entity: 'consignee',
     column: 'companyName',
@@ -96,7 +95,6 @@ export const _cells: {
     xRange: [11.188, 11.188],
     yRange: [11.349, 11.349],
   },
-
 
   {
     entity: 'goods',

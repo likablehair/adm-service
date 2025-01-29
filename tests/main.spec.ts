@@ -29,7 +29,8 @@ test('RichiestaIvistoRequest', async () => {
     return;
   }
 
-  const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_EXPORT_PASSPHRASE;
+  const certificatePassphrase = import.meta.env
+    .VITE_CERTIFICATE_EXPORT_PASSPHRASE;
   if (!certificatePassphrase) {
     console.error('ERROR: CERTIFICATE_PASSPHRASE not found');
     return;
@@ -678,10 +679,9 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
-    const daeDatStatementMapped: DaeDatStatementMapped =
-      await manager.convert({
-        data: { path: result.path },
-      });
+    const daeDatStatementMapped: DaeDatStatementMapped = await manager.convert({
+      data: { path: result.path },
+    });
     await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');

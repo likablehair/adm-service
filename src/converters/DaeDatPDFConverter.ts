@@ -1,6 +1,6 @@
-import PDFParser from "pdf2json";
-import { DeclarationRawJson } from "./PDFConverter";
-import { _cells } from "./DaeDatCellsMapper";
+import PDFParser from 'pdf2json';
+import { DeclarationRawJson } from './PDFConverter';
+import { _cells } from './DaeDatCellsMapper';
 
 export type DaeDatStatementMapped = {
   consignee: {
@@ -8,8 +8,8 @@ export type DaeDatStatementMapped = {
     companyAddress: string;
     postalCode: string;
     city: string;
-    country: string
-  }
+    country: string;
+  };
   customsExitOffice: string;
   totalPackages: string;
   totalGrossWeight: string;
@@ -30,25 +30,25 @@ export interface DaeDatJson {
     customsRegime3: string;
     customsRegime4: string;
     customsRegime5: string;
-  },
+  };
   consignee: {
     companyName: string;
     companyAddress: string;
     postalCode: string;
     city: string;
-    country: string
-  }
+    country: string;
+  };
   goods: {
-    statisticValue1: string
-    statisticValue2: string
-    statisticValue3: string
-    statisticValue4: string
-    statisticValue5: string
-    statisticValue6: string
-    statisticValue7: string
-    statisticValue8: string
-  }[]
-};
+    statisticValue1: string;
+    statisticValue2: string;
+    statisticValue3: string;
+    statisticValue4: string;
+    statisticValue5: string;
+    statisticValue6: string;
+    statisticValue7: string;
+    statisticValue8: string;
+  }[];
+}
 
 class DaeDatPDFConverter {
   private getMappedPosition(
@@ -77,68 +77,56 @@ class DaeDatPDFConverter {
     return {};
   }
   private map(input: DaeDatJson, numberOfPages: number): DaeDatStatementMapped {
-    if(input.goods.length != numberOfPages - 1) {
-      throw Error('Missing statistic value mapping')
+    if (input.goods.length != numberOfPages - 1) {
+      throw Error('Missing statistic value mapping');
     }
 
-    const releaseDate = 
-      input.statement.releaseDate?.trim() ||
-      ''
+    const releaseDate = input.statement.releaseDate?.trim() || '';
 
-    const customsRegime = 
+    const customsRegime =
       input.statement.customsRegime1?.trim() ||
       input.statement.customsRegime2?.trim() ||
       input.statement.customsRegime3?.trim() ||
       input.statement.customsRegime4?.trim() ||
       input.statement.customsRegime5?.trim() ||
-      ''
-    
-    const totalPackages = 
+      '';
+
+    const totalPackages =
       input.statement.totalPackages1?.trim() ||
       input.statement.totalPackages2?.trim() ||
-      ''
+      '';
 
-    const totalGrossWeight = 
-      input.statement.totalGrossWeight?.trim() ||
-      ''
-    
-    const customsExitOffice = 
-      input.statement.customsExitOffice?.trim() ||
-      ''
+    const totalGrossWeight = input.statement.totalGrossWeight?.trim() || '';
 
-    const companyName = 
-      input.consignee.companyName?.trim() ||
-      ''
-    
-    const companyAddress = 
-      input.consignee.companyAddress?.trim() ||
-      ''
+    const customsExitOffice = input.statement.customsExitOffice?.trim() || '';
 
-    const postalCode = 
-      input.consignee.postalCode?.trim() ||
-      ''
-    
-    const city = 
-      input.consignee.city?.trim() ||
-      ''
+    const companyName = input.consignee.companyName?.trim() || '';
 
-    const country = 
-      input.consignee.country?.trim() ||
-      ''
+    const companyAddress = input.consignee.companyAddress?.trim() || '';
 
-    const totalStatisticValue = Math.round(input.goods.reduce((acc, good) => {
-      const statisticValue = good.statisticValue1?.trim() ||
-        good.statisticValue2?.trim() ||
-        good.statisticValue3?.trim() ||
-        good.statisticValue4?.trim() ||
-        good.statisticValue5?.trim() ||
-        good.statisticValue6?.trim() ||
-        good.statisticValue7?.trim() ||
-        good.statisticValue8?.trim() ||
-        '0'
-      
-      return acc + Number(statisticValue)
-    }, 0) * 100) / 100
+    const postalCode = input.consignee.postalCode?.trim() || '';
+
+    const city = input.consignee.city?.trim() || '';
+
+    const country = input.consignee.country?.trim() || '';
+
+    const totalStatisticValue =
+      Math.round(
+        input.goods.reduce((acc, good) => {
+          const statisticValue =
+            good.statisticValue1?.trim() ||
+            good.statisticValue2?.trim() ||
+            good.statisticValue3?.trim() ||
+            good.statisticValue4?.trim() ||
+            good.statisticValue5?.trim() ||
+            good.statisticValue6?.trim() ||
+            good.statisticValue7?.trim() ||
+            good.statisticValue8?.trim() ||
+            '0';
+
+          return acc + Number(statisticValue);
+        }, 0) * 100,
+      ) / 100;
 
     return {
       releaseDate,
@@ -152,9 +140,9 @@ class DaeDatPDFConverter {
         companyAddress,
         postalCode,
         city,
-        country
-      }
-    }
+        country,
+      },
+    };
   }
   public async run(params: {
     data: {
@@ -184,12 +172,12 @@ class DaeDatPDFConverter {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const daeDatEntity: any = {
         statement: {},
-        consignee: {}
+        consignee: {},
       };
-      let numberOfPages: number | undefined = undefined
+      let numberOfPages: number | undefined = undefined;
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
-        numberOfPages = pages.length
+        numberOfPages = pages.length;
 
         for (let i = 0; i < pages.length; i++) {
           const page = pages[i];
@@ -210,16 +198,19 @@ class DaeDatPDFConverter {
                 continue;
               } else if (!!mappedPosition.entity && !!mappedPosition.column) {
                 if (i > 0) {
-                  if (i == 1 && mappedPosition.entity == 'statement' && mappedPosition.column.startsWith('customsRegime')) {
+                  if (
+                    i == 1 &&
+                    mappedPosition.entity == 'statement' &&
+                    mappedPosition.column.startsWith('customsRegime')
+                  ) {
                     if (!daeDatEntity[mappedPosition.entity])
                       daeDatEntity[mappedPosition.entity] = {};
                     daeDatEntity[mappedPosition.entity][mappedPosition.column] =
                       text.trim();
-                  }
-                  else {
+                  } else {
                     if (!daeDatEntity[mappedPosition.entity])
                       daeDatEntity[mappedPosition.entity] = [];
-  
+
                     if (Array.isArray(daeDatEntity[mappedPosition.entity])) {
                       goodObject[mappedPosition.column] = text.trim();
                       daeDatEntity[mappedPosition.entity].push(goodObject);
