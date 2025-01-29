@@ -1,5 +1,7 @@
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
+import { ProcessRequest, RichiestaIvisto } from 'src/main';
+import RichiestaIvistoRequest from 'src/requests/exportService/richiestaIvistoRequest';
 
 export type IvistoResult = {
   type: string;
@@ -38,6 +40,26 @@ export type IvistoMapped = {
 };
 
 export default class IvistoManager {
+  async import(params: ProcessRequest<RichiestaIvisto>): Promise <IvistoMapped> {
+    const request = new RichiestaIvistoRequest();
+    const result = await request.processRequest(params)
+
+    if (result.type !== 'success') {
+      throw new Error('DownloadProspettoSintesi failed');
+    }
+
+    if (!result.message || !result.message.data) {
+      throw new Error('XML Not found');
+    }
+
+    const ivistoMapped: IvistoMapped = await this.convert({
+      mrn: params.data.xml.mrn,
+      data: result.message.data,
+    });
+
+    return ivistoMapped
+  }
+
   async convert(params: { mrn: string; data: string }): Promise<IvistoMapped> {
     const xmlFilePath = `${params.mrn}.pdf`;
     const buffer = Buffer.from(params.data!, 'base64');

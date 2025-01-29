@@ -5,6 +5,7 @@ import RichiestaDaeDatRequest, {
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
 import { AdmFile } from './prospetto.manager';
+import DaeDatPDFConverter, { DaeDatStatementMapped } from 'src/converters/DaeDatPDFConverter';
 
 export const DAE_DAT_PDF_TYPES = ['DAE', 'DAT'] as const;
 
@@ -22,6 +23,7 @@ export type DaeDatResult = {
 
 export type ImportDaeDatResult = {
   file: AdmFile;
+  daeDatStatementMapped: DaeDatStatementMapped;
 };
 
 export default class DaeDatManager {
@@ -34,6 +36,10 @@ export default class DaeDatManager {
         params.data.xml.mrn,
         downloadedPDF,
       );
+      const daeDatStatementMapped: DaeDatStatementMapped =
+        await this.convert({
+          data: { path: savedPDF.path },
+        });
       await fsPromises.unlink(savedPDF.path);
 
       return {
@@ -43,6 +49,7 @@ export default class DaeDatManager {
           extension: 'pdf',
           docType: savedPDF.pdfType,
         },
+        daeDatStatementMapped
       };
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -122,5 +129,10 @@ export default class DaeDatManager {
         throw new Error('Unknown error');
       }
     }
+  }
+
+  async convert(params: { data: { path: string } }) {
+    const converterPDF = new DaeDatPDFConverter();
+    return await converterPDF.run({ data: { path: params.data.path } });
   }
 }

@@ -20,15 +20,16 @@ import ProspettoSvincoloManager, {
 import RichiestaDaeDatRequest from 'src/requests/ponImport/richiestaDaeDatRequest';
 import DaeDatManager, { DaeDatResult } from 'src/managers/daeDat.manager';
 import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
+import { DaeDatStatementMapped } from 'src/converters/DaeDatPDFConverter';
 
 test('RichiestaIvistoRequest', async () => {
-  const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
+  const certificatePath = import.meta.env.VITE_CERTIFICATE_EXPORT_URL;
   if (!certificatePath) {
     console.error('ERROR: CERTIFICATE_URL not found');
     return;
   }
 
-  const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_PASSPHRASE;
+  const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_EXPORT_PASSPHRASE;
   if (!certificatePassphrase) {
     console.error('ERROR: CERTIFICATE_PASSPHRASE not found');
     return;
@@ -677,9 +678,14 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
+    const daeDatStatementMapped: DaeDatStatementMapped =
+      await manager.convert({
+        data: { path: result.path },
+      });
     await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
+    expect(daeDatStatementMapped).toBeDefined();
   },
 );
