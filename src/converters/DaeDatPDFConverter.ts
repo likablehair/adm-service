@@ -104,7 +104,7 @@ class DaeDatPDFConverter {
 
     const companyAddress = input.consignee.companyAddress?.trim() || '';
 
-    const postalCode = input.consignee.postalCode?.trim() || '';
+    const postalCode = input.consignee.postalCode?.trim() || '0';
 
     const city = input.consignee.city?.trim() || '';
 
@@ -138,7 +138,7 @@ class DaeDatPDFConverter {
       consignee: {
         companyName,
         companyAddress,
-        postalCode,
+        postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
         city,
         country,
       },

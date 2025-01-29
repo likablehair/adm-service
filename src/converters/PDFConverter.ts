@@ -236,7 +236,7 @@ class PDFConverter {
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
-      '*';
+      '0';
 
     const supplier = {
       companyName: this.convertArrayToString(companyName),
@@ -244,7 +244,7 @@ class PDFConverter {
       country: country,
       address: this.convertArrayToString(address),
       city: this.convertArrayToString(city),
-      postalCode: postalCode,
+      postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
     };
 
     const date: string =
