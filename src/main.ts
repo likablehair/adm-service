@@ -46,6 +46,7 @@ export { default as ProspettoContabileManager } from './managers/prospettoContab
 export type {
   ProspettoSvincoloResult,
   ImportProspettoSvincoloResult,
+  ProspettoSvincoloGood
 } from './managers/prospettoSvincolo.manager';
 export { default as ProspettoSvincoloManager } from './managers/prospettoSvincolo.manager';
 

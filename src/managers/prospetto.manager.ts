@@ -7,7 +7,7 @@ import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProsp
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import ProspettoContabileManager from './prospettoContabile.manager';
 import ProspettoSvincoloManager, {
-  ImportProspettoSvincoloResult,
+  ProspettoSvincoloGood,
 } from './prospettoSvincolo.manager';
 import { DAE_DAT_PDF_TYPES } from './daeDat.manager';
 import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
@@ -29,9 +29,10 @@ export type AdmFile = {
 };
 
 export type ImportProspettoResult = {
-  files?: AdmFile[];
+  files: AdmFile[];
+  goods?: ProspettoSvincoloGood[]
   admDeclarationMapped: AdmDeclarationMapped;
-  accountingStatementMapped: AccountingStatementMapped | undefined;
+  accountingStatementMapped?: AccountingStatementMapped;
 };
 
 export default class ProspettoManager {
@@ -47,7 +48,8 @@ export default class ProspettoManager {
     let fileContabile: AdmFile | undefined = undefined,
       accountingStatementMapped: AccountingStatementMapped | undefined =
         undefined,
-      fileSvincolo: ImportProspettoSvincoloResult | undefined = undefined;
+      fileSvincolo: AdmFile | undefined = undefined,
+      goods: ProspettoSvincoloGood[] | undefined = undefined
     try {
       const contabileManager = new ProspettoContabileManager();
       ({ file: fileContabile, accountingStatementMapped } =
@@ -58,12 +60,12 @@ export default class ProspettoManager {
 
     try {
       const svincoloManager = new ProspettoSvincoloManager();
-      fileSvincolo = await svincoloManager.import(params);
+      ({ file:fileSvincolo, goods } = await svincoloManager.import(params));
     } catch (error) {
       // console.error(error);
     }
 
-    const files = [fileContabile, fileSvincolo?.file, fileSintesi].filter(
+    const files = [fileContabile, fileSvincolo, fileSintesi].filter(
       (f) => !!f,
     );
 
@@ -71,6 +73,7 @@ export default class ProspettoManager {
       files,
       admDeclarationMapped,
       accountingStatementMapped,
+      goods
     };
   }
 }
