@@ -17,6 +17,12 @@ export type DaeDatStatementMapped = {
   releaseDate: string;
   customsRegime: string;
   releaseCode: string;
+  goods: {
+    statisticValue: string;
+    netWeight: string;
+    ncCode: string;
+    description: string;
+  }[]
 };
 
 export interface DaeDatJson {
@@ -31,6 +37,8 @@ export interface DaeDatJson {
     customsRegime3: string;
     customsRegime4: string;
     customsRegime5: string;
+    customsRegime6: string;
+    customsRegime7: string;
     releaseCode: string;
   };
   consignee: {
@@ -41,6 +49,8 @@ export interface DaeDatJson {
     country: string;
   };
   goods: {
+    nr1: string;
+    nr2: string;
     statisticValue1: string;
     statisticValue2: string;
     statisticValue3: string;
@@ -49,6 +59,17 @@ export interface DaeDatJson {
     statisticValue6: string;
     statisticValue7: string;
     statisticValue8: string;
+    netWeight1: string;
+    netWeight2: string;
+    netWeight3: string;
+    netWeight4: string;
+    ncCode1: string;
+    ncCode2: string;
+    ncCode3: string;
+    ncCode4: string;
+    description1: string;
+    description2: string;
+    description3: string;
   }[];
 }
 
@@ -78,10 +99,7 @@ class DaeDatPDFConverter {
     }
     return {};
   }
-  private map(input: DaeDatJson, numberOfPages: number): DaeDatStatementMapped {
-    if (input.goods.length != numberOfPages - 1) {
-      throw Error('Missing statistic value mapping');
-    }
+  private map(input: DaeDatJson): DaeDatStatementMapped {
 
     const releaseDate = input.statement.releaseDate?.trim() || '';
 
@@ -91,6 +109,8 @@ class DaeDatPDFConverter {
       input.statement.customsRegime3?.trim() ||
       input.statement.customsRegime4?.trim() ||
       input.statement.customsRegime5?.trim() ||
+      input.statement.customsRegime6?.trim() ||
+      input.statement.customsRegime7?.trim() ||
       '';
 
     const totalPackages =
@@ -114,24 +134,53 @@ class DaeDatPDFConverter {
 
     const country = input.consignee.country?.trim() || '';
 
+    const goods = input.goods.map(good => {
+      const statisticValue =
+        good.statisticValue1?.trim() ||
+        good.statisticValue2?.trim() ||
+        good.statisticValue3?.trim() ||
+        good.statisticValue4?.trim() ||
+        good.statisticValue5?.trim() ||
+        good.statisticValue6?.trim() ||
+        good.statisticValue7?.trim() ||
+        good.statisticValue8?.trim() ||
+        '';
+
+      const netWeight =
+        good.netWeight1?.trim() ||
+        good.netWeight2?.trim() ||
+        good.netWeight3?.trim() ||
+        good.netWeight4?.trim() ||
+        '';
+
+      const ncCode =
+        good.ncCode1?.trim() ||
+        good.ncCode2?.trim() ||
+        good.ncCode3?.trim() ||
+        good.ncCode4?.trim() ||
+        '';
+
+      const description = [
+        good.description1,
+        good.description2,
+        good.description3,
+      ]
+      
+      return {
+        statisticValue,
+        netWeight,
+        ncCode: ncCode.replace(/[\s/]/g, ''),
+        description: this.convertArrayToString(description),
+      }
+    })
+    
     const totalStatisticValue =
       Math.round(
-        input.goods.reduce((acc, good) => {
-          const statisticValue =
-            good.statisticValue1?.trim() ||
-            good.statisticValue2?.trim() ||
-            good.statisticValue3?.trim() ||
-            good.statisticValue4?.trim() ||
-            good.statisticValue5?.trim() ||
-            good.statisticValue6?.trim() ||
-            good.statisticValue7?.trim() ||
-            good.statisticValue8?.trim() ||
-            '0';
-
-          return acc + Number(statisticValue);
+        goods.reduce((acc, good) => {
+          return acc + Number(good.statisticValue);
         }, 0) * 100,
       ) / 100;
-
+    
     return {
       releaseDate,
       totalPackages,
@@ -147,7 +196,14 @@ class DaeDatPDFConverter {
         city,
         country,
       },
+      goods,
     };
+  }
+  private convertArrayToString(array: string[]): string {
+    return array
+      .filter((el) => !!el)
+      .map((el) => el.trim())
+      .join(' ');
   }
   public async run(params: {
     data: {
@@ -179,10 +235,8 @@ class DaeDatPDFConverter {
         statement: {},
         consignee: {},
       };
-      let numberOfPages: number | undefined = undefined;
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
-        numberOfPages = pages.length;
 
         for (let i = 0; i < pages.length; i++) {
           const page = pages[i];
@@ -218,7 +272,32 @@ class DaeDatPDFConverter {
 
                     if (Array.isArray(daeDatEntity[mappedPosition.entity])) {
                       goodObject[mappedPosition.column] = text.trim();
-                      daeDatEntity[mappedPosition.entity].push(goodObject);
+
+                      const lastItem =
+                        daeDatEntity[mappedPosition.entity].slice(-1)[0];
+
+                      const isNewItem = 
+                        !lastItem ||
+                        ( 
+                          (
+                            !!lastItem.nr1 && 
+                            (
+                              lastItem.nr1 !== goodObject.nr1 &&
+                              lastItem.nr1 !== goodObject.nr2
+                            )
+                          )
+                          ||
+                          (
+                            !!lastItem.nr2 && 
+                            (
+                              lastItem.nr2 !== goodObject.nr1 &&
+                              lastItem.nr2 !== goodObject.nr2
+                            )
+                          )
+                        )
+
+                      if (isNewItem)
+                        daeDatEntity[mappedPosition.entity].push(goodObject);
                     }
                   }
                 } else {
@@ -235,7 +314,7 @@ class DaeDatPDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      const accountingStatementMapped = this.map(daeDatEntity, numberOfPages);
+      const accountingStatementMapped = this.map(daeDatEntity);
       return accountingStatementMapped;
     } catch (error) {
       throw new Error('Error parsing PDF:' + error); // Returning an empty object

@@ -70,6 +70,18 @@ export const _cells: {
     xRange: [18.625, 18.625],
     yRange: [20.979, 20.979],
   },
+  {
+    entity: 'statement',
+    column: 'customsRegime6',
+    xRange: [18.625, 18.625],
+    yRange: [19.729, 19.729],
+  },
+  {
+    entity: 'statement',
+    column: 'customsRegime7',
+    xRange: [18.625, 18.625],
+    yRange: [19.979, 19.979],
+  },
 
   {
     entity: 'consignee',
@@ -104,6 +116,18 @@ export const _cells: {
 
   {
     entity: 'goods',
+    column: 'nr1',
+    xRange: [17.316, 17.316],
+    yRange: [4.854, 4.854],
+  },
+  {
+    entity: 'goods',
+    column: 'nr2',
+    xRange: [17.194, 17.194],
+    yRange: [4.854, 4.854],
+  },
+  {
+    entity: 'goods',
     column: 'statisticValue1',
     xRange: [23.938, 23.938],
     yRange: [20.416, 20.416],
@@ -124,19 +148,19 @@ export const _cells: {
     entity: 'goods',
     column: 'statisticValue4',
     xRange: [23.938, 23.938],
-    yRange: [21.416, 21.416],
+    yRange: [21.166, 21.166],
   },
   {
     entity: 'goods',
     column: 'statisticValue5',
     xRange: [23.938, 23.938],
-    yRange: [21.666, 21.666],
+    yRange: [21.416, 21.416],
   },
   {
     entity: 'goods',
     column: 'statisticValue6',
     xRange: [23.938, 23.938],
-    yRange: [21.166, 21.166],
+    yRange: [21.666, 21.666],
   },
   {
     entity: 'goods',
@@ -149,5 +173,65 @@ export const _cells: {
     column: 'statisticValue8',
     xRange: [23.938, 23.938],
     yRange: [22.166, 22.166],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight1',
+    xRange: [31.188, 31.188],
+    yRange: [20.479, 20.479],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight2',
+    xRange: [31.188, 31.188],
+    yRange: [20.729, 20.729],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight3',
+    xRange: [31.188, 31.188],
+    yRange: [20.979, 20.979],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight4',
+    xRange: [31.188, 31.188],
+    yRange: [21.229, 21.229],
+  },
+  {
+    entity: 'goods',
+    column: 'ncCode1',
+    xRange: [18.625, 18.625],
+    yRange: [15.293, 15.293],
+  },
+  {
+    entity: 'goods',
+    column: 'ncCode2',
+    xRange: [18.625, 18.625],
+    yRange: [15.543, 15.543],
+  },
+  {
+    entity: 'goods',
+    column: 'ncCode4',
+    xRange: [18.625, 18.625],
+    yRange: [16.043, 16.043],
+  },
+  {
+    entity: 'goods',
+    column: 'description1',
+    xRange: [18.625, 18.625],
+    yRange: [12.73, 12.73],
+  },
+  {
+    entity: 'goods',
+    column: 'description2',
+    xRange: [18.625, 18.625],
+    yRange: [13.233, 13.233],
+  },
+  {
+    entity: 'goods',
+    column: 'description3',
+    xRange: [18.625, 18.625],
+    yRange: [13.736, 13.736],
   },
 ];
