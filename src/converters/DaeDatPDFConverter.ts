@@ -16,7 +16,7 @@ export type DaeDatStatementMapped = {
   totalStatisticValue: number;
   releaseDate: string;
   customsRegime: string;
-  releaseCode: string
+  releaseCode: string;
 };
 
 export interface DaeDatJson {
