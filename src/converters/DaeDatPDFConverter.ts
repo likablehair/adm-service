@@ -16,6 +16,7 @@ export type DaeDatStatementMapped = {
   totalStatisticValue: number;
   releaseDate: string;
   customsRegime: string;
+  releaseCode: string
 };
 
 export interface DaeDatJson {
@@ -30,6 +31,7 @@ export interface DaeDatJson {
     customsRegime3: string;
     customsRegime4: string;
     customsRegime5: string;
+    releaseCode: string;
   };
   consignee: {
     companyName: string;
@@ -100,6 +102,8 @@ class DaeDatPDFConverter {
 
     const customsExitOffice = input.statement.customsExitOffice?.trim() || '';
 
+    const releaseCode = input.statement.releaseCode?.trim() || '';
+
     const companyName = input.consignee.companyName?.trim() || '';
 
     const companyAddress = input.consignee.companyAddress?.trim() || '';
@@ -135,6 +139,7 @@ class DaeDatPDFConverter {
       customsExitOffice,
       customsRegime,
       totalStatisticValue,
+      releaseCode,
       consignee: {
         companyName,
         companyAddress,
@@ -187,7 +192,7 @@ class DaeDatPDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              // if(i == 1){
+              // if(i == 0){
               //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
               // }
 

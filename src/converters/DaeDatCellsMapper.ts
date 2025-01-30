@@ -24,6 +24,12 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'releaseCode',
+    xRange: [13.313, 13.313],
+    yRange: [45.292, 45.292],
+  },
+  {
+    entity: 'statement',
     column: 'totalPackages1',
     xRange: [23.156, 23.156],
     yRange: [6.557, 6.557],
