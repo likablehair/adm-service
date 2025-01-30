@@ -30,7 +30,7 @@ export type AdmFile = {
 
 export type ImportProspettoResult = {
   files: AdmFile[];
-  goods?: ProspettoSvincoloGood[]
+  goods?: ProspettoSvincoloGood[];
   admDeclarationMapped: AdmDeclarationMapped;
   accountingStatementMapped?: AccountingStatementMapped;
 };
@@ -49,7 +49,7 @@ export default class ProspettoManager {
       accountingStatementMapped: AccountingStatementMapped | undefined =
         undefined,
       fileSvincolo: AdmFile | undefined = undefined,
-      goods: ProspettoSvincoloGood[] | undefined = undefined
+      goods: ProspettoSvincoloGood[] | undefined = undefined;
     try {
       const contabileManager = new ProspettoContabileManager();
       ({ file: fileContabile, accountingStatementMapped } =
@@ -60,20 +60,18 @@ export default class ProspettoManager {
 
     try {
       const svincoloManager = new ProspettoSvincoloManager();
-      ({ file:fileSvincolo, goods } = await svincoloManager.import(params));
+      ({ file: fileSvincolo, goods } = await svincoloManager.import(params));
     } catch (error) {
       // console.error(error);
     }
 
-    const files = [fileContabile, fileSvincolo, fileSintesi].filter(
-      (f) => !!f,
-    );
+    const files = [fileContabile, fileSvincolo, fileSintesi].filter((f) => !!f);
 
     return {
       files,
       admDeclarationMapped,
       accountingStatementMapped,
-      goods
+      goods,
     };
   }
 }

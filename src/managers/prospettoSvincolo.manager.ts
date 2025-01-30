@@ -24,15 +24,15 @@ export type ImportProspettoSvincoloResult = {
 };
 
 export type ProspettoSvincoloGood = {
-  singolo: string,
-  codiceArticolo: string,
-  codiceEsitoCDC: string,
-  codiceSvincolo: string,
-  codiceStatoElaborativo: string,
-  descrizioneStatoElaborativo: string,
-  dataSvincolo: string,
-  completato: string
-}
+  singolo: string;
+  codiceArticolo: string;
+  codiceEsitoCDC: string;
+  codiceSvincolo: string;
+  codiceStatoElaborativo: string;
+  descrizioneStatoElaborativo: string;
+  dataSvincolo: string;
+  completato: string;
+};
 
 export default class ProspettoSvincoloManager {
   async import(
@@ -112,7 +112,7 @@ export default class ProspettoSvincoloManager {
       const downloaded = parsed['ns0:RichiestaProspettoSvincolo'];
       const data = downloaded.output.dichiarazione;
       const attachment = downloaded.output.prospettoSvincolo;
-      const goods = downloaded.output.articoli
+      const goods = downloaded.output.articoli;
       const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
 
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
@@ -127,7 +127,7 @@ export default class ProspettoSvincoloManager {
           code: downloaded.output.esito.codiceErrore,
           message: downloaded.output.esito.messaggioErrore,
         },
-        goods
+        goods,
       };
 
       return result;
