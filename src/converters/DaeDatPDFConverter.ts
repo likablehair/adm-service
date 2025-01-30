@@ -22,7 +22,7 @@ export type DaeDatStatementMapped = {
     netWeight: string;
     ncCode: string;
     description: string;
-  }[]
+  }[];
 };
 
 export interface DaeDatJson {
@@ -100,7 +100,6 @@ class DaeDatPDFConverter {
     return {};
   }
   private map(input: DaeDatJson): DaeDatStatementMapped {
-
     const releaseDate = input.statement.releaseDate?.trim() || '';
 
     const customsRegime =
@@ -134,7 +133,7 @@ class DaeDatPDFConverter {
 
     const country = input.consignee.country?.trim() || '';
 
-    const goods = input.goods.map(good => {
+    const goods = input.goods.map((good) => {
       const statisticValue =
         good.statisticValue1?.trim() ||
         good.statisticValue2?.trim() ||
@@ -164,23 +163,23 @@ class DaeDatPDFConverter {
         good.description1,
         good.description2,
         good.description3,
-      ]
-      
+      ];
+
       return {
         statisticValue,
         netWeight,
         ncCode: ncCode.replace(/[\s/]/g, ''),
         description: this.convertArrayToString(description),
-      }
-    })
-    
+      };
+    });
+
     const totalStatisticValue =
       Math.round(
         goods.reduce((acc, good) => {
           return acc + Number(good.statisticValue);
         }, 0) * 100,
       ) / 100;
-    
+
     return {
       releaseDate,
       totalPackages,
@@ -276,25 +275,14 @@ class DaeDatPDFConverter {
                       const lastItem =
                         daeDatEntity[mappedPosition.entity].slice(-1)[0];
 
-                      const isNewItem = 
+                      const isNewItem =
                         !lastItem ||
-                        ( 
-                          (
-                            !!lastItem.nr1 && 
-                            (
-                              lastItem.nr1 !== goodObject.nr1 &&
-                              lastItem.nr1 !== goodObject.nr2
-                            )
-                          )
-                          ||
-                          (
-                            !!lastItem.nr2 && 
-                            (
-                              lastItem.nr2 !== goodObject.nr1 &&
-                              lastItem.nr2 !== goodObject.nr2
-                            )
-                          )
-                        )
+                        (!!lastItem.nr1 &&
+                          lastItem.nr1 !== goodObject.nr1 &&
+                          lastItem.nr1 !== goodObject.nr2) ||
+                        (!!lastItem.nr2 &&
+                          lastItem.nr2 !== goodObject.nr1 &&
+                          lastItem.nr2 !== goodObject.nr2);
 
                       if (isNewItem)
                         daeDatEntity[mappedPosition.entity].push(goodObject);
