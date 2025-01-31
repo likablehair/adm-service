@@ -47,10 +47,10 @@ export default class ProspettoManager {
         data: {
           dichiarante: params.data.dichiarante,
           xml: {
-            mrn: params.data.xml.mrn
+            mrn: params.data.xml.mrn,
           },
         },
-        security: params.security
+        security: params.security,
       });
 
     let fileContabile: AdmFile | undefined = undefined,
@@ -65,10 +65,10 @@ export default class ProspettoManager {
           data: {
             dichiarante: params.data.dichiarante,
             xml: {
-              mrn: params.data.xml.mrn
+              mrn: params.data.xml.mrn,
             },
           },
-          security: params.security
+          security: params.security,
         }));
     } catch (error) {
       // console.error(error);
@@ -80,10 +80,10 @@ export default class ProspettoManager {
         data: {
           dichiarante: params.data.dichiarante,
           xml: {
-            mrn: params.data.xml.mrn
+            mrn: params.data.xml.mrn,
           },
         },
-        security: params.security
+        security: params.security,
       }));
     } catch (error) {
       // console.error(error);
