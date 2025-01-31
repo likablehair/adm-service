@@ -43,7 +43,15 @@ export default class ProspettoManager {
   ): Promise<ImportProspettoResult> {
     const sintesiManager = new ProspettoSintesiManager();
     const { file: fileSintesi, admDeclarationMapped } =
-      await sintesiManager.import(params);
+      await sintesiManager.import({
+        data: {
+          dichiarante: params.data.dichiarante,
+          xml: {
+            mrn: params.data.xml.mrn
+          },
+        },
+        security: params.security
+      });
 
     let fileContabile: AdmFile | undefined = undefined,
       accountingStatementMapped: AccountingStatementMapped | undefined =
@@ -53,14 +61,30 @@ export default class ProspettoManager {
     try {
       const contabileManager = new ProspettoContabileManager();
       ({ file: fileContabile, accountingStatementMapped } =
-        await contabileManager.import(params));
+        await contabileManager.import({
+          data: {
+            dichiarante: params.data.dichiarante,
+            xml: {
+              mrn: params.data.xml.mrn
+            },
+          },
+          security: params.security
+        }));
     } catch (error) {
       // console.error(error);
     }
 
     try {
       const svincoloManager = new ProspettoSvincoloManager();
-      ({ file: fileSvincolo, goods } = await svincoloManager.import(params));
+      ({ file: fileSvincolo, goods } = await svincoloManager.import({
+        data: {
+          dichiarante: params.data.dichiarante,
+          xml: {
+            mrn: params.data.xml.mrn
+          },
+        },
+        security: params.security
+      }));
     } catch (error) {
       // console.error(error);
     }
