@@ -15,13 +15,16 @@ export type DaeDatStatementMapped = {
   totalGrossWeight: string;
   totalStatisticValue: number;
   releaseDate: string;
-  customsRegime: string;
   releaseCode: string;
   goods: {
+    customsRegime: string;
+    requestedRegime: string;
+    previousRegime: string;
     statisticValue: string;
     netWeight: string;
     ncCode: string;
     description: string;
+    identificationCode: string;
   }[];
 };
 
@@ -32,13 +35,6 @@ export interface DaeDatJson {
     totalGrossWeight: string;
     totalPackages1: string;
     totalPackages2: string;
-    customsRegime1: string;
-    customsRegime2: string;
-    customsRegime3: string;
-    customsRegime4: string;
-    customsRegime5: string;
-    customsRegime6: string;
-    customsRegime7: string;
     releaseCode: string;
   };
   consignee: {
@@ -70,6 +66,13 @@ export interface DaeDatJson {
     description1: string;
     description2: string;
     description3: string;
+    customsRegime1: string;
+    customsRegime2: string;
+    customsRegime3: string;
+    customsRegime4: string;
+    customsRegime5: string;
+    customsRegime6: string;
+    customsRegime7: string;
   }[];
 }
 
@@ -101,16 +104,6 @@ class DaeDatPDFConverter {
   }
   private map(input: DaeDatJson): DaeDatStatementMapped {
     const releaseDate = input.statement.releaseDate?.trim() || '';
-
-    const customsRegime =
-      input.statement.customsRegime1?.trim() ||
-      input.statement.customsRegime2?.trim() ||
-      input.statement.customsRegime3?.trim() ||
-      input.statement.customsRegime4?.trim() ||
-      input.statement.customsRegime5?.trim() ||
-      input.statement.customsRegime6?.trim() ||
-      input.statement.customsRegime7?.trim() ||
-      '';
 
     const totalPackages =
       input.statement.totalPackages1?.trim() ||
@@ -152,12 +145,16 @@ class DaeDatPDFConverter {
         good.netWeight4?.trim() ||
         '';
 
-      const ncCode =
+      let ncCode =
         good.ncCode1?.trim() ||
         good.ncCode2?.trim() ||
         good.ncCode3?.trim() ||
         good.ncCode4?.trim() ||
         '';
+
+      ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8)
+
+      const identificationCode = ncCode
 
       const description = [
         good.description1,
@@ -165,10 +162,32 @@ class DaeDatPDFConverter {
         good.description3,
       ];
 
+      let customsRegime =
+        good.customsRegime1?.trim() ||
+        good.customsRegime2?.trim() ||
+        good.customsRegime3?.trim() ||
+        good.customsRegime4?.trim() ||
+        good.customsRegime5?.trim() ||
+        good.customsRegime6?.trim() ||
+        good.customsRegime7?.trim() ||
+        '';
+
+      const requestedRegime =
+        customsRegime.slice(0, 2).trim();
+
+      const previousRegime =
+        customsRegime.slice(-2).trim();
+
+      customsRegime = `${requestedRegime}${previousRegime}`;
+
       return {
+        customsRegime,
+        requestedRegime,
+        previousRegime,
         statisticValue,
         netWeight,
-        ncCode: ncCode.replace(/[\s/]/g, ''),
+        ncCode,
+        identificationCode,
         description: this.convertArrayToString(description),
       };
     });
@@ -185,7 +204,6 @@ class DaeDatPDFConverter {
       totalPackages,
       totalGrossWeight,
       customsExitOffice,
-      customsRegime,
       totalStatisticValue,
       releaseCode,
       consignee: {
@@ -256,37 +274,26 @@ class DaeDatPDFConverter {
                 continue;
               } else if (!!mappedPosition.entity && !!mappedPosition.column) {
                 if (i > 0) {
-                  if (
-                    i == 1 &&
-                    mappedPosition.entity == 'statement' &&
-                    mappedPosition.column.startsWith('customsRegime')
-                  ) {
-                    if (!daeDatEntity[mappedPosition.entity])
-                      daeDatEntity[mappedPosition.entity] = {};
-                    daeDatEntity[mappedPosition.entity][mappedPosition.column] =
-                      text.trim();
-                  } else {
-                    if (!daeDatEntity[mappedPosition.entity])
-                      daeDatEntity[mappedPosition.entity] = [];
+                  if (!daeDatEntity[mappedPosition.entity])
+                    daeDatEntity[mappedPosition.entity] = [];
 
-                    if (Array.isArray(daeDatEntity[mappedPosition.entity])) {
-                      goodObject[mappedPosition.column] = text.trim();
+                  if (Array.isArray(daeDatEntity[mappedPosition.entity])) {
+                    goodObject[mappedPosition.column] = text.trim();
 
-                      const lastItem =
-                        daeDatEntity[mappedPosition.entity].slice(-1)[0];
+                    const lastItem =
+                      daeDatEntity[mappedPosition.entity].slice(-1)[0];
 
-                      const isNewItem =
-                        !lastItem ||
-                        (!!lastItem.nr1 &&
-                          lastItem.nr1 !== goodObject.nr1 &&
-                          lastItem.nr1 !== goodObject.nr2) ||
-                        (!!lastItem.nr2 &&
-                          lastItem.nr2 !== goodObject.nr1 &&
-                          lastItem.nr2 !== goodObject.nr2);
+                    const isNewItem =
+                      !lastItem ||
+                      (!!lastItem.nr1 &&
+                        lastItem.nr1 !== goodObject.nr1 &&
+                        lastItem.nr1 !== goodObject.nr2) ||
+                      (!!lastItem.nr2 &&
+                        lastItem.nr2 !== goodObject.nr1 &&
+                        lastItem.nr2 !== goodObject.nr2);
 
-                      if (isNewItem)
-                        daeDatEntity[mappedPosition.entity].push(goodObject);
-                    }
+                    if (isNewItem)
+                      daeDatEntity[mappedPosition.entity].push(goodObject);
                   }
                 } else {
                   if (!daeDatEntity[mappedPosition.entity])
