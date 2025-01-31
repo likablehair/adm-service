@@ -51,7 +51,10 @@ export type {
 } from './managers/prospettoSvincolo.manager';
 export { default as ProspettoSvincoloManager } from './managers/prospettoSvincolo.manager';
 
-export type { ImportDeclarationTypeImportResult, ImportDeclarationTypeExportResult } from './managers/prospetto.manager';
+export type {
+  ImportDeclarationTypeImportResult,
+  ImportDeclarationTypeExportResult,
+} from './managers/prospetto.manager';
 export { default as ProspettoManager } from './managers/prospetto.manager';
 
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';

@@ -38,9 +38,9 @@ export type ImportDeclarationTypeImportResult = {
 };
 
 export type ImportDeclarationTypeExportResult = {
-  files: AdmFile[]
-  daeDatStatementMapped: DaeDatStatementMapped
-}
+  files: AdmFile[];
+  daeDatStatementMapped: DaeDatStatementMapped;
+};
 
 export default class ProspettoManager {
   async importDeclarationTypeImport(
@@ -106,7 +106,9 @@ export default class ProspettoManager {
     };
   }
 
-  async importDeclarationTypeExport(params: ProcessRequest<RichiestaDaeDat>): Promise<ImportDeclarationTypeExportResult> {
+  async importDeclarationTypeExport(
+    params: ProcessRequest<RichiestaDaeDat>,
+  ): Promise<ImportDeclarationTypeExportResult> {
     const daeDatManager = new DaeDatManager();
     const { file: fileDaeDat, daeDatStatementMapped } =
       await daeDatManager.import({
@@ -121,7 +123,7 @@ export default class ProspettoManager {
 
     return {
       files: [fileDaeDat],
-      daeDatStatementMapped
-    }
+      daeDatStatementMapped,
+    };
   }
 }
