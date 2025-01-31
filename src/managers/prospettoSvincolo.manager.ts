@@ -112,12 +112,16 @@ export default class ProspettoSvincoloManager {
       const downloaded = parsed['ns0:RichiestaProspettoSvincolo'];
       const data = downloaded.output.dichiarazione;
       const attachment = downloaded.output.prospettoSvincolo;
-      const goodOutcomes = downloaded.output.articoli;
+      let goodOutcomes = downloaded.output.articoli;
       const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
 
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
       await fsPromises.writeFile(pdfFileName, pdfContent);
 
+      if(!Array.isArray(goodOutcomes)) {
+        goodOutcomes = [goodOutcomes]
+      }
+      
       const result: ProspettoSvincoloResult = {
         mrn: data.mrn,
         rev: data.revisione,
