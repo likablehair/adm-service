@@ -12,7 +12,8 @@ export type {
 } from './requests/baseRequest';
 
 export type { RichiestaDocumentiDichiarazione } from './requests/ponImport/richiestaListaDocumentiDichiarazioniRequest';
-export type { RichiestaProspettoSintesi as RichiestaProspetto } from './requests/ponImport/richiestaProspettoSintesiRequest';
+export type { RichiestaProspettoSintesi } from './requests/ponImport/richiestaProspettoSintesiRequest';
+export type { RichiestaProspettoSvincolo } from './requests/ponImport/richiestaProspettoSvincoloRequest';
 export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSintesiRequest';
 
 export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINRequest';
@@ -50,7 +51,7 @@ export type {
 } from './managers/prospettoSvincolo.manager';
 export { default as ProspettoSvincoloManager } from './managers/prospettoSvincolo.manager';
 
-export type { ImportProspettoResult } from './managers/prospetto.manager';
+export type { ImportDeclarationTypeImportResult, ImportDeclarationTypeExportResult } from './managers/prospetto.manager';
 export { default as ProspettoManager } from './managers/prospetto.manager';
 
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';

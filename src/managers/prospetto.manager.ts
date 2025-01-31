@@ -1,5 +1,6 @@
 import {
   AdmDeclarationMapped,
+  DaeDatStatementMapped,
   ProcessRequest,
   ProspettoSintesiManager,
 } from 'src/main';
@@ -9,8 +10,9 @@ import ProspettoContabileManager from './prospettoContabile.manager';
 import ProspettoSvincoloManager, {
   GoodOutcome,
 } from './prospettoSvincolo.manager';
-import { DAE_DAT_PDF_TYPES } from './daeDat.manager';
+import DaeDatManager, { DAE_DAT_PDF_TYPES } from './daeDat.manager';
 import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
+import { RichiestaDaeDat } from 'src/requests/ponImport/richiestaDaeDatRequest';
 
 export const DOC_TYPES = [
   'declaration',
@@ -28,19 +30,24 @@ export type AdmFile = {
   docType: docType;
 };
 
-export type ImportProspettoResult = {
+export type ImportDeclarationTypeImportResult = {
   files: AdmFile[];
   goodOutcomes?: GoodOutcome[];
   admDeclarationMapped: AdmDeclarationMapped;
   accountingStatementMapped?: AccountingStatementMapped;
 };
 
+export type ImportDeclarationTypeExportResult = {
+  files: AdmFile[]
+  daeDatStatementMapped: DaeDatStatementMapped
+}
+
 export default class ProspettoManager {
-  async import(
+  async importDeclarationTypeImport(
     params: ProcessRequest<
       RichiestaProspettoSvincolo & RichiestaProspettoSintesi
     >,
-  ): Promise<ImportProspettoResult> {
+  ): Promise<ImportDeclarationTypeImportResult> {
     const sintesiManager = new ProspettoSintesiManager();
     const { file: fileSintesi, admDeclarationMapped } =
       await sintesiManager.import({
@@ -97,5 +104,24 @@ export default class ProspettoManager {
       accountingStatementMapped,
       goodOutcomes,
     };
+  }
+
+  async importDeclarationTypeExport(params: ProcessRequest<RichiestaDaeDat>): Promise<ImportDeclarationTypeExportResult> {
+    const daeDatManager = new DaeDatManager();
+    const { file: fileDaeDat, daeDatStatementMapped } =
+      await daeDatManager.import({
+        data: {
+          dichiarante: params.data.dichiarante,
+          xml: {
+            mrn: params.data.xml.mrn,
+          },
+        },
+        security: params.security,
+      });
+
+    return {
+      files: [fileDaeDat],
+      daeDatStatementMapped
+    }
   }
 }
