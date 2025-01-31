@@ -3,10 +3,10 @@ import DownloadProspettoSintesi from 'src/requests/ponImport/downloadProspettoSi
 import RichiestaProspettoSintesiRequest, {
   RichiestaProspettoSintesi,
 } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
-
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
 import { AdmDeclarationMapped, PDFConverter } from 'src/main';
+import { AdmFile } from './prospetto.manager';
 
 export type ProspettoSintesiResult = {
   mrn: string;
@@ -22,11 +22,7 @@ export type ProspettoSintesiResult = {
 
 export type ImportDeclarationResult = {
   admDeclarationMapped: AdmDeclarationMapped;
-  file: {
-    buffer: Buffer;
-    from: { path: string };
-    extension: string;
-  };
+  file: AdmFile;
 };
 
 export default class ProspettoSintesiManager {
@@ -50,10 +46,10 @@ export default class ProspettoSintesiManager {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
           extension: 'pdf',
+          docType: 'declaration',
         },
       };
     } catch (err: unknown) {
-      console.log(err);
       if (err instanceof Error) {
         throw new Error(err.message);
       } else {

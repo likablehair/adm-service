@@ -115,6 +115,8 @@ export interface DeclarationJson {
     postalCode7: string;
   };
   goods: {
+    goodCodeString: string;
+    goodDetailString: string;
     ncCode: string;
     taricCode: string;
     identificationCode: string;
@@ -234,7 +236,7 @@ class PDFConverter {
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
-      '*';
+      '0';
 
     const supplier = {
       companyName: this.convertArrayToString(companyName),
@@ -242,7 +244,7 @@ class PDFConverter {
       country: country,
       address: this.convertArrayToString(address),
       city: this.convertArrayToString(city),
-      postalCode: postalCode,
+      postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
     };
 
     const date: string =
@@ -251,77 +253,85 @@ class PDFConverter {
       input.declaration.date3 ||
       '';
 
-    const goods = input.goods.map((good) => {
-      const ncCode =
-        input.declaration.track == 'H7'
-          ? good.ncCode
-          : good.ncCode.slice(0, -2);
+    const goods = input.goods
+      .map((good) => {
+        if (
+          good.goodDetailString == 'Dettaglio Articolo n°' &&
+          good.goodCodeString == 'Codice merce'
+        ) {
+          const ncCode =
+            input.declaration.track == 'H7'
+              ? good.ncCode
+              : good.ncCode.slice(0, -2);
 
-      const taricCode =
-        input.declaration.track == 'H7' ? '' : good.ncCode.slice(-2);
+          const taricCode =
+            input.declaration.track == 'H7' ? '' : good.ncCode.slice(-2);
 
-      const requestedRegime =
-        input.declaration.track == 'H7'
-          ? ''
-          : good.customsRegime.slice(0, 2).trim();
+          const requestedRegime =
+            input.declaration.track == 'H7'
+              ? ''
+              : good.customsRegime.slice(0, 2).trim();
 
-      const previousRegime =
-        input.declaration.track == 'H7'
-          ? ''
-          : good.customsRegime.slice(-2).trim();
+          const previousRegime =
+            input.declaration.track == 'H7'
+              ? ''
+              : good.customsRegime.slice(-2).trim();
 
-      const customsRegime = `${requestedRegime}${previousRegime}`;
+          const customsRegime = `${requestedRegime}${previousRegime}`;
 
-      const description: string[] = [
-        good.description1,
-        good.description2,
-        good.description3,
-        good.description4,
-        good.description5,
-        good.description6,
-        good.description7,
-        good.description8,
-        good.description9,
-        good.description10,
-        good.description11,
-        good.description12,
-      ];
+          const description: string[] = [
+            good.description1,
+            good.description2,
+            good.description3,
+            good.description4,
+            good.description5,
+            good.description6,
+            good.description7,
+            good.description8,
+            good.description9,
+            good.description10,
+            good.description11,
+            good.description12,
+          ];
 
-      const country: string =
-        good.country1?.trim() ||
-        good.country2?.trim() ||
-        good.country3?.trim() ||
-        good.country4?.trim() ||
-        good.country5?.trim() ||
-        good.country6?.trim() ||
-        good.country7?.trim() ||
-        good.country8?.trim() ||
-        good.country9?.trim() ||
-        good.country10?.trim() ||
-        good.prefixedCountry1?.trim() ||
-        good.prefixedCountry2?.trim() ||
-        good.prefixedCountry3?.trim() ||
-        good.prefixedCountry4?.trim() ||
-        good.prefixedCountry5?.trim() ||
-        good.prefixedCountry6?.trim() ||
-        good.prefixedCountry7?.trim() ||
-        good.prefixedCountry8?.trim() ||
-        good.prefixedCountry9?.trim() ||
-        good.prefixedCountry10?.trim() ||
-        '';
+          const country: string =
+            good.country1?.trim() ||
+            good.country2?.trim() ||
+            good.country3?.trim() ||
+            good.country4?.trim() ||
+            good.country5?.trim() ||
+            good.country6?.trim() ||
+            good.country7?.trim() ||
+            good.country8?.trim() ||
+            good.country9?.trim() ||
+            good.country10?.trim() ||
+            good.prefixedCountry1?.trim() ||
+            good.prefixedCountry2?.trim() ||
+            good.prefixedCountry3?.trim() ||
+            good.prefixedCountry4?.trim() ||
+            good.prefixedCountry5?.trim() ||
+            good.prefixedCountry6?.trim() ||
+            good.prefixedCountry7?.trim() ||
+            good.prefixedCountry8?.trim() ||
+            good.prefixedCountry9?.trim() ||
+            good.prefixedCountry10?.trim() ||
+            '';
 
-      return {
-        ncCode,
-        taricCode,
-        identificationCode: good.ncCode,
-        description: this.convertArrayToString(description),
-        country,
-        netWeight: good.netWeight,
-        customsRegime,
-        requestedRegime,
-        previousRegime,
-      };
-    });
+          return {
+            ncCode,
+            taricCode,
+            identificationCode: good.ncCode,
+            description: this.convertArrayToString(description),
+            country,
+            netWeight: good.netWeight,
+            customsRegime,
+            requestedRegime,
+            previousRegime,
+          };
+        }
+        return undefined;
+      })
+      .filter((g) => !!g);
 
     return {
       mrn: input.declaration.mrn,

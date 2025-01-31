@@ -338,6 +338,17 @@ export default class AdmRobotProcessAutomationManager {
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
           }
+        } else if (dateDifferenceIteration < 0) {
+          const nextMonthButtonXPath =
+            'xpath///*[@id="ui-datepicker-div"]/div/a[2]';
+
+          //Iterate over the months
+          for (let i = 0; i < Math.abs(dateDifferenceIteration); i++) {
+            await params.page.waitForSelector(nextMonthButtonXPath);
+            await params.page.click(nextMonthButtonXPath);
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
         }
 
         const datePosition = this._getDatePositionInDatepicker({

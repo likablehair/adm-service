@@ -5,30 +5,34 @@ import {
 } from 'src/main';
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
-import ProspettoContabileManager, {
-  ImportProspettoContabileResult,
-} from './prospettoContabile.manager';
+import ProspettoContabileManager from './prospettoContabile.manager';
 import ProspettoSvincoloManager, {
-  ImportProspettoSvincoloResult,
+  ProspettoSvincoloGood,
 } from './prospettoSvincolo.manager';
+import { DAE_DAT_PDF_TYPES } from './daeDat.manager';
+import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
+
+export const DOC_TYPES = [
+  'declaration',
+  'accounting',
+  'release',
+  ...DAE_DAT_PDF_TYPES,
+] as const;
+
+export type docType = (typeof DOC_TYPES)[number];
+
+export type AdmFile = {
+  buffer: Buffer;
+  from: { path: string };
+  extension: string;
+  docType: docType;
+};
 
 export type ImportProspettoResult = {
-  fileSvincolo?: {
-    buffer: Buffer;
-    from: { path: string };
-    extension: string;
-  };
-  fileContabile?: {
-    buffer: Buffer;
-    from: { path: string };
-    extension: string;
-  };
-  fileSintesi: {
-    buffer: Buffer;
-    from: { path: string };
-    extension: string;
-  };
+  files: AdmFile[];
+  goods?: ProspettoSvincoloGood[];
   admDeclarationMapped: AdmDeclarationMapped;
+  accountingStatementMapped?: AccountingStatementMapped;
 };
 
 export default class ProspettoManager {
@@ -39,29 +43,59 @@ export default class ProspettoManager {
   ): Promise<ImportProspettoResult> {
     const sintesiManager = new ProspettoSintesiManager();
     const { file: fileSintesi, admDeclarationMapped } =
-      await sintesiManager.import(params);
+      await sintesiManager.import({
+        data: {
+          dichiarante: params.data.dichiarante,
+          xml: {
+            mrn: params.data.xml.mrn,
+          },
+        },
+        security: params.security,
+      });
 
-    let fileContabile: ImportProspettoContabileResult | undefined = undefined,
-      fileSvincolo: ImportProspettoSvincoloResult | undefined = undefined;
+    let fileContabile: AdmFile | undefined = undefined,
+      accountingStatementMapped: AccountingStatementMapped | undefined =
+        undefined,
+      fileSvincolo: AdmFile | undefined = undefined,
+      goods: ProspettoSvincoloGood[] | undefined = undefined;
     try {
       const contabileManager = new ProspettoContabileManager();
-      fileContabile = await contabileManager.import(params);
+      ({ file: fileContabile, accountingStatementMapped } =
+        await contabileManager.import({
+          data: {
+            dichiarante: params.data.dichiarante,
+            xml: {
+              mrn: params.data.xml.mrn,
+            },
+          },
+          security: params.security,
+        }));
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
 
     try {
       const svincoloManager = new ProspettoSvincoloManager();
-      fileSvincolo = await svincoloManager.import(params);
+      ({ file: fileSvincolo, goods } = await svincoloManager.import({
+        data: {
+          dichiarante: params.data.dichiarante,
+          xml: {
+            mrn: params.data.xml.mrn,
+          },
+        },
+        security: params.security,
+      }));
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
 
+    const files = [fileContabile, fileSvincolo, fileSintesi].filter((f) => !!f);
+
     return {
-      fileContabile: fileContabile?.file,
-      fileSintesi,
-      fileSvincolo: fileSvincolo?.file,
+      files,
       admDeclarationMapped,
+      accountingStatementMapped,
+      goods,
     };
   }
 }

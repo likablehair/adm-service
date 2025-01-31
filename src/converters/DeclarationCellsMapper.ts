@@ -237,6 +237,18 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'goodDetailString',
+    xRange: [2.159, 2.159],
+    yRange: [14.587, 14.587],
+  },
+  {
+    entity: 'goods',
+    column: 'goodCodeString',
+    xRange: [2.159, 2.159],
+    yRange: [15.484000000000002, 15.484000000000002],
+  },
+  {
+    entity: 'goods',
     column: 'netWeight',
     xRange: [10.335, 10.335],
     yRange: [16.381, 16.381],

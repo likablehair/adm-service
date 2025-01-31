@@ -1,12 +1,15 @@
-import { RichiestaProspettoSintesi } from './richiestaProspettoSintesiRequest';
+import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
 import BaseRequest, {
   BaseProcessRequest,
-  ProcessResponse,
   ProcessRequest,
+  ProcessResponse,
 } from '../baseRequest';
-import ponImportCodiciEsito from '../ponImport/ponImportCodiciEsito.json';
 
-export default class RichiestaProspettoContabileRequest extends BaseRequest<RichiestaProspettoSintesi> {
+export type RichiestaDaeDat = {
+  mrn: string;
+};
+
+export default class RichiestaDaeDatRequest extends BaseRequest<RichiestaDaeDat> {
   constructor() {
     const superArgs = {
       httpsUrl: 'https://interop.adm.gov.it/ponimportsoap/services/ponimport',
@@ -24,9 +27,7 @@ export default class RichiestaProspettoContabileRequest extends BaseRequest<Rich
     );
   }
 
-  async processRequest(
-    params: ProcessRequest<RichiestaProspettoSintesi>,
-  ): Promise<{
+  async processRequest(params: ProcessRequest<RichiestaDaeDat>): Promise<{
     type: 'success' | 'error' | 'unknown';
     message: ProcessResponse | undefined;
   }> {
@@ -39,18 +40,18 @@ export default class RichiestaProspettoContabileRequest extends BaseRequest<Rich
           dichiarante: params.data.dichiarante,
         },
         security: params.security,
-        serviceId: 'richiestaProspettoContabile',
+        serviceId: 'richiestaDaeDat',
       });
     } catch (e) {
       return { type: 'error', message: undefined };
     }
   }
 
-  protected createXMLForRequest(params: RichiestaProspettoSintesi): string {
+  protected createXMLForRequest(params: RichiestaDaeDat): string {
     return `
-      <RichiestaProspetto
+      <RichiestaDaeDat
         xmlns="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it" 
-        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it richiestaProspettoContabileSintesi.xsd" 
+        xsi:schemaLocation="http://documenti.tracciati.xsd.fascicoloele.domest.dogane.finanze.it richiestaDaeDat.xsd" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       >
         <input xmlns="">
@@ -58,7 +59,7 @@ export default class RichiestaProspettoContabileRequest extends BaseRequest<Rich
             <mrn>${params.mrn}</mrn>
           </datiDichiarazione>
         </input>
-      </RichiestaProspetto>
+      </RichiestaDaeDat>
     `;
   }
 

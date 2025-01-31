@@ -5,13 +5,14 @@ import * as fsPromises from 'fs/promises';
 import { ProspettoSintesiResult } from 'src/main';
 import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
 import DownloadProspettoContabile from 'src/requests/ponImport/downloadProspettoContabileRequest';
+import { AdmFile } from './prospetto.manager';
+import AccountingPDFConverter, {
+  AccountingStatementMapped,
+} from 'src/converters/AccountingPDFConverter';
 
 export type ImportProspettoContabileResult = {
-  file: {
-    buffer: Buffer;
-    from: { path: string };
-    extension: string;
-  };
+  file: AdmFile;
+  accountingStatementMapped: AccountingStatementMapped;
 };
 
 export default class ProspettoContabileManager {
@@ -24,6 +25,10 @@ export default class ProspettoContabileManager {
         params.data.xml.mrn,
         downloadedPDF,
       );
+      const accountingStatementMapped: AccountingStatementMapped =
+        await this.convert({
+          data: { path: savedPDF.path },
+        });
       await fsPromises.unlink(savedPDF.path);
 
       return {
@@ -31,10 +36,11 @@ export default class ProspettoContabileManager {
           buffer: savedPDF.buffer,
           from: { path: savedPDF.path },
           extension: 'pdf',
+          docType: 'accounting',
         },
+        accountingStatementMapped,
       };
     } catch (err: unknown) {
-      console.log(err);
       if (err instanceof Error) {
         throw new Error(err.message);
       } else {
@@ -141,5 +147,10 @@ export default class ProspettoContabileManager {
         throw new Error('Unknown error');
       }
     }
+  }
+
+  async convert(params: { data: { path: string } }) {
+    const converterPDF = new AccountingPDFConverter();
+    return await converterPDF.run({ data: { path: params.data.path } });
   }
 }

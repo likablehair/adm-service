@@ -18,9 +18,13 @@ export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSi
 export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINRequest';
 
 export type { AdmDeclarationMapped } from './converters/XMLConverter';
+export type { AccountingStatementMapped } from './converters/AccountingPDFConverter';
+export type { DaeDatStatementMapped } from './converters/DaeDatPDFConverter';
 
 export { default as XMLConverter } from './converters/XMLConverter';
 export { default as PDFConverter } from './converters/PDFConverter';
+export { default as AccountingPDFConverter } from './converters/AccountingPDFConverter';
+export { default as DaeDatPDFConverter } from './converters/DaeDatPDFConverter';
 
 export type {
   MRNProcessed,
@@ -42,6 +46,7 @@ export { default as ProspettoContabileManager } from './managers/prospettoContab
 export type {
   ProspettoSvincoloResult,
   ImportProspettoSvincoloResult,
+  ProspettoSvincoloGood,
 } from './managers/prospettoSvincolo.manager';
 export { default as ProspettoSvincoloManager } from './managers/prospettoSvincolo.manager';
 
