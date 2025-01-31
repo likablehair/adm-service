@@ -15,15 +15,15 @@ export type ProspettoSvincoloResult = {
     code: string;
     message: string;
   };
-  goods: ProspettoSvincoloGood[];
+  goodOutcomes: GoodOutcome[];
 };
 
 export type ImportProspettoSvincoloResult = {
   file: AdmFile;
-  goods: ProspettoSvincoloGood[];
+  goodOutcomes: GoodOutcome[];
 };
 
-export type ProspettoSvincoloGood = {
+export type GoodOutcome = {
   singolo: string;
   codiceArticolo: string;
   codiceEsitoCDC: string;
@@ -54,7 +54,7 @@ export default class ProspettoSvincoloManager {
           extension: 'pdf',
           docType: 'release',
         },
-        goods: savedPDF.goods,
+        goodOutcomes: savedPDF.goodOutcomes,
       };
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -112,11 +112,15 @@ export default class ProspettoSvincoloManager {
       const downloaded = parsed['ns0:RichiestaProspettoSvincolo'];
       const data = downloaded.output.dichiarazione;
       const attachment = downloaded.output.prospettoSvincolo;
-      const goods = downloaded.output.articoli;
+      let goodOutcomes = downloaded.output.articoli;
       const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
 
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
       await fsPromises.writeFile(pdfFileName, pdfContent);
+
+      if (!Array.isArray(goodOutcomes)) {
+        goodOutcomes = [goodOutcomes];
+      }
 
       const result: ProspettoSvincoloResult = {
         mrn: data.mrn,
@@ -127,7 +131,7 @@ export default class ProspettoSvincoloManager {
           code: downloaded.output.esito.codiceErrore,
           message: downloaded.output.esito.messaggioErrore,
         },
-        goods,
+        goodOutcomes,
       };
 
       return result;

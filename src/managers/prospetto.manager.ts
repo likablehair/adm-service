@@ -7,7 +7,7 @@ import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProsp
 import { RichiestaProspettoSvincolo } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import ProspettoContabileManager from './prospettoContabile.manager';
 import ProspettoSvincoloManager, {
-  ProspettoSvincoloGood,
+  GoodOutcome,
 } from './prospettoSvincolo.manager';
 import { DAE_DAT_PDF_TYPES } from './daeDat.manager';
 import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
@@ -30,7 +30,7 @@ export type AdmFile = {
 
 export type ImportProspettoResult = {
   files: AdmFile[];
-  goods?: ProspettoSvincoloGood[];
+  goodOutcomes?: GoodOutcome[];
   admDeclarationMapped: AdmDeclarationMapped;
   accountingStatementMapped?: AccountingStatementMapped;
 };
@@ -57,7 +57,7 @@ export default class ProspettoManager {
       accountingStatementMapped: AccountingStatementMapped | undefined =
         undefined,
       fileSvincolo: AdmFile | undefined = undefined,
-      goods: ProspettoSvincoloGood[] | undefined = undefined;
+      goodOutcomes: GoodOutcome[] | undefined = undefined;
     try {
       const contabileManager = new ProspettoContabileManager();
       ({ file: fileContabile, accountingStatementMapped } =
@@ -76,7 +76,7 @@ export default class ProspettoManager {
 
     try {
       const svincoloManager = new ProspettoSvincoloManager();
-      ({ file: fileSvincolo, goods } = await svincoloManager.import({
+      ({ file: fileSvincolo, goodOutcomes } = await svincoloManager.import({
         data: {
           dichiarante: params.data.dichiarante,
           xml: {
@@ -95,7 +95,7 @@ export default class ProspettoManager {
       files,
       admDeclarationMapped,
       accountingStatementMapped,
-      goods,
+      goodOutcomes,
     };
   }
 }
