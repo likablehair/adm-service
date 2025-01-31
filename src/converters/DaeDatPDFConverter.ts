@@ -152,9 +152,9 @@ class DaeDatPDFConverter {
         good.ncCode4?.trim() ||
         '';
 
-      ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8)
+      ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8);
 
-      const identificationCode = ncCode
+      const identificationCode = ncCode;
 
       const description = [
         good.description1,
@@ -172,11 +172,9 @@ class DaeDatPDFConverter {
         good.customsRegime7?.trim() ||
         '';
 
-      const requestedRegime =
-        customsRegime.slice(0, 2).trim();
+      const requestedRegime = customsRegime.slice(0, 2).trim();
 
-      const previousRegime =
-        customsRegime.slice(-2).trim();
+      const previousRegime = customsRegime.slice(-2).trim();
 
       customsRegime = `${requestedRegime}${previousRegime}`;
 
