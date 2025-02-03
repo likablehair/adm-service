@@ -424,7 +424,7 @@ class PDFConverter {
                     if (isNewItem)
                       declarationEntity[mappedPosition.entity].push(goodObject);
                   }
-                } else {
+                } else if (mappedPosition.entity != 'goods'){
                   if (!declarationEntity[mappedPosition.entity])
                     declarationEntity[mappedPosition.entity] = {};
                   declarationEntity[mappedPosition.entity][
