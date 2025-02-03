@@ -63,10 +63,10 @@ export default class ProspettoSvincoloManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `importing ProspettoSvincolo: ${localError.message}`;
@@ -88,8 +88,10 @@ export default class ProspettoSvincoloManager {
       }
 
       if (richiestaProspetto.type !== 'success') {
-        console.warn('zio cane svincolo', richiestaProspetto.message?.esito)
-        throw new Error(`message: ${richiestaProspetto.message?.esito?.messaggio}`);
+        console.warn('zio cane svincolo', richiestaProspetto.message?.esito);
+        throw new Error(
+          `message: ${richiestaProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!richiestaProspetto.message?.data) {
@@ -102,10 +104,10 @@ export default class ProspettoSvincoloManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `downloading ProspettoSvincolo: ${localError.message}`;
@@ -157,10 +159,10 @@ export default class ProspettoSvincoloManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `saving ProspettoSvincolo: ${localError.message}`;

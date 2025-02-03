@@ -47,10 +47,10 @@ export default class ProspettoContabileManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `importing ProspettoContabile: ${localError.message}`;
@@ -66,15 +66,16 @@ export default class ProspettoContabileManager {
       const richiestaProspetto =
         await richiestaProspettoContabileRequest.processRequest(params);
 
-      
       if (richiestaProspetto.message?.esito?.codice == '197') {
         //DO NOT MODIFY THE TEXT OF THIS ERROR
         throw new Error(ProspettoContabileMissingError);
       }
 
       if (richiestaProspetto.type !== 'success') {
-        console.warn('zio cane contabile', richiestaProspetto.message?.esito)
-        throw new Error(`message: ${richiestaProspetto.message?.esito?.messaggio}`);
+        console.warn('zio cane contabile', richiestaProspetto.message?.esito);
+        throw new Error(
+          `message: ${richiestaProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!richiestaProspetto.message?.IUT) {
@@ -105,7 +106,9 @@ export default class ProspettoContabileManager {
         });
 
       if (downloadProspetto.type !== 'success') {
-        throw new Error(`message: ${downloadProspetto.message?.esito?.messaggio}`);
+        throw new Error(
+          `message: ${downloadProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!downloadProspetto.message?.data) {
@@ -118,10 +121,10 @@ export default class ProspettoContabileManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `downloading ProspettoContabile: ${localError.message}`;
@@ -168,10 +171,10 @@ export default class ProspettoContabileManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `saving ProspettoContabile: ${localError.message}`;

@@ -159,10 +159,10 @@ export default class AdmRobotProcessAutomationManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `getMRNList: ${localError.message}`;
@@ -208,10 +208,10 @@ export default class AdmRobotProcessAutomationManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `login: ${localError.message}`;
@@ -259,10 +259,10 @@ export default class AdmRobotProcessAutomationManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `accessGestioneDocumenti: ${localError.message}`;
@@ -584,10 +584,10 @@ export default class AdmRobotProcessAutomationManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `aggregatedSearch: ${localError.message}`;

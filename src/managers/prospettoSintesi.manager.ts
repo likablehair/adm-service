@@ -56,10 +56,10 @@ export default class ProspettoSintesiManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `importing ProspettoSintesi: ${localError.message}`;
@@ -81,7 +81,9 @@ export default class ProspettoSintesiManager {
       }
 
       if (richiestaProspetto.type !== 'success') {
-        throw new Error(`message: ${richiestaProspetto.message?.esito?.messaggio}`);
+        throw new Error(
+          `message: ${richiestaProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!richiestaProspetto.message?.IUT) {
@@ -111,7 +113,9 @@ export default class ProspettoSintesiManager {
         });
 
       if (downloadProspetto.type !== 'success') {
-        throw new Error(`message: ${downloadProspetto.message?.esito?.messaggio}`);
+        throw new Error(
+          `message: ${downloadProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!downloadProspetto.message?.data) {
@@ -124,10 +128,10 @@ export default class ProspettoSintesiManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `downloading ProspettoSintesi: ${localError.message}`;
@@ -174,10 +178,10 @@ export default class ProspettoSintesiManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `downloading ProspettoSintesi: ${localError.message}`;

@@ -44,10 +44,10 @@ export default class DownloadProspettoContabile extends BaseRequest<DownloadPros
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       throw localError;

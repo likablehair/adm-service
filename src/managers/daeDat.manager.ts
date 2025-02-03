@@ -59,10 +59,10 @@ export default class DaeDatManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `importing DaeDat: ${localError.message}`;
@@ -81,7 +81,9 @@ export default class DaeDatManager {
       }
 
       if (richiestaDaeDat.type !== 'success') {
-        throw new Error(`message: ${richiestaDaeDat.message?.esito?.messaggio}`);
+        throw new Error(
+          `message: ${richiestaDaeDat.message?.esito?.messaggio}`,
+        );
       }
 
       if (!richiestaDaeDat.message?.data) {
@@ -94,10 +96,10 @@ export default class DaeDatManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `downloading DaeDat: ${localError.message}`;
@@ -149,10 +151,10 @@ export default class DaeDatManager {
 
       if (error instanceof Error) {
         localError = error;
-      } else if (typeof error === "string") {
+      } else if (typeof error === 'string') {
         localError = new Error(error);
       } else {
-        localError = new Error("Unknown error");
+        localError = new Error('Unknown error');
       }
 
       localError.message = `saving DaeDat: ${localError.message}`;
