@@ -310,7 +310,7 @@ class DaeDatPDFConverter {
       const accountingStatementMapped = this.map(daeDatEntity);
       return accountingStatementMapped;
     } catch (error) {
-      throw new Error('Error parsing PDF:' + error); // Returning an empty object
+      throw new Error('parsing PDF DAE/DAT:' + error); // Returning an empty object
     }
   }
 }

@@ -202,12 +202,19 @@ export default class ArubaSignatureManager {
       const parsedXML = await this._parseXMLResponse({ xmlResponse });
 
       return parsedXML;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error("Unknown error");
       }
+
+      localError.message = `fetchRequest from ArubaSignature: ${localError.message}`;
+      throw localError;
     }
   }
 
@@ -239,13 +246,19 @@ export default class ArubaSignatureManager {
           ]['binaryoutput'];
         return binaryOutput;
       }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        const errorMessage = 'Error in ArubaSign: ' + err.message;
-        throw new Error(errorMessage);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error in parsing XML response from ArubaSign');
+        localError = new Error("Unknown error");
       }
+
+      localError.message = `parseXMLResponse from ArubaSignature: ${localError.message}`;
+      throw localError;
     }
   }
 }

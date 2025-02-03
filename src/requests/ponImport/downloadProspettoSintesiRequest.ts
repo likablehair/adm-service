@@ -47,8 +47,18 @@ export default class DownloadProspettoSintesi extends BaseRequest<DownloadProspe
         security: params.security,
         serviceId: 'downloadProspettoSintesi',
       });
-    } catch (e) {
-      return { type: 'error', message: undefined };
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
+      } else {
+        localError = new Error("Unknown error");
+      }
+
+      throw localError;
     }
   }
 

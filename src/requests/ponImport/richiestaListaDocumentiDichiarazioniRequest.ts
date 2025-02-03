@@ -56,11 +56,18 @@ export default class RichiestaListaDocumentiDichiarazioniRequest extends BaseReq
         security: params.security,
         serviceId: 'richiestaListaDocumentiDichiarazione',
       });
-    } catch (e) {
-      if (e instanceof Error) {
-        console.log('STACK TRACE: ', e.stack);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
+      } else {
+        localError = new Error("Unknown error");
       }
-      return { type: 'error', message: undefined };
+
+      throw localError;
     }
   }
 

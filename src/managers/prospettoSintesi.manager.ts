@@ -25,6 +25,8 @@ export type ImportDeclarationResult = {
   file: AdmFile;
 };
 
+export const ProspettoSintesiMissingError = 'Prospetto Sintesi not present';
+
 export default class ProspettoSintesiManager {
   async import(
     params: ProcessRequest<RichiestaProspettoSintesi>,
@@ -49,12 +51,19 @@ export default class ProspettoSintesiManager {
           docType: 'declaration',
         },
       };
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error("Unknown error");
       }
+
+      localError.message = `importing ProspettoSintesi: ${localError.message}`;
+      throw localError;
     }
   }
   async download(
@@ -66,8 +75,13 @@ export default class ProspettoSintesiManager {
       const richiestaProspetto =
         await richiestaProspettoSintesiRequest.processRequest(params);
 
+      if (richiestaProspetto.message?.esito?.codice == '197') {
+        //DO NOT MODIFY THE TEXT OF THIS ERROR
+        throw new Error(ProspettoSintesiMissingError);
+      }
+
       if (richiestaProspetto.type !== 'success') {
-        throw new Error('RichiestaProspettoSintesi failed');
+        throw new Error(`message: ${richiestaProspetto.message?.esito?.messaggio}`);
       }
 
       if (!richiestaProspetto.message?.IUT) {
@@ -97,7 +111,7 @@ export default class ProspettoSintesiManager {
         });
 
       if (downloadProspetto.type !== 'success') {
-        throw new Error('DownloadProspettoSintesi failed');
+        throw new Error(`message: ${downloadProspetto.message?.esito?.messaggio}`);
       }
 
       if (!downloadProspetto.message?.data) {
@@ -105,12 +119,19 @@ export default class ProspettoSintesiManager {
       }
 
       return downloadProspetto.message.data;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error("Unknown error");
       }
+
+      localError.message = `downloading ProspettoSintesi: ${localError.message}`;
+      throw localError;
     }
   }
 
@@ -148,12 +169,19 @@ export default class ProspettoSintesiManager {
       };
 
       return result;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error("Unknown error");
       }
+
+      localError.message = `downloading ProspettoSintesi: ${localError.message}`;
+      throw localError;
     }
   }
 

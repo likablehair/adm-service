@@ -442,7 +442,7 @@ class PDFConverter {
       const admDeclarationMapped = this.map(declarationEntity);
       return admDeclarationMapped;
     } catch (error) {
-      throw new Error('Error parsing PDF:' + error); // Returning an empty object
+      throw new Error('parsing PDF declarations:' + error); // Returning an empty object
     }
   }
 }

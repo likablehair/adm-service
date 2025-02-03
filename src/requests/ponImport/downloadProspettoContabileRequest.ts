@@ -39,8 +39,18 @@ export default class DownloadProspettoContabile extends BaseRequest<DownloadPros
         security: params.security,
         serviceId: 'downloadProspettoContabile',
       });
-    } catch (e) {
-      return { type: 'error', message: undefined };
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
+      } else {
+        localError = new Error("Unknown error");
+      }
+
+      throw localError;
     }
   }
 

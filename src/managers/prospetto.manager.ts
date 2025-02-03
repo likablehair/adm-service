@@ -77,8 +77,8 @@ export default class ProspettoManager {
           },
           security: params.security,
         }));
-    } catch (error) {
-      // console.error(error);
+    } catch (error: unknown) {
+      //NO THROW
     }
 
     try {
@@ -92,8 +92,8 @@ export default class ProspettoManager {
         },
         security: params.security,
       }));
-    } catch (error) {
-      // console.error(error);
+    } catch (error: unknown) {
+      //NO THROW
     }
 
     const files = [fileContabile, fileSvincolo, fileSintesi].filter((f) => !!f);

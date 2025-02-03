@@ -154,8 +154,18 @@ export default class AdmRobotProcessAutomationManager {
       );
 
       return mrnProcessed;
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
+      } else {
+        localError = new Error("Unknown error");
+      }
+
+      localError.message = `getMRNList: ${localError.message}`;
       throw error;
     }
   }
@@ -193,9 +203,20 @@ export default class AdmRobotProcessAutomationManager {
       const cookies = await params.page.cookies();
 
       return cookies;
-    } catch (error) {
-      console.error(error);
-      throw error;
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
+      } else {
+        localError = new Error("Unknown error");
+      }
+
+      localError.message = `login: ${localError.message}`;
+
+      throw localError;
     }
   }
 
@@ -233,9 +254,20 @@ export default class AdmRobotProcessAutomationManager {
       ]);
 
       return params.page;
-    } catch (error) {
-      console.error(error);
-      throw error;
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
+      } else {
+        localError = new Error("Unknown error");
+      }
+
+      localError.message = `accessGestioneDocumenti: ${localError.message}`;
+
+      throw localError;
     }
   }
 
@@ -547,9 +579,20 @@ export default class AdmRobotProcessAutomationManager {
       }
 
       return declarationData;
-    } catch (error) {
-      console.error(error);
-      throw error;
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === "string") {
+        localError = new Error(error);
+      } else {
+        localError = new Error("Unknown error");
+      }
+
+      localError.message = `aggregatedSearch: ${localError.message}`;
+
+      throw localError;
     }
   }
 
