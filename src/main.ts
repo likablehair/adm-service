@@ -1,3 +1,4 @@
+
 export { default as RichiestaListaDocumentiDichiarazioniRequest } from './requests/ponImport/richiestaListaDocumentiDichiarazioniRequest';
 export { default as RichiestaProspettoSintesiRequest } from './requests/ponImport/richiestaProspettoSintesiRequest';
 export { default as DownloadProspettoSintesiRequest } from './requests/ponImport/downloadProspettoSintesiRequest';
@@ -39,17 +40,17 @@ export type {
   ProspettoSintesiResult,
   ImportDeclarationResult,
 } from './managers/prospettoSintesi.manager';
-export { default as ProspettoSintesiManager } from './managers/prospettoSintesi.manager';
+export { default as ProspettoSintesiManager, ProspettoSintesiMissingError } from './managers/prospettoSintesi.manager';
 
 export type { ImportProspettoContabileResult } from './managers/prospettoContabile.manager';
-export { default as ProspettoContabileManager } from './managers/prospettoContabile.manager';
+export { default as ProspettoContabileManager, ProspettoContabileMissingError  } from './managers/prospettoContabile.manager';
 
 export type {
   ProspettoSvincoloResult,
   ImportProspettoSvincoloResult,
   GoodOutcome,
 } from './managers/prospettoSvincolo.manager';
-export { default as ProspettoSvincoloManager } from './managers/prospettoSvincolo.manager';
+export { default as ProspettoSvincoloManager, ProspettoSvincoloMissingError } from './managers/prospettoSvincolo.manager';
 
 export type {
   ImportDeclarationTypeImportResult,
@@ -60,4 +61,4 @@ export { default as ProspettoManager } from './managers/prospetto.manager';
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';
 
 export type { IvistoResult, IvistoMapped } from './managers/ivisto.manager';
-export { default as IvistoManager } from './managers/ivisto.manager';
+export { default as IvistoManager, IvistoMissingError } from './managers/ivisto.manager';
