@@ -37,7 +37,10 @@ export { default as AdmRPA } from './managers/admRobotProcessAutomation.manager'
 
 export type {
   ProspettoSintesiResult,
-  ImportDeclarationResult,
+  ImportProspettoSintesiResult,
+  docType,
+  AdmFile,
+  DOC_TYPES
 } from './managers/prospettoSintesi.manager';
 export {
   default as ProspettoSintesiManager,
@@ -61,10 +64,14 @@ export {
 } from './managers/prospettoSvincolo.manager';
 
 export type {
-  ImportDeclarationTypeImportResult,
-  ImportDeclarationTypeExportResult,
-} from './managers/prospetto.manager';
-export { default as ProspettoManager } from './managers/prospetto.manager';
+  DaeDatResult,
+  ImportDaeDatResult,
+  DAE_DAT_PDF_TYPES,
+} from './managers/daeDat.manager';
+export {
+  default as DaeDatManager,
+  DaeDatMissingError,
+} from './managers/daeDat.manager';
 
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';
 

@@ -6,7 +6,7 @@ import RichiestaProspettoSintesiRequest, {
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
 import { AdmDeclarationMapped, PDFConverter } from 'src/main';
-import { AdmFile } from './prospetto.manager';
+import { DAE_DAT_PDF_TYPES } from './daeDat.manager';
 
 export type ProspettoSintesiResult = {
   mrn: string;
@@ -20,9 +20,25 @@ export type ProspettoSintesiResult = {
   };
 };
 
-export type ImportDeclarationResult = {
+export type ImportProspettoSintesiResult = {
   admDeclarationMapped: AdmDeclarationMapped;
   file: AdmFile;
+};
+
+export const DOC_TYPES = [
+  'declaration',
+  'accounting',
+  'release',
+  ...DAE_DAT_PDF_TYPES,
+] as const;
+
+export type docType = (typeof DOC_TYPES)[number];
+
+export type AdmFile = {
+  buffer: Buffer;
+  from: { path: string };
+  extension: string;
+  docType: docType;
 };
 
 export const ProspettoSintesiMissingError = 'Prospetto Sintesi not present';
@@ -30,7 +46,7 @@ export const ProspettoSintesiMissingError = 'Prospetto Sintesi not present';
 export default class ProspettoSintesiManager {
   async import(
     params: ProcessRequest<RichiestaProspettoSintesi>,
-  ): Promise<ImportDeclarationResult> {
+  ): Promise<ImportProspettoSintesiResult> {
     try {
       const downloadedPDF: string = await this.download(params);
       const savedPDF: ProspettoSintesiResult = await this.save(

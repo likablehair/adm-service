@@ -2,10 +2,9 @@ import { ProcessRequest } from 'src/requests/baseRequest';
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-import { ProspettoSintesiResult } from 'src/main';
+import { AdmFile, ProspettoSintesiResult } from 'src/main';
 import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
 import DownloadProspettoContabile from 'src/requests/ponImport/downloadProspettoContabileRequest';
-import { AdmFile } from './prospetto.manager';
 import AccountingPDFConverter, {
   AccountingStatementMapped,
 } from 'src/converters/AccountingPDFConverter';

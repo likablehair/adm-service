@@ -237,15 +237,20 @@ class PDFConverter {
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
       '0';
+    
+    const vatNumber = input.supplier?.vatNumber?.trim() || '';
 
-    const supplier = {
-      companyName: this.convertArrayToString(companyName),
-      vatNumber: input.supplier?.vatNumber?.trim() || '',
-      country: country,
-      address: this.convertArrayToString(address),
-      city: this.convertArrayToString(city),
-      postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
-    };
+    const supplier = this.convertAsterisksToZero({
+        companyName: this.convertArrayToString(companyName),
+        vatNumber,
+        country,
+        address: this.convertArrayToString(address),
+        city: this.convertArrayToString(city),
+        postalCode,
+      },
+      'city',
+      'postalCode'
+    )
 
     const date: string =
       input.declaration.date1 ||
@@ -317,7 +322,7 @@ class PDFConverter {
             good.prefixedCountry10?.trim() ||
             '';
 
-          return {
+          return this.convertAsterisksToZero({
             ncCode,
             taricCode,
             identificationCode: good.ncCode,
@@ -327,25 +332,42 @@ class PDFConverter {
             customsRegime,
             requestedRegime,
             previousRegime,
-          };
+          })
         }
         return undefined;
       })
       .filter((g) => !!g);
 
-    return {
+    return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
       date: date,
       track: input.declaration.track,
       supplier,
       goods,
-    };
+    })
   }
   private convertArrayToString(array: string[]): string {
     return array
       .filter((el) => !!el)
       .map((el) => el.trim())
       .join(' ');
+  }
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  private convertAsterisksToZero<T extends Record<string, any>>(
+    object: T, 
+    ...keysToConvertVoidToZero: (keyof T)[]
+  ): T {
+    for (const key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        const element = object[key];
+        if (element === '*' || (keysToConvertVoidToZero.includes(key) && element === '')) {
+          /* eslint-disable @typescript-eslint/no-explicit-any */
+          object[key] = '0' as any;
+        }
+      }
+    }
+
+    return object;
   }
   public async run(params: {
     data: {

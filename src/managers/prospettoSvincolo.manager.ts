@@ -4,7 +4,7 @@ import RichiestaProspettoSvincoloRequest, {
 } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-import { AdmFile } from './prospetto.manager';
+import { AdmFile } from './prospettoSintesi.manager';
 
 export type ProspettoSvincoloResult = {
   mrn: string;

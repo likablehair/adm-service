@@ -4,10 +4,10 @@ import RichiestaDaeDatRequest, {
 } from 'src/requests/ponImport/richiestaDaeDatRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-import { AdmFile } from './prospetto.manager';
 import DaeDatPDFConverter, {
   DaeDatStatementMapped,
 } from 'src/converters/DaeDatPDFConverter';
+import { AdmFile } from './prospettoSintesi.manager';
 
 export const DAE_DAT_PDF_TYPES = ['DAE', 'DAT'] as const;
 
