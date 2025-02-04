@@ -33,6 +33,10 @@ export interface AccountingJson {
     value8: string;
     tribute9: string;
     value9: string;
+    tribute10: string;
+    value10: string;
+    tribute11: string;
+    value11: string;
   };
 }
 
@@ -110,6 +114,14 @@ class AccountingPDFConverter {
       {
         tribute: input.statement.tribute9 || '',
         value: input.statement.value9 || '',
+      },
+      {
+        tribute: input.statement.tribute10 || '',
+        value: input.statement.value10 || '',
+      },
+      {
+        tribute: input.statement.tribute11 || '',
+        value: input.statement.value11 || '',
       },
     ];
 

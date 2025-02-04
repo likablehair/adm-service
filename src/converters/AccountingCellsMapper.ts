@@ -136,4 +136,28 @@ export const _cells: {
     xRange: [14.423, 14.423],
     yRange: [38.498, 38.498],
   },
+  {
+    entity: 'statement',
+    column: 'tribute10',
+    xRange: [2.159, 2.159],
+    yRange: [39.394, 39.394],
+  },
+  {
+    entity: 'statement',
+    column: 'value10',
+    xRange: [14.423, 14.423],
+    yRange: [39.394, 39.394],
+  },
+  {
+    entity: 'statement',
+    column: 'tribute11',
+    xRange: [2.159, 2.159],
+    yRange: [40.291, 40.291],
+  },
+  {
+    entity: 'statement',
+    column: 'value11',
+    xRange: [14.423, 14.423],
+    yRange: [40.291, 40.291],
+  },
 ];
