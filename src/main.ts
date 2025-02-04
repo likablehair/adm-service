@@ -40,7 +40,7 @@ export type {
   ImportProspettoSintesiResult,
   docType,
   AdmFile,
-  DOC_TYPES
+  DOC_TYPES,
 } from './managers/prospettoSintesi.manager';
 export {
   default as ProspettoSintesiManager,

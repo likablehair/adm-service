@@ -237,10 +237,11 @@ class PDFConverter {
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
       '0';
-    
+
     const vatNumber = input.supplier?.vatNumber?.trim() || '';
 
-    const supplier = this.convertAsterisksToZero({
+    const supplier = this.convertAsterisksToZero(
+      {
         companyName: this.convertArrayToString(companyName),
         vatNumber,
         country,
@@ -249,8 +250,8 @@ class PDFConverter {
         postalCode,
       },
       'city',
-      'postalCode'
-    )
+      'postalCode',
+    );
 
     const date: string =
       input.declaration.date1 ||
@@ -332,7 +333,7 @@ class PDFConverter {
             customsRegime,
             requestedRegime,
             previousRegime,
-          })
+          });
         }
         return undefined;
       })
@@ -344,7 +345,7 @@ class PDFConverter {
       track: input.declaration.track,
       supplier,
       goods,
-    })
+    });
   }
   private convertArrayToString(array: string[]): string {
     return array
@@ -354,13 +355,16 @@ class PDFConverter {
   }
   /* eslint-disable @typescript-eslint/no-explicit-any */
   private convertAsterisksToZero<T extends Record<string, any>>(
-    object: T, 
+    object: T,
     ...keysToConvertVoidToZero: (keyof T)[]
   ): T {
     for (const key in object) {
       if (Object.prototype.hasOwnProperty.call(object, key)) {
         const element = object[key];
-        if (element === '*' || (keysToConvertVoidToZero.includes(key) && element === '')) {
+        if (
+          element === '*' ||
+          (keysToConvertVoidToZero.includes(key) && element === '')
+        ) {
           /* eslint-disable @typescript-eslint/no-explicit-any */
           object[key] = '0' as any;
         }

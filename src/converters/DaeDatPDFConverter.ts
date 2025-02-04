@@ -187,7 +187,7 @@ class DaeDatPDFConverter {
         ncCode,
         identificationCode,
         description: this.convertArrayToString(description),
-      })
+      });
     });
 
     const totalStatisticValue =
@@ -213,10 +213,10 @@ class DaeDatPDFConverter {
           country,
         },
         'city',
-        'postalCode'
+        'postalCode',
       ),
       goods,
-    })
+    });
   }
   private convertArrayToString(array: string[]): string {
     return array
@@ -226,13 +226,16 @@ class DaeDatPDFConverter {
   }
   /* eslint-disable @typescript-eslint/no-explicit-any */
   private convertAsterisksToZero<T extends Record<string, any>>(
-    object: T, 
+    object: T,
     ...keysToConvertVoidToZero: (keyof T)[]
   ): T {
     for (const key in object) {
       if (Object.prototype.hasOwnProperty.call(object, key)) {
         const element = object[key];
-        if (element === '*' || (keysToConvertVoidToZero.includes(key) && element === '')) {
+        if (
+          element === '*' ||
+          (keysToConvertVoidToZero.includes(key) && element === '')
+        ) {
           /* eslint-disable @typescript-eslint/no-explicit-any */
           object[key] = '0' as any;
         }
