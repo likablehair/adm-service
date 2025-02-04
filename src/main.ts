@@ -12,7 +12,8 @@ export type {
 } from './requests/baseRequest';
 
 export type { RichiestaDocumentiDichiarazione } from './requests/ponImport/richiestaListaDocumentiDichiarazioniRequest';
-export type { RichiestaProspettoSintesi as RichiestaProspetto } from './requests/ponImport/richiestaProspettoSintesiRequest';
+export type { RichiestaProspettoSintesi } from './requests/ponImport/richiestaProspettoSintesiRequest';
+export type { RichiestaProspettoSvincolo } from './requests/ponImport/richiestaProspettoSvincoloRequest';
 export type { DownloadProspetto } from './requests/ponImport/downloadProspettoSintesiRequest';
 
 export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINRequest';
@@ -36,24 +37,46 @@ export { default as AdmRPA } from './managers/admRobotProcessAutomation.manager'
 
 export type {
   ProspettoSintesiResult,
-  ImportDeclarationResult,
+  ImportProspettoSintesiResult,
+  docType,
+  AdmFile,
+  DOC_TYPES,
 } from './managers/prospettoSintesi.manager';
-export { default as ProspettoSintesiManager } from './managers/prospettoSintesi.manager';
+export {
+  default as ProspettoSintesiManager,
+  ProspettoSintesiMissingError,
+} from './managers/prospettoSintesi.manager';
 
 export type { ImportProspettoContabileResult } from './managers/prospettoContabile.manager';
-export { default as ProspettoContabileManager } from './managers/prospettoContabile.manager';
+export {
+  default as ProspettoContabileManager,
+  ProspettoContabileMissingError,
+} from './managers/prospettoContabile.manager';
 
 export type {
   ProspettoSvincoloResult,
   ImportProspettoSvincoloResult,
   GoodOutcome,
 } from './managers/prospettoSvincolo.manager';
-export { default as ProspettoSvincoloManager } from './managers/prospettoSvincolo.manager';
+export {
+  default as ProspettoSvincoloManager,
+  ProspettoSvincoloMissingError,
+} from './managers/prospettoSvincolo.manager';
 
-export type { ImportProspettoResult } from './managers/prospetto.manager';
-export { default as ProspettoManager } from './managers/prospetto.manager';
+export type {
+  DaeDatResult,
+  ImportDaeDatResult,
+  DAE_DAT_PDF_TYPES,
+} from './managers/daeDat.manager';
+export {
+  default as DaeDatManager,
+  DaeDatMissingError,
+} from './managers/daeDat.manager';
 
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';
 
 export type { IvistoResult, IvistoMapped } from './managers/ivisto.manager';
-export { default as IvistoManager } from './managers/ivisto.manager';
+export {
+  default as IvistoManager,
+  IvistoMissingError,
+} from './managers/ivisto.manager';

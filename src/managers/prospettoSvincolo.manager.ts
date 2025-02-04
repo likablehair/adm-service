@@ -4,7 +4,7 @@ import RichiestaProspettoSvincoloRequest, {
 } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-import { AdmFile } from './prospetto.manager';
+import { AdmFile } from './prospettoSintesi.manager';
 
 export type ProspettoSvincoloResult = {
   mrn: string;
@@ -34,6 +34,8 @@ export type GoodOutcome = {
   completato: string;
 };
 
+export const ProspettoSvincoloMissingError = 'Prospetto Svincolo not present';
+
 export default class ProspettoSvincoloManager {
   async import(
     params: ProcessRequest<RichiestaProspettoSvincolo>,
@@ -56,12 +58,19 @@ export default class ProspettoSvincoloManager {
         },
         goodOutcomes: savedPDF.goodOutcomes,
       };
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `importing ProspettoSvincolo: ${localError.message}`;
+      throw localError;
     }
   }
   async download(
@@ -75,11 +84,14 @@ export default class ProspettoSvincoloManager {
 
       if (richiestaProspetto.message?.esito?.codice == '197') {
         //DO NOT MODIFY THE TEXT OF THIS ERROR
-        throw new Error('Prospetto Svincolo not present');
+        throw new Error(ProspettoSvincoloMissingError);
       }
 
       if (richiestaProspetto.type !== 'success') {
-        throw new Error('RichiestaProspettoSvincolo failed');
+        console.warn('zio cane svincolo', richiestaProspetto.message?.esito);
+        throw new Error(
+          `message: ${richiestaProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!richiestaProspetto.message?.data) {
@@ -87,12 +99,19 @@ export default class ProspettoSvincoloManager {
       }
 
       return richiestaProspetto.message.data;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `downloading ProspettoSvincolo: ${localError.message}`;
+      throw localError;
     }
   }
 
@@ -135,12 +154,19 @@ export default class ProspettoSvincoloManager {
       };
 
       return result;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `saving ProspettoSvincolo: ${localError.message}`;
+      throw localError;
     }
   }
 }

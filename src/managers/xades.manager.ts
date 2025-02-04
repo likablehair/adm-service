@@ -56,8 +56,19 @@ export default class XADESManager {
       }
 
       return signature.toString();
-    } catch (error) {
-      console.error('Error in signXML: ', error);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
+      } else {
+        localError = new Error('Unknown error');
+      }
+
+      localError.message = `signing XML: ${localError.message}`;
+      throw localError;
     }
   }
 }

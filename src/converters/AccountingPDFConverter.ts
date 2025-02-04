@@ -193,7 +193,7 @@ class AccountingPDFConverter {
       const accountingStatementMapped = this.map(accountingEntity);
       return accountingStatementMapped;
     } catch (error) {
-      throw new Error('Error parsing PDF:' + error); // Returning an empty object
+      throw new Error('parsing PDF Accounting:' + error); // Returning an empty object
     }
   }
 }

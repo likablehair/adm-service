@@ -39,13 +39,20 @@ export type IvistoMapped = {
   };
 };
 
+export const IvistoMissingError = 'Ivisto not present';
+
 export default class IvistoManager {
   async import(params: ProcessRequest<RichiestaIvisto>): Promise<IvistoMapped> {
     const request = new RichiestaIvistoRequest();
     const result = await request.processRequest(params);
 
+    if (result.message?.esito?.codice == '197') {
+      //DO NOT MODIFY THE TEXT OF THIS ERROR
+      throw new Error(IvistoMissingError);
+    }
+
     if (result.type !== 'success') {
-      throw new Error('DownloadProspettoSintesi failed');
+      throw new Error(`message: ${result.message?.esito?.messaggio}`);
     }
 
     if (!result.message || !result.message.data) {

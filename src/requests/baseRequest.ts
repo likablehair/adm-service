@@ -131,7 +131,7 @@ export default abstract class BaseRequest<T> {
       });
 
       if (!signedCodedXML) {
-        throw new Error('Error in signXML');
+        throw new Error('signXML');
       }
 
       const xmlParams = {
@@ -170,14 +170,18 @@ export default abstract class BaseRequest<T> {
           },
         },
       });
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error(err);
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        console.error(err);
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      throw localError;
     }
   }
 
@@ -209,7 +213,7 @@ export default abstract class BaseRequest<T> {
       };
     } catch (err: unknown) {
       if (err instanceof Error) {
-        console.log('Error in _soapRequest', err.stack);
+        console.log('_soapRequest', err.stack);
         throw new Error(err.message);
       } else {
         throw new Error('Unknown error');
@@ -295,12 +299,18 @@ export default abstract class BaseRequest<T> {
           message: responseObject,
         };
       }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      throw localError;
     }
   }
 }

@@ -2,10 +2,9 @@ import { ProcessRequest } from 'src/requests/baseRequest';
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-import { ProspettoSintesiResult } from 'src/main';
+import { AdmFile, ProspettoSintesiResult } from 'src/main';
 import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
 import DownloadProspettoContabile from 'src/requests/ponImport/downloadProspettoContabileRequest';
-import { AdmFile } from './prospetto.manager';
 import AccountingPDFConverter, {
   AccountingStatementMapped,
 } from 'src/converters/AccountingPDFConverter';
@@ -14,6 +13,8 @@ export type ImportProspettoContabileResult = {
   file: AdmFile;
   accountingStatementMapped: AccountingStatementMapped;
 };
+
+export const ProspettoContabileMissingError = 'Prospetto Contabile not present';
 
 export default class ProspettoContabileManager {
   async import(
@@ -40,12 +41,19 @@ export default class ProspettoContabileManager {
         },
         accountingStatementMapped,
       };
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `importing ProspettoContabile: ${localError.message}`;
+      throw localError;
     }
   }
   async download(
@@ -57,8 +65,16 @@ export default class ProspettoContabileManager {
       const richiestaProspetto =
         await richiestaProspettoContabileRequest.processRequest(params);
 
+      if (richiestaProspetto.message?.esito?.codice == '197') {
+        //DO NOT MODIFY THE TEXT OF THIS ERROR
+        throw new Error(ProspettoContabileMissingError);
+      }
+
       if (richiestaProspetto.type !== 'success') {
-        throw new Error('RichiestaProspettoContabile failed');
+        console.warn('zio cane contabile', richiestaProspetto.message?.esito);
+        throw new Error(
+          `message: ${richiestaProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!richiestaProspetto.message?.IUT) {
@@ -89,7 +105,9 @@ export default class ProspettoContabileManager {
         });
 
       if (downloadProspetto.type !== 'success') {
-        throw new Error('DownloadProspettoContabile failed');
+        throw new Error(
+          `message: ${downloadProspetto.message?.esito?.messaggio}`,
+        );
       }
 
       if (!downloadProspetto.message?.data) {
@@ -97,12 +115,19 @@ export default class ProspettoContabileManager {
       }
 
       return downloadProspetto.message.data;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `downloading ProspettoContabile: ${localError.message}`;
+      throw localError;
     }
   }
 
@@ -140,12 +165,19 @@ export default class ProspettoContabileManager {
       };
 
       return result;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `saving ProspettoContabile: ${localError.message}`;
+      throw localError;
     }
   }
 

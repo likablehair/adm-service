@@ -178,7 +178,7 @@ class DaeDatPDFConverter {
 
       customsRegime = `${requestedRegime}${previousRegime}`;
 
-      return {
+      return this.convertAsterisksToZero({
         customsRegime,
         requestedRegime,
         previousRegime,
@@ -187,7 +187,7 @@ class DaeDatPDFConverter {
         ncCode,
         identificationCode,
         description: this.convertArrayToString(description),
-      };
+      });
     });
 
     const totalStatisticValue =
@@ -197,28 +197,51 @@ class DaeDatPDFConverter {
         }, 0) * 100,
       ) / 100;
 
-    return {
+    return this.convertAsterisksToZero({
       releaseDate,
       totalPackages,
       totalGrossWeight,
       customsExitOffice,
       totalStatisticValue,
       releaseCode,
-      consignee: {
-        companyName,
-        companyAddress,
-        postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
-        city,
-        country,
-      },
+      consignee: this.convertAsterisksToZero(
+        {
+          companyName,
+          companyAddress,
+          postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
+          city,
+          country,
+        },
+        'city',
+        'postalCode',
+      ),
       goods,
-    };
+    });
   }
   private convertArrayToString(array: string[]): string {
     return array
       .filter((el) => !!el)
       .map((el) => el.trim())
       .join(' ');
+  }
+  private convertAsterisksToZero<T extends Record<string, unknown>>(
+    object: T,
+    ...keysToConvertVoidToZero: (keyof T)[]
+  ): T {
+    for (const key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        const element = object[key];
+        if (
+          element === '*' ||
+          (keysToConvertVoidToZero.includes(key) && element === '')
+        ) {
+          //GENERALLY NOT SAFE, BUT ADDED IF
+          object[key] = '0' as T[typeof key];
+        }
+      }
+    }
+
+    return object;
   }
   public async run(params: {
     data: {
@@ -310,7 +333,7 @@ class DaeDatPDFConverter {
       const accountingStatementMapped = this.map(daeDatEntity);
       return accountingStatementMapped;
     } catch (error) {
-      throw new Error('Error parsing PDF:' + error); // Returning an empty object
+      throw new Error('parsing PDF DAE/DAT:' + error); // Returning an empty object
     }
   }
 }

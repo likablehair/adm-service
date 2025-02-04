@@ -238,14 +238,20 @@ class PDFConverter {
       input.supplier?.postalCode7?.trim() ||
       '0';
 
-    const supplier = {
-      companyName: this.convertArrayToString(companyName),
-      vatNumber: input.supplier?.vatNumber?.trim() || '',
-      country: country,
-      address: this.convertArrayToString(address),
-      city: this.convertArrayToString(city),
-      postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
-    };
+    const vatNumber = input.supplier?.vatNumber?.trim() || '';
+
+    const supplier = this.convertAsterisksToZero(
+      {
+        companyName: this.convertArrayToString(companyName),
+        vatNumber,
+        country,
+        address: this.convertArrayToString(address),
+        city: this.convertArrayToString(city),
+        postalCode,
+      },
+      'city',
+      'postalCode',
+    );
 
     const date: string =
       input.declaration.date1 ||
@@ -317,7 +323,7 @@ class PDFConverter {
             good.prefixedCountry10?.trim() ||
             '';
 
-          return {
+          return this.convertAsterisksToZero({
             ncCode,
             taricCode,
             identificationCode: good.ncCode,
@@ -327,25 +333,44 @@ class PDFConverter {
             customsRegime,
             requestedRegime,
             previousRegime,
-          };
+          });
         }
         return undefined;
       })
       .filter((g) => !!g);
 
-    return {
+    return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
       date: date,
       track: input.declaration.track,
       supplier,
       goods,
-    };
+    });
   }
   private convertArrayToString(array: string[]): string {
     return array
       .filter((el) => !!el)
       .map((el) => el.trim())
       .join(' ');
+  }
+  private convertAsterisksToZero<T extends Record<string, unknown>>(
+    object: T,
+    ...keysToConvertVoidToZero: (keyof T)[]
+  ): T {
+    for (const key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        const element = object[key];
+        if (
+          element === '*' ||
+          (keysToConvertVoidToZero.includes(key) && element === '')
+        ) {
+          //GENERALLY NOT SAFE, BUT ADDED IF
+          object[key] = '0' as T[typeof key];
+        }
+      }
+    }
+
+    return object;
   }
   public async run(params: {
     data: {
@@ -424,7 +449,7 @@ class PDFConverter {
                     if (isNewItem)
                       declarationEntity[mappedPosition.entity].push(goodObject);
                   }
-                } else {
+                } else if (mappedPosition.entity != 'goods') {
                   if (!declarationEntity[mappedPosition.entity])
                     declarationEntity[mappedPosition.entity] = {};
                   declarationEntity[mappedPosition.entity][
@@ -442,7 +467,7 @@ class PDFConverter {
       const admDeclarationMapped = this.map(declarationEntity);
       return admDeclarationMapped;
     } catch (error) {
-      throw new Error('Error parsing PDF:' + error); // Returning an empty object
+      throw new Error('parsing PDF declarations:' + error); // Returning an empty object
     }
   }
 }

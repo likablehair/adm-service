@@ -4,10 +4,10 @@ import RichiestaDaeDatRequest, {
 } from 'src/requests/ponImport/richiestaDaeDatRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
-import { AdmFile } from './prospetto.manager';
 import DaeDatPDFConverter, {
   DaeDatStatementMapped,
 } from 'src/converters/DaeDatPDFConverter';
+import { AdmFile } from './prospettoSintesi.manager';
 
 export const DAE_DAT_PDF_TYPES = ['DAE', 'DAT'] as const;
 
@@ -27,6 +27,8 @@ export type ImportDaeDatResult = {
   file: AdmFile;
   daeDatStatementMapped: DaeDatStatementMapped;
 };
+
+export const DaeDatMissingError = 'DaeDat not present';
 
 export default class DaeDatManager {
   async import(
@@ -52,12 +54,19 @@ export default class DaeDatManager {
         },
         daeDatStatementMapped,
       };
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `importing DaeDat: ${localError.message}`;
+      throw localError;
     }
   }
   async download(params: ProcessRequest<RichiestaDaeDat>): Promise<string> {
@@ -66,8 +75,15 @@ export default class DaeDatManager {
       const richiestaDaeDat =
         await richiestaDaeDatRequest.processRequest(params);
 
+      if (richiestaDaeDat.message?.esito?.codice == '197') {
+        //DO NOT MODIFY THE TEXT OF THIS ERROR
+        throw new Error(DaeDatMissingError);
+      }
+
       if (richiestaDaeDat.type !== 'success') {
-        throw new Error('RichiestaDaeDat failed');
+        throw new Error(
+          `message: ${richiestaDaeDat.message?.esito?.messaggio}`,
+        );
       }
 
       if (!richiestaDaeDat.message?.data) {
@@ -75,12 +91,19 @@ export default class DaeDatManager {
       }
 
       return richiestaDaeDat.message.data;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `downloading DaeDat: ${localError.message}`;
+      throw localError;
     }
   }
 
@@ -123,12 +146,19 @@ export default class DaeDatManager {
       };
 
       return result;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
       } else {
-        throw new Error('Unknown error');
+        localError = new Error('Unknown error');
       }
+
+      localError.message = `saving DaeDat: ${localError.message}`;
+      throw localError;
     }
   }
 

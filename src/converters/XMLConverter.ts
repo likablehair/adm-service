@@ -148,9 +148,19 @@ export default class XMLConverter {
       const result = this.map(jsonData);
 
       return result;
-    } catch (err) {
-      console.error('Error reading or converting XML file:', err);
-      throw err;
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
+      } else {
+        localError = new Error('Unknown error');
+      }
+
+      localError.message = `Error in converting XML: ${localError.message}`;
+      throw localError;
     }
   }
 
