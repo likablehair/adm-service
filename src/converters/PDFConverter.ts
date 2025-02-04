@@ -353,8 +353,7 @@ class PDFConverter {
       .map((el) => el.trim())
       .join(' ');
   }
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  private convertAsterisksToZero<T extends Record<string, any>>(
+  private convertAsterisksToZero<T extends Record<string, unknown>>(
     object: T,
     ...keysToConvertVoidToZero: (keyof T)[]
   ): T {
@@ -365,8 +364,8 @@ class PDFConverter {
           element === '*' ||
           (keysToConvertVoidToZero.includes(key) && element === '')
         ) {
-          /* eslint-disable @typescript-eslint/no-explicit-any */
-          object[key] = '0' as any;
+          //GENERALLY NOT SAFE, BUT ADDED IF
+          object[key] = '0' as T[typeof key];
         }
       }
     }
