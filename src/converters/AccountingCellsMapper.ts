@@ -30,6 +30,18 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'totalDuties5',
+    xRange: [29.874, 29.874],
+    yRange: [39.427, 39.427],
+  },
+  {
+    entity: 'statement',
+    column: 'totalDuties6',
+    xRange: [29.874, 29.874],
+    yRange: [34.797, 34.797],
+  },
+  {
+    entity: 'statement',
     column: 'tribute1',
     xRange: [2.159, 2.159],
     yRange: [36.704, 36.704],
@@ -159,5 +171,53 @@ export const _cells: {
     column: 'value11',
     xRange: [14.423, 14.423],
     yRange: [40.291, 40.291],
+  },
+  {
+    entity: 'statement',
+    column: 'tribute12',
+    xRange: [2.159, 2.159],
+    yRange: [46.569, 46.569],
+  },
+  {
+    entity: 'statement',
+    column: 'value12',
+    xRange: [14.423, 14.423],
+    yRange: [46.569, 46.569],
+  },
+  {
+    entity: 'statement',
+    column: 'tribute13',
+    xRange: [2.159, 2.159],
+    yRange: [47.466, 47.466],
+  },
+  {
+    entity: 'statement',
+    column: 'value13',
+    xRange: [14.423, 14.423],
+    yRange: [47.466, 47.466],
+  },
+  {
+    entity: 'statement',
+    column: 'tribute14',
+    xRange: [2.159, 2.159],
+    yRange: [41.041, 41.041],
+  },
+  {
+    entity: 'statement',
+    column: 'value14',
+    xRange: [14.423, 14.423],
+    yRange: [41.041, 41.041],
+  },
+  {
+    entity: 'statement',
+    column: 'tribute15',
+    xRange: [2.159, 2.159],
+    yRange: [41.938, 41.938],
+  },
+  {
+    entity: 'statement',
+    column: 'value15',
+    xRange: [14.423, 14.423],
+    yRange: [41.938, 41.938],
   },
 ];

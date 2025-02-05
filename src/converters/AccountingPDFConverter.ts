@@ -15,6 +15,8 @@ export interface AccountingJson {
     totalDuties2: string;
     totalDuties3: string;
     totalDuties4: string;
+    totalDuties5: string;
+    totalDuties6: string;
     tribute1: string;
     value1: string;
     tribute2: string;
@@ -37,6 +39,14 @@ export interface AccountingJson {
     value10: string;
     tribute11: string;
     value11: string;
+    tribute12: string;
+    value12: string;
+    tribute13: string;
+    value13: string;
+    tribute14: string;
+    value14: string;
+    tribute15: string;
+    value15: string;
   };
 }
 
@@ -72,6 +82,8 @@ class AccountingPDFConverter {
       input.statement.totalDuties2?.trim() ||
       input.statement.totalDuties3?.trim() ||
       input.statement.totalDuties4?.trim() ||
+      input.statement.totalDuties5?.trim() ||
+      input.statement.totalDuties6?.trim() ||
       '';
 
     const ivaLiquidation: { tribute: string; value: string }[] = [
@@ -122,6 +134,22 @@ class AccountingPDFConverter {
       {
         tribute: input.statement.tribute11 || '',
         value: input.statement.value11 || '',
+      },
+      {
+        tribute: input.statement.tribute12 || '',
+        value: input.statement.value12 || '',
+      },
+      {
+        tribute: input.statement.tribute13 || '',
+        value: input.statement.value13 || '',
+      },
+      {
+        tribute: input.statement.tribute14 || '',
+        value: input.statement.value14 || '',
+      },
+      {
+        tribute: input.statement.tribute15 || '',
+        value: input.statement.value15 || '',
       },
     ];
 
