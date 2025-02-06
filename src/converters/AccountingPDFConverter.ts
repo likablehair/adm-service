@@ -273,9 +273,12 @@ class AccountingPDFConverter {
       (il) => il.tribute == 'B00',
     );
 
-    const totalVatLiquidation = filteredVatLiquidation.length > 0 ?
-      filteredVatLiquidation.reduce((acc, cur) => { return acc += Number(cur.value.replace(',', '.')) }, 0) :
-      undefined
+    const totalVatLiquidation =
+      filteredVatLiquidation.length > 0
+        ? filteredVatLiquidation.reduce((acc, cur) => {
+            return (acc += Number(cur.value.replace(',', '.')));
+          }, 0)
+        : undefined;
 
     return {
       totalDuties,
