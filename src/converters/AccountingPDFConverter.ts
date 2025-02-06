@@ -3,10 +3,10 @@ import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
 
 export type AccountingStatementMapped = {
-  totalDuties: string;
-  totalVat: string | undefined;
+  totalDuties: number;
+  totalVat: number;
   vatExemption: boolean;
-  vatExemptionValue: string | undefined;
+  vatExemptionValue: number | undefined;
 };
 
 export interface AccountingJson {
@@ -15,6 +15,22 @@ export interface AccountingJson {
     totalDuties2: string;
     totalDuties3: string;
     totalDuties4: string;
+    totalDuties5: string;
+    totalDuties6: string;
+    totalDuties7: string;
+    totalDuties8: string;
+    totalDuties9: string;
+    totalDuties10: string;
+    totalDuties11: string;
+    totalDuties12: string;
+    totalDuties13: string;
+    totalDuties14: string;
+    totalDuties15: string;
+    totalDuties16: string;
+    totalDuties17: string;
+    totalDuties18: string;
+    totalDuties19: string;
+    totalDuties20: string;
     tribute1: string;
     value1: string;
     tribute2: string;
@@ -33,6 +49,46 @@ export interface AccountingJson {
     value8: string;
     tribute9: string;
     value9: string;
+    tribute10: string;
+    value10: string;
+    tribute11: string;
+    value11: string;
+    tribute12: string;
+    value12: string;
+    tribute13: string;
+    value13: string;
+    tribute14: string;
+    value14: string;
+    tribute15: string;
+    value15: string;
+    tribute16: string;
+    value16: string;
+    tribute17: string;
+    value17: string;
+    tribute18: string;
+    value18: string;
+    tribute19: string;
+    value19: string;
+    tribute20: string;
+    value20: string;
+    tribute21: string;
+    value21: string;
+    tribute22: string;
+    value22: string;
+    tribute23: string;
+    value23: string;
+    tribute24: string;
+    value24: string;
+    tribute25: string;
+    value25: string;
+    tribute26: string;
+    value26: string;
+    tribute27: string;
+    value27: string;
+    tribute28: string;
+    value28: string;
+    tribute29: string;
+    value29: string;
   };
 }
 
@@ -63,12 +119,33 @@ class AccountingPDFConverter {
     return {};
   }
   private map(input: AccountingJson): AccountingStatementMapped {
-    const totalDuties =
+    const totalDutiesString =
       input.statement.totalDuties1?.trim() ||
       input.statement.totalDuties2?.trim() ||
       input.statement.totalDuties3?.trim() ||
       input.statement.totalDuties4?.trim() ||
+      input.statement.totalDuties5?.trim() ||
+      input.statement.totalDuties6?.trim() ||
+      input.statement.totalDuties7?.trim() ||
+      input.statement.totalDuties8?.trim() ||
+      input.statement.totalDuties9?.trim() ||
+      input.statement.totalDuties10?.trim() ||
+      input.statement.totalDuties11?.trim() ||
+      input.statement.totalDuties12?.trim() ||
+      input.statement.totalDuties13?.trim() ||
+      input.statement.totalDuties14?.trim() ||
+      input.statement.totalDuties15?.trim() ||
+      input.statement.totalDuties16?.trim() ||
+      input.statement.totalDuties17?.trim() ||
+      input.statement.totalDuties18?.trim() ||
+      input.statement.totalDuties19?.trim() ||
+      input.statement.totalDuties20?.trim() ||
       '';
+
+    const totalDuties =
+      totalDutiesString != ''
+        ? Number(Number(totalDutiesString.replace(',', '.')).toFixed(2))
+        : undefined;
 
     const ivaLiquidation: { tribute: string; value: string }[] = [
       {
@@ -111,21 +188,122 @@ class AccountingPDFConverter {
         tribute: input.statement.tribute9 || '',
         value: input.statement.value9 || '',
       },
+      {
+        tribute: input.statement.tribute10 || '',
+        value: input.statement.value10 || '',
+      },
+      {
+        tribute: input.statement.tribute11 || '',
+        value: input.statement.value11 || '',
+      },
+      {
+        tribute: input.statement.tribute12 || '',
+        value: input.statement.value12 || '',
+      },
+      {
+        tribute: input.statement.tribute13 || '',
+        value: input.statement.value13 || '',
+      },
+      {
+        tribute: input.statement.tribute14 || '',
+        value: input.statement.value14 || '',
+      },
+      {
+        tribute: input.statement.tribute15 || '',
+        value: input.statement.value15 || '',
+      },
+      {
+        tribute: input.statement.tribute16 || '',
+        value: input.statement.value16 || '',
+      },
+      {
+        tribute: input.statement.tribute17 || '',
+        value: input.statement.value17 || '',
+      },
+      {
+        tribute: input.statement.tribute18 || '',
+        value: input.statement.value18 || '',
+      },
+      {
+        tribute: input.statement.tribute19 || '',
+        value: input.statement.value19 || '',
+      },
+      {
+        tribute: input.statement.tribute20 || '',
+        value: input.statement.value20 || '',
+      },
+      {
+        tribute: input.statement.tribute21 || '',
+        value: input.statement.value21 || '',
+      },
+      {
+        tribute: input.statement.tribute22 || '',
+        value: input.statement.value22 || '',
+      },
+      {
+        tribute: input.statement.tribute23 || '',
+        value: input.statement.value23 || '',
+      },
+      {
+        tribute: input.statement.tribute24 || '',
+        value: input.statement.value24 || '',
+      },
+      {
+        tribute: input.statement.tribute25 || '',
+        value: input.statement.value25 || '',
+      },
+      {
+        tribute: input.statement.tribute26 || '',
+        value: input.statement.value26 || '',
+      },
+      {
+        tribute: input.statement.tribute27 || '',
+        value: input.statement.value27 || '',
+      },
+      {
+        tribute: input.statement.tribute28 || '',
+        value: input.statement.value28 || '',
+      },
+      {
+        tribute: input.statement.tribute29 || '',
+        value: input.statement.value29 || '',
+      },
     ];
 
     const vatExemptionLiquidation = ivaLiquidation.find(
       (il) => il.tribute == '406',
     );
 
-    const totalVatLiquidation = ivaLiquidation.find(
+    const filteredVatLiquidation = ivaLiquidation.filter(
       (il) => il.tribute == 'B00',
     );
 
+    const totalVat =
+      filteredVatLiquidation.length > 0
+        ? filteredVatLiquidation.reduce((acc, cur) => {
+            return (acc += Number(cur.value.replace(',', '.')));
+          }, 0)
+        : undefined;
+
+    const vatExemptionValue = vatExemptionLiquidation
+      ? Number(
+          Number(vatExemptionLiquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
+
+    if (totalDuties == undefined) {
+      throw new Error('Missing total duties');
+    }
+
+    if (totalVat == undefined) {
+      throw new Error('Missing total vat');
+    }
+
     return {
       totalDuties,
-      totalVat: totalVatLiquidation?.value,
+      totalVat,
       vatExemption: !!vatExemptionLiquidation,
-      vatExemptionValue: vatExemptionLiquidation?.value,
+      vatExemptionValue,
     };
   }
   public async run(params: {
