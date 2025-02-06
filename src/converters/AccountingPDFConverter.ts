@@ -142,9 +142,10 @@ class AccountingPDFConverter {
       input.statement.totalDuties20?.trim() ||
       '';
 
-    const totalDuties = totalDutiesString != '' ?
-      Number(Number(totalDutiesString.replace(',', '.')).toFixed(2)) :
-      undefined
+    const totalDuties =
+      totalDutiesString != ''
+        ? Number(Number(totalDutiesString.replace(',', '.')).toFixed(2))
+        : undefined;
 
     const ivaLiquidation: { tribute: string; value: string }[] = [
       {
@@ -284,16 +285,18 @@ class AccountingPDFConverter {
           }, 0)
         : undefined;
 
-    const vatExemptionValue = vatExemptionLiquidation ?
-      Number(Number(vatExemptionLiquidation.value.replace(',', '.')).toFixed(2)) : 
-      undefined
+    const vatExemptionValue = vatExemptionLiquidation
+      ? Number(
+          Number(vatExemptionLiquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
 
-    if(totalDuties == undefined) {
-      throw new Error('Missing total duties')
+    if (totalDuties == undefined) {
+      throw new Error('Missing total duties');
     }
 
-    if(totalVat == undefined) {
-      throw new Error('Missing total vat')
+    if (totalVat == undefined) {
+      throw new Error('Missing total vat');
     }
 
     return {
