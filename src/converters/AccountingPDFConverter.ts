@@ -3,10 +3,10 @@ import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
 
 export type AccountingStatementMapped = {
-  totalDuties: string;
-  totalVat: number | undefined;
+  totalDuties: number;
+  totalVat: number;
   vatExemption: boolean;
-  vatExemptionValue: string | undefined;
+  vatExemptionValue: number | undefined;
 };
 
 export interface AccountingJson {
@@ -119,7 +119,7 @@ class AccountingPDFConverter {
     return {};
   }
   private map(input: AccountingJson): AccountingStatementMapped {
-    const totalDuties =
+    const totalDutiesString =
       input.statement.totalDuties1?.trim() ||
       input.statement.totalDuties2?.trim() ||
       input.statement.totalDuties3?.trim() ||
@@ -141,6 +141,10 @@ class AccountingPDFConverter {
       input.statement.totalDuties19?.trim() ||
       input.statement.totalDuties20?.trim() ||
       '';
+
+    const totalDuties = totalDutiesString != '' ?
+      Number(Number(totalDutiesString.replace(',', '.')).toFixed(2)) :
+      undefined
 
     const ivaLiquidation: { tribute: string; value: string }[] = [
       {
@@ -273,18 +277,30 @@ class AccountingPDFConverter {
       (il) => il.tribute == 'B00',
     );
 
-    const totalVatLiquidation =
+    const totalVat =
       filteredVatLiquidation.length > 0
         ? filteredVatLiquidation.reduce((acc, cur) => {
             return (acc += Number(cur.value.replace(',', '.')));
           }, 0)
         : undefined;
 
+    const vatExemptionValue = vatExemptionLiquidation ?
+      Number(Number(vatExemptionLiquidation.value.replace(',', '.')).toFixed(2)) : 
+      undefined
+
+    if(totalDuties == undefined) {
+      throw new Error('Missing total duties')
+    }
+
+    if(totalVat == undefined) {
+      throw new Error('Missing total vat')
+    }
+
     return {
       totalDuties,
-      totalVat: totalVatLiquidation,
+      totalVat,
       vatExemption: !!vatExemptionLiquidation,
-      vatExemptionValue: vatExemptionLiquidation?.value,
+      vatExemptionValue,
     };
   }
   public async run(params: {
