@@ -59,13 +59,19 @@ export interface DaeDatJson {
     netWeight2: string;
     netWeight3: string;
     netWeight4: string;
+    netWeight5: string;
+    netWeight6: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
     ncCode4: string;
+    ncCode5: string;
+    ncCode6: string;
     description1: string;
     description2: string;
     description3: string;
+    description4: string;
+    description5: string;
     customsRegime1: string;
     customsRegime2: string;
     customsRegime3: string;
@@ -139,10 +145,12 @@ class DaeDatPDFConverter {
         '';
 
       const netWeight =
-        good.netWeight1?.trim() ||
-        good.netWeight2?.trim() ||
-        good.netWeight3?.trim() ||
+        good.netWeight6?.trim() ||
+        good.netWeight5?.trim() ||
         good.netWeight4?.trim() ||
+        good.netWeight3?.trim() ||
+        good.netWeight2?.trim() ||
+        good.netWeight1?.trim() ||
         '';
 
       let ncCode =
@@ -150,6 +158,8 @@ class DaeDatPDFConverter {
         good.ncCode2?.trim() ||
         good.ncCode3?.trim() ||
         good.ncCode4?.trim() ||
+        good.ncCode5?.trim() ||
+        good.ncCode6?.trim() ||
         '';
 
       ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8);
@@ -160,6 +170,8 @@ class DaeDatPDFConverter {
         good.description1,
         good.description2,
         good.description3,
+        good.description4,
+        good.description5,
       ];
 
       let customsRegime =

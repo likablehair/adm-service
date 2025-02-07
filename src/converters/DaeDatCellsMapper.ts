@@ -200,6 +200,18 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'netWeight5',
+    xRange: [31.188, 31.188],
+    yRange: [21.729, 21.729],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight6',
+    xRange: [31.188, 31.188],
+    yRange: [22.229, 22.229],
+  },
+  {
+    entity: 'goods',
     column: 'ncCode1',
     xRange: [18.625, 18.625],
     yRange: [15.293, 15.293],
@@ -218,6 +230,18 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'ncCode5',
+    xRange: [18.625, 18.625],
+    yRange: [16.543, 16.543],
+  },
+  {
+    entity: 'goods',
+    column: 'ncCode6',
+    xRange: [18.625, 18.625],
+    yRange: [17.043, 17.043],
+  },
+  {
+    entity: 'goods',
     column: 'description1',
     xRange: [18.625, 18.625],
     yRange: [12.73, 12.73],
@@ -233,5 +257,17 @@ export const _cells: {
     column: 'description3',
     xRange: [18.625, 18.625],
     yRange: [13.736, 13.736],
+  },
+  {
+    entity: 'goods',
+    column: 'description4',
+    xRange: [18.625, 18.625],
+    yRange: [14.239, 14.239],
+  },
+  {
+    entity: 'goods',
+    column: 'description5',
+    xRange: [18.625, 18.625],
+    yRange: [14.742, 14.742],
   },
 ];
