@@ -2,19 +2,11 @@ import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
 import { ProcessRequest, RichiestaIvisto } from 'src/main';
 import RichiestaIvistoRequest from 'src/requests/exportService/richiestaIvistoRequest';
+import { AdmFile } from 'src/main';
 
 export type IvistoResult = {
-  type: string;
-  message: {
-    IUT: string;
-    data: string;
-    dataRegistrazione: string;
-    esito: {
-      codice: string;
-      messaggio: string;
-    };
-    xml: string;
-  };
+  file: AdmFile,
+  ivistoMapped: IvistoMapped
 };
 
 export type IvistoMapped = {
@@ -42,7 +34,7 @@ export type IvistoMapped = {
 export const IvistoMissingError = 'Ivisto not present';
 
 export default class IvistoManager {
-  async import(params: ProcessRequest<RichiestaIvisto>): Promise<IvistoMapped> {
+  async import(params: ProcessRequest<RichiestaIvisto>): Promise<IvistoResult> {
     const request = new RichiestaIvistoRequest();
     const result = await request.processRequest(params);
 
@@ -59,21 +51,32 @@ export default class IvistoManager {
       throw new Error('XML Not found');
     }
 
-    const ivistoMapped: IvistoMapped = await this.convert({
+    const ivistoResult = await this.convert({
       mrn: params.data.xml.mrn,
       data: result.message.data,
     });
 
-    return ivistoMapped;
+    return ivistoResult;
   }
 
-  async convert(params: { mrn: string; data: string }): Promise<IvistoMapped> {
-    const xmlFilePath = `${params.mrn}.pdf`;
+  async convert(params: { mrn: string; data: string }): Promise<IvistoResult> {
+    const xmlFilePath = `${params.mrn}.xml`;
     const buffer = Buffer.from(params.data!, 'base64');
     await fsPromises.writeFile(xmlFilePath, buffer);
     const xmlContent = await fsPromises.readFile(xmlFilePath, 'utf8');
     await fsPromises.unlink(xmlFilePath);
-    return await this.map(xmlContent);
+    const ivistoMapped = await this.map(xmlContent);
+    return {
+      ivistoMapped,
+      file: {
+        extension: 'xml',
+        docType: 'ivisto',
+        buffer,
+        from: {
+          path: xmlFilePath
+        }
+      }
+    }
   }
 
   async map(xmlContent: string): Promise<IvistoMapped> {

@@ -10,7 +10,7 @@ import ProspettoSintesiManager, {
   ProspettoSintesiResult,
 } from 'src/managers/prospettoSintesi.manager';
 import RichiestaIvistoRequest from 'src/requests/exportService/richiestaIvistoRequest';
-import IvistoManager, { IvistoMapped } from 'src/managers/ivisto.manager';
+import IvistoManager from 'src/managers/ivisto.manager';
 import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
 import ProspettoContabileManager from 'src/managers/prospettoContabile.manager';
 import RichiestaProspettoSvincoloRequest from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
@@ -21,6 +21,7 @@ import RichiestaDaeDatRequest from 'src/requests/ponImport/richiestaDaeDatReques
 import DaeDatManager, { DaeDatResult } from 'src/managers/daeDat.manager';
 import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
 import { DaeDatStatementMapped } from 'src/converters/DaeDatPDFConverter';
+import { IvistoResult } from 'src/main';
 
 test('RichiestaIvistoRequest', async () => {
   const certificatePath = import.meta.env.VITE_CERTIFICATE_EXPORT_URL;
@@ -87,11 +88,11 @@ test('RichiestaIvistoRequest', async () => {
   const manager = new IvistoManager();
 
   if (result.type === 'success' && !!result.message && !!result.message.data) {
-    const ivistoMapped: IvistoMapped = await manager.convert({
+    const ivistoResult: IvistoResult = await manager.convert({
       mrn: mrn,
       data: result.message.data,
     });
-    expect(ivistoMapped.exportOperation.mrn).toBe(mrn);
+    expect(ivistoResult.ivistoMapped.exportOperation.mrn).toBe(mrn);
   }
 
   expect(result.type).toBe('success');

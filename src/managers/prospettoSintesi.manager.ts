@@ -29,6 +29,7 @@ export const DOC_TYPES = [
   'declaration',
   'accounting',
   'release',
+  'ivisto',
   ...DAE_DAT_PDF_TYPES,
 ] as const;
 
