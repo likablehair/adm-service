@@ -5,8 +5,8 @@ import RichiestaIvistoRequest from 'src/requests/exportService/richiestaIvistoRe
 import { AdmFile } from 'src/main';
 
 export type IvistoResult = {
-  file: AdmFile,
-  ivistoMapped: IvistoMapped
+  file: AdmFile;
+  ivistoMapped: IvistoMapped;
 };
 
 export type IvistoMapped = {
@@ -73,10 +73,10 @@ export default class IvistoManager {
         docType: 'ivisto',
         buffer,
         from: {
-          path: xmlFilePath
-        }
-      }
-    }
+          path: xmlFilePath,
+        },
+      },
+    };
   }
 
   async map(xmlContent: string): Promise<IvistoMapped> {
