@@ -252,8 +252,8 @@ class PDFConverter {
       eoriCode != ''
     ) {
       companyName = eoriCode;
-      vatNumber = eoriCode.slice(2);
-      country = eoriCode.slice(0, 2);
+      vatNumber = /^[A-Za-z]{2}/.test(eoriCode) ? eoriCode.slice(2) : eoriCode;
+      country = /^[A-Za-z]{2}/.test(eoriCode) ? eoriCode.slice(0, 2) : 'IT';
     } else {
       companyName = this.convertArrayToString(companyNameArray);
       if (eoriCode != '') {
