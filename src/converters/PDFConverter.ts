@@ -241,22 +241,23 @@ class PDFConverter {
     const eoriCode = input.supplier?.vatNumber?.trim() || '';
 
     let companyName: string = '',
-      vatNumber: string = ''
+      vatNumber: string = '';
 
-    if(this.convertArrayToString(companyNameArray) == '' &&
+    if (
+      this.convertArrayToString(companyNameArray) == '' &&
       country == '' &&
       this.convertArrayToString(address) == '' &&
       this.convertArrayToString(city) == '' &&
       postalCode == '' &&
-      eoriCode != '') {
-        companyName = eoriCode
-        vatNumber = eoriCode.slice(2)
-        country = eoriCode.slice(0, 2)
-      }
-    else {
-      companyName = this.convertArrayToString(companyNameArray)
-      if(eoriCode != ''){
-        vatNumber = eoriCode.slice(2)
+      eoriCode != ''
+    ) {
+      companyName = eoriCode;
+      vatNumber = eoriCode.slice(2);
+      country = eoriCode.slice(0, 2);
+    } else {
+      companyName = this.convertArrayToString(companyNameArray);
+      if (eoriCode != '') {
+        vatNumber = eoriCode.slice(2);
       }
     }
 
@@ -271,7 +272,7 @@ class PDFConverter {
       },
       'city',
       'postalCode',
-      'address'
+      'address',
     );
 
     const date: string =
