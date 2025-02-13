@@ -186,7 +186,7 @@ class PDFConverter {
     return {};
   }
   private map(input: DeclarationJson): AdmDeclarationMapped {
-    const companyName: string[] = [
+    const companyNameArray: string[] = [
       input.supplier?.companyName1,
       input.supplier?.companyName2,
       input.supplier?.companyName3,
@@ -218,7 +218,7 @@ class PDFConverter {
       input.supplier?.city9,
     ];
 
-    const country: string =
+    let country: string =
       input.supplier?.country1?.trim() ||
       input.supplier?.country2?.trim() ||
       input.supplier?.country3?.trim() ||
@@ -236,13 +236,33 @@ class PDFConverter {
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
-      '0';
+      '';
 
-    const vatNumber = input.supplier?.vatNumber?.trim() || '';
+    const eoriCode = input.supplier?.vatNumber?.trim() || '';
+
+    let companyName: string = '',
+      vatNumber: string = ''
+
+    if(this.convertArrayToString(companyNameArray) == '' &&
+      country == '' &&
+      this.convertArrayToString(address) == '' &&
+      this.convertArrayToString(city) == '' &&
+      postalCode == '' &&
+      eoriCode != '') {
+        companyName = eoriCode
+        vatNumber = eoriCode.slice(2)
+        country = eoriCode.slice(0, 2)
+      }
+    else {
+      companyName = this.convertArrayToString(companyNameArray)
+      if(eoriCode != ''){
+        vatNumber = eoriCode.slice(2)
+      }
+    }
 
     const supplier = this.convertAsterisksToZero(
       {
-        companyName: this.convertArrayToString(companyName),
+        companyName,
         vatNumber,
         country,
         address: this.convertArrayToString(address),
@@ -251,6 +271,7 @@ class PDFConverter {
       },
       'city',
       'postalCode',
+      'address'
     );
 
     const date: string =
