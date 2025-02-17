@@ -81,7 +81,7 @@ export default class ProspettoSvincoloManager {
         new RichiestaProspettoSvincoloRequest();
       const richiestaProspetto =
         await richiestaProspettoSvincoloRequest.processRequest(params);
-      console.log(richiestaProspetto)
+
       if (richiestaProspetto.message?.esito?.codice == '197') {
         //DO NOT MODIFY THE TEXT OF THIS ERROR
         throw new Error(ProspettoSvincoloMissingError);

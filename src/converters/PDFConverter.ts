@@ -283,13 +283,9 @@ class PDFConverter {
       input.declaration.date3 ||
       '';
 
-    const releaseDate: string =
-      input.declaration.releaseDate1 ||
-      '';
+    const releaseDate: string = input.declaration.releaseDate1 || '';
 
-    const releaseCode: string =
-      input.declaration.releaseCode1 ||
-      '';
+    const releaseCode: string = input.declaration.releaseCode1 || '';
 
     const goods = input.goods
       .map((good) => {
