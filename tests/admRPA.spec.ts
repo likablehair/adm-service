@@ -27,3 +27,12 @@ test('MRN List', { timeout: 200000 }, async () => {
     type: 'export',
   });
 });
+
+test('Print MRN Export Status', { timeout: 200000 }, async () => {
+  const mrn = import.meta.env.VITE_MRN_SCREENSHOT_TEST;
+
+  const admRPA = new AdmRobotProcessAutomationManager();
+  await admRPA.printMrnExportStatus({
+    mrn,
+  });
+});
