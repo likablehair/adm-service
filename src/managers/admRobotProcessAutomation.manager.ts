@@ -608,7 +608,7 @@ export default class AdmRobotProcessAutomationManager {
       let browser: Browser;
       if (!params.browser) {
         browser = await puppeteer.launch({
-          headless: false,
+          headless: 'shell',
           args: ['--lang=it-IT'],
           env: {
             LANGUAGE: 'it_IT',
