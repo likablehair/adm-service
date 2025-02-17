@@ -31,6 +31,10 @@ export type MRNProcessed = {
   realTotalDeclarationNumber: number;
 };
 
+export type MrnExportStatusType = {
+  mrn: string;
+  buffer: Buffer;
+};
 export type DeclarationType = 'import' | 'export';
 
 const declarationTableHeaderMap: Record<string, keyof Declaration> = {
@@ -596,6 +600,95 @@ export default class AdmRobotProcessAutomationManager {
     }
   }
 
+  async printMrnExportStatus(params: {
+    mrn: string;
+    browser?: Browser;
+  }): Promise<MrnExportStatusType> {
+    try {
+      let browser: Browser;
+      if (!params.browser) {
+        browser = await puppeteer.launch({
+          headless: false,
+          args: ['--lang=it-IT'],
+          env: {
+            LANGUAGE: 'it_IT',
+          },
+        });
+      } else {
+        browser = params.browser;
+      }
+
+      console.info(
+        `[${new Date().toISOString()}] RPA to get Movement Reference Number - (MRN) ${params.mrn} starting...`,
+      );
+      const page = await browser.newPage();
+
+      await page.setExtraHTTPHeaders({
+        'Accept-Language': 'it-IT,it;q=0.9',
+      });
+
+      const url =
+        'https://www.adm.gov.it/portale/notifica-di-esportazione-del-m.r.n.-movement-reference-number-';
+
+      await this._retry({
+        promiseFactory: () => page.goto(url),
+        retryCount: 5,
+        retryMs: 500,
+      });
+
+      await page.waitForSelector(
+        'xpath///*[@id="cookiebar-adm"]/div/div/div[1]/a',
+      );
+      await page.click('xpath///*[@id="cookiebar-adm"]/div/div/div[1]/a');
+
+      await page.type(
+        'xpath///*[@id="_it_smc_sogei_info_dogane_aes_web_InfoDoganeAesPortlet_INSTANCE_Sh48LEXuB3mL_mrn"]',
+        params.mrn,
+      );
+      await page.waitForFunction(() => {
+        const btn = document.querySelector(
+          'button.btn-primary-adm span.lfr-btn-label',
+        );
+        return btn && btn !== null;
+      });
+
+      await Promise.all([
+        this._retry({
+          promiseFactory: () => page.waitForNavigation(),
+          retryCount: 3,
+          retryMs: 500,
+        }),
+        await page.click('button.btn-primary-adm span.lfr-btn-label'),
+      ]);
+
+      const screenshot = await page.screenshot();
+
+      const buffer = Buffer.from(screenshot);
+      // const pdfFilePath = `${params.mrn}_screenshot.png`;
+      // await fsPromises.writeFile(pdfFilePath, buffer);
+      console.info(
+        `[${new Date().toISOString()}] RPA to get Movement Reference Number - (MRN) ${params.mrn} ended successfully!`,
+      );
+      return {
+        mrn: params.mrn,
+        buffer,
+      };
+    } catch (error: unknown) {
+      let localError: Error;
+
+      if (error instanceof Error) {
+        localError = error;
+      } else if (typeof error === 'string') {
+        localError = new Error(error);
+      } else {
+        localError = new Error('Unknown error');
+      }
+
+      localError.message = `login: ${localError.message}`;
+
+      throw localError;
+    }
+  }
   private _getDatePositionInDatepicker(params: {
     day: number;
     month: number;

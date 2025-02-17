@@ -71,6 +71,8 @@ export interface DeclarationJson {
     date1: string;
     date2: string;
     date3: string;
+    releaseDate1: string;
+    releaseCode1: string;
     mrn: string;
     track: string;
   };
@@ -186,7 +188,7 @@ class PDFConverter {
     return {};
   }
   private map(input: DeclarationJson): AdmDeclarationMapped {
-    const companyName: string[] = [
+    const companyNameArray: string[] = [
       input.supplier?.companyName1,
       input.supplier?.companyName2,
       input.supplier?.companyName3,
@@ -218,7 +220,7 @@ class PDFConverter {
       input.supplier?.city9,
     ];
 
-    const country: string =
+    let country: string =
       input.supplier?.country1?.trim() ||
       input.supplier?.country2?.trim() ||
       input.supplier?.country3?.trim() ||
@@ -236,13 +238,34 @@ class PDFConverter {
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
-      '0';
+      '';
 
-    const vatNumber = input.supplier?.vatNumber?.trim() || '';
+    const eoriCode = input.supplier?.vatNumber?.trim() || '';
+
+    let companyName: string = '',
+      vatNumber: string = '';
+
+    if (
+      this.convertArrayToString(companyNameArray) == '' &&
+      country == '' &&
+      this.convertArrayToString(address) == '' &&
+      this.convertArrayToString(city) == '' &&
+      postalCode == '' &&
+      eoriCode != ''
+    ) {
+      companyName = eoriCode;
+      vatNumber = /^[A-Za-z]{2}/.test(eoriCode) ? eoriCode.slice(2) : eoriCode;
+      country = /^[A-Za-z]{2}/.test(eoriCode) ? eoriCode.slice(0, 2) : 'IT';
+    } else {
+      companyName = this.convertArrayToString(companyNameArray);
+      if (eoriCode != '') {
+        vatNumber = eoriCode.slice(2);
+      }
+    }
 
     const supplier = this.convertAsterisksToZero(
       {
-        companyName: this.convertArrayToString(companyName),
+        companyName,
         vatNumber,
         country,
         address: this.convertArrayToString(address),
@@ -251,6 +274,7 @@ class PDFConverter {
       },
       'city',
       'postalCode',
+      'address',
     );
 
     const date: string =
@@ -258,6 +282,10 @@ class PDFConverter {
       input.declaration.date2 ||
       input.declaration.date3 ||
       '';
+
+    const releaseDate: string = input.declaration.releaseDate1 || '';
+
+    const releaseCode: string = input.declaration.releaseCode1 || '';
 
     const goods = input.goods
       .map((good) => {
@@ -342,6 +370,8 @@ class PDFConverter {
     return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
       date: date,
+      releaseCode,
+      releaseDate,
       track: input.declaration.track,
       supplier,
       goods,

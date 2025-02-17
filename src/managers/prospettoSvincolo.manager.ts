@@ -88,7 +88,6 @@ export default class ProspettoSvincoloManager {
       }
 
       if (richiestaProspetto.type !== 'success') {
-        console.warn('zio cane svincolo', richiestaProspetto.message?.esito);
         throw new Error(
           `message: ${richiestaProspetto.message?.esito?.messaggio}`,
         );
