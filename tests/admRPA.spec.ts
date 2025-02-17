@@ -32,7 +32,9 @@ test('Print MRN Export Status', { timeout: 200000 }, async () => {
   const mrn = import.meta.env.VITE_MRN_IVISTO_TEST;
 
   const admRPA = new AdmRobotProcessAutomationManager();
-  await admRPA.printMrnExportStatus({
+  const result = await admRPA.printMrnExportStatus({
     mrn,
   });
+
+  console.log(result);
 });

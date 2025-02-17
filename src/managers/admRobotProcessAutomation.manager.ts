@@ -636,10 +636,21 @@ export default class AdmRobotProcessAutomationManager {
         retryMs: 500,
       });
 
+      await page.waitForSelector('aria/Google');
+      await page.click('aria/Google');
       await page.waitForSelector(
-        'xpath///*[@id="cookiebar-adm"]/div/div/div[1]/a',
+        'xpath///*[@id="_it_sogei_portlet_cookie_portlet_GestioneCookies_submitDogCookiesButton"]/span',
       );
-      await page.click('xpath///*[@id="cookiebar-adm"]/div/div/div[1]/a');
+      await page.click(
+        'xpath///*[@id="_it_sogei_portlet_cookie_portlet_GestioneCookies_submitDogCookiesButton"]/span',
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await this._retry({
+        promiseFactory: () => page.goto(url),
+        retryCount: 5,
+        retryMs: 500,
+      });
 
       await page.type(
         'xpath///*[@id="_it_smc_sogei_info_dogane_aes_web_InfoDoganeAesPortlet_INSTANCE_Sh48LEXuB3mL_mrn"]',
