@@ -71,6 +71,8 @@ export interface DeclarationJson {
     date1: string;
     date2: string;
     date3: string;
+    releaseDate1: string;
+    releaseCode1: string;
     mrn: string;
     track: string;
   };
@@ -281,6 +283,10 @@ class PDFConverter {
       input.declaration.date3 ||
       '';
 
+    const releaseDate: string = input.declaration.releaseDate1 || '';
+
+    const releaseCode: string = input.declaration.releaseCode1 || '';
+
     const goods = input.goods
       .map((good) => {
         if (
@@ -364,6 +370,8 @@ class PDFConverter {
     return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
       date: date,
+      releaseCode,
+      releaseDate,
       track: input.declaration.track,
       supplier,
       goods,

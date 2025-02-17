@@ -485,6 +485,18 @@ export const _cells: {
   },
   {
     entity: 'declaration',
+    column: 'releaseCode1',
+    xRange: [18.511, 18.511],
+    yRange: [17.838, 17.838],
+  },
+  {
+    entity: 'declaration',
+    column: 'releaseDate1',
+    xRange: [22.599, 22.599],
+    yRange: [17.838, 17.838],
+  },
+  {
+    entity: 'declaration',
     column: 'mrn',
     xRange: [25.962, 25.962],
     yRange: [14.81, 14.81],
