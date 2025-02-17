@@ -672,7 +672,7 @@ export default class AdmRobotProcessAutomationManager {
         await page.click('button.btn-primary-adm span.lfr-btn-label'),
       ]);
 
-      const screenshot = await page.screenshot({fullPage: true});
+      const screenshot = await page.screenshot({ fullPage: true });
 
       const buffer = Buffer.from(screenshot);
       // const pdfFilePath = `${params.mrn}_screenshot.png`;
