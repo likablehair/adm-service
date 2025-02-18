@@ -67,7 +67,7 @@ export default class ProspettoSintesiManager {
           from: { path: savedPDF.path },
           extension: 'pdf',
           docType: 'declaration',
-          version: Number(savedPDF.rev)
+          version: Number(savedPDF.rev),
         },
       };
     } catch (error: unknown) {

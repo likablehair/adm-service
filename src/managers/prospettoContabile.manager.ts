@@ -38,7 +38,7 @@ export default class ProspettoContabileManager {
           from: { path: savedPDF.path },
           extension: 'pdf',
           docType: 'accounting',
-          version: Number(savedPDF.rev)
+          version: Number(savedPDF.rev),
         },
         accountingStatementMapped,
       };
