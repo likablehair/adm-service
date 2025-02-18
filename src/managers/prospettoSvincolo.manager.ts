@@ -55,6 +55,7 @@ export default class ProspettoSvincoloManager {
           from: { path: savedPDF.path },
           extension: 'pdf',
           docType: 'release',
+          version: Number(savedPDF.rev)
         },
         goodOutcomes: savedPDF.goodOutcomes,
       };
