@@ -6,6 +6,30 @@ export const _cells: {
 }[] = [
   {
     entity: 'statement',
+    column: 'version',
+    xRange: [21.214, 21.214],
+    yRange: [9.109, 9.109],
+  },
+  {
+    entity: 'statement',
+    column: 'rectificationOrCancellationDate1',
+    xRange: [11.966, 11.966],
+    yRange: [13.125, 13.125],
+  },
+  {
+    entity: 'statement',
+    column: 'rectificationOrCancellationDate2',
+    xRange: [11.966, 11.966],
+    yRange: [13.5, 13.5],
+  },
+  {
+    entity: 'statement',
+    column: 'rectificationOrCancellationDate3',
+    xRange: [11.966, 11.966],
+    yRange: [12.797, 12.797],
+  },
+  {
+    entity: 'statement',
     column: 'totalDuties1',
     xRange: [29.874, 29.874],
     yRange: [29.562, 29.562],

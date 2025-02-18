@@ -3,14 +3,20 @@ import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
 
 export type AccountingStatementMapped = {
+  version: string;
   totalDuties: number;
   totalVat: number;
   vatExemption: boolean;
   vatExemptionValue: number | undefined;
+  rectificationOrCancellationDate: string;
 };
 
 export interface AccountingJson {
   statement: {
+    version: string;
+    rectificationOrCancellationDate1: string;
+    rectificationOrCancellationDate2: string;
+    rectificationOrCancellationDate3: string;
     totalDuties1: string;
     totalDuties2: string;
     totalDuties3: string;
@@ -119,6 +125,13 @@ class AccountingPDFConverter {
     return {};
   }
   private map(input: AccountingJson): AccountingStatementMapped {
+    const version: string = input.statement.version || '';
+
+    const rectificationOrCancellationDate: string = input.statement.rectificationOrCancellationDate1 || 
+      input.statement.rectificationOrCancellationDate2 || 
+      input.statement.rectificationOrCancellationDate3 || 
+      '';
+
     const totalDutiesString =
       input.statement.totalDuties1?.trim() ||
       input.statement.totalDuties2?.trim() ||
@@ -300,6 +313,8 @@ class AccountingPDFConverter {
     }
 
     return {
+      rectificationOrCancellationDate,
+      version,
       totalDuties,
       totalVat,
       vatExemption: !!vatExemptionLiquidation,
@@ -346,9 +361,9 @@ class AccountingPDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              // if(i == 0){
-              //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
-              // }
+              if(i == 0){
+                console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              }
 
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
