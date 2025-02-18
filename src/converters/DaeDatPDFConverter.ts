@@ -148,11 +148,11 @@ class DaeDatPDFConverter {
 
     const transportMode = input.statement.transportMode?.trim() || '-1';
 
-    const transitNetworkCountry = 
+    const transitNetworkCountry =
       input.statement.transitNetworkCountry1?.trim() ||
-      input.statement.transitNetworkCountry2?.trim() || 
-      input.statement.transitNetworkCountry3?.trim() || 
-      input.statement.transitNetworkCountry4?.trim() || 
+      input.statement.transitNetworkCountry2?.trim() ||
+      input.statement.transitNetworkCountry3?.trim() ||
+      input.statement.transitNetworkCountry4?.trim() ||
       input.statement.transitNetworkCountry5?.trim() ||
       input.statement.transitNetworkCountry6?.trim() ||
       input.statement.transitNetworkCountry7?.trim() ||
@@ -328,9 +328,9 @@ class DaeDatPDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-               if(i == 0){
-                 console.log({ "x": textElement.x, "y": textElement.y, "text": text })
-               }
+              if (i == 0) {
+                console.log({ x: textElement.x, y: textElement.y, text: text });
+              }
 
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
