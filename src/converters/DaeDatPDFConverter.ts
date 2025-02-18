@@ -16,6 +16,8 @@ export type DaeDatStatementMapped = {
   totalStatisticValue: number;
   releaseDate: string;
   releaseCode: string;
+  transitNetworkCountry: string;
+  transportMode: number;
   goods: {
     customsRegime: string;
     requestedRegime: string;
@@ -36,6 +38,18 @@ export interface DaeDatJson {
     totalPackages1: string;
     totalPackages2: string;
     releaseCode: string;
+    transitNetworkCountry1: string;
+    transitNetworkCountry2: string;
+    transitNetworkCountry3: string;
+    transitNetworkCountry4: string;
+    transitNetworkCountry5: string;
+    transitNetworkCountry6: string;
+    transitNetworkCountry7: string;
+    transitNetworkCountry8: string;
+    transitNetworkCountry9: string;
+    transitNetworkCountry10: string;
+    transitNetworkCountry11: string;
+    transportMode: string;
   };
   consignee: {
     companyName: string;
@@ -132,6 +146,22 @@ class DaeDatPDFConverter {
 
     const country = input.consignee.country?.trim() || '';
 
+    const transportMode = input.statement.transportMode?.trim() || '-1';
+
+    const transitNetworkCountry = 
+      input.statement.transitNetworkCountry1?.trim() ||
+      input.statement.transitNetworkCountry2?.trim() || 
+      input.statement.transitNetworkCountry3?.trim() || 
+      input.statement.transitNetworkCountry4?.trim() || 
+      input.statement.transitNetworkCountry5?.trim() ||
+      input.statement.transitNetworkCountry6?.trim() ||
+      input.statement.transitNetworkCountry7?.trim() ||
+      input.statement.transitNetworkCountry8?.trim() ||
+      input.statement.transitNetworkCountry9?.trim() ||
+      input.statement.transitNetworkCountry10?.trim() ||
+      input.statement.transitNetworkCountry11?.trim() ||
+      '';
+
     const goods = input.goods.map((good) => {
       const statisticValue =
         good.statisticValue1?.trim() ||
@@ -216,6 +246,8 @@ class DaeDatPDFConverter {
       customsExitOffice,
       totalStatisticValue,
       releaseCode,
+      transitNetworkCountry,
+      transportMode: Number(transportMode),
       consignee: this.convertAsterisksToZero(
         {
           companyName,
@@ -296,9 +328,9 @@ class DaeDatPDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              // if(i == 0){
-              //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
-              // }
+               if(i == 0){
+                 console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+               }
 
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
