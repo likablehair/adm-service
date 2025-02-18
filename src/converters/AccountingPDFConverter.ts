@@ -127,9 +127,10 @@ class AccountingPDFConverter {
   private map(input: AccountingJson): AccountingStatementMapped {
     const version: string = input.statement.version || '';
 
-    const rectificationOrCancellationDate: string = input.statement.rectificationOrCancellationDate1 || 
-      input.statement.rectificationOrCancellationDate2 || 
-      input.statement.rectificationOrCancellationDate3 || 
+    const rectificationOrCancellationDate: string =
+      input.statement.rectificationOrCancellationDate1 ||
+      input.statement.rectificationOrCancellationDate2 ||
+      input.statement.rectificationOrCancellationDate3 ||
       '';
 
     const totalDutiesString =
@@ -361,8 +362,8 @@ class AccountingPDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              if(i == 0){
-                console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              if (i == 0) {
+                console.log({ x: textElement.x, y: textElement.y, text: text });
               }
 
               const mappedPosition: { entity?: string; column?: string } =

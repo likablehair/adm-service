@@ -312,27 +312,32 @@ class PDFConverter {
 
     const releaseCode: string = input.declaration.releaseCode1 || '';
 
-    const totalGrossWeight: string = input.declaration.totalGrossWeight1 ||
+    const totalGrossWeight: string =
+      input.declaration.totalGrossWeight1 ||
       input.declaration.totalGrossWeight2 ||
       input.declaration.totalGrossWeight3 ||
       '';
 
-    const invoiceValue: string = input.declaration.invoiceValueAndCurrency1?.split(' ')[0] ||
+    const invoiceValue: string =
+      input.declaration.invoiceValueAndCurrency1?.split(' ')[0] ||
       input.declaration.invoiceValueAndCurrency2?.split(' ')[0] ||
-      input.declaration.invoiceValueAndCurrency3?.split(' ')[0] || 
+      input.declaration.invoiceValueAndCurrency3?.split(' ')[0] ||
       '';
 
-    const currency: string = input.declaration.invoiceValueAndCurrency1?.split(' ')[1] || 
+    const currency: string =
+      input.declaration.invoiceValueAndCurrency1?.split(' ')[1] ||
       input.declaration.invoiceValueAndCurrency2?.split(' ')[1] ||
       input.declaration.invoiceValueAndCurrency3?.split(' ')[1] ||
-    '';
+      '';
 
-    const exchangeRate: string = input.declaration.exchangeRate1 || 
+    const exchangeRate: string =
+      input.declaration.exchangeRate1 ||
       input.declaration.exchangeRate2 ||
       input.declaration.exchangeRate3 ||
       '';
 
-    const incoterm: string = input.declaration.incoterm1 ||
+    const incoterm: string =
+      input.declaration.incoterm1 ||
       input.declaration.incoterm2 ||
       input.declaration.incoterm3 ||
       input.declaration.incoterm4 ||
