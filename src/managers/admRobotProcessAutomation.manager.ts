@@ -1,7 +1,6 @@
 import { Browser, Cookie, Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-
 export type DeclarationTableRow = {
   [key: string]: string;
 };
@@ -104,8 +103,7 @@ export default class AdmRobotProcessAutomationManager {
         password: params.security.password,
       });
 
-      await page.setCookie(...cookies);
-
+      await browser.setCookie(...cookies);
       const gestioneDocumentiPage = await this.accessToGestioneDocumenti({
         page,
         dichiarante: params.dichiarante,
@@ -239,7 +237,6 @@ export default class AdmRobotProcessAutomationManager {
         visible: true,
       });
       await params.page.click(dropdownLabelDichiaranteCSS);
-
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       await params.page.waitForSelector(dropdownOptionDichiaranteXPath);
