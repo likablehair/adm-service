@@ -40,6 +40,7 @@ export type AdmFile = {
   from: { path: string };
   extension: string;
   docType: docType;
+  version?: number;
 };
 
 export const ProspettoSintesiMissingError = 'Prospetto Sintesi not present';
@@ -66,6 +67,7 @@ export default class ProspettoSintesiManager {
           from: { path: savedPDF.path },
           extension: 'pdf',
           docType: 'declaration',
+          version: Number(savedPDF.rev),
         },
       };
     } catch (error: unknown) {

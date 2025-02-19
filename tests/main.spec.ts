@@ -685,6 +685,8 @@ test(
     });
     await fsPromises.unlink(result.path);
 
+    console.log('daeDatStatementMapped', daeDatStatementMapped);
+
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
     expect(daeDatStatementMapped).toBeDefined();

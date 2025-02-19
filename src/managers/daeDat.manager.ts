@@ -51,6 +51,7 @@ export default class DaeDatManager {
           from: { path: savedPDF.path },
           extension: 'pdf',
           docType: savedPDF.pdfType,
+          version: Number(savedPDF.rev),
         },
         daeDatStatementMapped,
       };

@@ -71,9 +71,28 @@ export interface DeclarationJson {
     date1: string;
     date2: string;
     date3: string;
+    acceptanceDate1: string;
+    acceptanceDate2: string;
+    acceptanceDate3: string;
+    invoiceValueAndCurrency1: string;
+    invoiceValueAndCurrency2: string;
+    invoiceValueAndCurrency3: string;
+    exchangeRate1: string;
+    exchangeRate2: string;
+    exchangeRate3: string;
+    totalGrossWeight1: string;
+    totalGrossWeight2: string;
+    totalGrossWeight3: string;
+    incoterm1: string;
+    incoterm2: string;
+    incoterm3: string;
+    incoterm4: string;
+    incoterm5: string;
+    incoterm6: string;
     releaseDate1: string;
     releaseCode1: string;
     mrn: string;
+    version: string;
     track: string;
   };
   supplier: {
@@ -259,7 +278,7 @@ class PDFConverter {
     } else {
       companyName = this.convertArrayToString(companyNameArray);
       if (eoriCode != '') {
-        vatNumber = eoriCode.slice(2);
+        vatNumber = eoriCode.replace(/[a-zA-Z]/g, '');
       }
     }
 
@@ -283,9 +302,48 @@ class PDFConverter {
       input.declaration.date3 ||
       '';
 
+    const acceptanceDate: string =
+      input.declaration.acceptanceDate1 ||
+      input.declaration.acceptanceDate2 ||
+      input.declaration.acceptanceDate3 ||
+      '';
+
     const releaseDate: string = input.declaration.releaseDate1 || '';
 
     const releaseCode: string = input.declaration.releaseCode1 || '';
+
+    const totalGrossWeight: string =
+      input.declaration.totalGrossWeight1 ||
+      input.declaration.totalGrossWeight2 ||
+      input.declaration.totalGrossWeight3 ||
+      '';
+
+    const invoiceValue: string =
+      input.declaration.invoiceValueAndCurrency1?.split(' ')[0] ||
+      input.declaration.invoiceValueAndCurrency2?.split(' ')[0] ||
+      input.declaration.invoiceValueAndCurrency3?.split(' ')[0] ||
+      '';
+
+    const currency: string =
+      input.declaration.invoiceValueAndCurrency1?.split(' ')[1] ||
+      input.declaration.invoiceValueAndCurrency2?.split(' ')[1] ||
+      input.declaration.invoiceValueAndCurrency3?.split(' ')[1] ||
+      '';
+
+    const exchangeRate: string =
+      input.declaration.exchangeRate1 ||
+      input.declaration.exchangeRate2 ||
+      input.declaration.exchangeRate3 ||
+      '';
+
+    const incoterm: string =
+      input.declaration.incoterm1 ||
+      input.declaration.incoterm2 ||
+      input.declaration.incoterm3 ||
+      input.declaration.incoterm4 ||
+      input.declaration.incoterm5 ||
+      input.declaration.incoterm6 ||
+      '';
 
     const goods = input.goods
       .map((good) => {
@@ -369,9 +427,16 @@ class PDFConverter {
 
     return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
-      date: date,
+      version: input.declaration.version,
+      date,
+      acceptanceDate,
       releaseCode,
       releaseDate,
+      totalGrossWeight,
+      invoiceValue,
+      currency,
+      exchangeRate,
+      incoterm,
       track: input.declaration.track,
       supplier,
       goods,

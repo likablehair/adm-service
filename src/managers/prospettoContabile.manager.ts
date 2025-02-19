@@ -38,6 +38,7 @@ export default class ProspettoContabileManager {
           from: { path: savedPDF.path },
           extension: 'pdf',
           docType: 'accounting',
+          version: Number(savedPDF.rev),
         },
         accountingStatementMapped,
       };
@@ -71,7 +72,6 @@ export default class ProspettoContabileManager {
       }
 
       if (richiestaProspetto.type !== 'success') {
-        console.warn('zio cane contabile', richiestaProspetto.message?.esito);
         throw new Error(
           `message: ${richiestaProspetto.message?.esito?.messaggio}`,
         );

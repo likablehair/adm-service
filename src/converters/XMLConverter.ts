@@ -106,10 +106,17 @@ export type Dichiarazione = {
 
 export type AdmDeclarationMapped = {
   mrn: string;
+  version: string;
   date: string;
+  acceptanceDate: string;
   track: string;
   releaseDate: string;
   releaseCode: string;
+  totalGrossWeight: string;
+  invoiceValue: string;
+  currency: string;
+  exchangeRate: string;
+  incoterm: string;
   supplier: {
     companyName: string;
     vatNumber: string;
@@ -173,10 +180,17 @@ export default class XMLConverter {
 
     const data: AdmDeclarationMapped = {
       mrn: '',
+      version: '',
       date: '',
+      acceptanceDate: '',
       releaseCode: '',
       releaseDate: '',
       track: 'H1',
+      totalGrossWeight: '',
+      invoiceValue: '',
+      currency: '',
+      exchangeRate: '',
+      incoterm: '',
       supplier: {
         companyName: esportatore.Nome,
         vatNumber: '',
