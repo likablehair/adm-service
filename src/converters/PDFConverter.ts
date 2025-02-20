@@ -89,6 +89,7 @@ export interface DeclarationJson {
     incoterm4: string;
     incoterm5: string;
     incoterm6: string;
+    incoterm7: string;
     releaseDate1: string;
     releaseCode1: string;
     mrn: string;
@@ -343,6 +344,7 @@ class PDFConverter {
       input.declaration.incoterm4 ||
       input.declaration.incoterm5 ||
       input.declaration.incoterm6 ||
+      input.declaration.incoterm7 ||
       '';
 
     const goods = input.goods

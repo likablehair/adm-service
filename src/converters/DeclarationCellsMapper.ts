@@ -605,6 +605,12 @@ export const _cells: {
   },
   {
     entity: 'declaration',
+    column: 'incoterm7',
+    xRange: [2.07, 2.07],
+    yRange: [30.624, 30.624],
+  },
+  {
+    entity: 'declaration',
     column: 'mrn',
     xRange: [25.962, 25.962],
     yRange: [14.81, 14.81],
