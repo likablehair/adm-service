@@ -458,7 +458,9 @@ class AccountingPDFConverter {
     );
 
     const taxB00Vat04 = taxB00Vat04Liquidation
-      ? Number(Number(taxB00Vat04Liquidation.value.replace(',', '.')).toFixed(2))
+      ? Number(
+          Number(taxB00Vat04Liquidation.value.replace(',', '.')).toFixed(2),
+        )
       : undefined;
 
     const taxLiquidation: { tribute: string; value: string }[] = [
