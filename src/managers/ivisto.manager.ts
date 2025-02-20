@@ -41,8 +41,7 @@ export default class IvistoManager {
     if (result.message?.esito?.codice == '198') {
       if (result.message.data) {
         throw new Error(Buffer.from(result.message?.data, 'base64').toString());
-      }
-      else {
+      } else {
         throw new Error(IvistoMissingError);
       }
     }
