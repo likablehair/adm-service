@@ -114,6 +114,18 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'transitNetworkCountry13',
+    xRange: [32.313, 32.313],
+    yRange: [9.651, 9.651],
+  },
+  {
+    entity: 'statement',
+    column: 'transitNetworkCountry14',
+    xRange: [32.235, 32.235],
+    yRange: [9.651, 9.651],
+  },
+  {
+    entity: 'statement',
     column: 'transportMode',
     xRange: [4.188, 4.188],
     yRange: [18.284, 18.284],
