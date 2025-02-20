@@ -18,7 +18,9 @@ export const ProspettoContabileMissingError = 'Prospetto Contabile not present';
 
 export default class ProspettoContabileManager {
   async import(
-    params: ProcessRequest<RichiestaProspettoSintesi> & { data: { seaTaxCodes: string[] } },
+    params: ProcessRequest<RichiestaProspettoSintesi> & {
+      data: { seaTaxCodes: string[] };
+    },
   ): Promise<ImportProspettoContabileResult> {
     try {
       const downloadedPDF: string = await this.download(params);
@@ -181,8 +183,10 @@ export default class ProspettoContabileManager {
     }
   }
 
-  async convert(params: { data: { path: string, seaTaxCodes: string[] } }) {
+  async convert(params: { data: { path: string; seaTaxCodes: string[] } }) {
     const converterPDF = new AccountingPDFConverter();
-    return await converterPDF.run({ data: { path: params.data.path, seaTaxCodes: params.data.seaTaxCodes } });
+    return await converterPDF.run({
+      data: { path: params.data.path, seaTaxCodes: params.data.seaTaxCodes },
+    });
   }
 }

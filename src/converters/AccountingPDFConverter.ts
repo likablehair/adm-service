@@ -64,7 +64,7 @@ export interface AccountingJson {
     totalVat8: string;
     totalVat9: string;
     totalVat10: string;
-  },
+  };
   taxes: {
     tribute1: string;
     value1: string;
@@ -80,7 +80,7 @@ export interface AccountingJson {
     value6: string;
     tribute7: string;
     value7: string;
-  },
+  };
   vat: {
     tribute1: string;
     value1: string;
@@ -198,7 +198,10 @@ class AccountingPDFConverter {
     }
     return {};
   }
-  private map(input: AccountingJson, seaTaxCodes: string[]): AccountingStatementMapped {
+  private map(
+    input: AccountingJson,
+    seaTaxCodes: string[],
+  ): AccountingStatementMapped {
     const version: string = input.statement.version || '';
 
     const rectificationOrCancellationDate: string =
@@ -253,7 +256,7 @@ class AccountingPDFConverter {
         ? Number(Number(totalTaxesString.replace(',', '.')).toFixed(2))
         : undefined;
 
-      const totalVatString =
+    const totalVatString =
       input.statement.totalVat1?.trim() ||
       input.statement.totalVat2?.trim() ||
       input.statement.totalVat3?.trim() ||
@@ -271,7 +274,7 @@ class AccountingPDFConverter {
         ? Number(Number(totalVatString.replace(',', '.')).toFixed(2))
         : undefined;
 
-    const vatLiquidation: { tribute: string; value: string; rate: string; }[] = [
+    const vatLiquidation: { tribute: string; value: string; rate: string }[] = [
       {
         tribute: input.vat?.tribute1 || '',
         value: input.vat?.value1 || '',
@@ -424,20 +427,16 @@ class AccountingPDFConverter {
       },
     ];
 
-    const vatExemption = vatLiquidation.find(
-      (il) => il.tribute == '406',
-    );
-    
+    const vatExemption = vatLiquidation.find((il) => il.tribute == '406');
+
     const vatExemptionValue = vatExemption
-      ? Number(
-          Number(vatExemption.value.replace(',', '.')).toFixed(2),
-        )
+      ? Number(Number(vatExemption.value.replace(',', '.')).toFixed(2))
       : undefined;
 
     const vatTaxB0022Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '22,00' || il.rate == '0,22'),
     );
-    
+
     const vatTaxB0022 = vatTaxB0022Liquidation
       ? Number(
           Number(vatTaxB0022Liquidation.value.replace(',', '.')).toFixed(2),
@@ -447,7 +446,7 @@ class AccountingPDFConverter {
     const vatTaxB0010Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '10,00' || il.rate == '0,10'),
     );
-    
+
     const vatTaxB0010 = vatTaxB0010Liquidation
       ? Number(
           Number(vatTaxB0010Liquidation.value.replace(',', '.')).toFixed(2),
@@ -457,14 +456,12 @@ class AccountingPDFConverter {
     const vatTaxB004Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '4,00' || il.rate == '0,04'),
     );
-    
+
     const vatTaxB004 = vatTaxB004Liquidation
-      ? Number(
-          Number(vatTaxB004Liquidation.value.replace(',', '.')).toFixed(2),
-        )
+      ? Number(Number(vatTaxB004Liquidation.value.replace(',', '.')).toFixed(2))
       : undefined;
 
-    const taxLiquidation: { tribute: string; value: string; }[] = [
+    const taxLiquidation: { tribute: string; value: string }[] = [
       {
         tribute: input.taxes?.tribute1 || '',
         value: input.taxes?.value1 || '',
@@ -495,38 +492,34 @@ class AccountingPDFConverter {
       },
     ];
 
-    const tax931Liquidation = taxLiquidation.find(
-      (il) => il.tribute == '931',
-    );
-    
+    const tax931Liquidation = taxLiquidation.find((il) => il.tribute == '931');
+
     const tax931 = tax931Liquidation
-      ? Number(
-          Number(tax931Liquidation.value.replace(',', '.')).toFixed(2),
-        )
+      ? Number(Number(tax931Liquidation.value.replace(',', '.')).toFixed(2))
       : undefined;
 
-    const tax123Liquidation = taxLiquidation.find(
-      (il) => il.tribute == '123',
-    );
-    
+    const tax123Liquidation = taxLiquidation.find((il) => il.tribute == '123');
+
     const tax123 = tax123Liquidation
-      ? Number(
-          Number(tax123Liquidation.value.replace(',', '.')).toFixed(2),
-        )
+      ? Number(Number(tax123Liquidation.value.replace(',', '.')).toFixed(2))
       : undefined;
 
-    const seaTaxLiquidation = taxLiquidation.filter(
-      (il) => seaTaxCodes.includes(il.tribute),
+    const seaTaxLiquidation = taxLiquidation.filter((il) =>
+      seaTaxCodes.includes(il.tribute),
     );
-    
+
     let totalSeaTax: number | undefined = Number(
-      seaTaxLiquidation.reduce((acc, tax) => {
-        return acc += Number(Number(tax.value.replace(',', '.')).toFixed(2))
-      }, 0).toFixed(2)
-    )
+      seaTaxLiquidation
+        .reduce((acc, tax) => {
+          return (acc += Number(
+            Number(tax.value.replace(',', '.')).toFixed(2),
+          ));
+        }, 0)
+        .toFixed(2),
+    );
 
     if (totalSeaTax == 0) {
-      totalSeaTax = undefined
+      totalSeaTax = undefined;
     }
 
     if (totalDuties == undefined) {
@@ -541,8 +534,12 @@ class AccountingPDFConverter {
       throw new Error('Missing total taxes');
     }
 
-    if (vatTaxB0022 == undefined && vatTaxB0010 == undefined && vatTaxB004 == undefined) {
-      throw new Error('Missing VAT tax')
+    if (
+      vatTaxB0022 == undefined &&
+      vatTaxB0010 == undefined &&
+      vatTaxB004 == undefined
+    ) {
+      throw new Error('Missing VAT tax');
     }
 
     return {
@@ -564,7 +561,7 @@ class AccountingPDFConverter {
   public async run(params: {
     data: {
       path: string;
-      seaTaxCodes: string[]
+      seaTaxCodes: string[];
     };
   }): Promise<AccountingStatementMapped> {
     const pdfParser = new PDFParser();
@@ -624,7 +621,10 @@ class AccountingPDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      const accountingStatementMapped = this.map(accountingEntity, params.data.seaTaxCodes);
+      const accountingStatementMapped = this.map(
+        accountingEntity,
+        params.data.seaTaxCodes,
+      );
       return accountingStatementMapped;
     } catch (error) {
       throw new Error('parsing PDF Accounting:' + error); // Returning an empty object

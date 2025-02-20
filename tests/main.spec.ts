@@ -514,7 +514,7 @@ test(
       '9CE',
       '9CK',
       '9DF',
-    ]
+    ];
 
     const manager = new ProspettoContabileManager();
 
