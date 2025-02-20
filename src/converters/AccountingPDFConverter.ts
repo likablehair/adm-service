@@ -5,9 +5,16 @@ import { DeclarationRawJson } from './PDFConverter';
 export type AccountingStatementMapped = {
   version: string;
   totalDuties: number;
+  totalTaxes: number;
   totalVat: number;
   vatExemption: boolean;
   vatExemptionValue: number | undefined;
+  vatTaxB0022: number | undefined;
+  vatTaxB004: number | undefined;
+  vatTaxB0010: number | undefined;
+  tax931: number | undefined;
+  tax123: number | undefined;
+  totalSeaTax: number | undefined;
   rectificationOrCancellationDate: string;
 };
 
@@ -37,6 +44,28 @@ export interface AccountingJson {
     totalDuties18: string;
     totalDuties19: string;
     totalDuties20: string;
+    totalTaxes1: string;
+    totalTaxes2: string;
+    totalTaxes3: string;
+    totalTaxes4: string;
+    totalTaxes5: string;
+    totalTaxes6: string;
+    totalTaxes7: string;
+    totalTaxes8: string;
+    totalTaxes9: string;
+    totalTaxes10: string;
+    totalVat1: string;
+    totalVat2: string;
+    totalVat3: string;
+    totalVat4: string;
+    totalVat5: string;
+    totalVat6: string;
+    totalVat7: string;
+    totalVat8: string;
+    totalVat9: string;
+    totalVat10: string;
+  },
+  taxes: {
     tribute1: string;
     value1: string;
     tribute2: string;
@@ -51,50 +80,95 @@ export interface AccountingJson {
     value6: string;
     tribute7: string;
     value7: string;
+  },
+  vat: {
+    tribute1: string;
+    value1: string;
+    rate1: string;
+    tribute2: string;
+    value2: string;
+    rate2: string;
+    tribute3: string;
+    value3: string;
+    rate3: string;
+    tribute4: string;
+    value4: string;
+    rate4: string;
+    tribute5: string;
+    value5: string;
+    rate5: string;
+    tribute6: string;
+    value6: string;
+    rate6: string;
+    tribute7: string;
+    value7: string;
+    rate7: string;
     tribute8: string;
     value8: string;
+    rate8: string;
     tribute9: string;
     value9: string;
+    rate9: string;
     tribute10: string;
     value10: string;
+    rate10: string;
     tribute11: string;
     value11: string;
+    rate11: string;
     tribute12: string;
     value12: string;
+    rate12: string;
     tribute13: string;
     value13: string;
+    rate13: string;
     tribute14: string;
     value14: string;
+    rate14: string;
     tribute15: string;
     value15: string;
+    rate15: string;
     tribute16: string;
     value16: string;
+    rate16: string;
     tribute17: string;
     value17: string;
+    rate17: string;
     tribute18: string;
     value18: string;
+    rate18: string;
     tribute19: string;
     value19: string;
+    rate19: string;
     tribute20: string;
     value20: string;
+    rate20: string;
     tribute21: string;
     value21: string;
+    rate21: string;
     tribute22: string;
     value22: string;
+    rate22: string;
     tribute23: string;
     value23: string;
+    rate23: string;
     tribute24: string;
     value24: string;
+    rate24: string;
     tribute25: string;
     value25: string;
+    rate25: string;
     tribute26: string;
     value26: string;
+    rate26: string;
     tribute27: string;
     value27: string;
+    rate27: string;
     tribute28: string;
     value28: string;
+    rate28: string;
     tribute29: string;
     value29: string;
+    rate29: string;
   };
 }
 
@@ -124,7 +198,7 @@ class AccountingPDFConverter {
     }
     return {};
   }
-  private map(input: AccountingJson): AccountingStatementMapped {
+  private map(input: AccountingJson, seaTaxCodes: string[]): AccountingStatementMapped {
     const version: string = input.statement.version || '';
 
     const rectificationOrCancellationDate: string =
@@ -161,149 +235,299 @@ class AccountingPDFConverter {
         ? Number(Number(totalDutiesString.replace(',', '.')).toFixed(2))
         : undefined;
 
-    const ivaLiquidation: { tribute: string; value: string }[] = [
+    const totalTaxesString =
+      input.statement.totalTaxes1?.trim() ||
+      input.statement.totalTaxes2?.trim() ||
+      input.statement.totalTaxes3?.trim() ||
+      input.statement.totalTaxes4?.trim() ||
+      input.statement.totalTaxes5?.trim() ||
+      input.statement.totalTaxes6?.trim() ||
+      input.statement.totalTaxes7?.trim() ||
+      input.statement.totalTaxes8?.trim() ||
+      input.statement.totalTaxes9?.trim() ||
+      input.statement.totalTaxes10?.trim() ||
+      '';
+
+    const totalTaxes =
+      totalTaxesString != ''
+        ? Number(Number(totalTaxesString.replace(',', '.')).toFixed(2))
+        : undefined;
+
+      const totalVatString =
+      input.statement.totalVat1?.trim() ||
+      input.statement.totalVat2?.trim() ||
+      input.statement.totalVat3?.trim() ||
+      input.statement.totalVat4?.trim() ||
+      input.statement.totalVat5?.trim() ||
+      input.statement.totalVat6?.trim() ||
+      input.statement.totalVat7?.trim() ||
+      input.statement.totalVat8?.trim() ||
+      input.statement.totalVat9?.trim() ||
+      input.statement.totalVat10?.trim() ||
+      '';
+
+    const totalVat =
+      totalVatString != ''
+        ? Number(Number(totalVatString.replace(',', '.')).toFixed(2))
+        : undefined;
+
+    const vatLiquidation: { tribute: string; value: string; rate: string; }[] = [
       {
-        tribute: input.statement.tribute1 || '',
-        value: input.statement.value1 || '',
+        tribute: input.vat?.tribute1 || '',
+        value: input.vat?.value1 || '',
+        rate: input.vat?.rate1 || '',
       },
       {
-        tribute: input.statement.tribute2 || '',
-        value: input.statement.value2 || '',
+        tribute: input.vat?.tribute2 || '',
+        value: input.vat?.value2 || '',
+        rate: input.vat?.rate2 || '',
       },
       {
-        tribute: input.statement.tribute3 || '',
-        value: input.statement.value3 || '',
+        tribute: input.vat?.tribute3 || '',
+        value: input.vat?.value3 || '',
+        rate: input.vat?.rate3 || '',
       },
       {
-        tribute: input.statement.tribute3 || '',
-        value: input.statement.value3 || '',
+        tribute: input.vat?.tribute3 || '',
+        value: input.vat?.value3 || '',
+        rate: input.vat?.rate3 || '',
       },
       {
-        tribute: input.statement.tribute4 || '',
-        value: input.statement.value4 || '',
+        tribute: input.vat?.tribute4 || '',
+        value: input.vat?.value4 || '',
+        rate: input.vat?.rate4 || '',
       },
       {
-        tribute: input.statement.tribute5 || '',
-        value: input.statement.value5 || '',
+        tribute: input.vat?.tribute5 || '',
+        value: input.vat?.value5 || '',
+        rate: input.vat?.rate5 || '',
       },
       {
-        tribute: input.statement.tribute6 || '',
-        value: input.statement.value6 || '',
+        tribute: input.vat?.tribute6 || '',
+        value: input.vat?.value6 || '',
+        rate: input.vat?.rate6 || '',
       },
       {
-        tribute: input.statement.tribute7 || '',
-        value: input.statement.value7 || '',
+        tribute: input.vat?.tribute7 || '',
+        value: input.vat?.value7 || '',
+        rate: input.vat?.rate7 || '',
       },
       {
-        tribute: input.statement.tribute8 || '',
-        value: input.statement.value8 || '',
+        tribute: input.vat?.tribute8 || '',
+        value: input.vat?.value8 || '',
+        rate: input.vat?.rate8 || '',
       },
       {
-        tribute: input.statement.tribute9 || '',
-        value: input.statement.value9 || '',
+        tribute: input.vat?.tribute9 || '',
+        value: input.vat?.value9 || '',
+        rate: input.vat?.rate9 || '',
       },
       {
-        tribute: input.statement.tribute10 || '',
-        value: input.statement.value10 || '',
+        tribute: input.vat?.tribute10 || '',
+        value: input.vat?.value10 || '',
+        rate: input.vat?.rate10 || '',
       },
       {
-        tribute: input.statement.tribute11 || '',
-        value: input.statement.value11 || '',
+        tribute: input.vat?.tribute11 || '',
+        value: input.vat?.value11 || '',
+        rate: input.vat?.rate11 || '',
       },
       {
-        tribute: input.statement.tribute12 || '',
-        value: input.statement.value12 || '',
+        tribute: input.vat?.tribute12 || '',
+        value: input.vat?.value12 || '',
+        rate: input.vat?.rate12 || '',
       },
       {
-        tribute: input.statement.tribute13 || '',
-        value: input.statement.value13 || '',
+        tribute: input.vat?.tribute13 || '',
+        value: input.vat?.value13 || '',
+        rate: input.vat?.rate13 || '',
       },
       {
-        tribute: input.statement.tribute14 || '',
-        value: input.statement.value14 || '',
+        tribute: input.vat?.tribute14 || '',
+        value: input.vat?.value14 || '',
+        rate: input.vat?.rate14 || '',
       },
       {
-        tribute: input.statement.tribute15 || '',
-        value: input.statement.value15 || '',
+        tribute: input.vat?.tribute15 || '',
+        value: input.vat?.value15 || '',
+        rate: input.vat?.rate15 || '',
       },
       {
-        tribute: input.statement.tribute16 || '',
-        value: input.statement.value16 || '',
+        tribute: input.vat?.tribute16 || '',
+        value: input.vat?.value16 || '',
+        rate: input.vat?.rate16 || '',
       },
       {
-        tribute: input.statement.tribute17 || '',
-        value: input.statement.value17 || '',
+        tribute: input.vat?.tribute17 || '',
+        value: input.vat?.value17 || '',
+        rate: input.vat?.rate17 || '',
       },
       {
-        tribute: input.statement.tribute18 || '',
-        value: input.statement.value18 || '',
+        tribute: input.vat?.tribute18 || '',
+        value: input.vat?.value18 || '',
+        rate: input.vat?.rate18 || '',
       },
       {
-        tribute: input.statement.tribute19 || '',
-        value: input.statement.value19 || '',
+        tribute: input.vat?.tribute19 || '',
+        value: input.vat?.value19 || '',
+        rate: input.vat?.rate19 || '',
       },
       {
-        tribute: input.statement.tribute20 || '',
-        value: input.statement.value20 || '',
+        tribute: input.vat?.tribute20 || '',
+        value: input.vat?.value20 || '',
+        rate: input.vat?.rate20 || '',
       },
       {
-        tribute: input.statement.tribute21 || '',
-        value: input.statement.value21 || '',
+        tribute: input.vat?.tribute21 || '',
+        value: input.vat?.value21 || '',
+        rate: input.vat?.rate21 || '',
       },
       {
-        tribute: input.statement.tribute22 || '',
-        value: input.statement.value22 || '',
+        tribute: input.vat?.tribute22 || '',
+        value: input.vat?.value22 || '',
+        rate: input.vat?.rate22 || '',
       },
       {
-        tribute: input.statement.tribute23 || '',
-        value: input.statement.value23 || '',
+        tribute: input.vat?.tribute23 || '',
+        value: input.vat?.value23 || '',
+        rate: input.vat?.rate23 || '',
       },
       {
-        tribute: input.statement.tribute24 || '',
-        value: input.statement.value24 || '',
+        tribute: input.vat?.tribute24 || '',
+        value: input.vat?.value24 || '',
+        rate: input.vat?.rate24 || '',
       },
       {
-        tribute: input.statement.tribute25 || '',
-        value: input.statement.value25 || '',
+        tribute: input.vat?.tribute25 || '',
+        value: input.vat?.value25 || '',
+        rate: input.vat?.rate25 || '',
       },
       {
-        tribute: input.statement.tribute26 || '',
-        value: input.statement.value26 || '',
+        tribute: input.vat?.tribute26 || '',
+        value: input.vat?.value26 || '',
+        rate: input.vat?.rate26 || '',
       },
       {
-        tribute: input.statement.tribute27 || '',
-        value: input.statement.value27 || '',
+        tribute: input.vat?.tribute27 || '',
+        value: input.vat?.value27 || '',
+        rate: input.vat?.rate27 || '',
       },
       {
-        tribute: input.statement.tribute28 || '',
-        value: input.statement.value28 || '',
+        tribute: input.vat?.tribute28 || '',
+        value: input.vat?.value28 || '',
+        rate: input.vat?.rate28 || '',
       },
       {
-        tribute: input.statement.tribute29 || '',
-        value: input.statement.value29 || '',
+        tribute: input.vat?.tribute29 || '',
+        value: input.vat?.value29 || '',
+        rate: input.vat?.rate29 || '',
       },
     ];
 
-    const vatExemptionLiquidation = ivaLiquidation.find(
+    const vatExemption = vatLiquidation.find(
       (il) => il.tribute == '406',
     );
-
-    const filteredVatLiquidation = ivaLiquidation.filter(
-      (il) => il.tribute == 'B00',
-    );
-
-    const totalVat =
-      filteredVatLiquidation.length > 0
-        ? filteredVatLiquidation.reduce((acc, cur) => {
-            return (acc += Number(cur.value.replace(',', '.')));
-          }, 0)
-        : undefined;
-
-    const vatExemptionValue = vatExemptionLiquidation
+    
+    const vatExemptionValue = vatExemption
       ? Number(
-          Number(vatExemptionLiquidation.value.replace(',', '.')).toFixed(2),
+          Number(vatExemption.value.replace(',', '.')).toFixed(2),
         )
       : undefined;
+
+    const vatTaxB0022Liquidation = vatLiquidation.find(
+      (il) => il.tribute == 'B00' && (il.rate == '22,00' || il.rate == '0,22'),
+    );
+    
+    const vatTaxB0022 = vatTaxB0022Liquidation
+      ? Number(
+          Number(vatTaxB0022Liquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
+
+    const vatTaxB0010Liquidation = vatLiquidation.find(
+      (il) => il.tribute == 'B00' && (il.rate == '10,00' || il.rate == '0,10'),
+    );
+    
+    const vatTaxB0010 = vatTaxB0010Liquidation
+      ? Number(
+          Number(vatTaxB0010Liquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
+
+    const vatTaxB004Liquidation = vatLiquidation.find(
+      (il) => il.tribute == 'B00' && (il.rate == '4,00' || il.rate == '0,04'),
+    );
+    
+    const vatTaxB004 = vatTaxB004Liquidation
+      ? Number(
+          Number(vatTaxB004Liquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
+
+    const taxLiquidation: { tribute: string; value: string; }[] = [
+      {
+        tribute: input.taxes?.tribute1 || '',
+        value: input.taxes?.value1 || '',
+      },
+      {
+        tribute: input.taxes?.tribute2 || '',
+        value: input.taxes?.value2 || '',
+      },
+      {
+        tribute: input.taxes?.tribute3 || '',
+        value: input.taxes?.value3 || '',
+      },
+      {
+        tribute: input.taxes?.tribute4 || '',
+        value: input.taxes?.value4 || '',
+      },
+      {
+        tribute: input.taxes?.tribute5 || '',
+        value: input.taxes?.value5 || '',
+      },
+      {
+        tribute: input.taxes?.tribute6 || '',
+        value: input.taxes?.value6 || '',
+      },
+      {
+        tribute: input.taxes?.tribute7 || '',
+        value: input.taxes?.value7 || '',
+      },
+    ];
+
+    const tax931Liquidation = taxLiquidation.find(
+      (il) => il.tribute == '931',
+    );
+    
+    const tax931 = tax931Liquidation
+      ? Number(
+          Number(tax931Liquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
+
+    const tax123Liquidation = taxLiquidation.find(
+      (il) => il.tribute == '123',
+    );
+    
+    const tax123 = tax123Liquidation
+      ? Number(
+          Number(tax123Liquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
+
+    const seaTaxLiquidation = taxLiquidation.filter(
+      (il) => seaTaxCodes.includes(il.tribute),
+    );
+    
+    let totalSeaTax: number | undefined = Number(
+      seaTaxLiquidation.reduce((acc, tax) => {
+        return acc += Number(Number(tax.value.replace(',', '.')).toFixed(2))
+      }, 0).toFixed(2)
+    )
+
+    if (totalSeaTax == 0) {
+      totalSeaTax = undefined
+    }
 
     if (totalDuties == undefined) {
       throw new Error('Missing total duties');
@@ -313,18 +537,34 @@ class AccountingPDFConverter {
       throw new Error('Missing total vat');
     }
 
+    if (totalTaxes == undefined) {
+      throw new Error('Missing total taxes');
+    }
+
+    if (vatTaxB0022 == undefined && vatTaxB0010 == undefined && vatTaxB004 == undefined) {
+      throw new Error('Missing VAT tax')
+    }
+
     return {
       rectificationOrCancellationDate,
       version,
       totalDuties,
+      totalTaxes,
       totalVat,
-      vatExemption: !!vatExemptionLiquidation,
+      vatExemption: !!vatExemption,
       vatExemptionValue,
+      vatTaxB0022,
+      vatTaxB0010,
+      vatTaxB004,
+      tax931,
+      tax123,
+      totalSeaTax,
     };
   }
   public async run(params: {
     data: {
       path: string;
+      seaTaxCodes: string[]
     };
   }): Promise<AccountingStatementMapped> {
     const pdfParser = new PDFParser();
@@ -384,7 +624,7 @@ class AccountingPDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      const accountingStatementMapped = this.map(accountingEntity);
+      const accountingStatementMapped = this.map(accountingEntity, params.data.seaTaxCodes);
       return accountingStatementMapped;
     } catch (error) {
       throw new Error('parsing PDF Accounting:' + error); // Returning an empty object

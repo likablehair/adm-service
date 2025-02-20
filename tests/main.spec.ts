@@ -489,6 +489,33 @@ test(
 
     const admCertificate = fs.readFileSync(certificatePath);
 
+    const seaTaxCodes = [
+      '9AA',
+      '9AB',
+      '9AC',
+      '9AD',
+      '9AE',
+      '9AF',
+      '9AG',
+      '9AH',
+      '9AJ',
+      '9AK',
+      '9AL',
+      '9AM',
+      '9AN',
+      '9AP',
+      '9AR',
+      '9AS',
+      '9BA',
+      '9BD',
+      '9CA',
+      '9CB',
+      '9CC',
+      '9CE',
+      '9CK',
+      '9DF',
+    ]
+
     const manager = new ProspettoContabileManager();
 
     const params = {
@@ -522,7 +549,7 @@ test(
     );
     const accountingStatementMapped: AccountingStatementMapped =
       await manager.convert({
-        data: { path: result.path },
+        data: { path: result.path, seaTaxCodes },
       });
     await fsPromises.unlink(result.path);
 
