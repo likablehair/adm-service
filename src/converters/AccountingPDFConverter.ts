@@ -9,12 +9,12 @@ export type AccountingStatementMapped = {
   totalVat: number;
   vatExemption: boolean;
   vatExemptionValue: number | undefined;
-  vatTaxB0022: number | undefined;
-  vatTaxB004: number | undefined;
-  vatTaxB0010: number | undefined;
+  taxB00Vat22: number | undefined;
+  taxB00Vat04: number | undefined;
+  taxB00Vat10: number | undefined;
   tax931: number | undefined;
   tax123: number | undefined;
-  totalSeaTax: number | undefined;
+  totalSeaTaxes: number | undefined;
   rectificationOrCancellationDate: string;
 };
 
@@ -433,32 +433,32 @@ class AccountingPDFConverter {
       ? Number(Number(vatExemption.value.replace(',', '.')).toFixed(2))
       : undefined;
 
-    const vatTaxB0022Liquidation = vatLiquidation.find(
+    const taxB00Vat22Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '22,00' || il.rate == '0,22'),
     );
 
-    const vatTaxB0022 = vatTaxB0022Liquidation
+    const taxB00Vat22 = taxB00Vat22Liquidation
       ? Number(
-          Number(vatTaxB0022Liquidation.value.replace(',', '.')).toFixed(2),
+          Number(taxB00Vat22Liquidation.value.replace(',', '.')).toFixed(2),
         )
       : undefined;
 
-    const vatTaxB0010Liquidation = vatLiquidation.find(
+    const taxB00Vat10Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '10,00' || il.rate == '0,10'),
     );
 
-    const vatTaxB0010 = vatTaxB0010Liquidation
+    const taxB00Vat10 = taxB00Vat10Liquidation
       ? Number(
-          Number(vatTaxB0010Liquidation.value.replace(',', '.')).toFixed(2),
+          Number(taxB00Vat10Liquidation.value.replace(',', '.')).toFixed(2),
         )
       : undefined;
 
-    const vatTaxB004Liquidation = vatLiquidation.find(
+    const taxB00Vat04Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '4,00' || il.rate == '0,04'),
     );
 
-    const vatTaxB004 = vatTaxB004Liquidation
-      ? Number(Number(vatTaxB004Liquidation.value.replace(',', '.')).toFixed(2))
+    const taxB00Vat04 = taxB00Vat04Liquidation
+      ? Number(Number(taxB00Vat04Liquidation.value.replace(',', '.')).toFixed(2))
       : undefined;
 
     const taxLiquidation: { tribute: string; value: string }[] = [
@@ -508,7 +508,7 @@ class AccountingPDFConverter {
       seaTaxCodes.includes(il.tribute),
     );
 
-    let totalSeaTax: number | undefined = Number(
+    let totalSeaTaxes: number | undefined = Number(
       seaTaxLiquidation
         .reduce((acc, tax) => {
           return (acc += Number(
@@ -518,8 +518,8 @@ class AccountingPDFConverter {
         .toFixed(2),
     );
 
-    if (totalSeaTax == 0) {
-      totalSeaTax = undefined;
+    if (totalSeaTaxes == 0) {
+      totalSeaTaxes = undefined;
     }
 
     if (totalDuties == undefined) {
@@ -535,9 +535,9 @@ class AccountingPDFConverter {
     }
 
     if (
-      vatTaxB0022 == undefined &&
-      vatTaxB0010 == undefined &&
-      vatTaxB004 == undefined
+      taxB00Vat22 == undefined &&
+      taxB00Vat10 == undefined &&
+      taxB00Vat04 == undefined
     ) {
       throw new Error('Missing VAT tax');
     }
@@ -550,12 +550,12 @@ class AccountingPDFConverter {
       totalVat,
       vatExemption: !!vatExemption,
       vatExemptionValue,
-      vatTaxB0022,
-      vatTaxB0010,
-      vatTaxB004,
+      taxB00Vat22,
+      taxB00Vat10,
+      taxB00Vat04,
       tax931,
       tax123,
-      totalSeaTax,
+      totalSeaTaxes,
     };
   }
   public async run(params: {
