@@ -38,9 +38,13 @@ export default class IvistoManager {
     const request = new RichiestaIvistoRequest();
     const result = await request.processRequest(params);
 
-    if (result.message?.esito?.codice == '197') {
-      //DO NOT MODIFY THE TEXT OF THIS ERROR
-      throw new Error(IvistoMissingError);
+    if (result.message?.esito?.codice == '198') {
+      if (result.message.data) {
+        throw new Error(Buffer.from(result.message?.data, 'base64').toString());
+      }
+      else {
+        throw new Error(IvistoMissingError);
+      }
     }
 
     if (result.type !== 'success') {

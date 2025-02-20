@@ -84,8 +84,16 @@ export default class ProspettoSvincoloManager {
         await richiestaProspettoSvincoloRequest.processRequest(params);
 
       if (richiestaProspetto.message?.esito?.codice == '197') {
-        //DO NOT MODIFY THE TEXT OF THIS ERROR
-        throw new Error(ProspettoSvincoloMissingError);
+        if (richiestaProspetto.message.data) {
+          const parsed = await parseStringPromise(Buffer.from(richiestaProspetto.message?.data, 'base64').toString(), {
+            explicitArray: false,
+          })
+
+          throw new Error(parsed['ns0:RichiestaProspettoSvincolo'].output.esito.messaggioErrore)
+        }
+        else {
+          throw new Error(ProspettoSvincoloMissingError);
+        }
       }
 
       if (richiestaProspetto.type !== 'success') {
