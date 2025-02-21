@@ -54,6 +54,13 @@ export interface AccountingJson {
     totalTaxes8: string;
     totalTaxes9: string;
     totalTaxes10: string;
+    totalTaxes11: string;
+    totalTaxes12: string;
+    totalTaxes13: string;
+    totalTaxes14: string;
+    totalTaxes15: string;
+    totalTaxes16: string;
+    totalTaxes17: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -64,6 +71,13 @@ export interface AccountingJson {
     totalVat8: string;
     totalVat9: string;
     totalVat10: string;
+    totalVat11: string;
+    totalVat12: string;
+    totalVat13: string;
+    totalVat14: string;
+    totalVat15: string;
+    totalVat16: string;
+    totalVat17: string;
   };
   taxes: {
     tribute1: string;
@@ -80,6 +94,14 @@ export interface AccountingJson {
     value6: string;
     tribute7: string;
     value7: string;
+    tribute8: string;
+    value8: string;
+    tribute9: string;
+    value9: string;
+    tribute10: string;
+    value10: string;
+    tribute11: string;
+    value11: string;
   };
   vat: {
     tribute1: string;
@@ -249,6 +271,13 @@ class AccountingPDFConverter {
       input.statement.totalTaxes8?.trim() ||
       input.statement.totalTaxes9?.trim() ||
       input.statement.totalTaxes10?.trim() ||
+      input.statement.totalTaxes11?.trim() ||
+      input.statement.totalTaxes12?.trim() ||
+      input.statement.totalTaxes13?.trim() ||
+      input.statement.totalTaxes14?.trim() ||
+      input.statement.totalTaxes15?.trim() ||
+      input.statement.totalTaxes16?.trim() ||
+      input.statement.totalTaxes17?.trim() ||
       '';
 
     const totalTaxes =
@@ -267,6 +296,13 @@ class AccountingPDFConverter {
       input.statement.totalVat8?.trim() ||
       input.statement.totalVat9?.trim() ||
       input.statement.totalVat10?.trim() ||
+      input.statement.totalVat11?.trim() ||
+      input.statement.totalVat12?.trim() ||
+      input.statement.totalVat13?.trim() ||
+      input.statement.totalVat14?.trim() ||
+      input.statement.totalVat15?.trim() ||
+      input.statement.totalVat16?.trim() ||
+      input.statement.totalVat17?.trim() ||
       '';
 
     const totalVat =
@@ -491,6 +527,22 @@ class AccountingPDFConverter {
       {
         tribute: input.taxes?.tribute7 || '',
         value: input.taxes?.value7 || '',
+      },
+      {
+        tribute: input.taxes?.tribute8 || '',
+        value: input.taxes?.value8 || '',
+      },
+      {
+        tribute: input.taxes?.tribute9 || '',
+        value: input.taxes?.value9 || '',
+      },
+      {
+        tribute: input.taxes?.tribute10 || '',
+        value: input.taxes?.value10 || '',
+      },
+      {
+        tribute: input.taxes?.tribute11 || '',
+        value: input.taxes?.value11 || '',
       },
     ];
 

@@ -136,6 +136,10 @@ export type AdmDeclarationMapped = {
     requestedRegime: string;
     previousRegime: string;
   }[];
+  documents: {
+    code: string;
+    identifier: string;
+  }[];
 };
 
 import { parseStringPromise } from 'xml2js';
@@ -200,6 +204,7 @@ export default class XMLConverter {
         postalCode: esportatore.CodPostale,
       },
       goods: [],
+      documents: [],
     };
 
     const articoloH1 = jsonData.Messaggio.DichiarazioneH1.DatiH1.ArticoloH1;

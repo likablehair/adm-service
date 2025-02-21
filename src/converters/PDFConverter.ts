@@ -179,6 +179,10 @@ export interface DeclarationJson {
     requestedRegime: string;
     previousRegime: string;
   }[];
+  documents: {
+    code: string;
+    identifier: string;
+  }[];
 }
 
 class PDFConverter {
@@ -427,6 +431,10 @@ class PDFConverter {
       })
       .filter((g) => !!g);
 
+    const documents = input.documents.filter(
+      (d) => d.code != '' && d.code != 'Tipo',
+    );
+
     return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
       version: input.declaration.version,
@@ -442,6 +450,7 @@ class PDFConverter {
       track: input.declaration.track,
       supplier,
       goods,
+      documents,
     });
   }
   private convertArrayToString(array: string[]): string {
@@ -501,6 +510,7 @@ class PDFConverter {
         cbamRequestId: 0,
         authorId: 0,
         mrn: '',
+        documents: [],
       };
 
       if (!!declarationRawJson && declarationRawJson.Pages) {
@@ -511,6 +521,11 @@ class PDFConverter {
           if (page.Texts) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
             const goodObject: any = {};
+            let documentObject: any = {
+              code: '',
+              identifier: '',
+            };
+            let isFirstDocument = true;
             for (let j = 0; j < page.Texts.length; j++) {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
@@ -549,11 +564,42 @@ class PDFConverter {
                 } else if (mappedPosition.entity != 'goods') {
                   if (!declarationEntity[mappedPosition.entity])
                     declarationEntity[mappedPosition.entity] = {};
-                  declarationEntity[mappedPosition.entity][
-                    mappedPosition.column
-                  ] = text.trim();
+
+                  if (mappedPosition.entity != 'documents') {
+                    declarationEntity[mappedPosition.entity][
+                      mappedPosition.column
+                    ] = text.trim();
+                  } else {
+                    let isNewDocument = false;
+                    if (mappedPosition.column.startsWith('code')) {
+                      if (isFirstDocument) {
+                        isFirstDocument = false;
+                      } else {
+                        isNewDocument = true;
+                      }
+                    }
+
+                    if (isNewDocument) {
+                      declarationEntity['documents'].push(documentObject);
+                      documentObject = {
+                        code: '',
+                        identifier: '',
+                      };
+                    }
+
+                    if (mappedPosition.column.startsWith('identifier')) {
+                      documentObject['identifier'] =
+                        documentObject['identifier'] + text.trim();
+                    } else {
+                      documentObject['code'] = text.trim();
+                    }
+                  }
                 }
               }
+            }
+
+            if (i == 0) {
+              declarationEntity['documents'].push(documentObject);
             }
           }
         }
