@@ -595,7 +595,7 @@ class PDFConverter {
                       mappedPosition.column
                     ] = text.trim();
                   } else {
-                    if(isMappingDocuments) {
+                    if (isMappingDocuments) {
                       let isNewDocument = false;
                       if (mappedPosition.column.startsWith('code')) {
                         if (isFirstDocument) {
@@ -604,7 +604,7 @@ class PDFConverter {
                           isNewDocument = true;
                         }
                       }
-  
+
                       if (isNewDocument) {
                         declarationEntity['documents'].push(documentObject);
                         documentObject = {
@@ -612,7 +612,7 @@ class PDFConverter {
                           identifier: '',
                         };
                       }
-  
+
                       if (mappedPosition.column.startsWith('identifier')) {
                         documentObject['identifier'] =
                           documentObject['identifier'] + text.trim();
