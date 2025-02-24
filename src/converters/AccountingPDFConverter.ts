@@ -340,7 +340,12 @@ class AccountingPDFConverter {
         ? Number(Number(totalVatString.replace(',', '.')).toFixed(2))
         : undefined;
 
-    const vatLiquidation: { tribute: string; value: string; rate: string, letterOfIntent: string }[] = [
+    const vatLiquidation: {
+      tribute: string;
+      value: string;
+      rate: string;
+      letterOfIntent: string;
+    }[] = [
       {
         tribute: input.vat?.tribute1 || '',
         value: input.vat?.value1 || '',
@@ -523,9 +528,9 @@ class AccountingPDFConverter {
       ? Number(Number(vatExemption.value.replace(',', '.')).toFixed(2))
       : undefined;
 
-    const letterOfIntent = vatExemption 
+    const letterOfIntent = vatExemption
       ? vatExemption.letterOfIntent
-      : undefined
+      : undefined;
 
     const taxB00Vat22Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '22,00' || il.rate == '0,22'),
