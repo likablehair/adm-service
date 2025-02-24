@@ -52,6 +52,7 @@ export interface DaeDatJson {
     transitNetworkCountry12: string;
     transitNetworkCountry13: string;
     transitNetworkCountry14: string;
+    transitNetworkCountry15: string;
     transportMode: string;
   };
   consignee: {
@@ -166,6 +167,7 @@ class DaeDatPDFConverter {
       input.statement.transitNetworkCountry12?.trim() ||
       input.statement.transitNetworkCountry13?.trim() ||
       input.statement.transitNetworkCountry14?.trim() ||
+      input.statement.transitNetworkCountry15?.trim() ||
       '';
 
     const goods = input.goods.map((good) => {
