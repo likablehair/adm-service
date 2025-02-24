@@ -211,7 +211,7 @@ class PDFConverter {
     }
     return {};
   }
-  private map(input: DeclarationJson): AdmDeclarationMapped {
+  private map(input: DeclarationJson, documentsNumber: number): AdmDeclarationMapped {
     const companyNameArray: string[] = [
       input.supplier?.companyName1,
       input.supplier?.companyName2,
@@ -435,6 +435,10 @@ class PDFConverter {
       (d) => d.code != '' && d.code != 'Tipo',
     );
 
+    if(documents.length != documentsNumber) {
+      throw new Error('Missing mapping for documents')
+    }
+
     return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
       version: input.declaration.version,
@@ -512,7 +516,7 @@ class PDFConverter {
         mrn: '',
         documents: [],
       };
-
+      let countNumber = 0;
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
 
@@ -526,6 +530,7 @@ class PDFConverter {
               identifier: '',
             };
             let isFirstDocument = true;
+            let count: boolean = false;
             for (let j = 0; j < page.Texts.length; j++) {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
@@ -533,6 +538,18 @@ class PDFConverter {
               // if(i == 0){
               //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
               // }
+
+              if(i == 0 && text == 'Scarichi' && textElement.x == 2.159) {
+                count = false
+              }
+
+              if(i == 0 && text != 'Codice' && textElement.x == 2.159 && count) {
+                countNumber ++
+              }
+
+              if(i == 0 && text == 'Documenti' && textElement.x == 2.159) {
+                count = true
+              }
 
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
@@ -607,7 +624,7 @@ class PDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      const admDeclarationMapped = this.map(declarationEntity);
+      const admDeclarationMapped = this.map(declarationEntity, countNumber);
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('parsing PDF declarations:' + error); // Returning an empty object
