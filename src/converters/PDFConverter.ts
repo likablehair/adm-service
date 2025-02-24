@@ -435,7 +435,7 @@ class PDFConverter {
       .filter((g) => !!g);
 
     const documents = input.documents.filter(
-      (d) => d.code != '' && d.code != 'Tipo',
+      (d) => d.code != '' && d.code != 'Tipo' && d.code != 'Scarichi',
     );
 
     if (documents.length != documentsNumber) {
