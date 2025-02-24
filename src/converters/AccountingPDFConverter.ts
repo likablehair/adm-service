@@ -9,6 +9,7 @@ export type AccountingStatementMapped = {
   totalVat: number;
   vatExemption: boolean;
   vatExemptionValue: number | undefined;
+  letterOfIntent: string | undefined;
   taxB00Vat22: number | undefined;
   taxB00Vat04: number | undefined;
   taxB00Vat10: number | undefined;
@@ -107,90 +108,119 @@ export interface AccountingJson {
     tribute1: string;
     value1: string;
     rate1: string;
+    letterOfIntent1: string;
     tribute2: string;
     value2: string;
     rate2: string;
+    letterOfIntent2: string;
     tribute3: string;
     value3: string;
     rate3: string;
+    letterOfIntent3: string;
     tribute4: string;
     value4: string;
     rate4: string;
+    letterOfIntent4: string;
     tribute5: string;
     value5: string;
     rate5: string;
+    letterOfIntent5: string;
     tribute6: string;
     value6: string;
     rate6: string;
+    letterOfIntent6: string;
     tribute7: string;
     value7: string;
     rate7: string;
+    letterOfIntent7: string;
     tribute8: string;
     value8: string;
     rate8: string;
+    letterOfIntent8: string;
     tribute9: string;
     value9: string;
     rate9: string;
+    letterOfIntent9: string;
     tribute10: string;
     value10: string;
     rate10: string;
+    letterOfIntent10: string;
     tribute11: string;
     value11: string;
     rate11: string;
+    letterOfIntent11: string;
     tribute12: string;
     value12: string;
     rate12: string;
+    letterOfIntent12: string;
     tribute13: string;
     value13: string;
     rate13: string;
+    letterOfIntent13: string;
     tribute14: string;
     value14: string;
     rate14: string;
+    letterOfIntent14: string;
     tribute15: string;
     value15: string;
     rate15: string;
+    letterOfIntent15: string;
     tribute16: string;
     value16: string;
     rate16: string;
+    letterOfIntent16: string;
     tribute17: string;
     value17: string;
     rate17: string;
+    letterOfIntent17: string;
     tribute18: string;
     value18: string;
     rate18: string;
+    letterOfIntent18: string;
     tribute19: string;
     value19: string;
     rate19: string;
+    letterOfIntent19: string;
     tribute20: string;
     value20: string;
     rate20: string;
+    letterOfIntent20: string;
     tribute21: string;
     value21: string;
     rate21: string;
+    letterOfIntent21: string;
     tribute22: string;
     value22: string;
     rate22: string;
+    letterOfIntent22: string;
     tribute23: string;
     value23: string;
     rate23: string;
+    letterOfIntent23: string;
     tribute24: string;
     value24: string;
     rate24: string;
+    letterOfIntent24: string;
     tribute25: string;
     value25: string;
     rate25: string;
+    letterOfIntent25: string;
     tribute26: string;
     value26: string;
     rate26: string;
+    letterOfIntent26: string;
     tribute27: string;
     value27: string;
     rate27: string;
+    letterOfIntent27: string;
     tribute28: string;
     value28: string;
     rate28: string;
+    letterOfIntent28: string;
     tribute29: string;
     value29: string;
     rate29: string;
+    letterOfIntent29: string;
   };
 }
 
@@ -310,156 +340,180 @@ class AccountingPDFConverter {
         ? Number(Number(totalVatString.replace(',', '.')).toFixed(2))
         : undefined;
 
-    const vatLiquidation: { tribute: string; value: string; rate: string }[] = [
+    const vatLiquidation: { tribute: string; value: string; rate: string, letterOfIntent: string }[] = [
       {
         tribute: input.vat?.tribute1 || '',
         value: input.vat?.value1 || '',
         rate: input.vat?.rate1 || '',
+        letterOfIntent: input.vat?.letterOfIntent1 || '',
       },
       {
         tribute: input.vat?.tribute2 || '',
         value: input.vat?.value2 || '',
         rate: input.vat?.rate2 || '',
+        letterOfIntent: input.vat?.letterOfIntent2 || '',
       },
       {
         tribute: input.vat?.tribute3 || '',
         value: input.vat?.value3 || '',
         rate: input.vat?.rate3 || '',
-      },
-      {
-        tribute: input.vat?.tribute3 || '',
-        value: input.vat?.value3 || '',
-        rate: input.vat?.rate3 || '',
+        letterOfIntent: input.vat?.letterOfIntent3 || '',
       },
       {
         tribute: input.vat?.tribute4 || '',
         value: input.vat?.value4 || '',
         rate: input.vat?.rate4 || '',
+        letterOfIntent: input.vat?.letterOfIntent4 || '',
       },
       {
         tribute: input.vat?.tribute5 || '',
         value: input.vat?.value5 || '',
         rate: input.vat?.rate5 || '',
+        letterOfIntent: input.vat?.letterOfIntent5 || '',
       },
       {
         tribute: input.vat?.tribute6 || '',
         value: input.vat?.value6 || '',
         rate: input.vat?.rate6 || '',
+        letterOfIntent: input.vat?.letterOfIntent6 || '',
       },
       {
         tribute: input.vat?.tribute7 || '',
         value: input.vat?.value7 || '',
         rate: input.vat?.rate7 || '',
+        letterOfIntent: input.vat?.letterOfIntent7 || '',
       },
       {
         tribute: input.vat?.tribute8 || '',
         value: input.vat?.value8 || '',
         rate: input.vat?.rate8 || '',
+        letterOfIntent: input.vat?.letterOfIntent8 || '',
       },
       {
         tribute: input.vat?.tribute9 || '',
         value: input.vat?.value9 || '',
         rate: input.vat?.rate9 || '',
+        letterOfIntent: input.vat?.letterOfIntent9 || '',
       },
       {
         tribute: input.vat?.tribute10 || '',
         value: input.vat?.value10 || '',
         rate: input.vat?.rate10 || '',
+        letterOfIntent: input.vat?.letterOfIntent10 || '',
       },
       {
         tribute: input.vat?.tribute11 || '',
         value: input.vat?.value11 || '',
         rate: input.vat?.rate11 || '',
+        letterOfIntent: input.vat?.letterOfIntent11 || '',
       },
       {
         tribute: input.vat?.tribute12 || '',
         value: input.vat?.value12 || '',
         rate: input.vat?.rate12 || '',
+        letterOfIntent: input.vat?.letterOfIntent12 || '',
       },
       {
         tribute: input.vat?.tribute13 || '',
         value: input.vat?.value13 || '',
         rate: input.vat?.rate13 || '',
+        letterOfIntent: input.vat?.letterOfIntent13 || '',
       },
       {
         tribute: input.vat?.tribute14 || '',
         value: input.vat?.value14 || '',
         rate: input.vat?.rate14 || '',
+        letterOfIntent: input.vat?.letterOfIntent14 || '',
       },
       {
         tribute: input.vat?.tribute15 || '',
         value: input.vat?.value15 || '',
         rate: input.vat?.rate15 || '',
+        letterOfIntent: input.vat?.letterOfIntent15 || '',
       },
       {
         tribute: input.vat?.tribute16 || '',
         value: input.vat?.value16 || '',
         rate: input.vat?.rate16 || '',
+        letterOfIntent: input.vat?.letterOfIntent16 || '',
       },
       {
         tribute: input.vat?.tribute17 || '',
         value: input.vat?.value17 || '',
         rate: input.vat?.rate17 || '',
+        letterOfIntent: input.vat?.letterOfIntent17 || '',
       },
       {
         tribute: input.vat?.tribute18 || '',
         value: input.vat?.value18 || '',
         rate: input.vat?.rate18 || '',
+        letterOfIntent: input.vat?.letterOfIntent18 || '',
       },
       {
         tribute: input.vat?.tribute19 || '',
         value: input.vat?.value19 || '',
         rate: input.vat?.rate19 || '',
+        letterOfIntent: input.vat?.letterOfIntent19 || '',
       },
       {
         tribute: input.vat?.tribute20 || '',
         value: input.vat?.value20 || '',
         rate: input.vat?.rate20 || '',
+        letterOfIntent: input.vat?.letterOfIntent20 || '',
       },
       {
         tribute: input.vat?.tribute21 || '',
         value: input.vat?.value21 || '',
         rate: input.vat?.rate21 || '',
+        letterOfIntent: input.vat?.letterOfIntent21 || '',
       },
       {
         tribute: input.vat?.tribute22 || '',
         value: input.vat?.value22 || '',
         rate: input.vat?.rate22 || '',
+        letterOfIntent: input.vat?.letterOfIntent22 || '',
       },
       {
         tribute: input.vat?.tribute23 || '',
         value: input.vat?.value23 || '',
         rate: input.vat?.rate23 || '',
+        letterOfIntent: input.vat?.letterOfIntent23 || '',
       },
       {
         tribute: input.vat?.tribute24 || '',
         value: input.vat?.value24 || '',
         rate: input.vat?.rate24 || '',
+        letterOfIntent: input.vat?.letterOfIntent24 || '',
       },
       {
         tribute: input.vat?.tribute25 || '',
         value: input.vat?.value25 || '',
         rate: input.vat?.rate25 || '',
+        letterOfIntent: input.vat?.letterOfIntent25 || '',
       },
       {
         tribute: input.vat?.tribute26 || '',
         value: input.vat?.value26 || '',
         rate: input.vat?.rate26 || '',
+        letterOfIntent: input.vat?.letterOfIntent26 || '',
       },
       {
         tribute: input.vat?.tribute27 || '',
         value: input.vat?.value27 || '',
         rate: input.vat?.rate27 || '',
+        letterOfIntent: input.vat?.letterOfIntent27 || '',
       },
       {
         tribute: input.vat?.tribute28 || '',
         value: input.vat?.value28 || '',
         rate: input.vat?.rate28 || '',
+        letterOfIntent: input.vat?.letterOfIntent28 || '',
       },
       {
         tribute: input.vat?.tribute29 || '',
         value: input.vat?.value29 || '',
         rate: input.vat?.rate29 || '',
+        letterOfIntent: input.vat?.letterOfIntent29 || '',
       },
     ];
 
@@ -468,6 +522,10 @@ class AccountingPDFConverter {
     const vatExemptionValue = vatExemption
       ? Number(Number(vatExemption.value.replace(',', '.')).toFixed(2))
       : undefined;
+
+    const letterOfIntent = vatExemption 
+      ? vatExemption.letterOfIntent
+      : undefined
 
     const taxB00Vat22Liquidation = vatLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '22,00' || il.rate == '0,22'),
@@ -604,6 +662,7 @@ class AccountingPDFConverter {
       totalVat,
       vatExemption: !!vatExemption,
       vatExemptionValue,
+      letterOfIntent,
       taxB00Vat22,
       taxB00Vat10,
       taxB00Vat04,

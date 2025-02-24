@@ -372,6 +372,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent1',
+    xRange: [22.599, 22.599],
+    yRange: [36.704, 36.704],
+  },
+  {
+    entity: 'vat',
     column: 'tribute2',
     xRange: [2.159, 2.159],
     yRange: [37.601, 37.601],
@@ -386,6 +392,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate2',
     xRange: [10.335, 10.335],
+    yRange: [37.601, 37.601],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent2',
+    xRange: [22.599, 22.599],
     yRange: [37.601, 37.601],
   },
   {
@@ -408,6 +420,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent3',
+    xRange: [22.599, 22.599],
+    yRange: [34.91, 34.91],
+  },
+  {
+    entity: 'vat',
     column: 'tribute4',
     xRange: [2.159, 2.159],
     yRange: [35.807, 35.807],
@@ -422,6 +440,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate4',
     xRange: [10.335, 10.335],
+    yRange: [35.807, 35.807],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent4',
+    xRange: [22.599, 22.599],
     yRange: [35.807, 35.807],
   },
   {
@@ -444,6 +468,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent5',
+    xRange: [22.599, 22.599],
+    yRange: [35.66, 35.66],
+  },
+  {
+    entity: 'vat',
     column: 'tribute6',
     xRange: [2.159, 2.159],
     yRange: [36.557, 36.557],
@@ -458,6 +488,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate6',
     xRange: [10.335, 10.335],
+    yRange: [36.557, 36.557],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent6',
+    xRange: [22.599, 22.599],
     yRange: [36.557, 36.557],
   },
   {
@@ -480,6 +516,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent7',
+    xRange: [22.599, 22.599],
+    yRange: [41.188, 41.188],
+  },
+  {
+    entity: 'vat',
     column: 'tribute8',
     xRange: [2.159, 2.159],
     yRange: [42.085, 42.085],
@@ -494,6 +536,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate8',
     xRange: [10.335, 10.335],
+    yRange: [42.085, 42.085],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent8',
+    xRange: [22.599, 22.599],
     yRange: [42.085, 42.085],
   },
   {
@@ -516,6 +564,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent9',
+    xRange: [22.599, 22.599],
+    yRange: [38.498, 38.498],
+  },
+  {
+    entity: 'vat',
     column: 'tribute10',
     xRange: [2.159, 2.159],
     yRange: [39.394, 39.394],
@@ -530,6 +584,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate10',
     xRange: [10.335, 10.335],
+    yRange: [39.394, 39.394],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent10',
+    xRange: [22.599, 22.599],
     yRange: [39.394, 39.394],
   },
   {
@@ -552,6 +612,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent11',
+    xRange: [22.599, 22.599],
+    yRange: [40.291, 40.291],
+  },
+  {
+    entity: 'vat',
     column: 'tribute12',
     xRange: [2.159, 2.159],
     yRange: [46.569, 46.569],
@@ -566,6 +632,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate12',
     xRange: [10.335, 10.335],
+    yRange: [46.569, 46.569],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent12',
+    xRange: [22.599, 22.599],
     yRange: [46.569, 46.569],
   },
   {
@@ -588,6 +660,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent13',
+    xRange: [22.599, 22.599],
+    yRange: [47.466, 47.466],
+  },
+  {
+    entity: 'vat',
     column: 'tribute14',
     xRange: [2.159, 2.159],
     yRange: [41.041, 41.041],
@@ -602,6 +680,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate14',
     xRange: [10.335, 10.335],
+    yRange: [41.041, 41.041],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent14',
+    xRange: [22.599, 22.599],
     yRange: [41.041, 41.041],
   },
   {
@@ -624,6 +708,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent15',
+    xRange: [22.599, 22.599],
+    yRange: [41.938, 41.938],
+  },
+  {
+    entity: 'vat',
     column: 'tribute16',
     xRange: [2.159, 2.159],
     yRange: [43.732, 43.732],
@@ -638,6 +728,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate16',
     xRange: [10.335, 10.335],
+    yRange: [43.732, 43.732],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent16',
+    xRange: [22.599, 22.599],
     yRange: [43.732, 43.732],
   },
   {
@@ -660,6 +756,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent17',
+    xRange: [22.599, 22.599],
+    yRange: [44.629, 44.629],
+  },
+  {
+    entity: 'vat',
     column: 'tribute18',
     xRange: [2.159, 2.159],
     yRange: [34.255, 34.255],
@@ -674,6 +776,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate18',
     xRange: [10.335, 10.335],
+    yRange: [34.255, 34.255],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent18',
+    xRange: [22.599, 22.599],
     yRange: [34.255, 34.255],
   },
   {
@@ -696,6 +804,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent19',
+    xRange: [22.599, 22.599],
+    yRange: [35.152, 35.152],
+  },
+  {
+    entity: 'vat',
     column: 'tribute20',
     xRange: [2.159, 2.159],
     yRange: [42.982, 42.982],
@@ -710,6 +824,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate20',
     xRange: [10.335, 10.335],
+    yRange: [42.982, 42.982],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent20',
+    xRange: [22.599, 22.599],
     yRange: [42.982, 42.982],
   },
   {
@@ -732,6 +852,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent21',
+    xRange: [22.599, 22.599],
+    yRange: [43.879, 43.879],
+  },
+  {
+    entity: 'vat',
     column: 'tribute22',
     xRange: [2.159, 2.159],
     yRange: [42.835, 42.835],
@@ -746,6 +872,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate22',
     xRange: [10.335, 10.335],
+    yRange: [42.835, 42.835],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent22',
+    xRange: [22.599, 22.599],
     yRange: [42.835, 42.835],
   },
   {
@@ -768,6 +900,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent23',
+    xRange: [22.599, 22.599],
+    yRange: [39.248, 39.248],
+  },
+  {
+    entity: 'vat',
     column: 'tribute24',
     xRange: [2.159, 2.159],
     yRange: [40.144, 40.144],
@@ -782,6 +920,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate24',
     xRange: [10.335, 10.335],
+    yRange: [40.144, 40.144],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent24',
+    xRange: [22.599, 22.599],
     yRange: [40.144, 40.144],
   },
   {
@@ -804,6 +948,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent25',
+    xRange: [22.599, 22.599],
+    yRange: [37.454, 37.454],
+  },
+  {
+    entity: 'vat',
     column: 'tribute26',
     xRange: [2.159, 2.159],
     yRange: [8.828, 8.828],
@@ -818,6 +968,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate26',
     xRange: [10.335, 10.335],
+    yRange: [8.828, 8.828],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent26',
+    xRange: [22.599, 22.599],
     yRange: [8.828, 8.828],
   },
   {
@@ -840,6 +996,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent27',
+    xRange: [22.599, 22.599],
+    yRange: [9.725, 9.725],
+  },
+  {
+    entity: 'vat',
     column: 'tribute28',
     xRange: [2.159, 2.159],
     yRange: [11.485, 11.485],
@@ -858,6 +1020,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'letterOfIntent28',
+    xRange: [22.599, 22.599],
+    yRange: [11.485, 11.485],
+  },
+  {
+    entity: 'vat',
     column: 'tribute29',
     xRange: [2.159, 2.159],
     yRange: [12.382, 12.382],
@@ -872,6 +1040,12 @@ export const _cells: {
     entity: 'vat',
     column: 'rate29',
     xRange: [10.335, 10.335],
+    yRange: [12.382, 12.382],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent29',
+    xRange: [22.599, 22.599],
     yRange: [12.382, 12.382],
   },
   {
