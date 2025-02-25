@@ -701,7 +701,7 @@ export const _cells: {
     xRange: [22.599, 22.599],
     yRange: [27.519, 27.519],
   },
-    // {
+  // {
   //   entity: 'documents',
   //   column: 'code',
   //   xRange: [2.159, 2.159],
