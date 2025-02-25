@@ -189,6 +189,7 @@ class PDFConverter {
   private getMappedPosition(
     x: number,
     y: number,
+    isMappingDocuments: boolean,
   ): { entity?: string; column?: string } {
     const _x = x.toFixed(3);
     const _y = y.toFixed(3);
@@ -197,15 +198,17 @@ class PDFConverter {
     _cells[Number(_xy)] = { xRange: [x, x], yRange: [y, y] };
 
     for (const cell in _cells) {
-      if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
-        const { xRange, yRange, entity, column } = _cells[cell];
-        if (
-          x >= xRange[0] &&
-          x <= xRange[1] &&
-          y >= yRange[0] &&
-          y <= yRange[1]
-        ) {
-          return { entity, column };
+      if(isMappingDocuments || _cells[cell].entity != 'documents'){
+        if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
+          const { xRange, yRange, entity, column } = _cells[cell];
+          if (
+            x >= xRange[0] &&
+            x <= xRange[1] &&
+            y >= yRange[0] &&
+            y <= yRange[1]
+          ) {
+            return { entity, column };
+          }
         }
       }
     }
@@ -435,7 +438,7 @@ class PDFConverter {
       .filter((g) => !!g);
 
     const documents = input.documents.filter(
-      (d) => d.code != '' && d.code != 'Tipo' && d.code != 'Scarichi',
+      (d) => d.code != '' && d.code != 'Tipo' && d.code != 'Scarichi' && d.code != 'Documenti' && d.code != 'Codice',
     );
 
     if (documents.length != documentsNumber) {
@@ -520,6 +523,9 @@ class PDFConverter {
         documents: [],
       };
       let countNumber = 0;
+      let isMappingDocuments: boolean = false,
+        isFirstDocument = true,
+        isNewDocument = false;
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
 
@@ -532,8 +538,6 @@ class PDFConverter {
               code: '',
               identifier: '',
             };
-            let isFirstDocument = true;
-            let isMappingDocuments: boolean = false;
             for (let j = 0; j < page.Texts.length; j++) {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
@@ -542,12 +546,11 @@ class PDFConverter {
               //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
               // }
 
-              if (i == 0 && text == 'Scarichi' && textElement.x == 2.159) {
+              if (text == 'Scarichi' && textElement.x == 2.159) {
                 isMappingDocuments = false;
               }
 
               if (
-                i == 0 &&
                 text != 'Codice' &&
                 textElement.x == 2.159 &&
                 isMappingDocuments
@@ -560,74 +563,72 @@ class PDFConverter {
               }
 
               const mappedPosition: { entity?: string; column?: string } =
-                this.getMappedPosition(textElement.x, textElement.y);
+                this.getMappedPosition(textElement.x, textElement.y, isMappingDocuments);
 
               if (!mappedPosition.column || !text.trim()) {
                 continue;
               } else if (!!mappedPosition.entity && !!mappedPosition.column) {
-                if (i > 0) {
-                  if (!declarationEntity[mappedPosition.entity])
-                    declarationEntity[mappedPosition.entity] = [];
+                if (mappedPosition.entity == 'documents') {
+                  if (isMappingDocuments) {
+                    if (mappedPosition.column == 'code') {
+                      if (isFirstDocument) {
+                        isFirstDocument = false;
+                      } else {
+                        isNewDocument = true;
+                      }
+                    }
 
-                  if (Array.isArray(declarationEntity[mappedPosition.entity])) {
-                    goodObject[mappedPosition.column] = text.trim();
+                    if (isNewDocument) {
+                      declarationEntity['documents'].push(documentObject);
+                      documentObject = {
+                        code: '',
+                        identifier: '',
+                      };
+                      isNewDocument = false
+                    }
 
-                    const lastItem =
-                      declarationEntity[mappedPosition.entity].slice(-1)[0];
-
-                    const isNewItem =
-                      !lastItem ||
-                      (lastItem.nr !== goodObject.nr &&
-                        !!goodObject.ncCode &&
-                        goodObject.ncCode.length > 0 &&
-                        goodObject.ncCode.length <= 10 &&
-                        !isNaN(parseFloat(goodObject.netWeight)));
-
-                    if (isNewItem)
-                      declarationEntity[mappedPosition.entity].push(goodObject);
+                    if (mappedPosition.column == 'identifier') {
+                      documentObject['identifier'] =
+                        documentObject['identifier'] + text.trim();
+                    } else {
+                      documentObject['code'] = text.trim();
+                    }
                   }
-                } else if (mappedPosition.entity != 'goods') {
-                  if (!declarationEntity[mappedPosition.entity])
-                    declarationEntity[mappedPosition.entity] = {};
-
-                  if (mappedPosition.entity != 'documents') {
+                }
+                else {
+                  if (i > 0) {
+                    if (!declarationEntity[mappedPosition.entity])
+                      declarationEntity[mappedPosition.entity] = [];
+  
+                    if (Array.isArray(declarationEntity[mappedPosition.entity])) {
+                      goodObject[mappedPosition.column] = text.trim();
+  
+                      const lastItem =
+                        declarationEntity[mappedPosition.entity].slice(-1)[0];
+  
+                      const isNewItem =
+                        !lastItem ||
+                        (lastItem.nr !== goodObject.nr &&
+                          !!goodObject.ncCode &&
+                          goodObject.ncCode.length > 0 &&
+                          goodObject.ncCode.length <= 10 &&
+                          !isNaN(parseFloat(goodObject.netWeight)));
+  
+                      if (isNewItem)
+                        declarationEntity[mappedPosition.entity].push(goodObject);
+                    }
+                  } else if (mappedPosition.entity != 'goods') {
+                    if (!declarationEntity[mappedPosition.entity])
+                      declarationEntity[mappedPosition.entity] = {};
+  
                     declarationEntity[mappedPosition.entity][
                       mappedPosition.column
                     ] = text.trim();
-                  } else {
-                    if (isMappingDocuments) {
-                      let isNewDocument = false;
-                      if (mappedPosition.column.startsWith('code')) {
-                        if (isFirstDocument) {
-                          isFirstDocument = false;
-                        } else {
-                          isNewDocument = true;
-                        }
-                      }
-
-                      if (isNewDocument) {
-                        declarationEntity['documents'].push(documentObject);
-                        documentObject = {
-                          code: '',
-                          identifier: '',
-                        };
-                      }
-
-                      if (mappedPosition.column.startsWith('identifier')) {
-                        documentObject['identifier'] =
-                          documentObject['identifier'] + text.trim();
-                      } else {
-                        documentObject['code'] = text.trim();
-                      }
-                    }
                   }
                 }
               }
             }
-
-            if (i == 0) {
-              declarationEntity['documents'].push(documentObject);
-            }
+            declarationEntity['documents'].push(documentObject);
           }
         }
       } else {
