@@ -8,7 +8,7 @@ export const _cells: {
     entity: 'documents',
     column: 'code',
     xRange: [2.159, 2.159],
-    yRange: [11.897, 48.689],
+    yRange: [11.897, 48.775],
   },
 
   {
@@ -272,6 +272,18 @@ export const _cells: {
     column: 'netWeight',
     xRange: [10.335, 10.335],
     yRange: [16.381, 16.381],
+  },
+  {
+    entity: 'goods',
+    column: 'releaseDate',
+    xRange: [22.599, 22.599],
+    yRange: [12.793, 12.793],
+  },
+  {
+    entity: 'goods',
+    column: 'releaseCode',
+    xRange: [18.511, 18.511],
+    yRange: [12.793, 12.793],
   },
   {
     entity: 'goods',

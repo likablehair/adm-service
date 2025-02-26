@@ -142,6 +142,8 @@ export interface DeclarationJson {
     ncCode: string;
     taricCode: string;
     identificationCode: string;
+    releaseCode: string;
+    releaseDate: string;
     description1: string;
     description2: string;
     description3: string;
@@ -425,6 +427,8 @@ class PDFConverter {
             ncCode,
             taricCode,
             identificationCode: good.ncCode,
+            releaseCode: good.releaseCode,
+            releaseDate: good.releaseDate,
             description: this.convertArrayToString(description),
             country,
             netWeight: good.netWeight,

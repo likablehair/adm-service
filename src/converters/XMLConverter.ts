@@ -129,6 +129,8 @@ export type AdmDeclarationMapped = {
     ncCode: string;
     taricCode: string;
     identificationCode: string;
+    releaseDate: string;
+    releaseCode: string;
     description: string;
     country: string;
     netWeight: string;
@@ -213,6 +215,8 @@ export default class XMLConverter {
       ncCode: string;
       taricCode: string;
       identificationCode: string;
+      releaseDate: string;
+      releaseCode: string;
       description: string;
       country: string;
       netWeight: string;
@@ -230,6 +234,8 @@ export default class XMLConverter {
         identificationCode:
           articoli[i].IdentificazioneMerci.CodiceNC +
           articoli[i].IdentificazioneMerci.CodiceTaric,
+        releaseCode: '',
+        releaseDate: '',
         description: articoli[i].IdentificazioneMerci.DescrizioneMerci,
         country: esportatore.Paese,
         netWeight: articoli[i].IdentificazioneMerci.MassaNetta,
