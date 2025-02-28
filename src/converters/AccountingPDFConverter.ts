@@ -62,6 +62,9 @@ export interface AccountingJson {
     totalTaxes15: string;
     totalTaxes16: string;
     totalTaxes17: string;
+    totalTaxes18: string;
+    totalTaxes19: string;
+    totalTaxes20: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -79,6 +82,11 @@ export interface AccountingJson {
     totalVat15: string;
     totalVat16: string;
     totalVat17: string;
+    totalVat18: string;
+    totalVat19: string;
+    totalVat20: string;
+    totalVat21: string;
+    totalVat22: string;
   };
   taxes: {
     tribute1: string;
@@ -308,6 +316,9 @@ class AccountingPDFConverter {
       input.statement.totalTaxes15?.trim() ||
       input.statement.totalTaxes16?.trim() ||
       input.statement.totalTaxes17?.trim() ||
+      input.statement.totalTaxes18?.trim() ||
+      input.statement.totalTaxes19?.trim() ||
+      input.statement.totalTaxes20?.trim() ||
       '';
 
     const totalTaxes =
@@ -333,6 +344,11 @@ class AccountingPDFConverter {
       input.statement.totalVat15?.trim() ||
       input.statement.totalVat16?.trim() ||
       input.statement.totalVat17?.trim() ||
+      input.statement.totalVat18?.trim() ||
+      input.statement.totalVat19?.trim() ||
+      input.statement.totalVat20?.trim() ||
+      input.statement.totalVat21?.trim() ||
+      input.statement.totalVat22?.trim() ||
       '';
 
     const totalVat =
@@ -562,6 +578,16 @@ class AccountingPDFConverter {
         )
       : undefined;
 
+    const taxB00Vat00Liquidation = vatLiquidation.find(
+      (il) => il.tribute == 'B00' && (il.rate == '0,00' || il.rate == '0,00'),
+    );
+
+    const taxB00Vat00 = taxB00Vat00Liquidation
+      ? Number(
+          Number(taxB00Vat00Liquidation.value.replace(',', '.')).toFixed(2),
+        )
+      : undefined;
+
     const taxLiquidation: { tribute: string; value: string }[] = [
       {
         tribute: input.taxes?.tribute1 || '',
@@ -654,7 +680,8 @@ class AccountingPDFConverter {
     if (
       taxB00Vat22 == undefined &&
       taxB00Vat10 == undefined &&
-      taxB00Vat04 == undefined
+      taxB00Vat04 == undefined &&
+      taxB00Vat00 == undefined
     ) {
       throw new Error('Missing VAT tax');
     }

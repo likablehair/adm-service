@@ -8,14 +8,14 @@ export const _cells: {
     entity: 'documents',
     column: 'code',
     xRange: [2.159, 2.159],
-    yRange: [11.897, 48.775],
+    yRange: [11.897, 50],
   },
 
   {
     entity: 'documents',
     column: 'identifier',
     xRange: [6.247, 6.247],
-    yRange: [11.849, 49.064],
+    yRange: [11.849, 50],
   },
 
   {
