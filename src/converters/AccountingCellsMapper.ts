@@ -255,19 +255,19 @@ export const _cells: {
     column: 'totalTaxes18',
     xRange: [30.531, 30.531],
     yRange: [36.574, 36.574],
-  },  
+  },
   {
     entity: 'statement',
     column: 'totalTaxes19',
     xRange: [30.531, 30.531],
     yRange: [39.411, 39.411],
-  }, 
+  },
   {
     entity: 'statement',
     column: 'totalTaxes20',
     xRange: [30.531, 30.531],
     yRange: [41.058, 41.058],
-  }, 
+  },
   {
     entity: 'statement',
     column: 'totalVat1',
