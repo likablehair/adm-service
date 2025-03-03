@@ -150,6 +150,12 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'totalDuties21',
+    xRange: [29.874, 29.874],
+    yRange: [38.531, 38.531],
+  },
+  {
+    entity: 'statement',
     column: 'totalTaxes1',
     xRange: [30.531, 30.531],
     yRange: [35.824, 35.824],
@@ -267,6 +273,12 @@ export const _cells: {
     column: 'totalTaxes20',
     xRange: [30.531, 30.531],
     yRange: [41.058, 41.058],
+  },
+  {
+    entity: 'statement',
+    column: 'totalTaxes21',
+    xRange: [30.531, 30.531],
+    yRange: [42.101, 42.101],
   },
   {
     entity: 'statement',
@@ -399,6 +411,12 @@ export const _cells: {
     column: 'totalVat22',
     xRange: [29.5, 29.5],
     yRange: [45.525, 45.525],
+  },
+  {
+    entity: 'statement',
+    column: 'totalVat23',
+    xRange: [29.5, 29.5],
+    yRange: [46.569, 46.569],
   },
   {
     entity: 'vat',
@@ -1095,6 +1113,54 @@ export const _cells: {
     column: 'letterOfIntent29',
     xRange: [22.599, 22.599],
     yRange: [12.382, 12.382],
+  },
+  {
+    entity: 'vat',
+    column: 'tribute30',
+    xRange: [2.159, 2.159],
+    yRange: [45.672, 45.672],
+  },
+  {
+    entity: 'vat',
+    column: 'value30',
+    xRange: [14.423, 14.423],
+    yRange: [45.672, 45.672],
+  },
+  {
+    entity: 'vat',
+    column: 'rate30',
+    xRange: [10.335, 10.335],
+    yRange: [45.672, 45.672],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent30',
+    xRange: [22.599, 22.599],
+    yRange: [45.672, 45.672],
+  },
+  {
+    entity: 'vat',
+    column: 'tribute31',
+    xRange: [2.159, 2.159],
+    yRange: [44.775, 44.775],
+  },
+  {
+    entity: 'vat',
+    column: 'value31',
+    xRange: [14.423, 14.423],
+    yRange: [44.775, 44.775],
+  },
+  {
+    entity: 'vat',
+    column: 'rate31',
+    xRange: [10.335, 10.335],
+    yRange: [44.775, 44.775],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent31',
+    xRange: [22.599, 22.599],
+    yRange: [44.775, 44.775],
   },
   {
     entity: 'taxes',

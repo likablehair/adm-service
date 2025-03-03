@@ -45,6 +45,7 @@ export interface AccountingJson {
     totalDuties18: string;
     totalDuties19: string;
     totalDuties20: string;
+    totalDuties21: string;
     totalTaxes1: string;
     totalTaxes2: string;
     totalTaxes3: string;
@@ -65,6 +66,7 @@ export interface AccountingJson {
     totalTaxes18: string;
     totalTaxes19: string;
     totalTaxes20: string;
+    totalTaxes21: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -87,6 +89,7 @@ export interface AccountingJson {
     totalVat20: string;
     totalVat21: string;
     totalVat22: string;
+    totalVat23: string;
   };
   taxes: {
     tribute1: string;
@@ -229,6 +232,14 @@ export interface AccountingJson {
     value29: string;
     rate29: string;
     letterOfIntent29: string;
+    tribute30: string;
+    value30: string;
+    rate30: string;
+    letterOfIntent30: string;
+    tribute31: string;
+    value31: string;
+    rate31: string;
+    letterOfIntent31: string;
   };
 }
 
@@ -291,6 +302,7 @@ class AccountingPDFConverter {
       input.statement.totalDuties18?.trim() ||
       input.statement.totalDuties19?.trim() ||
       input.statement.totalDuties20?.trim() ||
+      input.statement.totalDuties21?.trim() ||
       '';
 
     const totalDuties =
@@ -319,6 +331,7 @@ class AccountingPDFConverter {
       input.statement.totalTaxes18?.trim() ||
       input.statement.totalTaxes19?.trim() ||
       input.statement.totalTaxes20?.trim() ||
+      input.statement.totalTaxes21?.trim() ||
       '';
 
     const totalTaxes =
@@ -349,6 +362,7 @@ class AccountingPDFConverter {
       input.statement.totalVat20?.trim() ||
       input.statement.totalVat21?.trim() ||
       input.statement.totalVat22?.trim() ||
+      input.statement.totalVat23?.trim() ||
       '';
 
     const totalVat =
@@ -535,6 +549,18 @@ class AccountingPDFConverter {
         value: input.vat?.value29 || '',
         rate: input.vat?.rate29 || '',
         letterOfIntent: input.vat?.letterOfIntent29 || '',
+      },
+      {
+        tribute: input.vat?.tribute30 || '',
+        value: input.vat?.value30 || '',
+        rate: input.vat?.rate30 || '',
+        letterOfIntent: input.vat?.letterOfIntent30 || '',
+      },
+      {
+        tribute: input.vat?.tribute31 || '',
+        value: input.vat?.value31 || '',
+        rate: input.vat?.rate31 || '',
+        letterOfIntent: input.vat?.letterOfIntent31 || '',
       },
     ];
 
