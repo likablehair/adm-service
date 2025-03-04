@@ -6,7 +6,7 @@ export type AccountingStatementMapped = {
   version: string;
   totalDuties: number;
   totalTaxes: number;
-  totalVat: number;
+  totalVatToBePaid: number;
   vatExemption: boolean;
   vatExemptionValue: number | undefined;
   letterOfIntent: string | undefined;
@@ -339,7 +339,7 @@ class AccountingPDFConverter {
         ? Number(Number(totalTaxesString.replace(',', '.')).toFixed(2))
         : undefined;
 
-    const totalVatString =
+    const totalVatToBePaidString =
       input.statement.totalVat1?.trim() ||
       input.statement.totalVat2?.trim() ||
       input.statement.totalVat3?.trim() ||
@@ -365,9 +365,9 @@ class AccountingPDFConverter {
       input.statement.totalVat23?.trim() ||
       '';
 
-    const totalVat =
-      totalVatString != ''
-        ? Number(Number(totalVatString.replace(',', '.')).toFixed(2))
+    const totalVatToBePaid =
+      totalVatToBePaidString != ''
+        ? Number(Number(totalVatToBePaidString.replace(',', '.')).toFixed(2))
         : undefined;
 
     const vatLiquidation: {
@@ -695,8 +695,8 @@ class AccountingPDFConverter {
       throw new Error('Missing total duties');
     }
 
-    if (totalVat == undefined) {
-      throw new Error('Missing total vat');
+    if (totalVatToBePaid == undefined) {
+      throw new Error('Missing total vat to be paid');
     }
 
     if (totalTaxes == undefined) {
@@ -717,7 +717,7 @@ class AccountingPDFConverter {
       version,
       totalDuties,
       totalTaxes,
-      totalVat,
+      totalVatToBePaid,
       vatExemption: !!vatExemption,
       vatExemptionValue,
       letterOfIntent,
