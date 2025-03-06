@@ -17,6 +17,10 @@ export type AccountingStatementMapped = {
   tax123: number | undefined;
   totalSeaTaxes: number | undefined;
   rectificationOrCancellationDate: string;
+  documents: {
+    code: string;
+    identifier: string;
+  }[];
 };
 
 export interface AccountingJson {
@@ -91,6 +95,12 @@ export interface AccountingJson {
     totalVat22: string;
     totalVat23: string;
   };
+  documents: {
+    code: string;
+    identifier: string;
+    country: string;
+    year: string;
+  }[];
   taxes: {
     tribute1: string;
     value1: string;
@@ -247,6 +257,7 @@ class AccountingPDFConverter {
   private getMappedPosition(
     x: number,
     y: number,
+    isMappingDocuments: boolean,
   ): { entity?: string; column?: string } {
     const _x = x.toFixed(3);
     const _y = y.toFixed(3);
@@ -255,15 +266,17 @@ class AccountingPDFConverter {
     _cells[Number(_xy)] = { xRange: [x, x], yRange: [y, y] };
 
     for (const cell in _cells) {
-      if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
-        const { xRange, yRange, entity, column } = _cells[cell];
-        if (
-          x >= xRange[0] &&
-          x <= xRange[1] &&
-          y >= yRange[0] &&
-          y <= yRange[1]
-        ) {
-          return { entity, column };
+      if (isMappingDocuments || _cells[cell].entity != 'documents') {
+        if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
+          const { xRange, yRange, entity, column } = _cells[cell];
+          if (
+            x >= xRange[0] &&
+            x <= xRange[1] &&
+            y >= yRange[0] &&
+            y <= yRange[1]
+          ) {
+            return { entity, column };
+          }
         }
       }
     }
@@ -272,6 +285,7 @@ class AccountingPDFConverter {
   private map(
     input: AccountingJson,
     seaTaxCodes: string[],
+    documentsNumber: number,
   ): AccountingStatementMapped {
     const version: string = input.statement.version || '';
 
@@ -691,6 +705,28 @@ class AccountingPDFConverter {
       totalSeaTaxes = undefined;
     }
 
+    const documents = input.documents
+      .filter(
+        (d) =>
+          d.code != '' &&
+          d.code != 'Elenco Fatture' &&
+          d.code != 'Codice',
+      )
+      .map(document => {
+        return {
+          code: document.code,
+          identifier: [document.country, document.year, document.identifier].join('-')
+        }
+      });
+
+    if (documents.length != documentsNumber) {
+      throw new Error('Missing mapping for documents');
+    }
+
+    if(letterOfIntent) {
+      documents.push({ code: '01DI', identifier: letterOfIntent})
+    }
+
     if (totalDuties == undefined) {
       throw new Error('Missing total duties');
     }
@@ -727,6 +763,7 @@ class AccountingPDFConverter {
       tax931,
       tax123,
       totalSeaTaxes,
+      documents,
     };
   }
   public async run(params: {
@@ -758,7 +795,12 @@ class AccountingPDFConverter {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const accountingEntity: any = {
         statement: {},
+        documents: []
       };
+      let isMappingDocuments: boolean = false,
+        countNumber = 0,
+        isFirstDocument = true,
+        isNewDocument = false;
 
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
@@ -766,6 +808,12 @@ class AccountingPDFConverter {
         for (let i = 0; i < pages.length; i++) {
           const page = pages[i];
           if (page.Texts) {
+            let documentObject: any = {
+              code: '',
+              identifier: '',
+              country: '',
+              year: '',
+            };
             for (let j = 0; j < page.Texts.length; j++) {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
@@ -774,18 +822,65 @@ class AccountingPDFConverter {
               //   console.log({ x: textElement.x, y: textElement.y, text: text });
               // }
 
+              if (text == 'Condizioni di Consegna' && textElement.x == 2.159) {
+                isMappingDocuments = false;
+              }
+
+              if (
+                text != 'Codice' &&
+                textElement.x == 2.159 &&
+                isMappingDocuments
+              ) {
+                countNumber++;
+              }
+
+              if (i == 0 && text == 'Elenco Fatture' && textElement.x == 2.159) {
+                isMappingDocuments = true;
+              }
+
               const mappedPosition: { entity?: string; column?: string } =
-                this.getMappedPosition(textElement.x, textElement.y);
+                this.getMappedPosition(
+                  textElement.x,
+                  textElement.y,
+                  isMappingDocuments,
+                );
 
               if (!mappedPosition.column || !text.trim()) {
                 continue;
               } else if (!!mappedPosition.entity && !!mappedPosition.column) {
-                if (!accountingEntity[mappedPosition.entity])
-                  accountingEntity[mappedPosition.entity] = {};
-                accountingEntity[mappedPosition.entity][mappedPosition.column] =
-                  text.trim();
+                if (mappedPosition.entity == 'documents' && isMappingDocuments) {
+                  if (isMappingDocuments) {
+                    if (mappedPosition.column == 'code') {
+                      if (isFirstDocument) {
+                        isFirstDocument = false;
+                      } else {
+                        isNewDocument = true;
+                      }
+                    }
+
+                    if (isNewDocument) {
+                      accountingEntity['documents'].push(documentObject);
+                      documentObject = {
+                        code: '',
+                        identifier: '',
+                        country: '',
+                        year: '',
+                      };
+                      isNewDocument = false;
+                    }
+
+                    documentObject[mappedPosition.column] = text.trim();
+                  }
+                }
+                else {
+                  if (!accountingEntity[mappedPosition.entity])
+                    accountingEntity[mappedPosition.entity] = {};
+                  accountingEntity[mappedPosition.entity][mappedPosition.column] =
+                    text.trim();
+                }
               }
             }
+            accountingEntity['documents'].push(documentObject);
           }
         }
       } else {
@@ -795,6 +890,7 @@ class AccountingPDFConverter {
       const accountingStatementMapped = this.map(
         accountingEntity,
         params.data.seaTaxCodes,
+        countNumber
       );
       return accountingStatementMapped;
     } catch (error) {

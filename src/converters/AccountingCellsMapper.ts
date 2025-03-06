@@ -5,6 +5,33 @@ export const _cells: {
   yRange: [number, number];
 }[] = [
   {
+    entity: 'documents',
+    column: 'code',
+    xRange: [2.159, 2.159],
+    yRange: [20, 45],
+  },
+
+  {
+    entity: 'documents',
+    column: 'country',
+    xRange: [5.79, 5.79],
+    yRange: [20, 45],
+  },
+
+  {
+    entity: 'documents',
+    column: 'year',
+    xRange: [9.421, 9.421],
+    yRange: [20, 45],
+  },
+
+  {
+    entity: 'documents',
+    column: 'identifier',
+    xRange: [16.685, 16.685],
+    yRange: [20, 45],
+  },
+  {
     entity: 'statement',
     column: 'version',
     xRange: [21.214, 21.214],
