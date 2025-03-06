@@ -117,6 +117,7 @@ export type AdmDeclarationMapped = {
   currency: string;
   exchangeRate: string;
   incoterm: string;
+  originCountryAlpha2: string;
   supplier: {
     companyName: string;
     vatNumber: string;
@@ -197,6 +198,7 @@ export default class XMLConverter {
       currency: '',
       exchangeRate: '',
       incoterm: '',
+      originCountryAlpha2: '',
       supplier: {
         companyName: esportatore.Nome,
         vatNumber: '',

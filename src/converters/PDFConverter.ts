@@ -90,6 +90,13 @@ export interface DeclarationJson {
     incoterm5: string;
     incoterm6: string;
     incoterm7: string;
+    originCountry1: string;
+    originCountry2: string;
+    originCountry3: string;
+    originCountry4: string;
+    originCountry5: string;
+    originCountry6: string;
+    originCountry7: string;
     releaseDate1: string;
     releaseCode1: string;
     mrn: string;
@@ -359,6 +366,16 @@ class PDFConverter {
       input.declaration.incoterm7 ||
       '';
 
+    const originCountryAlpha2: string =
+      input.declaration.originCountry1 ||
+      input.declaration.originCountry2 ||
+      input.declaration.originCountry3 ||
+      input.declaration.originCountry4 ||
+      input.declaration.originCountry5 ||
+      input.declaration.originCountry6 ||
+      input.declaration.originCountry7 ||
+      '';
+
     const goods = input.goods
       .map((good) => {
         if (
@@ -454,6 +471,10 @@ class PDFConverter {
       throw new Error('Missing mapping for documents');
     }
 
+    if (originCountryAlpha2 == '') {
+      throw new Error('Missing mapping for origin country');
+    }
+
     return this.convertAsterisksToZero({
       mrn: input.declaration.mrn,
       version: input.declaration.version,
@@ -466,6 +487,7 @@ class PDFConverter {
       currency,
       exchangeRate,
       incoterm,
+      originCountryAlpha2,
       track: input.declaration.track,
       supplier,
       goods,
