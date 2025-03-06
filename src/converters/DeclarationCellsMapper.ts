@@ -670,7 +670,7 @@ export const _cells: {
     column: 'originCountry6',
     xRange: [2.159, 2.159],
     yRange: [32.512, 32.512],
-  },  
+  },
   {
     entity: 'declaration',
     column: 'originCountry7',
