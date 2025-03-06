@@ -707,24 +707,25 @@ class AccountingPDFConverter {
 
     const documents = input.documents
       .filter(
-        (d) =>
-          d.code != '' &&
-          d.code != 'Elenco Fatture' &&
-          d.code != 'Codice',
+        (d) => d.code != '' && d.code != 'Elenco Fatture' && d.code != 'Codice',
       )
-      .map(document => {
+      .map((document) => {
         return {
           code: document.code,
-          identifier: [document.country, document.year, document.identifier].join('-')
-        }
+          identifier: [
+            document.country,
+            document.year,
+            document.identifier,
+          ].join('-'),
+        };
       });
 
     if (documents.length != documentsNumber) {
       throw new Error('Missing mapping for documents');
     }
 
-    if(letterOfIntent) {
-      documents.push({ code: '01DI', identifier: letterOfIntent})
+    if (letterOfIntent) {
+      documents.push({ code: '01DI', identifier: letterOfIntent });
     }
 
     if (totalDuties == undefined) {
@@ -795,7 +796,7 @@ class AccountingPDFConverter {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const accountingEntity: any = {
         statement: {},
-        documents: []
+        documents: [],
       };
       let isMappingDocuments: boolean = false,
         countNumber = 0,
@@ -834,7 +835,11 @@ class AccountingPDFConverter {
                 countNumber++;
               }
 
-              if (i == 0 && text == 'Elenco Fatture' && textElement.x == 2.159) {
+              if (
+                i == 0 &&
+                text == 'Elenco Fatture' &&
+                textElement.x == 2.159
+              ) {
                 isMappingDocuments = true;
               }
 
@@ -848,7 +853,10 @@ class AccountingPDFConverter {
               if (!mappedPosition.column || !text.trim()) {
                 continue;
               } else if (!!mappedPosition.entity && !!mappedPosition.column) {
-                if (mappedPosition.entity == 'documents' && isMappingDocuments) {
+                if (
+                  mappedPosition.entity == 'documents' &&
+                  isMappingDocuments
+                ) {
                   if (isMappingDocuments) {
                     if (mappedPosition.column == 'code') {
                       if (isFirstDocument) {
@@ -871,12 +879,12 @@ class AccountingPDFConverter {
 
                     documentObject[mappedPosition.column] = text.trim();
                   }
-                }
-                else {
+                } else {
                   if (!accountingEntity[mappedPosition.entity])
                     accountingEntity[mappedPosition.entity] = {};
-                  accountingEntity[mappedPosition.entity][mappedPosition.column] =
-                    text.trim();
+                  accountingEntity[mappedPosition.entity][
+                    mappedPosition.column
+                  ] = text.trim();
                 }
               }
             }
@@ -890,7 +898,7 @@ class AccountingPDFConverter {
       const accountingStatementMapped = this.map(
         accountingEntity,
         params.data.seaTaxCodes,
-        countNumber
+        countNumber,
       );
       return accountingStatementMapped;
     } catch (error) {
