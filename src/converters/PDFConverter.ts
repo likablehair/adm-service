@@ -471,7 +471,7 @@ class PDFConverter {
       throw new Error('Missing mapping for documents');
     }
 
-    if (originCountryAlpha2 == '') {
+    if (originCountryAlpha2 == '' && input.declaration.track != 'H7') {
       throw new Error('Missing mapping for origin country');
     }
 
