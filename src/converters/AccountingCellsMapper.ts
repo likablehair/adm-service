@@ -459,6 +459,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue1',
+    xRange: [6.247, 6.247],
+    yRange: [36.704, 36.704],
+  },
+  {
+    entity: 'vat',
     column: 'rate1',
     xRange: [10.335, 10.335],
     yRange: [36.704, 36.704],
@@ -479,6 +485,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value2',
     xRange: [14.423, 14.423],
+    yRange: [37.601, 37.601],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue2',
+    xRange: [6.247, 6.247],
     yRange: [37.601, 37.601],
   },
   {
@@ -507,6 +519,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue3',
+    xRange: [6.247, 6.247],
+    yRange: [34.91, 34.91],
+  },
+  {
+    entity: 'vat',
     column: 'rate3',
     xRange: [10.335, 10.335],
     yRange: [34.91, 34.91],
@@ -527,6 +545,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value4',
     xRange: [14.423, 14.423],
+    yRange: [35.807, 35.807],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue4',
+    xRange: [6.247, 6.247],
     yRange: [35.807, 35.807],
   },
   {
@@ -555,6 +579,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue5',
+    xRange: [6.247, 6.247],
+    yRange: [35.66, 35.66],
+  },
+  {
+    entity: 'vat',
     column: 'rate5',
     xRange: [10.335, 10.335],
     yRange: [35.66, 35.66],
@@ -575,6 +605,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value6',
     xRange: [14.423, 14.423],
+    yRange: [36.557, 36.557],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue6',
+    xRange: [6.247, 6.247],
     yRange: [36.557, 36.557],
   },
   {
@@ -603,6 +639,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue7',
+    xRange: [6.247, 6.247],
+    yRange: [41.188, 41.188],
+  },
+  {
+    entity: 'vat',
     column: 'rate7',
     xRange: [10.335, 10.335],
     yRange: [41.188, 41.188],
@@ -623,6 +665,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value8',
     xRange: [14.423, 14.423],
+    yRange: [42.085, 42.085],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue8',
+    xRange: [6.247, 6.247],
     yRange: [42.085, 42.085],
   },
   {
@@ -651,6 +699,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue9',
+    xRange: [6.247, 6.247],
+    yRange: [38.498, 38.498],
+  },
+  {
+    entity: 'vat',
     column: 'rate9',
     xRange: [10.335, 10.335],
     yRange: [38.498, 38.498],
@@ -671,6 +725,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value10',
     xRange: [14.423, 14.423],
+    yRange: [39.394, 39.394],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue10',
+    xRange: [6.247, 6.247],
     yRange: [39.394, 39.394],
   },
   {
@@ -699,6 +759,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue11',
+    xRange: [6.247, 6.247],
+    yRange: [40.291, 40.291],
+  },
+  {
+    entity: 'vat',
     column: 'rate11',
     xRange: [10.335, 10.335],
     yRange: [40.291, 40.291],
@@ -719,6 +785,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value12',
     xRange: [14.423, 14.423],
+    yRange: [46.569, 46.569],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue12',
+    xRange: [6.247, 6.247],
     yRange: [46.569, 46.569],
   },
   {
@@ -747,6 +819,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue13',
+    xRange: [6.247, 6.247],
+    yRange: [47.466, 47.466],
+  },
+  {
+    entity: 'vat',
     column: 'rate13',
     xRange: [10.335, 10.335],
     yRange: [47.466, 47.466],
@@ -767,6 +845,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value14',
     xRange: [14.423, 14.423],
+    yRange: [41.041, 41.041],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue14',
+    xRange: [6.247, 6.247],
     yRange: [41.041, 41.041],
   },
   {
@@ -795,6 +879,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue15',
+    xRange: [6.247, 6.247],
+    yRange: [41.938, 41.938],
+  },
+  {
+    entity: 'vat',
     column: 'rate15',
     xRange: [10.335, 10.335],
     yRange: [41.938, 41.938],
@@ -815,6 +905,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value16',
     xRange: [14.423, 14.423],
+    yRange: [43.732, 43.732],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue16',
+    xRange: [6.247, 6.247],
     yRange: [43.732, 43.732],
   },
   {
@@ -843,6 +939,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue17',
+    xRange: [6.247, 6.247],
+    yRange: [44.629, 44.629],
+  },
+  {
+    entity: 'vat',
     column: 'rate17',
     xRange: [10.335, 10.335],
     yRange: [44.629, 44.629],
@@ -863,6 +965,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value18',
     xRange: [14.423, 14.423],
+    yRange: [34.255, 34.255],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue18',
+    xRange: [6.247, 6.247],
     yRange: [34.255, 34.255],
   },
   {
@@ -891,6 +999,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue19',
+    xRange: [6.247, 6.247],
+    yRange: [35.152, 35.152],
+  },
+  {
+    entity: 'vat',
     column: 'rate19',
     xRange: [10.335, 10.335],
     yRange: [35.152, 35.152],
@@ -911,6 +1025,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value20',
     xRange: [14.423, 14.423],
+    yRange: [42.982, 42.982],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue20',
+    xRange: [6.247, 6.247],
     yRange: [42.982, 42.982],
   },
   {
@@ -939,6 +1059,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue21',
+    xRange: [6.247, 6.247],
+    yRange: [43.879, 43.879],
+  },
+  {
+    entity: 'vat',
     column: 'rate21',
     xRange: [10.335, 10.335],
     yRange: [43.879, 43.879],
@@ -959,6 +1085,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value22',
     xRange: [14.423, 14.423],
+    yRange: [42.835, 42.835],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue22',
+    xRange: [6.247, 6.247],
     yRange: [42.835, 42.835],
   },
   {
@@ -993,6 +1125,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue23',
+    xRange: [6.247, 6.247],
+    yRange: [39.248, 39.248],
+  },
+  {
+    entity: 'vat',
     column: 'letterOfIntent23',
     xRange: [22.599, 22.599],
     yRange: [39.248, 39.248],
@@ -1007,6 +1145,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value24',
     xRange: [14.423, 14.423],
+    yRange: [40.144, 40.144],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue24',
+    xRange: [6.247, 6.247],
     yRange: [40.144, 40.144],
   },
   {
@@ -1035,6 +1179,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue25',
+    xRange: [6.247, 6.247],
+    yRange: [37.454, 37.454],
+  },
+  {
+    entity: 'vat',
     column: 'rate25',
     xRange: [10.335, 10.335],
     yRange: [37.454, 37.454],
@@ -1055,6 +1205,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value26',
     xRange: [14.423, 14.423],
+    yRange: [8.828, 8.828],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue26',
+    xRange: [6.247, 6.247],
     yRange: [8.828, 8.828],
   },
   {
@@ -1083,6 +1239,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue27',
+    xRange: [6.247, 6.247],
+    yRange: [9.725, 9.725],
+  },
+  {
+    entity: 'vat',
     column: 'rate27',
     xRange: [10.335, 10.335],
     yRange: [9.725, 9.725],
@@ -1103,6 +1265,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value28',
     xRange: [14.423, 14.423],
+    yRange: [11.485, 11.485],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue28',
+    xRange: [6.247, 6.247],
     yRange: [11.485, 11.485],
   },
   {
@@ -1131,6 +1299,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue29',
+    xRange: [6.247, 6.247],
+    yRange: [12.382, 12.382],
+  },
+  {
+    entity: 'vat',
     column: 'rate29',
     xRange: [10.335, 10.335],
     yRange: [12.382, 12.382],
@@ -1155,6 +1329,12 @@ export const _cells: {
   },
   {
     entity: 'vat',
+    column: 'taxableValue30',
+    xRange: [6.247, 6.247],
+    yRange: [45.672, 45.672],
+  },
+  {
+    entity: 'vat',
     column: 'rate30',
     xRange: [10.335, 10.335],
     yRange: [45.672, 45.672],
@@ -1175,6 +1355,12 @@ export const _cells: {
     entity: 'vat',
     column: 'value31',
     xRange: [14.423, 14.423],
+    yRange: [44.775, 44.775],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue31',
+    xRange: [6.247, 6.247],
     yRange: [44.775, 44.775],
   },
   {
