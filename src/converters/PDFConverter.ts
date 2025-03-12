@@ -97,6 +97,7 @@ export interface DeclarationJson {
     originCountry5: string;
     originCountry6: string;
     originCountry7: string;
+    originCountry8: string;
     releaseDate1: string;
     releaseCode1: string;
     mrn: string;
@@ -374,6 +375,7 @@ class PDFConverter {
       input.declaration.originCountry5 ||
       input.declaration.originCountry6 ||
       input.declaration.originCountry7 ||
+      input.declaration.originCountry8 ||
       '';
 
     const goods = input.goods
