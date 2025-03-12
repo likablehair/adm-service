@@ -51,6 +51,9 @@ export interface AccountingJson {
     totalDuties19: string;
     totalDuties20: string;
     totalDuties21: string;
+    totalDuties22: string;
+    totalDuties23: string;
+    totalDuties24: string;
     totalTaxes1: string;
     totalTaxes2: string;
     totalTaxes3: string;
@@ -72,6 +75,9 @@ export interface AccountingJson {
     totalTaxes19: string;
     totalTaxes20: string;
     totalTaxes21: string;
+    totalTaxes22: string;
+    totalTaxes23: string;
+    totalTaxes24: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -95,6 +101,9 @@ export interface AccountingJson {
     totalVat21: string;
     totalVat22: string;
     totalVat23: string;
+    totalVat24: string;
+    totalVat25: string;
+    totalVat26: string;
   };
   documents: {
     code: string;
@@ -282,6 +291,21 @@ export interface AccountingJson {
     taxableValue31: string;
     rate31: string;
     letterOfIntent31: string;
+    tribute32: string;
+    value32: string;
+    taxableValue32: string;
+    rate32: string;
+    letterOfIntent32: string;
+    tribute33: string;
+    value33: string;
+    taxableValue33: string;
+    rate33: string;
+    letterOfIntent33: string;
+    tribute34: string;
+    value34: string;
+    taxableValue34: string;
+    rate34: string;
+    letterOfIntent34: string;
   };
 }
 
@@ -349,6 +373,9 @@ class AccountingPDFConverter {
       input.statement.totalDuties19?.trim() ||
       input.statement.totalDuties20?.trim() ||
       input.statement.totalDuties21?.trim() ||
+      input.statement.totalDuties22?.trim() ||
+      input.statement.totalDuties23?.trim() ||
+      input.statement.totalDuties24?.trim() ||
       '';
 
     const totalDuties =
@@ -378,6 +405,9 @@ class AccountingPDFConverter {
       input.statement.totalTaxes19?.trim() ||
       input.statement.totalTaxes20?.trim() ||
       input.statement.totalTaxes21?.trim() ||
+      input.statement.totalTaxes22?.trim() ||
+      input.statement.totalTaxes23?.trim() ||
+      input.statement.totalTaxes24?.trim() ||
       '';
 
     const totalTaxes =
@@ -409,6 +439,9 @@ class AccountingPDFConverter {
       input.statement.totalVat21?.trim() ||
       input.statement.totalVat22?.trim() ||
       input.statement.totalVat23?.trim() ||
+      input.statement.totalVat24?.trim() ||
+      input.statement.totalVat25?.trim() ||
+      input.statement.totalVat26?.trim() ||
       '';
 
     const totalVatToBePaid =
@@ -639,6 +672,27 @@ class AccountingPDFConverter {
         taxableValue: input.vat?.taxableValue31 || '',
         rate: input.vat?.rate31 || '',
         letterOfIntent: input.vat?.letterOfIntent31 || '',
+      },
+      {
+        tribute: input.vat?.tribute32 || '',
+        value: input.vat?.value32 || '',
+        taxableValue: input.vat?.taxableValue32 || '',
+        rate: input.vat?.rate32 || '',
+        letterOfIntent: input.vat?.letterOfIntent32 || '',
+      },
+      {
+        tribute: input.vat?.tribute33 || '',
+        value: input.vat?.value33 || '',
+        taxableValue: input.vat?.taxableValue33 || '',
+        rate: input.vat?.rate33 || '',
+        letterOfIntent: input.vat?.letterOfIntent33 || '',
+      },
+      {
+        tribute: input.vat?.tribute34 || '',
+        value: input.vat?.value34 || '',
+        taxableValue: input.vat?.taxableValue34 || '',
+        rate: input.vat?.rate34 || '',
+        letterOfIntent: input.vat?.letterOfIntent34 || '',
       },
     ];
 
