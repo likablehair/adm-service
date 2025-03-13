@@ -670,8 +670,7 @@ export default class AdmRobotProcessAutomationManager {
         await page.click('button.btn-primary-adm span.lfr-btn-label'),
       ]);
 
-      const filePath = `${params.mrn}_screenshot.pdf`
-
+      const filePath = `${params.mrn}_screenshot.pdf`;
 
       const screenshot = await page.pdf({
         path: filePath,
@@ -691,8 +690,8 @@ export default class AdmRobotProcessAutomationManager {
               <a class="url"></a>
             </div>
           </div>
-        `
-    });
+        `,
+      });
 
       const buffer = Buffer.from(screenshot);
       await fsPromises.unlink(filePath);
