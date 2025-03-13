@@ -1,4 +1,5 @@
 import { Browser, Cookie, Page } from 'puppeteer';
+import * as fsPromises from 'fs/promises';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 export type DeclarationTableRow = {
@@ -669,9 +670,33 @@ export default class AdmRobotProcessAutomationManager {
         await page.click('button.btn-primary-adm span.lfr-btn-label'),
       ]);
 
-      const screenshot = await page.screenshot({ fullPage: true });
+      const filePath = `${params.mrn}_screenshot.pdf`
+
+
+      const screenshot = await page.pdf({
+        path: filePath,
+        format: 'A4',
+        displayHeaderFooter: true,
+        margin: { top: '70px', bottom: '130px', left: '30px', right: '30px' },
+        printBackground: true,
+        headerTemplate: `
+          <div style="width: 100%; font-size: 10px; display: flex; justify-content: space-between; padding: 0 20px;">
+            <span class="date"></span>
+            <span class="title"></span>
+          </div>
+        `,
+        footerTemplate: `
+          <div style="display: flex; justify-content: center; max-width: 100%; padding: 0 10px;">
+            <div style="width: 80%; font-size: 8px; text-align: center; padding: 5px 10px; overflow-wrap: break-word; word-wrap: break-word;">
+              <a class="url"></a>
+            </div>
+          </div>
+        `
+    });
 
       const buffer = Buffer.from(screenshot);
+      await fsPromises.unlink(filePath);
+
       // const pdfFilePath = `${params.mrn}_screenshot.png`;
       // await fsPromises.writeFile(pdfFilePath, buffer);
       console.info(
