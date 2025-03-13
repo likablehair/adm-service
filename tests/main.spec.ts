@@ -661,9 +661,9 @@ test(
       return;
     }
 
-    const dichiarante = import.meta.env.VITE_DICHIARANTE_TEST;
+    const dichiarante = import.meta.env.VITE_EXPORT_DICHIARANTE_TEST;
     if (!dichiarante) {
-      console.error('ERROR: DICHIARANTE_TEST not found');
+      console.error('ERROR: EXPORT_DICHIARANTE_TEST not found');
       return;
     }
 
