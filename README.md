@@ -11,7 +11,7 @@
 This package is available in the npm registry.
 
 ```bash
-pnpm install breeze
+pnpm install adm-service
 ```
 
 Next, configure the .env file (by following the example) and set the following variables:
