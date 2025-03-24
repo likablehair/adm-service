@@ -11,7 +11,7 @@
 This package is available in the npm registry.
 
 ```bash
-pnpm install adm-service
+npm install adm-service
 ```
 
 Next, configure the .env file (by following the example) and set the following variables:
@@ -56,5 +56,5 @@ You also need to configure the variables regarding:
 Run the following command to test the package
 
 ```bash
-pnpm run test
+npm run test
 ```
