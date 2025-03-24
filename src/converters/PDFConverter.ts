@@ -460,8 +460,8 @@ class PDFConverter {
             good.prefixedCountry10?.trim() ||
             '';
 
-          const price: string = 
-            good.price1 || 
+          const price: string =
+            good.price1 ||
             good.price2 ||
             good.price3 ||
             good.price4 ||
@@ -473,7 +473,7 @@ class PDFConverter {
             '';
 
           const statisticValue: string =
-            good.statisticValue1 || 
+            good.statisticValue1 ||
             good.statisticValue2 ||
             good.statisticValue3 ||
             good.statisticValue4 ||
