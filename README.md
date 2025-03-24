@@ -50,3 +50,11 @@ You also need to configure the variables regarding:
     ADM services. The package is configured to use Aruba services.
   </li>
 </ul>
+
+## Usage
+
+Run the following command to test the package
+
+```bash
+pnpm run test
+```
