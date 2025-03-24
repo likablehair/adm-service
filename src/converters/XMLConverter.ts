@@ -135,6 +135,8 @@ export type AdmDeclarationMapped = {
     description: string;
     country: string;
     netWeight: string;
+    price: string;
+    statisticValue: string;
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
@@ -222,6 +224,8 @@ export default class XMLConverter {
       description: string;
       country: string;
       netWeight: string;
+      price: string;
+      statisticValue: string;
       customsRegime: string | '';
       requestedRegime: string | '';
       previousRegime: string | '';
@@ -241,6 +245,8 @@ export default class XMLConverter {
         description: articoli[i].IdentificazioneMerci.DescrizioneMerci,
         country: esportatore.Paese,
         netWeight: articoli[i].IdentificazioneMerci.MassaNetta,
+        price: articoli[i].InformazioniValoreImposte.PrezzoArticolo,
+        statisticValue: articoli[i].AltriDati.ValoreStatistico,
         customsRegime:
           articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto +
           articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
