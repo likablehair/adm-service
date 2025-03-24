@@ -460,29 +460,34 @@ class PDFConverter {
             good.prefixedCountry10?.trim() ||
             '';
 
-          const price: string =
-            good.price1 ||
-            good.price2 ||
-            good.price3 ||
-            good.price4 ||
-            good.price5 ||
-            good.price6 ||
-            good.price7 ||
-            good.price8 ||
-            good.price9 ||
+          const priceString: string =
+            good.price1?.trim() ||
+            good.price2?.trim() ||
+            good.price3?.trim() ||
+            good.price4?.trim() ||
+            good.price5?.trim() ||
+            good.price6?.trim() ||
+            good.price7?.trim() ||
+            good.price8?.trim() ||
+            good.price9?.trim() ||
             '';
 
-          const statisticValue: string =
-            good.statisticValue1 ||
-            good.statisticValue2 ||
-            good.statisticValue3 ||
-            good.statisticValue4 ||
-            good.statisticValue5 ||
-            good.statisticValue6 ||
-            good.statisticValue7 ||
-            good.statisticValue8 ||
-            good.statisticValue9 ||
+          const statisticValueString: string =
+            good.statisticValue1?.trim() ||
+            good.statisticValue2?.trim() ||
+            good.statisticValue3?.trim() ||
+            good.statisticValue4?.trim() ||
+            good.statisticValue5?.trim() ||
+            good.statisticValue6?.trim() ||
+            good.statisticValue7?.trim() ||
+            good.statisticValue8?.trim() ||
+            good.statisticValue9?.trim() ||
             '';
+
+          const price: number = Number(priceString.replace(',', '.'));
+          const statisticValue: number = Number(
+            statisticValueString.replace(',', '.'),
+          );
 
           return this.convertAsterisksToZero({
             ncCode,

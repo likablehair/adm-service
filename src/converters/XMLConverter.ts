@@ -135,8 +135,8 @@ export type AdmDeclarationMapped = {
     description: string;
     country: string;
     netWeight: string;
-    price: string;
-    statisticValue: string;
+    price: number;
+    statisticValue: number;
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
@@ -224,8 +224,8 @@ export default class XMLConverter {
       description: string;
       country: string;
       netWeight: string;
-      price: string;
-      statisticValue: string;
+      price: number;
+      statisticValue: number;
       customsRegime: string | '';
       requestedRegime: string | '';
       previousRegime: string | '';
@@ -234,6 +234,15 @@ export default class XMLConverter {
     const articoli = await this.ensureArray(articoloH1);
 
     for (let i = 0; i < articoli.length; i++) {
+      const statisticValue = Number(
+        articoli[i].AltriDati.ValoreStatistico?.trim().replace(',', '.')
+      );
+
+      const price = Number(
+        articoli[i].InformazioniValoreImposte.PrezzoArticolo?.trim().replace(',', '.')
+      );
+        
+
       goods.push({
         ncCode: articoli[i].IdentificazioneMerci.CodiceNC,
         taricCode: articoli[i].IdentificazioneMerci.CodiceTaric,
@@ -245,8 +254,8 @@ export default class XMLConverter {
         description: articoli[i].IdentificazioneMerci.DescrizioneMerci,
         country: esportatore.Paese,
         netWeight: articoli[i].IdentificazioneMerci.MassaNetta,
-        price: articoli[i].InformazioniValoreImposte.PrezzoArticolo,
-        statisticValue: articoli[i].AltriDati.ValoreStatistico,
+        price,
+        statisticValue,
         customsRegime:
           articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto +
           articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
