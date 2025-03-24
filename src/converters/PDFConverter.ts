@@ -188,6 +188,24 @@ export interface DeclarationJson {
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
+    price1: string;
+    price2: string;
+    price3: string;
+    price4: string;
+    price5: string;
+    price6: string;
+    price7: string;
+    price8: string;
+    price9: string;
+    statisticValue1: string;
+    statisticValue2: string;
+    statisticValue3: string;
+    statisticValue4: string;
+    statisticValue5: string;
+    statisticValue6: string;
+    statisticValue7: string;
+    statisticValue8: string;
+    statisticValue9: string;
   }[];
   documents: {
     code: string;
@@ -442,6 +460,30 @@ class PDFConverter {
             good.prefixedCountry10?.trim() ||
             '';
 
+          const price: string = 
+            good.price1 || 
+            good.price2 ||
+            good.price3 ||
+            good.price4 ||
+            good.price5 ||
+            good.price6 ||
+            good.price7 ||
+            good.price8 ||
+            good.price9 ||
+            '';
+
+          const statisticValue: string =
+            good.statisticValue1 || 
+            good.statisticValue2 ||
+            good.statisticValue3 ||
+            good.statisticValue4 ||
+            good.statisticValue5 ||
+            good.statisticValue6 ||
+            good.statisticValue7 ||
+            good.statisticValue8 ||
+            good.statisticValue9 ||
+            '';
+
           return this.convertAsterisksToZero({
             ncCode,
             taricCode,
@@ -451,6 +493,8 @@ class PDFConverter {
             description: this.convertArrayToString(description),
             country,
             netWeight: good.netWeight,
+            price,
+            statisticValue,
             customsRegime,
             requestedRegime,
             previousRegime,
