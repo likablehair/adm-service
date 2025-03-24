@@ -235,13 +235,15 @@ export default class XMLConverter {
 
     for (let i = 0; i < articoli.length; i++) {
       const statisticValue = Number(
-        articoli[i].AltriDati.ValoreStatistico?.trim().replace(',', '.')
+        articoli[i].AltriDati.ValoreStatistico?.trim().replace(',', '.'),
       );
 
       const price = Number(
-        articoli[i].InformazioniValoreImposte.PrezzoArticolo?.trim().replace(',', '.')
+        articoli[i].InformazioniValoreImposte.PrezzoArticolo?.trim().replace(
+          ',',
+          '.',
+        ),
       );
-        
 
       goods.push({
         ncCode: articoli[i].IdentificazioneMerci.CodiceNC,

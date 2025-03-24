@@ -13,6 +13,7 @@ This package is available in the npm registry.
 ```bash
 pnpm install breeze
 ```
+
 Next, configure the .env file (by following the example) and set the following variables:
 
 <ul>
@@ -22,6 +23,7 @@ Next, configure the .env file (by following the example) and set the following v
 </ul>
 
 You also need to configure the variables regarding:
+
 <ul>
   <li> the ADM user for the RPA (Robot Process Automation)</li>
   <li> the Aruba Service for the signature of the xml</li>
