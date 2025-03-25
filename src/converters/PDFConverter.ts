@@ -67,7 +67,7 @@ export interface DeclarationJson {
     x?: number;
     y?: number;
   };
-  declaration: {
+  declaration?: {
     date1: string;
     date2: string;
     date3: string;
@@ -104,7 +104,7 @@ export interface DeclarationJson {
     version: string;
     track: string;
   };
-  supplier: {
+  supplier?: {
     companyName1: string;
     companyName2: string;
     companyName3: string;
@@ -206,8 +206,13 @@ export interface DeclarationJson {
     statisticValue7: string;
     statisticValue8: string;
     statisticValue9: string;
+    page: number;
+    documents: {
+      code: string;
+      identifier: string;
+    }[]
   }[];
-  documents: {
+  documents?: {
     code: string;
     identifier: string;
   }[];
@@ -253,7 +258,8 @@ class PDFConverter {
       input.supplier?.companyName4,
       input.supplier?.companyName5,
       input.supplier?.companyName6,
-    ];
+    ]
+    .filter((item): item is string => typeof item === 'string');
 
     const address: string[] = [
       input.supplier?.address1,
@@ -264,7 +270,8 @@ class PDFConverter {
       input.supplier?.address6,
       input.supplier?.address7,
       input.supplier?.address8,
-    ];
+    ]
+    .filter((item): item is string => typeof item === 'string');
 
     const city: string[] = [
       input.supplier?.city1,
@@ -276,7 +283,8 @@ class PDFConverter {
       input.supplier?.city7,
       input.supplier?.city8,
       input.supplier?.city9,
-    ];
+    ]
+    .filter((item): item is string => typeof item === 'string');
 
     let country: string =
       input.supplier?.country1?.trim() ||
@@ -336,87 +344,87 @@ class PDFConverter {
     );
 
     const date: string =
-      input.declaration.date1 ||
-      input.declaration.date2 ||
-      input.declaration.date3 ||
+      input.declaration?.date1 ||
+      input.declaration?.date2 ||
+      input.declaration?.date3 ||
       '';
 
     const acceptanceDate: string =
-      input.declaration.acceptanceDate1 ||
-      input.declaration.acceptanceDate2 ||
-      input.declaration.acceptanceDate3 ||
+      input.declaration?.acceptanceDate1 ||
+      input.declaration?.acceptanceDate2 ||
+      input.declaration?.acceptanceDate3 ||
       '';
 
-    const releaseDate: string = input.declaration.releaseDate1 || '';
+    const releaseDate: string = input.declaration?.releaseDate1 || '';
 
-    const releaseCode: string = input.declaration.releaseCode1 || '';
+    const releaseCode: string = input.declaration?.releaseCode1 || '';
 
     const totalGrossWeight: string =
-      input.declaration.totalGrossWeight1 ||
-      input.declaration.totalGrossWeight2 ||
-      input.declaration.totalGrossWeight3 ||
+      input.declaration?.totalGrossWeight1 ||
+      input.declaration?.totalGrossWeight2 ||
+      input.declaration?.totalGrossWeight3 ||
       '';
 
     const invoiceValue: string =
-      input.declaration.invoiceValueAndCurrency1?.split(' ')[0] ||
-      input.declaration.invoiceValueAndCurrency2?.split(' ')[0] ||
-      input.declaration.invoiceValueAndCurrency3?.split(' ')[0] ||
+      input.declaration?.invoiceValueAndCurrency1?.split(' ')[0] ||
+      input.declaration?.invoiceValueAndCurrency2?.split(' ')[0] ||
+      input.declaration?.invoiceValueAndCurrency3?.split(' ')[0] ||
       '';
 
     const currency: string =
-      input.declaration.invoiceValueAndCurrency1?.split(' ')[1] ||
-      input.declaration.invoiceValueAndCurrency2?.split(' ')[1] ||
-      input.declaration.invoiceValueAndCurrency3?.split(' ')[1] ||
+      input.declaration?.invoiceValueAndCurrency1?.split(' ')[1] ||
+      input.declaration?.invoiceValueAndCurrency2?.split(' ')[1] ||
+      input.declaration?.invoiceValueAndCurrency3?.split(' ')[1] ||
       '';
 
     const exchangeRate: string =
-      input.declaration.exchangeRate1 ||
-      input.declaration.exchangeRate2 ||
-      input.declaration.exchangeRate3 ||
+      input.declaration?.exchangeRate1 ||
+      input.declaration?.exchangeRate2 ||
+      input.declaration?.exchangeRate3 ||
       '';
 
     const incoterm: string =
-      input.declaration.incoterm1 ||
-      input.declaration.incoterm2 ||
-      input.declaration.incoterm3 ||
-      input.declaration.incoterm4 ||
-      input.declaration.incoterm5 ||
-      input.declaration.incoterm6 ||
-      input.declaration.incoterm7 ||
+      input.declaration?.incoterm1 ||
+      input.declaration?.incoterm2 ||
+      input.declaration?.incoterm3 ||
+      input.declaration?.incoterm4 ||
+      input.declaration?.incoterm5 ||
+      input.declaration?.incoterm6 ||
+      input.declaration?.incoterm7 ||
       '';
 
     const originCountryAlpha2: string =
-      input.declaration.originCountry1 ||
-      input.declaration.originCountry2 ||
-      input.declaration.originCountry3 ||
-      input.declaration.originCountry4 ||
-      input.declaration.originCountry5 ||
-      input.declaration.originCountry6 ||
-      input.declaration.originCountry7 ||
-      input.declaration.originCountry8 ||
+      input.declaration?.originCountry1 ||
+      input.declaration?.originCountry2 ||
+      input.declaration?.originCountry3 ||
+      input.declaration?.originCountry4 ||
+      input.declaration?.originCountry5 ||
+      input.declaration?.originCountry6 ||
+      input.declaration?.originCountry7 ||
+      input.declaration?.originCountry8 ||
       '';
 
     const goods = input.goods
-      .map((good) => {
+      ?.map((good) => {
         if (
           good.goodDetailString == 'Dettaglio Articolo n°' &&
           good.goodCodeString == 'Codice merce'
         ) {
           const ncCode =
-            input.declaration.track == 'H7'
+            input.declaration?.track == 'H7'
               ? good.ncCode
               : good.ncCode.slice(0, -2);
 
           const taricCode =
-            input.declaration.track == 'H7' ? '' : good.ncCode.slice(-2);
+            input.declaration?.track == 'H7' ? '' : good.ncCode.slice(-2);
 
           const requestedRegime =
-            input.declaration.track == 'H7'
+            input.declaration?.track == 'H7'
               ? ''
               : good.customsRegime.slice(0, 2).trim();
 
           const previousRegime =
-            input.declaration.track == 'H7'
+            input.declaration?.track == 'H7'
               ? ''
               : good.customsRegime.slice(-2).trim();
 
@@ -489,6 +497,8 @@ class PDFConverter {
             statisticValueString.replace(',', '.'),
           );
 
+          const documents = good.documents
+
           return this.convertAsterisksToZero({
             ncCode,
             taricCode,
@@ -503,32 +513,30 @@ class PDFConverter {
             customsRegime,
             requestedRegime,
             previousRegime,
+            documents,
+            page: good.page
           });
         }
         return undefined;
       })
       .filter((g) => !!g);
 
-    const documents = input.documents.filter(
-      (d) =>
-        d.code != '' &&
-        d.code != 'Tipo' &&
-        d.code != 'Scarichi' &&
-        d.code != 'Documenti' &&
-        d.code != 'Codice',
-    );
+    const documents = input.documents
 
-    if (documents.length != documentsNumber) {
+    const localDocumentsNumber = (documents?.length || 0) + 
+      goods.reduce((acc, good) => acc + good.documents.length, 0)
+
+    if (localDocumentsNumber != documentsNumber || !documents) {
       throw new Error('Missing mapping for documents');
     }
 
-    if (originCountryAlpha2 == '' && input.declaration.track != 'H7') {
+    if (originCountryAlpha2 == '' && input.declaration?.track != 'H7') {
       throw new Error('Missing mapping for origin country');
     }
 
     return this.convertAsterisksToZero({
-      mrn: input.declaration.mrn,
-      version: input.declaration.version,
+      mrn: input.declaration?.mrn || '',
+      version: input.declaration?.version || '',
       date,
       acceptanceDate,
       releaseCode,
@@ -539,7 +547,7 @@ class PDFConverter {
       exchangeRate,
       incoterm,
       originCountryAlpha2,
-      track: input.declaration.track,
+      track: input.declaration?.track || '',
       supplier,
       goods,
       documents,
@@ -596,23 +604,31 @@ class PDFConverter {
       const declarationRawJson: DeclarationRawJson =
         await loadDeclarationFromPDF;
       /* eslint-disable @typescript-eslint/no-explicit-any */
-      const declarationEntity: any = {
+      const declarationEntity: {[key: string]: any} = {
         date: new Date(),
         declarationId: 0,
         cbamRequestId: 0,
         authorId: 0,
         mrn: '',
         documents: [],
+        goods: [],
       };
+
+      const documentsWithPage: 
+        { page: number, documents: { code: string; identifier: string }[] }[] = [];
+
       let countNumber = 0;
-      let isMappingDocuments: boolean = false,
-        isFirstDocument = true,
-        isNewDocument = false;
+      let isMappingDocuments: boolean = false;
+      let isFirstDocument = true;
+      let isNewDocument = false;
+
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
 
         for (let i = 0; i < pages.length; i++) {
           const page = pages[i];
+          const documentsPerPage: { code: string; identifier: string }[] = [];
+          
           if (page.Texts) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
             const goodObject: any = {};
@@ -624,11 +640,11 @@ class PDFConverter {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
 
-              // if(i == 0){
-              //   console.log({ "x": textElement.x, "y": textElement.y, "text": text })
+              // if(i == 0 || i == 1){
+              //   console.log({ "page": i + 1, "x": textElement.x, "y": textElement.y, "text": text })
               // }
 
-              if (text == 'Scarichi' && textElement.x == 2.159) {
+              if ((text == 'Scarichi' || text == 'Liquidazione') && textElement.x == 2.159) {
                 isMappingDocuments = false;
               }
 
@@ -640,7 +656,7 @@ class PDFConverter {
                 countNumber++;
               }
 
-              if (i == 0 && text == 'Documenti' && textElement.x == 2.159) {
+              if (text == 'Documenti' && textElement.x == 2.159) {
                 isMappingDocuments = true;
               }
 
@@ -665,11 +681,26 @@ class PDFConverter {
                     }
 
                     if (isNewDocument) {
-                      declarationEntity['documents'].push(documentObject);
+
+                      if (
+                        documentObject.code != '' && 
+                        documentObject.code != 'Tipo' &&
+                        documentObject.code != 'Scarichi' &&
+                        documentObject.code != 'Documenti' &&
+                        documentObject.code != 'Codice'
+                      ) {
+                        documentsPerPage.push(documentObject);
+                        
+                        if (i === 0) {
+                          declarationEntity['documents']?.push(documentObject);
+                        }
+                      } 
+
                       documentObject = {
                         code: '',
                         identifier: '',
                       };
+
                       isNewDocument = false;
                     }
 
@@ -682,13 +713,15 @@ class PDFConverter {
                   }
                 } else {
                   if (i > 0) {
-                    if (!declarationEntity[mappedPosition.entity])
-                      declarationEntity[mappedPosition.entity] = [];
+                    if (!declarationEntity[mappedPosition.entity]) {
+                      declarationEntity[mappedPosition.entity] = []
+                    }
 
                     if (
                       Array.isArray(declarationEntity[mappedPosition.entity])
                     ) {
                       goodObject[mappedPosition.column] = text.trim();
+                      goodObject['page'] = i + 1;
 
                       const lastItem =
                         declarationEntity[mappedPosition.entity].slice(-1)[0];
@@ -717,14 +750,39 @@ class PDFConverter {
                 }
               }
             }
-            declarationEntity['documents'].push(documentObject);
+
+            if (
+              documentObject.code != '' && 
+              documentObject.code != 'Tipo' &&
+              documentObject.code != 'Scarichi' &&
+              documentObject.code != 'Documenti' &&
+              documentObject.code != 'Codice'
+            ) {
+              documentsPerPage.push(documentObject);
+
+              if (i === 0) {
+                declarationEntity['documents'].push(documentObject);
+              }
+            }
+
+            if (documentsPerPage.length > 0) {
+              documentsWithPage.push({ page: i + 1, documents: documentsPerPage });
+            }
           }
+
         }
       } else {
         throw new Error('No Pages found in the PDF.');
       }
 
-      const admDeclarationMapped = this.map(declarationEntity, countNumber);
+      const parsedDeclarationEntity = declarationEntity as DeclarationJson;
+
+      parsedDeclarationEntity['goods'].forEach((good) => {
+        const documentsForGood = documentsWithPage.find((d) => d.page == good.page);
+        good.documents = documentsForGood?.documents || [];
+      })
+
+      const admDeclarationMapped = this.map(parsedDeclarationEntity, countNumber);
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('parsing PDF declarations:' + error); // Returning an empty object

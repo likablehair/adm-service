@@ -140,6 +140,11 @@ export type AdmDeclarationMapped = {
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
+    page: number;
+    documents: {
+      code: string;
+      identifier: string;
+    }[]
   }[];
   documents: {
     code: string;
@@ -229,6 +234,11 @@ export default class XMLConverter {
       customsRegime: string | '';
       requestedRegime: string | '';
       previousRegime: string | '';
+      page: number;
+      documents: {
+        code: string;
+        identifier: string;
+      }[]
     }[] = [];
 
     const articoli = await this.ensureArray(articoloH1);
@@ -265,6 +275,8 @@ export default class XMLConverter {
           articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto,
         previousRegime:
           articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
+        page: i + 1,
+        documents: [],
       });
     }
 
