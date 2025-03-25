@@ -144,7 +144,7 @@ export type AdmDeclarationMapped = {
     documents: {
       code: string;
       identifier: string;
-    }[]
+    }[];
   }[];
   documents: {
     code: string;
@@ -238,7 +238,7 @@ export default class XMLConverter {
       documents: {
         code: string;
         identifier: string;
-      }[]
+      }[];
     }[] = [];
 
     const articoli = await this.ensureArray(articoloH1);

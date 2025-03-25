@@ -210,7 +210,7 @@ export interface DeclarationJson {
     documents: {
       code: string;
       identifier: string;
-    }[]
+    }[];
   }[];
   documents?: {
     code: string;
@@ -258,8 +258,7 @@ class PDFConverter {
       input.supplier?.companyName4,
       input.supplier?.companyName5,
       input.supplier?.companyName6,
-    ]
-    .filter((item): item is string => typeof item === 'string');
+    ].filter((item): item is string => typeof item === 'string');
 
     const address: string[] = [
       input.supplier?.address1,
@@ -270,8 +269,7 @@ class PDFConverter {
       input.supplier?.address6,
       input.supplier?.address7,
       input.supplier?.address8,
-    ]
-    .filter((item): item is string => typeof item === 'string');
+    ].filter((item): item is string => typeof item === 'string');
 
     const city: string[] = [
       input.supplier?.city1,
@@ -283,8 +281,7 @@ class PDFConverter {
       input.supplier?.city7,
       input.supplier?.city8,
       input.supplier?.city9,
-    ]
-    .filter((item): item is string => typeof item === 'string');
+    ].filter((item): item is string => typeof item === 'string');
 
     let country: string =
       input.supplier?.country1?.trim() ||
@@ -497,7 +494,7 @@ class PDFConverter {
             statisticValueString.replace(',', '.'),
           );
 
-          const documents = good.documents
+          const documents = good.documents;
 
           return this.convertAsterisksToZero({
             ncCode,
@@ -514,17 +511,18 @@ class PDFConverter {
             requestedRegime,
             previousRegime,
             documents,
-            page: good.page
+            page: good.page,
           });
         }
         return undefined;
       })
       .filter((g) => !!g);
 
-    const documents = input.documents
+    const documents = input.documents;
 
-    const localDocumentsNumber = (documents?.length || 0) + 
-      goods.reduce((acc, good) => acc + good.documents.length, 0)
+    const localDocumentsNumber =
+      (documents?.length || 0) +
+      goods.reduce((acc, good) => acc + good.documents.length, 0);
 
     if (localDocumentsNumber != documentsNumber || !documents) {
       throw new Error('Missing mapping for documents');
@@ -604,7 +602,7 @@ class PDFConverter {
       const declarationRawJson: DeclarationRawJson =
         await loadDeclarationFromPDF;
       /* eslint-disable @typescript-eslint/no-explicit-any */
-      const declarationEntity: {[key: string]: any} = {
+      const declarationEntity: { [key: string]: any } = {
         date: new Date(),
         declarationId: 0,
         cbamRequestId: 0,
@@ -614,8 +612,10 @@ class PDFConverter {
         goods: [],
       };
 
-      const documentsWithPage: 
-        { page: number, documents: { code: string; identifier: string }[] }[] = [];
+      const documentsWithPage: {
+        page: number;
+        documents: { code: string; identifier: string }[];
+      }[] = [];
 
       let countNumber = 0;
       let isMappingDocuments: boolean = false;
@@ -628,7 +628,7 @@ class PDFConverter {
         for (let i = 0; i < pages.length; i++) {
           const page = pages[i];
           const documentsPerPage: { code: string; identifier: string }[] = [];
-          
+
           if (page.Texts) {
             /* eslint-disable @typescript-eslint/no-explicit-any */
             const goodObject: any = {};
@@ -644,7 +644,10 @@ class PDFConverter {
               //   console.log({ "page": i + 1, "x": textElement.x, "y": textElement.y, "text": text })
               // }
 
-              if ((text == 'Scarichi' || text == 'Liquidazione') && textElement.x == 2.159) {
+              if (
+                (text == 'Scarichi' || text == 'Liquidazione') &&
+                textElement.x == 2.159
+              ) {
                 isMappingDocuments = false;
               }
 
@@ -681,20 +684,19 @@ class PDFConverter {
                     }
 
                     if (isNewDocument) {
-
                       if (
-                        documentObject.code != '' && 
+                        documentObject.code != '' &&
                         documentObject.code != 'Tipo' &&
                         documentObject.code != 'Scarichi' &&
                         documentObject.code != 'Documenti' &&
                         documentObject.code != 'Codice'
                       ) {
                         documentsPerPage.push(documentObject);
-                        
+
                         if (i === 0) {
                           declarationEntity['documents']?.push(documentObject);
                         }
-                      } 
+                      }
 
                       documentObject = {
                         code: '',
@@ -714,7 +716,7 @@ class PDFConverter {
                 } else {
                   if (i > 0) {
                     if (!declarationEntity[mappedPosition.entity]) {
-                      declarationEntity[mappedPosition.entity] = []
+                      declarationEntity[mappedPosition.entity] = [];
                     }
 
                     if (
@@ -752,7 +754,7 @@ class PDFConverter {
             }
 
             if (
-              documentObject.code != '' && 
+              documentObject.code != '' &&
               documentObject.code != 'Tipo' &&
               documentObject.code != 'Scarichi' &&
               documentObject.code != 'Documenti' &&
@@ -766,10 +768,12 @@ class PDFConverter {
             }
 
             if (documentsPerPage.length > 0) {
-              documentsWithPage.push({ page: i + 1, documents: documentsPerPage });
+              documentsWithPage.push({
+                page: i + 1,
+                documents: documentsPerPage,
+              });
             }
           }
-
         }
       } else {
         throw new Error('No Pages found in the PDF.');
@@ -778,11 +782,16 @@ class PDFConverter {
       const parsedDeclarationEntity = declarationEntity as DeclarationJson;
 
       parsedDeclarationEntity['goods'].forEach((good) => {
-        const documentsForGood = documentsWithPage.find((d) => d.page == good.page);
+        const documentsForGood = documentsWithPage.find(
+          (d) => d.page == good.page,
+        );
         good.documents = documentsForGood?.documents || [];
-      })
+      });
 
-      const admDeclarationMapped = this.map(parsedDeclarationEntity, countNumber);
+      const admDeclarationMapped = this.map(
+        parsedDeclarationEntity,
+        countNumber,
+      );
       return admDeclarationMapped;
     } catch (error) {
       throw new Error('parsing PDF declarations:' + error); // Returning an empty object
