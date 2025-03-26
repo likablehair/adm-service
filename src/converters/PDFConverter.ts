@@ -692,10 +692,6 @@ class PDFConverter {
                         documentObject.code != 'Codice'
                       ) {
                         documentsPerPage.push(documentObject);
-
-                        if (i === 0) {
-                          declarationEntity['documents']?.push(documentObject);
-                        }
                       }
 
                       documentObject = {
@@ -761,10 +757,6 @@ class PDFConverter {
               documentObject.code != 'Codice'
             ) {
               documentsPerPage.push(documentObject);
-
-              if (i === 0) {
-                declarationEntity['documents'].push(documentObject);
-              }
             }
 
             if (documentsPerPage.length > 0) {
@@ -788,6 +780,14 @@ class PDFConverter {
         good.documents = documentsForGood?.documents || [];
       });
 
+      const declarationGeneralDocuments = documentsWithPage.filter(
+        (d) => !parsedDeclarationEntity['goods'].some((g) => g.page == d.page),
+      );
+
+      declarationEntity['documents'] = declarationGeneralDocuments.flatMap(
+        (d) => d.documents,
+      );
+      
       const admDeclarationMapped = this.map(
         parsedDeclarationEntity,
         countNumber,

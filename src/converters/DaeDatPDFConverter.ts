@@ -22,7 +22,7 @@ export type DaeDatStatementMapped = {
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
-    statisticValue: string;
+    statisticValue: number;
     netWeight: string;
     ncCode: string;
     description: string;
@@ -175,7 +175,7 @@ class DaeDatPDFConverter {
       '';
 
     const goods = input.goods.map((good) => {
-      const statisticValue =
+      const statisticValueString =
         good.statisticValue1?.trim() ||
         good.statisticValue2?.trim() ||
         good.statisticValue3?.trim() ||
@@ -231,6 +231,10 @@ class DaeDatPDFConverter {
       const previousRegime = customsRegime.slice(-2).trim();
 
       customsRegime = `${requestedRegime}${previousRegime}`;
+
+      const statisticValue: number = Number(
+        statisticValueString.replace(',', '.'),
+      );
 
       return this.convertAsterisksToZero({
         customsRegime,
