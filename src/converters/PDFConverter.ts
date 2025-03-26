@@ -787,7 +787,7 @@ class PDFConverter {
       declarationEntity['documents'] = declarationGeneralDocuments.flatMap(
         (d) => d.documents,
       );
-      
+
       const admDeclarationMapped = this.map(
         parsedDeclarationEntity,
         countNumber,
