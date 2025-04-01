@@ -773,15 +773,32 @@ class PDFConverter {
 
       const parsedDeclarationEntity = declarationEntity as DeclarationJson;
 
+      const documentsForGoods: {
+        page: number;
+        documents: {
+            code: string;
+            identifier: string;
+        }[];
+      }[]  = [];
+
       parsedDeclarationEntity['goods'].forEach((good) => {
         const documentsForGood = documentsWithPage.find(
-          (d) => d.page == good.page,
+          (d) => (
+            d.page == good.page && 
+            good.goodDetailString == 'Dettaglio Articolo n°' &&
+            good.goodCodeString == 'Codice merce'
+          ),
         );
+
+        if (documentsForGood) {
+          documentsForGoods.push(documentsForGood)
+        }
+
         good.documents = documentsForGood?.documents || [];
       });
 
       const declarationGeneralDocuments = documentsWithPage.filter(
-        (d) => !parsedDeclarationEntity['goods'].some((g) => g.page == d.page),
+        (d) => !documentsForGoods.includes(d),
       );
 
       declarationEntity['documents'] = declarationGeneralDocuments.flatMap(
