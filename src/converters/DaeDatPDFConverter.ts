@@ -1,6 +1,8 @@
 import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
 import { _cells } from './DaeDatCellsMapper';
+import * as fsPromises from 'fs/promises';
+import { createId } from '@paralleldrive/cuid2';
 
 export type DaeDatStatementMapped = {
   consignee: {
@@ -303,12 +305,16 @@ class DaeDatPDFConverter {
 
     return object;
   }
-  public async run(params: {
-    data: {
-      path: string;
-    };
-  }): Promise<DaeDatStatementMapped> {
+  public async run(params: { data: { path: string } | { buffer: Buffer } }): Promise<DaeDatStatementMapped> {
     const pdfParser = new PDFParser();
+
+    let path = createId()
+    if('buffer' in params.data){
+      await fsPromises.writeFile(path, params.data.buffer)
+    }
+    else {
+      path = params.data.path
+    }
 
     const loadDeclarationFromPDF = new Promise<DeclarationRawJson>(
       (resolve, reject) => {
@@ -321,7 +327,7 @@ class DaeDatPDFConverter {
           resolve(pdfData);
         });
 
-        pdfParser.loadPDF(params.data.path);
+        pdfParser.loadPDF(path);
       },
     );
 
@@ -389,10 +395,11 @@ class DaeDatPDFConverter {
       } else {
         throw new Error('No Pages found in the PDF.');
       }
-
+      await fsPromises.unlink(path)
       const accountingStatementMapped = this.map(daeDatEntity);
       return accountingStatementMapped;
     } catch (error) {
+      await fsPromises.unlink(path)
       throw new Error('parsing PDF DAE/DAT:' + error); // Returning an empty object
     }
   }

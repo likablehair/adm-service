@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest';
 
-import * as fsPromises from 'fs/promises';
 import * as fs from 'node:fs';
 import XMLConverter, {
   AdmDeclarationMapped,
@@ -439,9 +438,8 @@ test(
       downloadedPDF,
     );
     const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({
-      data: { path: result.path },
+      data: { buffer: result.buffer },
     });
-    await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
@@ -549,9 +547,8 @@ test(
     );
     const accountingStatementMapped: AccountingStatementMapped =
       await manager.convert({
-        data: { path: result.path, seaTaxCodes },
+        data: { buffer: result.buffer, seaTaxCodes },
       });
-    await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
@@ -630,7 +627,6 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
-    await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
@@ -708,9 +704,8 @@ test(
       downloadedPDF,
     );
     const daeDatStatementMapped: DaeDatStatementMapped = await manager.convert({
-      data: { path: result.path },
+      data: { buffer: result.buffer },
     });
-    await fsPromises.unlink(result.path);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');

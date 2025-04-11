@@ -30,9 +30,8 @@ export default class ProspettoContabileManager {
       );
       const accountingStatementMapped: AccountingStatementMapped =
         await this.convert({
-          data: { path: savedPDF.path, seaTaxCodes: params.data.seaTaxCodes },
+          data: { buffer: savedPDF.buffer, seaTaxCodes: params.data.seaTaxCodes },
         });
-      await fsPromises.unlink(savedPDF.path);
 
       return {
         file: {
@@ -149,10 +148,7 @@ export default class ProspettoContabileManager {
       const downloaded = parsed['ns0:DownloadProspetto'];
       const data = downloaded.output.datiDichiarazione;
       const attachment = downloaded.output.allegato;
-      const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
-
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
-      await fsPromises.writeFile(pdfFileName, pdfContent);
 
       const result: ProspettoSintesiResult = {
         mrn: data.mrn,
@@ -183,10 +179,8 @@ export default class ProspettoContabileManager {
     }
   }
 
-  async convert(params: { data: { path: string; seaTaxCodes: string[] } }) {
+  async convert(params: { data: ({ path: string; } | { buffer: Buffer}) & { seaTaxCodes: string[] } }) {
     const converterPDF = new AccountingPDFConverter();
-    return await converterPDF.run({
-      data: { path: params.data.path, seaTaxCodes: params.data.seaTaxCodes },
-    });
+    return await converterPDF.run(params);
   }
 }

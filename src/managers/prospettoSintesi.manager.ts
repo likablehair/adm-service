@@ -56,9 +56,8 @@ export default class ProspettoSintesiManager {
         downloadedPDF,
       );
       const admDeclarationMapped: AdmDeclarationMapped = await this.convert({
-        data: { path: savedPDF.path },
+        data: { buffer: savedPDF.buffer },
       });
-      await fsPromises.unlink(savedPDF.path);
 
       return {
         admDeclarationMapped,
@@ -174,10 +173,7 @@ export default class ProspettoSintesiManager {
       const downloaded = parsed['ns0:DownloadProspetto'];
       const data = downloaded.output.datiDichiarazione;
       const attachment = downloaded.output.allegato;
-      const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
-
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
-      await fsPromises.writeFile(pdfFileName, pdfContent);
 
       const result: ProspettoSintesiResult = {
         mrn: data.mrn,
@@ -208,8 +204,8 @@ export default class ProspettoSintesiManager {
     }
   }
 
-  async convert(params: { data: { path: string } }) {
+  async convert(params: { data: { path: string } | { buffer: Buffer } }) {
     const converterPDF = new PDFConverter();
-    return await converterPDF.run({ data: { path: params.data.path } });
+    return await converterPDF.run(params);
   }
 }

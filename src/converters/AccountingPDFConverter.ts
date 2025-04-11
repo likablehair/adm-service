@@ -1,6 +1,8 @@
 import { _cells } from './AccountingCellsMapper';
 import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
+import * as fsPromises from 'fs/promises';
+import { createId } from '@paralleldrive/cuid2';
 
 export type AccountingStatementMapped = {
   version: string;
@@ -890,13 +892,16 @@ class AccountingPDFConverter {
       documents,
     };
   }
-  public async run(params: {
-    data: {
-      path: string;
-      seaTaxCodes: string[];
-    };
-  }): Promise<AccountingStatementMapped> {
+  public async run(params: { data: ({ path: string; } | { buffer: Buffer}) & { seaTaxCodes: string[] } }): Promise<AccountingStatementMapped> {
     const pdfParser = new PDFParser();
+
+    let path = createId()
+    if('buffer' in params.data){
+      await fsPromises.writeFile(path, params.data.buffer)
+    }
+    else {
+      path = params.data.path
+    }
 
     const loadDeclarationFromPDF = new Promise<DeclarationRawJson>(
       (resolve, reject) => {
@@ -909,7 +914,7 @@ class AccountingPDFConverter {
           resolve(pdfData);
         });
 
-        pdfParser.loadPDF(params.data.path);
+        pdfParser.loadPDF(path);
       },
     );
 
@@ -1023,8 +1028,10 @@ class AccountingPDFConverter {
         params.data.seaTaxCodes,
         countNumber,
       );
+      await fsPromises.unlink(path)
       return accountingStatementMapped;
     } catch (error) {
+      await fsPromises.unlink(path)
       throw new Error('parsing PDF Accounting:' + error); // Returning an empty object
     }
   }

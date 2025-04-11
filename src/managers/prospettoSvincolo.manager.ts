@@ -47,7 +47,6 @@ export default class ProspettoSvincoloManager {
         params.data.xml.mrn,
         downloadedPDF,
       );
-      await fsPromises.unlink(savedPDF.path);
 
       return {
         file: {
@@ -146,10 +145,7 @@ export default class ProspettoSvincoloManager {
       const data = downloaded.output.dichiarazione;
       const attachment = downloaded.output.prospettoSvincolo;
       let goodOutcomes = downloaded.output.articoli;
-      const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
-
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
-      await fsPromises.writeFile(pdfFileName, pdfContent);
 
       if (!Array.isArray(goodOutcomes)) {
         goodOutcomes = [goodOutcomes];

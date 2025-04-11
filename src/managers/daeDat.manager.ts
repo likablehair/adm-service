@@ -41,9 +41,8 @@ export default class DaeDatManager {
         downloadedPDF,
       );
       const daeDatStatementMapped: DaeDatStatementMapped = await this.convert({
-        data: { path: savedPDF.path },
+        data: { buffer: savedPDF.buffer },
       });
-      await fsPromises.unlink(savedPDF.path);
 
       return {
         file: {
@@ -124,15 +123,12 @@ export default class DaeDatManager {
       const downloaded = parsed['ns0:RichiestaDaeDat'];
       const data = downloaded.output.dichiarazione;
       const attachment = downloaded.output.daeDat;
-      const pdfFileName: string = attachment.nomeFile || 'decoded-tmp.pdf';
       const pdfType = attachment.tipoPdf;
+      const pdfContent = Buffer.from(attachment.contenuto, 'base64');
 
       if (!DAE_DAT_PDF_TYPES.includes(pdfType)) {
         throw new Error(`PDF Type "${pdfType}"is not valid`);
       }
-
-      const pdfContent = Buffer.from(attachment.contenuto, 'base64');
-      await fsPromises.writeFile(pdfFileName, pdfContent);
 
       const result: DaeDatResult = {
         mrn: data.mrn,
@@ -163,8 +159,8 @@ export default class DaeDatManager {
     }
   }
 
-  async convert(params: { data: { path: string } }) {
+  async convert(params: { data: { path: string } | { buffer: Buffer } }) {
     const converterPDF = new DaeDatPDFConverter();
-    return await converterPDF.run({ data: { path: params.data.path } });
+    return await converterPDF.run(params);
   }
 }
