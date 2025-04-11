@@ -42,6 +42,12 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'totalPackages3',
+    xRange: [22.843, 22.843],
+    yRange: [6.557, 6.557],
+  },
+  {
+    entity: 'statement',
     column: 'transitNetworkCountry1',
     xRange: [32.172, 32.172],
     yRange: [9.651, 9.651],
@@ -190,6 +196,24 @@ export const _cells: {
     xRange: [18.625, 18.625],
     yRange: [19.979, 19.979],
   },
+  {
+    entity: 'goods',
+    column: 'customsRegime8',
+    xRange: [18.625, 18.625],
+    yRange: [19.604, 19.604],
+  },
+  {
+    entity: 'goods',
+    column: 'customsRegime9',
+    xRange: [18.625, 18.625],
+    yRange: [20.354, 20.354],
+  },
+  {
+    entity: 'goods',
+    column: 'customsRegime10',
+    xRange: [18.625, 18.625],
+    yRange: [19.854, 19.854],
+  },
 
   {
     entity: 'consignee',
@@ -284,6 +308,24 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'statisticValue9',
+    xRange: [23.938, 23.938],
+    yRange: [20.791, 20.791],
+  },
+  {
+    entity: 'goods',
+    column: 'statisticValue10',
+    xRange: [23.938, 23.938],
+    yRange: [21.541, 21.541],
+  },
+  {
+    entity: 'goods',
+    column: 'statisticValue11',
+    xRange: [23.938, 23.938],
+    yRange: [21.041, 21.041],
+  },
+  {
+    entity: 'goods',
     column: 'netWeight1',
     xRange: [31.188, 31.188],
     yRange: [20.479, 20.479],
@@ -317,6 +359,30 @@ export const _cells: {
     column: 'netWeight6',
     xRange: [31.188, 31.188],
     yRange: [22.229, 22.229],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight7',
+    xRange: [31.188, 31.188],
+    yRange: [19.604, 19.604],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight8',
+    xRange: [31.188, 31.188],
+    yRange: [21.604, 21.604],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight9',
+    xRange: [31.188, 31.188],
+    yRange: [21.104, 21.104],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight10',
+    xRange: [31.188, 31.188],
+    yRange: [20.854, 20.854],
   },
   {
     entity: 'goods',

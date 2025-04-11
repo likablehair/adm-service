@@ -39,6 +39,7 @@ export interface DaeDatJson {
     totalGrossWeight: string;
     totalPackages1: string;
     totalPackages2: string;
+    totalPackages3: string;
     releaseCode: string;
     transitNetworkCountry1: string;
     transitNetworkCountry2: string;
@@ -77,12 +78,19 @@ export interface DaeDatJson {
     statisticValue6: string;
     statisticValue7: string;
     statisticValue8: string;
+    statisticValue9: string;
+    statisticValue10: string;
+    statisticValue11: string;
     netWeight1: string;
     netWeight2: string;
     netWeight3: string;
     netWeight4: string;
     netWeight5: string;
     netWeight6: string;
+    netWeight7: string;
+    netWeight8: string;
+    netWeight9: string;
+    netWeight10: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
@@ -101,6 +109,9 @@ export interface DaeDatJson {
     customsRegime5: string;
     customsRegime6: string;
     customsRegime7: string;
+    customsRegime8: string;
+    customsRegime9: string;
+    customsRegime10: string;
   }[];
 }
 
@@ -136,6 +147,7 @@ class DaeDatPDFConverter {
     const totalPackages =
       input.statement.totalPackages1?.trim() ||
       input.statement.totalPackages2?.trim() ||
+      input.statement.totalPackages3?.trim() ||
       '';
 
     const totalGrossWeight = input.statement.totalGrossWeight?.trim() || '';
@@ -186,9 +198,16 @@ class DaeDatPDFConverter {
         good.statisticValue6?.trim() ||
         good.statisticValue7?.trim() ||
         good.statisticValue8?.trim() ||
+        good.statisticValue9?.trim() ||
+        good.statisticValue10?.trim() ||
+        good.statisticValue11?.trim() ||
         '';
 
       const netWeight =
+        good.netWeight10?.trim() ||
+        good.netWeight9?.trim() ||
+        good.netWeight8?.trim() ||
+        good.netWeight7?.trim() ||
         good.netWeight6?.trim() ||
         good.netWeight5?.trim() ||
         good.netWeight4?.trim() ||
@@ -226,6 +245,9 @@ class DaeDatPDFConverter {
         good.customsRegime5?.trim() ||
         good.customsRegime6?.trim() ||
         good.customsRegime7?.trim() ||
+        good.customsRegime8?.trim() ||
+        good.customsRegime9?.trim() ||
+        good.customsRegime10?.trim() ||
         '';
 
       const requestedRegime = customsRegime.slice(0, 2).trim();
