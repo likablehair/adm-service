@@ -582,13 +582,12 @@ class PDFConverter {
     data: { path: string } | { buffer: Buffer };
   }): Promise<AdmDeclarationMapped> {
     const pdfParser = new PDFParser();
-    
-    let path = createId()
-    if('buffer' in params.data){
-      await fsPromises.writeFile(path, params.data.buffer)
-    }
-    else {
-      path = params.data.path
+
+    let path = createId();
+    if ('buffer' in params.data) {
+      await fsPromises.writeFile(path, params.data.buffer);
+    } else {
+      path = params.data.path;
     }
 
     const loadDeclarationFromPDF = new Promise<DeclarationRawJson>(
@@ -816,10 +815,10 @@ class PDFConverter {
         parsedDeclarationEntity,
         countNumber,
       );
-      await fsPromises.unlink(path)
+      await fsPromises.unlink(path);
       return admDeclarationMapped;
     } catch (error) {
-      await fsPromises.unlink(path)
+      await fsPromises.unlink(path);
       throw new Error('parsing PDF declarations:' + error); // Returning an empty object
     }
   }

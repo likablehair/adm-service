@@ -30,7 +30,10 @@ export default class ProspettoContabileManager {
       );
       const accountingStatementMapped: AccountingStatementMapped =
         await this.convert({
-          data: { buffer: savedPDF.buffer, seaTaxCodes: params.data.seaTaxCodes },
+          data: {
+            buffer: savedPDF.buffer,
+            seaTaxCodes: params.data.seaTaxCodes,
+          },
         });
 
       return {
@@ -179,7 +182,9 @@ export default class ProspettoContabileManager {
     }
   }
 
-  async convert(params: { data: ({ path: string; } | { buffer: Buffer}) & { seaTaxCodes: string[] } }) {
+  async convert(params: {
+    data: ({ path: string } | { buffer: Buffer }) & { seaTaxCodes: string[] };
+  }) {
     const converterPDF = new AccountingPDFConverter();
     return await converterPDF.run(params);
   }
