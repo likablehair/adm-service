@@ -260,6 +260,12 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'nr3',
+    xRange: [17.073, 17.073],
+    yRange: [4.854, 4.854],
+  },
+  {
+    entity: 'goods',
     column: 'statisticValue1',
     xRange: [23.938, 23.938],
     yRange: [20.416, 20.416],
@@ -444,4 +450,10 @@ export const _cells: {
     xRange: [18.625, 18.625],
     yRange: [14.742, 14.742],
   },
+  {
+    entity: 'goods',
+    column: 'codeIdentifier',
+    xRange: [1.125, 1.125],
+    yRange: [17, 50]
+  }
 ];

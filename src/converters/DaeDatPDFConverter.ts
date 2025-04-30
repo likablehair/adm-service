@@ -29,6 +29,7 @@ export type DaeDatStatementMapped = {
     ncCode: string;
     description: string;
     identificationCode: string;
+    documents: { code: string; identifier: string }[];
   }[];
 };
 
@@ -70,6 +71,7 @@ export interface DaeDatJson {
   goods: {
     nr1: string;
     nr2: string;
+    nr3: string;
     statisticValue1: string;
     statisticValue2: string;
     statisticValue3: string;
@@ -112,6 +114,7 @@ export interface DaeDatJson {
     customsRegime8: string;
     customsRegime9: string;
     customsRegime10: string;
+    codeIdentifier: string;
   }[];
 }
 
@@ -119,6 +122,7 @@ class DaeDatPDFConverter {
   private getMappedPosition(
     x: number,
     y: number,
+    isMappingDocuments: boolean,
   ): { entity?: string; column?: string } {
     const _x = x.toFixed(3);
     const _y = y.toFixed(3);
@@ -127,21 +131,27 @@ class DaeDatPDFConverter {
     _cells[Number(_xy)] = { xRange: [x, x], yRange: [y, y] };
 
     for (const cell in _cells) {
-      if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
-        const { xRange, yRange, entity, column } = _cells[cell];
-        if (
-          x >= xRange[0] &&
-          x <= xRange[1] &&
-          y >= yRange[0] &&
-          y <= yRange[1]
-        ) {
-          return { entity, column };
+      if (isMappingDocuments || _cells[cell].column != 'codeIdentifier') {
+        if ( Object.prototype.hasOwnProperty.call(_cells, cell)) {
+          const { xRange, yRange, entity, column } = _cells[cell];
+          if (
+            x >= xRange[0] &&
+            x <= xRange[1] &&
+            y >= yRange[0] &&
+            y <= yRange[1]
+          ) {
+            return { entity, column };
+          }
         }
       }
     }
     return {};
   }
-  private map(input: DaeDatJson): DaeDatStatementMapped {
+  private map(
+    input: DaeDatJson,
+    documentsNumber: number,
+    numberOfGoodsPages: number = 0,
+  ): DaeDatStatementMapped {
     const releaseDate = input.statement.releaseDate?.trim() || '';
 
     const totalPackages =
@@ -260,6 +270,20 @@ class DaeDatPDFConverter {
         statisticValueString.replace(',', '.'),
       );
 
+      const documents = this.convertDocumentsStringToArray(
+        good.codeIdentifier,
+      )
+
+      const formattedDocuments: { code: string; identifier: string }[] = documents.map((doc) => {
+        const [code, identifier] = doc.split(/ -(.*)/s).map((el) => el.trim());
+        return {
+          code,
+          identifier: !identifier || identifier === ''
+            ? '-'
+            : identifier,
+        }
+      })
+
       return this.convertAsterisksToZero({
         customsRegime,
         requestedRegime,
@@ -269,8 +293,22 @@ class DaeDatPDFConverter {
         ncCode,
         identificationCode,
         description: this.convertArrayToString(description),
+        documents: formattedDocuments,
       });
     });
+
+    if (numberOfGoodsPages !== goods.length) {
+      throw new Error('Missing mapping for goods');
+    }
+
+    const localDocumentsNumber =
+      goods.reduce((acc, good) => {
+        return acc + (good.documents.length || 0);
+      }, 0) || 0;
+
+    if (localDocumentsNumber !== documentsNumber) {
+      throw new Error('Missing mapping for documents');
+    }
 
     const totalStatisticValue =
       Math.round(
@@ -302,12 +340,14 @@ class DaeDatPDFConverter {
       goods,
     });
   }
+
   private convertArrayToString(array: string[]): string {
     return array
       .filter((el) => !!el)
       .map((el) => el.trim())
       .join(' ');
   }
+
   private convertAsterisksToZero<T extends Record<string, unknown>>(
     object: T,
     ...keysToConvertVoidToZero: (keyof T)[]
@@ -327,6 +367,16 @@ class DaeDatPDFConverter {
 
     return object;
   }
+
+  private convertDocumentsStringToArray(documentString: string): string[] {
+    const documentsArray = documentString
+      .split(' /')
+      .map((el) => el.trim())
+      .filter((el) => !!el && el !== '');
+
+    return documentsArray;
+  }
+
   public async run(params: {
     data: { path: string } | { buffer: Buffer };
   }): Promise<DaeDatStatementMapped> {
@@ -362,10 +412,17 @@ class DaeDatPDFConverter {
         statement: {},
         consignee: {},
       };
+
+      let numberOfDocuments: number = 0;
+      let pagesNumber: number = 0;
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
+        pagesNumber = pages.length;
 
         for (let i = 0; i < pages.length; i++) {
+          let isMappingDocuments: boolean = false;
+          let countDocumentPosition: number = 0;
+
           const page = pages[i];
           if (page.Texts) {
             const goodObject: any = {};
@@ -377,8 +434,25 @@ class DaeDatPDFConverter {
               //   console.log({ x: textElement.x, y: textElement.y, text: text });
               // }
 
+              //console.log({ "page": i + 1, "x": textElement.x, "y": textElement.y, "text": text })
+
+              if (textElement.x === 1.125 && i > 0) {
+                countDocumentPosition += 1;
+              } 
+
+              if (countDocumentPosition === 1 && textElement.x === 1.125) {
+                isMappingDocuments = true;
+                numberOfDocuments += Number(this.convertDocumentsStringToArray(text).length || 0);
+              } else if (countDocumentPosition > 1 && textElement.x === 1.125) {
+                isMappingDocuments = false;
+              }
+
               const mappedPosition: { entity?: string; column?: string } =
-                this.getMappedPosition(textElement.x, textElement.y);
+                this.getMappedPosition(
+                  textElement.x, 
+                  textElement.y,
+                  isMappingDocuments
+                );
 
               if (!mappedPosition.column || !text.trim()) {
                 continue;
@@ -397,10 +471,16 @@ class DaeDatPDFConverter {
                       !lastItem ||
                       (!!lastItem.nr1 &&
                         lastItem.nr1 !== goodObject.nr1 &&
-                        lastItem.nr1 !== goodObject.nr2) ||
+                        lastItem.nr1 !== goodObject.nr2 && 
+                        lastItem.nr1 !== goodObject.nr3) ||
                       (!!lastItem.nr2 &&
                         lastItem.nr2 !== goodObject.nr1 &&
-                        lastItem.nr2 !== goodObject.nr2);
+                        lastItem.nr2 !== goodObject.nr2 &&
+                        lastItem.nr2 !== goodObject.nr3) ||
+                      (!!lastItem.nr3 &&
+                        lastItem.nr3 !== goodObject.nr1 &&
+                        lastItem.nr3 !== goodObject.nr2 && 
+                        lastItem.nr3 !== goodObject.nr3);
 
                     if (isNewItem)
                       daeDatEntity[mappedPosition.entity].push(goodObject);
@@ -418,8 +498,14 @@ class DaeDatPDFConverter {
       } else {
         throw new Error('No Pages found in the PDF.');
       }
+
+      const accountingStatementMapped = this.map(
+        daeDatEntity,
+        numberOfDocuments,
+        pagesNumber- 1,
+      );
+      
       await fsPromises.unlink(path);
-      const accountingStatementMapped = this.map(daeDatEntity);
       return accountingStatementMapped;
     } catch (error) {
       await fsPromises.unlink(path);
