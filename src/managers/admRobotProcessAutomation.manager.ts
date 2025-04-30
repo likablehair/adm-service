@@ -190,7 +190,7 @@ export default class AdmRobotProcessAutomationManager {
       await params.page.type('input[name="IDToken1"]', params.username);
       await params.page.type('input[name="IDToken2"]', params.password);
 
-      const accessButtonXPath = 'xpath///*[@id="tab-1"]/form/div/a/button';
+      const accessButtonXPath = 'xpath///form//button';
 
       await params.page.waitForSelector(accessButtonXPath);
 
