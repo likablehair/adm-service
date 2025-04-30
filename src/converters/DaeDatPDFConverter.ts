@@ -132,7 +132,7 @@ class DaeDatPDFConverter {
 
     for (const cell in _cells) {
       if (isMappingDocuments || _cells[cell].column != 'codeIdentifier') {
-        if ( Object.prototype.hasOwnProperty.call(_cells, cell)) {
+        if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
           const { xRange, yRange, entity, column } = _cells[cell];
           if (
             x >= xRange[0] &&
@@ -270,19 +270,18 @@ class DaeDatPDFConverter {
         statisticValueString.replace(',', '.'),
       );
 
-      const documents = this.convertDocumentsStringToArray(
-        good.codeIdentifier,
-      )
+      const documents = this.convertDocumentsStringToArray(good.codeIdentifier);
 
-      const formattedDocuments: { code: string; identifier: string }[] = documents.map((doc) => {
-        const [code, identifier] = doc.split(/ -(.*)/s).map((el) => el.trim());
-        return {
-          code,
-          identifier: !identifier || identifier === ''
-            ? '-'
-            : identifier,
-        }
-      })
+      const formattedDocuments: { code: string; identifier: string }[] =
+        documents.map((doc) => {
+          const [code, identifier] = doc
+            .split(/ -(.*)/s)
+            .map((el) => el.trim());
+          return {
+            code,
+            identifier: !identifier || identifier === '' ? '-' : identifier,
+          };
+        });
 
       return this.convertAsterisksToZero({
         customsRegime,
@@ -438,20 +437,22 @@ class DaeDatPDFConverter {
 
               if (textElement.x === 1.125 && i > 0) {
                 countDocumentPosition += 1;
-              } 
+              }
 
               if (countDocumentPosition === 1 && textElement.x === 1.125) {
                 isMappingDocuments = true;
-                numberOfDocuments += Number(this.convertDocumentsStringToArray(text).length || 0);
+                numberOfDocuments += Number(
+                  this.convertDocumentsStringToArray(text).length || 0,
+                );
               } else if (countDocumentPosition > 1 && textElement.x === 1.125) {
                 isMappingDocuments = false;
               }
 
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(
-                  textElement.x, 
+                  textElement.x,
                   textElement.y,
-                  isMappingDocuments
+                  isMappingDocuments,
                 );
 
               if (!mappedPosition.column || !text.trim()) {
@@ -471,7 +472,7 @@ class DaeDatPDFConverter {
                       !lastItem ||
                       (!!lastItem.nr1 &&
                         lastItem.nr1 !== goodObject.nr1 &&
-                        lastItem.nr1 !== goodObject.nr2 && 
+                        lastItem.nr1 !== goodObject.nr2 &&
                         lastItem.nr1 !== goodObject.nr3) ||
                       (!!lastItem.nr2 &&
                         lastItem.nr2 !== goodObject.nr1 &&
@@ -479,7 +480,7 @@ class DaeDatPDFConverter {
                         lastItem.nr2 !== goodObject.nr3) ||
                       (!!lastItem.nr3 &&
                         lastItem.nr3 !== goodObject.nr1 &&
-                        lastItem.nr3 !== goodObject.nr2 && 
+                        lastItem.nr3 !== goodObject.nr2 &&
                         lastItem.nr3 !== goodObject.nr3);
 
                     if (isNewItem)
@@ -502,9 +503,9 @@ class DaeDatPDFConverter {
       const accountingStatementMapped = this.map(
         daeDatEntity,
         numberOfDocuments,
-        pagesNumber- 1,
+        pagesNumber - 1,
       );
-      
+
       await fsPromises.unlink(path);
       return accountingStatementMapped;
     } catch (error) {

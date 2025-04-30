@@ -454,6 +454,6 @@ export const _cells: {
     entity: 'goods',
     column: 'codeIdentifier',
     xRange: [1.125, 1.125],
-    yRange: [17, 50]
-  }
+    yRange: [17, 50],
+  },
 ];
