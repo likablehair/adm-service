@@ -179,7 +179,7 @@ export default class AdmRobotProcessAutomationManager {
     password: string;
   }): Promise<Cookie[]> {
     try {
-      const url = 'https://iampe.adm.gov.it/sam/UI/Login?realm=/adm';
+      const url = 'https://iampe.adm.gov.it/sam/UI/Login?realm=/adm&locale=it';
 
       await this._retry({
         promiseFactory: () => params.page.goto(url),
