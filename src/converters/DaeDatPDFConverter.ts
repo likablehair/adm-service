@@ -275,10 +275,8 @@ class DaeDatPDFConverter {
 
       const formattedDocuments: { code: string; identifier: string }[] =
         documents.map((doc) => {
-          const documentCode = doc
-            .split(/ -(.*)/s)
-            .map((el) => el.trim())  
-          
+          const documentCode = doc.split(/ -(.*)/s).map((el) => el.trim());
+
           const code = documentCode[0];
           let identifier = documentCode[1];
 
@@ -383,7 +381,7 @@ class DaeDatPDFConverter {
     const documentsArray = documentString
       .split(regex)
       .map((el) => el.trim())
-      .filter((el) => !!el && el !== '')
+      .filter((el) => !!el && el !== '');
 
     return documentsArray;
   }
