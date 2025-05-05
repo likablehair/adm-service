@@ -3,6 +3,7 @@ import { DeclarationRawJson } from './PDFConverter';
 import { _cells } from './DaeDatCellsMapper';
 import * as fsPromises from 'fs/promises';
 import { createId } from '@paralleldrive/cuid2';
+import { documentCodeList } from 'src/utils/documentCodes';
 
 export type DaeDatStatementMapped = {
   consignee: {
@@ -274,9 +275,17 @@ class DaeDatPDFConverter {
 
       const formattedDocuments: { code: string; identifier: string }[] =
         documents.map((doc) => {
-          const [code, identifier] = doc
+          const documentCode = doc
             .split(/ -(.*)/s)
-            .map((el) => el.trim());
+            .map((el) => el.trim())  
+          
+          const code = documentCode[0];
+          let identifier = documentCode[1];
+
+          if (identifier) {
+            identifier = identifier.replace(/( \/|\/)$/, '').trim();
+          }
+
           return {
             code,
             identifier: !identifier || identifier === '' ? '-' : identifier,
@@ -368,10 +377,13 @@ class DaeDatPDFConverter {
   }
 
   private convertDocumentsStringToArray(documentString: string): string[] {
+    const docCodes = documentCodeList.map((doc) => doc.code);
+    const regex = new RegExp(`(?=${docCodes.join('|')})`, 'g');
+
     const documentsArray = documentString
-      .split(' /')
+      .split(regex)
       .map((el) => el.trim())
-      .filter((el) => !!el && el !== '');
+      .filter((el) => !!el && el !== '')
 
     return documentsArray;
   }
