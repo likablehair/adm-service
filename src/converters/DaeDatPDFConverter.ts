@@ -375,13 +375,18 @@ class DaeDatPDFConverter {
   }
 
   private convertDocumentsStringToArray(documentString: string): string[] {
-    const docCodes = documentCodeList.map(doc => this.escapeRegExp(doc.code));
-    const joinedDocCodes = docCodes.join('|');    
-    const regex = new RegExp(`(${joinedDocCodes})\\s*-\\s*.*?(?=\\s*(?:${joinedDocCodes})\\b|\\s*$)`, 'g')
-    
-    const documentsArray = documentString.match(regex)
-      ?.map((el) => el.trim())
-      .filter((el) => !!el && el !== '') || [];
+    const docCodes = documentCodeList.map((doc) => this.escapeRegExp(doc.code));
+    const joinedDocCodes = docCodes.join('|');
+    const regex = new RegExp(
+      `(${joinedDocCodes})\\s*-\\s*.*?(?=\\s*(?:${joinedDocCodes})\\b|\\s*$)`,
+      'g',
+    );
+
+    const documentsArray =
+      documentString
+        .match(regex)
+        ?.map((el) => el.trim())
+        .filter((el) => !!el && el !== '') || [];
 
     return documentsArray;
   }
@@ -439,7 +444,7 @@ class DaeDatPDFConverter {
           const page = pages[i];
           if (page.Texts) {
             const goodObject: any = {};
-            
+
             const totalNumberOfDocumentPositions: number =
               i === 0
                 ? 0
@@ -463,7 +468,7 @@ class DaeDatPDFConverter {
 
               if (countDocumentPosition > 0 && textElement.x === 1.125) {
                 isMappingDocuments = true;
-              } 
+              }
 
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(
@@ -481,7 +486,9 @@ class DaeDatPDFConverter {
 
                   if (Array.isArray(daeDatEntity[mappedPosition.entity])) {
                     if (mappedPosition.column === 'codeIdentifier') {
-                      if (countDocumentPosition < totalNumberOfDocumentPositions) {
+                      if (
+                        countDocumentPosition < totalNumberOfDocumentPositions
+                      ) {
                         if (!goodObject[mappedPosition.column]) {
                           goodObject[mappedPosition.column] = text.trim();
                         } else {
@@ -528,9 +535,14 @@ class DaeDatPDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      numberOfDocuments = daeDatEntity.goods.reduce((acc: number, good: any) => {
-        return acc + this.convertDocumentsStringToArray(good.codeIdentifier).length;
-      }, 0);
+      numberOfDocuments = daeDatEntity.goods.reduce(
+        (acc: number, good: any) => {
+          return (
+            acc + this.convertDocumentsStringToArray(good.codeIdentifier).length
+          );
+        },
+        0,
+      );
 
       const accountingStatementMapped = this.map(
         daeDatEntity,
