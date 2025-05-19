@@ -80,6 +80,7 @@ export interface AccountingJson {
     totalTaxes22: string;
     totalTaxes23: string;
     totalTaxes24: string;
+    totalTaxes25: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -106,6 +107,7 @@ export interface AccountingJson {
     totalVat24: string;
     totalVat25: string;
     totalVat26: string;
+    totalVat27: string;
   };
   documents: {
     code: string;
@@ -136,6 +138,10 @@ export interface AccountingJson {
     value10: string;
     tribute11: string;
     value11: string;
+    tribute12: string;
+    value12: string;
+    tribute13: string;
+    value13: string;
   };
   vat: {
     tribute1: string;
@@ -308,6 +314,11 @@ export interface AccountingJson {
     taxableValue34: string;
     rate34: string;
     letterOfIntent34: string;
+    tribute35: string;
+    value35: string;
+    taxableValue35: string;
+    rate35: string;
+    letterOfIntent35: string;
   };
 }
 
@@ -410,6 +421,7 @@ class AccountingPDFConverter {
       input.statement.totalTaxes22?.trim() ||
       input.statement.totalTaxes23?.trim() ||
       input.statement.totalTaxes24?.trim() ||
+      input.statement.totalTaxes25?.trim() ||
       '';
 
     const totalTaxes =
@@ -444,6 +456,7 @@ class AccountingPDFConverter {
       input.statement.totalVat24?.trim() ||
       input.statement.totalVat25?.trim() ||
       input.statement.totalVat26?.trim() ||
+      input.statement.totalVat27?.trim() ||
       '';
 
     const totalVatToBePaid =
@@ -696,6 +709,13 @@ class AccountingPDFConverter {
         rate: input.vat?.rate34 || '',
         letterOfIntent: input.vat?.letterOfIntent34 || '',
       },
+      {
+        tribute: input.vat?.tribute35 || '',
+        value: input.vat?.value35 || '',
+        taxableValue: input.vat?.taxableValue35 || '',
+        rate: input.vat?.rate35 || '',
+        letterOfIntent: input.vat?.letterOfIntent35 || '',
+      },
     ];
 
     const vatExemption = vatLiquidation.find((il) => il.tribute == '406');
@@ -796,6 +816,14 @@ class AccountingPDFConverter {
       {
         tribute: input.taxes?.tribute11 || '',
         value: input.taxes?.value11 || '',
+      },
+      {
+        tribute: input.taxes?.tribute12 || '',
+        value: input.taxes?.value12 || '',
+      },
+      {
+        tribute: input.taxes?.tribute13 || '',
+        value: input.taxes?.value13 || '',
       },
     ];
 
