@@ -3,6 +3,7 @@ import { DeclarationRawJson } from './PDFConverter';
 import { _cells } from './DaeDatCellsMapper';
 import * as fsPromises from 'fs/promises';
 import { createId } from '@paralleldrive/cuid2';
+import { documentCodeList } from 'src/utils/documentCodes';
 
 export type DaeDatStatementMapped = {
   consignee: {
@@ -274,9 +275,15 @@ class DaeDatPDFConverter {
 
       const formattedDocuments: { code: string; identifier: string }[] =
         documents.map((doc) => {
-          const [code, identifier] = doc
-            .split(/ -(.*)/s)
-            .map((el) => el.trim());
+          const documentCode = doc.split(/[ ]?-(.*)/).map((el) => el.trim());
+
+          const code = documentCode[0];
+          let identifier = documentCode[1];
+
+          if (identifier) {
+            identifier = identifier.replace(/( \/|\/)$/, '').trim();
+          }
+
           return {
             code,
             identifier: !identifier || identifier === '' ? '-' : identifier,
@@ -368,12 +375,24 @@ class DaeDatPDFConverter {
   }
 
   private convertDocumentsStringToArray(documentString: string): string[] {
-    const documentsArray = documentString
-      .split(' /')
-      .map((el) => el.trim())
-      .filter((el) => !!el && el !== '');
+    const docCodes = documentCodeList.map((doc) => this.escapeRegExp(doc.code));
+    const joinedDocCodes = docCodes.join('|');
+    const regex = new RegExp(
+      `(${joinedDocCodes})\\s*-\\s*.*?(?=\\s*(?:${joinedDocCodes})\\b|\\s*$)`,
+      'g',
+    );
+
+    const documentsArray =
+      documentString
+        .match(regex)
+        ?.map((el) => el.trim())
+        .filter((el) => !!el && el !== '') || [];
 
     return documentsArray;
+  }
+
+  private escapeRegExp(string: string): string {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   public async run(params: {
@@ -425,6 +444,14 @@ class DaeDatPDFConverter {
           const page = pages[i];
           if (page.Texts) {
             const goodObject: any = {};
+
+            const totalNumberOfDocumentPositions: number =
+              i === 0
+                ? 0
+                : page.Texts.filter((textElement: any) => {
+                    return textElement.x === 1.125;
+                  }).length;
+
             for (let j = 0; j < page.Texts.length; j++) {
               const textElement = page.Texts[j];
               const text = decodeURIComponent(textElement.R[0].T);
@@ -439,13 +466,8 @@ class DaeDatPDFConverter {
                 countDocumentPosition += 1;
               }
 
-              if (countDocumentPosition === 1 && textElement.x === 1.125) {
+              if (countDocumentPosition > 0 && textElement.x === 1.125) {
                 isMappingDocuments = true;
-                numberOfDocuments += Number(
-                  this.convertDocumentsStringToArray(text).length || 0,
-                );
-              } else if (countDocumentPosition > 1 && textElement.x === 1.125) {
-                isMappingDocuments = false;
               }
 
               const mappedPosition: { entity?: string; column?: string } =
@@ -463,7 +485,19 @@ class DaeDatPDFConverter {
                     daeDatEntity[mappedPosition.entity] = [];
 
                   if (Array.isArray(daeDatEntity[mappedPosition.entity])) {
-                    goodObject[mappedPosition.column] = text.trim();
+                    if (mappedPosition.column === 'codeIdentifier') {
+                      if (
+                        countDocumentPosition < totalNumberOfDocumentPositions
+                      ) {
+                        if (!goodObject[mappedPosition.column]) {
+                          goodObject[mappedPosition.column] = text.trim();
+                        } else {
+                          goodObject[mappedPosition.column] += text.trim();
+                        }
+                      }
+                    } else {
+                      goodObject[mappedPosition.column] = text.trim();
+                    }
 
                     const lastItem =
                       daeDatEntity[mappedPosition.entity].slice(-1)[0];
@@ -489,6 +523,7 @@ class DaeDatPDFConverter {
                 } else {
                   if (!daeDatEntity[mappedPosition.entity])
                     daeDatEntity[mappedPosition.entity] = {};
+
                   daeDatEntity[mappedPosition.entity][mappedPosition.column] =
                     text.trim();
                 }
@@ -499,6 +534,15 @@ class DaeDatPDFConverter {
       } else {
         throw new Error('No Pages found in the PDF.');
       }
+
+      numberOfDocuments = daeDatEntity.goods.reduce(
+        (acc: number, good: any) => {
+          return (
+            acc + this.convertDocumentsStringToArray(good.codeIdentifier).length
+          );
+        },
+        0,
+      );
 
       const accountingStatementMapped = this.map(
         daeDatEntity,
