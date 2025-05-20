@@ -18,6 +18,8 @@ export type AccountingStatementMapped = {
   taxB00Vat10: number | undefined;
   tax931: number | undefined;
   tax123: number | undefined;
+  taxA30: number | undefined;
+  taxA35: number | undefined;
   totalSeaTaxes: number | undefined;
   rectificationOrCancellationDate: string;
   documents: {
@@ -839,6 +841,18 @@ class AccountingPDFConverter {
       ? Number(Number(tax123Liquidation.value.replace(',', '.')).toFixed(2))
       : undefined;
 
+    const taxA30Liquidation = taxLiquidation.find((il) => il.tribute == 'A30');
+
+    const taxA30 = taxA30Liquidation
+      ? Number(Number(taxA30Liquidation.value.replace(',', '.')).toFixed(2))
+      : undefined;
+
+    const taxA35Liquidation = taxLiquidation.find((il) => il.tribute == 'A35');
+
+    const taxA35 = taxA35Liquidation
+      ? Number(Number(taxA35Liquidation.value.replace(',', '.')).toFixed(2))
+      : undefined;
+
     const seaTaxLiquidation = taxLiquidation.filter((il) =>
       seaTaxCodes.includes(il.tribute),
     );
@@ -916,6 +930,8 @@ class AccountingPDFConverter {
       taxB00Vat04,
       tax931,
       tax123,
+      taxA30,
+      taxA35,
       totalSeaTaxes,
       documents,
     };
