@@ -194,14 +194,17 @@ export default class AdmRobotProcessAutomationManager {
 
       await params.page.waitForSelector(accessButtonXPath);
 
-      await Promise.all([
-        this._retry({
-          promiseFactory: () => params.page.waitForNavigation(),
-          retryCount: 3,
-          retryMs: 500,
-        }),
-        params.page.click(accessButtonXPath),
-      ]);
+      await this._retry({
+        promiseFactory: async () => {
+          const [response] = await Promise.all([
+            params.page.waitForNavigation(),
+            params.page.click(accessButtonXPath),
+          ]);
+          return response;
+        },
+        retryCount: 3,
+        retryMs: 500,
+      });
 
       const cookies = await params.page.cookies();
 
@@ -246,14 +249,17 @@ export default class AdmRobotProcessAutomationManager {
       await new Promise((resolve) => setTimeout(resolve, 1500));
       await params.page.waitForSelector(buttonConfirmXPath);
 
-      await Promise.all([
-        this._retry({
-          promiseFactory: () => params.page.waitForNavigation(),
-          retryCount: 3,
-          retryMs: 500,
-        }),
-        params.page.click(buttonConfirmXPath),
-      ]);
+      await this._retry({
+        promiseFactory: async () => {
+          const [response] = await Promise.all([
+            params.page.waitForNavigation(),
+            params.page.click(buttonConfirmXPath),
+          ]);
+          return response;
+        },
+        retryCount: 3,
+        retryMs: 500,
+      });
 
       return params.page;
     } catch (error: unknown) {
@@ -661,14 +667,17 @@ export default class AdmRobotProcessAutomationManager {
         return btn && btn !== null;
       });
 
-      await Promise.all([
-        this._retry({
-          promiseFactory: () => page.waitForNavigation(),
-          retryCount: 3,
-          retryMs: 500,
-        }),
-        await page.click('button.btn-primary-adm span.lfr-btn-label'),
-      ]);
+      await this._retry({
+        promiseFactory: async () => {
+          const [response] = await Promise.all([
+            page.waitForNavigation(),
+            page.click('button.btn-primary-adm span.lfr-btn-label'),
+          ]);
+          return response;
+        },
+        retryCount: 3,
+        retryMs: 500,
+      });
 
       const filePath = `${params.mrn}_screenshot.pdf`;
 
