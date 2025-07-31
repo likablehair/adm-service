@@ -273,6 +273,12 @@ export const _cells: {
     xRange: [10.335, 10.335],
     yRange: [16.381, 16.381],
   },
+    {
+    entity: 'goods',
+    column: 'grossWeight',
+    xRange: [6.247, 6.247],
+    yRange: [16.381, 16.381],
+  },
   {
     entity: 'goods',
     column: 'releaseDate',

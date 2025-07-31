@@ -187,6 +187,7 @@ export interface DeclarationJson {
     prefixedCountry9: string;
     prefixedCountry10: string;
     netWeight: string;
+    grossWeight: string;
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
@@ -507,6 +508,7 @@ class PDFConverter {
             description: this.convertArrayToString(description),
             country,
             netWeight: good.netWeight,
+            grossWeight: good.grossWeight,
             price,
             statisticValue,
             customsRegime,
@@ -736,8 +738,7 @@ class PDFConverter {
                         (lastItem.nr !== goodObject.nr &&
                           !!goodObject.ncCode &&
                           goodObject.ncCode.length > 0 &&
-                          goodObject.ncCode.length <= 10 &&
-                          !isNaN(parseFloat(goodObject.netWeight)));
+                          goodObject.ncCode.length <= 10);
 
                       if (isNewItem)
                         declarationEntity[mappedPosition.entity].push(
