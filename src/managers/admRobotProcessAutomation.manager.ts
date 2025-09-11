@@ -344,8 +344,11 @@ export default class AdmRobotProcessAutomationManager {
         const ricercaAggregataButtonXPath =
           'xpath///*[@id="formAvan:accordionTab:buttonRicercaAgg"]/span';
 
+        // Date From
+
         const dateFromInputXPath =
           'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
+
         await params.page.waitForSelector(dateFromInputXPath);
         await params.page.click(dateFromInputXPath);
 
@@ -406,9 +409,77 @@ export default class AdmRobotProcessAutomationManager {
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        //select import or export
-        const dropdownLabelScopeCSS = '#formAvan label.ui-selectonemenu-label';
-        const dropdownOptionScopeXPath = `aria/${type == 'export' ? 'Esportazione' : 'Importazione'}[role="option"]`;
+        await params.page.click(dateFromInputXPath); // close the date from input form
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Date To
+
+        const dateToInputXPath =
+          'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneA"]/button';
+
+        await params.page.waitForSelector(dateToInputXPath);
+        await params.page.click(dateToInputXPath);
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        await params.page.waitForSelector(datePickerCalendarXPath);
+
+        const toDay = iterationDate.getDate();
+        const toMonth = iterationDate.getMonth() + 1;
+        const toYear = iterationDate.getFullYear();
+
+        const toCurrentMonth = datePickerDate.getMonth() + 1;
+        const toCurrentYear = datePickerDate.getFullYear();
+
+        const toMonthDifferece = toCurrentMonth - toMonth;
+        const toYearDifference = toCurrentYear - toYear;
+
+        const toDateDifferenceIteration =
+          toMonthDifferece + toYearDifference * 12;
+
+        if (toDateDifferenceIteration > 0) {
+          const toPreviousMonthButtonXPath =
+            'xpath///*[@id="ui-datepicker-div"]/div/a[1]';
+
+          //Iterate over the months
+          for (let i = 0; i < toDateDifferenceIteration; i++) {
+            await params.page.waitForSelector(toPreviousMonthButtonXPath);
+            await params.page.click(toPreviousMonthButtonXPath);
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        } else if (toDateDifferenceIteration < 0) {
+          const toNextMonthButtonXPath =
+            'xpath///*[@id="ui-datepicker-div"]/div/a[2]';
+
+          //Iterate over the months
+          for (let i = 0; i < Math.abs(toDateDifferenceIteration); i++) {
+            await params.page.waitForSelector(toNextMonthButtonXPath);
+            await params.page.click(toNextMonthButtonXPath);
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+        }
+
+        const toDatePosition = this._getDatePositionInDatepicker({
+          day: toDay,
+          month: toMonth,
+          year: toYear,
+        });
+        const toDateCellXPath = `xpath///*[@id="ui-datepicker-div"]/table/tbody/tr[${
+          toDatePosition.row
+        }]/td[${toDatePosition.column}]`;
+
+        await params.page.waitForSelector(toDateCellXPath);
+        await params.page.click(toDateCellXPath);
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        await params.page.click(dateToInputXPath); // close the date to input form
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        const dropdownLabelScopeCSS =
+          '#formAvan\\:accordionTab\\:menuTipoOperazione_label';
 
         await params.page.waitForSelector(dropdownLabelScopeCSS, {
           visible: true,
@@ -417,9 +488,12 @@ export default class AdmRobotProcessAutomationManager {
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        await params.page.waitForSelector(dropdownOptionScopeXPath);
-        await params.page.click(dropdownOptionScopeXPath);
+        const dropdownOptionScopeXPath = `li[data-label='${type == 'export' ? 'Esportazione' : 'Importazione'}']`;
+        await params.page.waitForSelector(dropdownOptionScopeXPath, {
+          visible: true,
+        });
 
+        await params.page.click(dropdownOptionScopeXPath);
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
         await params.page.waitForSelector(ricercaAggregataButtonXPath);
