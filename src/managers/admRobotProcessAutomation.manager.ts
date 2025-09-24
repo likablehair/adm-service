@@ -35,7 +35,8 @@ export type MrnExportStatusType = {
   mrn: string;
   buffer: Buffer;
 };
-export type DeclarationType = 'import' | 'export';
+export type DeclarationType = 'import' | 'export' | 'transit';
+export type SubjectType = 'declarant' | 'representative' | 'importer' | 'exporter' | 'transiter';
 
 const declarationTableHeaderMap: Record<string, keyof Declaration> = {
   'Declarating Operator': 'declaratingOperator',
@@ -72,9 +73,10 @@ export default class AdmRobotProcessAutomationManager {
     };
     browser?: Browser;
     type: DeclarationType;
+    subjectType?: SubjectType
   }): Promise<MRNProcessed[]> {
     try {
-      const type = params.type;
+      const { type, subjectType, } = params;
 
       let browser: Browser;
       if (!params.browser) {
@@ -116,6 +118,7 @@ export default class AdmRobotProcessAutomationManager {
         dateFrom: params.dateFrom,
         dateTo: params.dateTo,
         type,
+        subjectType
       });
 
       const mrnProcessed: MRNProcessed[] = aggregatedSearchResult.map(
@@ -284,9 +287,10 @@ export default class AdmRobotProcessAutomationManager {
     dateFrom?: Date;
     dateTo?: Date;
     type: DeclarationType;
+    subjectType?: SubjectType
   }): Promise<AggregatedSearchType[]> {
     try {
-      const type = params.type;
+      const { type, subjectType, } = params;
       let dateFrom = new Date();
       let dateTo = new Date();
 
@@ -488,7 +492,7 @@ export default class AdmRobotProcessAutomationManager {
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        const dropdownOptionScopeXPath = `li[data-label='${type == 'export' ? 'Esportazione' : 'Importazione'}']`;
+        const dropdownOptionScopeXPath = `li[data-label='${type == 'export' ? 'Esportazione' : type == 'import' ? 'Importazione' : 'Transito'}']`;
         await params.page.waitForSelector(dropdownOptionScopeXPath, {
           visible: true,
         });
@@ -496,6 +500,34 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.click(dropdownOptionScopeXPath);
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
+
+        const dropdownLabelSubjectCSS =
+          '#formAvan\\:accordionTab\\:tipologiaSoggetto_label'
+
+        await params.page.waitForSelector(dropdownLabelSubjectCSS, {
+          visible: true,
+        });
+        await params.page.click(dropdownLabelSubjectCSS);
+
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        const subject: SubjectType = subjectType 
+          ? subjectType 
+          : type == 'import'
+            ? 'importer'
+            : type == 'export'
+              ? 'exporter'
+              : 'transiter'
+
+        const dropdownOptionSubjectXPath = `li[data-label='${subject == 'representative' ? 'Rappresentante' : subject == 'transiter' ? 'Titolare transito' : subject == 'declarant' ? 'Dichiarante' : subject == 'importer' ? 'Importatore' : 'Esportatore'}']`;
+        await params.page.waitForSelector(dropdownOptionSubjectXPath, {
+          visible: true,
+        });
+
+        await params.page.click(dropdownOptionSubjectXPath);
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        
         await params.page.waitForSelector(ricercaAggregataButtonXPath);
         await params.page.click(ricercaAggregataButtonXPath);
 
