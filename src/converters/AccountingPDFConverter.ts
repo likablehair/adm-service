@@ -58,6 +58,13 @@ export interface AccountingJson {
     totalDuties22: string;
     totalDuties23: string;
     totalDuties24: string;
+    totalDuties25: string;
+    totalDuties26: string;
+    totalDuties27: string;
+    totalDuties28: string;
+    totalDuties29: string;
+    totalDuties30: string;
+    totalDuties31: string;
     totalTaxes1: string;
     totalTaxes2: string;
     totalTaxes3: string;
@@ -83,6 +90,12 @@ export interface AccountingJson {
     totalTaxes23: string;
     totalTaxes24: string;
     totalTaxes25: string;
+    totalTaxes26: string;
+    totalTaxes27: string;
+    totalTaxes28: string;
+    totalTaxes29: string;
+    totalTaxes30: string;
+    totalTaxes31: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -110,6 +123,12 @@ export interface AccountingJson {
     totalVat25: string;
     totalVat26: string;
     totalVat27: string;
+    totalVat28: string;
+    totalVat29: string;
+    totalVat30: string;
+    totalVat31: string;
+    totalVat32: string;
+    totalVat33: string;
   };
   documents: {
     code: string;
@@ -321,6 +340,31 @@ export interface AccountingJson {
     taxableValue35: string;
     rate35: string;
     letterOfIntent35: string;
+    tribute36: string;
+    value36: string;
+    taxableValue36: string;
+    rate36: string;
+    letterOfIntent36: string;
+    tribute37: string;
+    value37: string;
+    taxableValue37: string;
+    rate37: string;
+    letterOfIntent37: string;
+    tribute38: string;
+    value38: string;
+    taxableValue38: string;
+    rate38: string;
+    letterOfIntent38: string;
+    tribute39: string;
+    value39: string;
+    taxableValue39: string;
+    rate39: string;
+    letterOfIntent39: string;
+    tribute40: string;
+    value40: string;
+    taxableValue40: string;
+    rate40: string;
+    letterOfIntent40: string;
   };
 }
 
@@ -391,6 +435,13 @@ class AccountingPDFConverter {
       input.statement.totalDuties22?.trim() ||
       input.statement.totalDuties23?.trim() ||
       input.statement.totalDuties24?.trim() ||
+      input.statement.totalDuties25?.trim() ||
+      input.statement.totalDuties26?.trim() ||
+      input.statement.totalDuties27?.trim() ||
+      input.statement.totalDuties28?.trim() ||
+      input.statement.totalDuties29?.trim() ||
+      input.statement.totalDuties30?.trim() ||
+      input.statement.totalDuties31?.trim() ||
       '';
 
     const totalDuties =
@@ -424,6 +475,12 @@ class AccountingPDFConverter {
       input.statement.totalTaxes23?.trim() ||
       input.statement.totalTaxes24?.trim() ||
       input.statement.totalTaxes25?.trim() ||
+      input.statement.totalTaxes26?.trim() ||
+      input.statement.totalTaxes27?.trim() ||
+      input.statement.totalTaxes28?.trim() ||
+      input.statement.totalTaxes29?.trim() ||
+      input.statement.totalTaxes30?.trim() ||
+      input.statement.totalTaxes31?.trim() ||
       '';
 
     const totalTaxes =
@@ -459,6 +516,12 @@ class AccountingPDFConverter {
       input.statement.totalVat25?.trim() ||
       input.statement.totalVat26?.trim() ||
       input.statement.totalVat27?.trim() ||
+      input.statement.totalVat28?.trim() ||
+      input.statement.totalVat29?.trim() ||
+      input.statement.totalVat30?.trim() ||
+      input.statement.totalVat31?.trim() ||
+      input.statement.totalVat32?.trim() ||
+      input.statement.totalVat33?.trim() ||
       '';
 
     const totalVatToBePaid =
@@ -717,6 +780,41 @@ class AccountingPDFConverter {
         taxableValue: input.vat?.taxableValue35 || '',
         rate: input.vat?.rate35 || '',
         letterOfIntent: input.vat?.letterOfIntent35 || '',
+      },
+      {
+        tribute: input.vat?.tribute36 || '',
+        value: input.vat?.value36 || '',
+        taxableValue: input.vat?.taxableValue36 || '',
+        rate: input.vat?.rate36 || '',
+        letterOfIntent: input.vat?.letterOfIntent36 || '',
+      },
+      {
+        tribute: input.vat?.tribute37 || '',
+        value: input.vat?.value37 || '',
+        taxableValue: input.vat?.taxableValue37 || '',
+        rate: input.vat?.rate37 || '',
+        letterOfIntent: input.vat?.letterOfIntent37 || '',
+      },
+      {
+        tribute: input.vat?.tribute38 || '',
+        value: input.vat?.value38 || '',
+        taxableValue: input.vat?.taxableValue38 || '',
+        rate: input.vat?.rate38 || '',
+        letterOfIntent: input.vat?.letterOfIntent38 || '',
+      },
+      {
+        tribute: input.vat?.tribute39 || '',
+        value: input.vat?.value39 || '',
+        taxableValue: input.vat?.taxableValue39 || '',
+        rate: input.vat?.rate39 || '',
+        letterOfIntent: input.vat?.letterOfIntent39 || '',
+      },
+      {
+        tribute: input.vat?.tribute40 || '',
+        value: input.vat?.value40 || '',
+        taxableValue: input.vat?.taxableValue40 || '',
+        rate: input.vat?.rate40 || '',
+        letterOfIntent: input.vat?.letterOfIntent40 || '',
       },
     ];
 
