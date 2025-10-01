@@ -1005,6 +1005,7 @@ class AccountingPDFConverter {
     }
 
     if (
+      totalVatToBePaid &&
       taxB00Vat22 == undefined &&
       taxB00Vat10 == undefined &&
       taxB00Vat04 == undefined &&
