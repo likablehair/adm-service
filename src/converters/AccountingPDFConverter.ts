@@ -65,6 +65,7 @@ export interface AccountingJson {
     totalDuties29: string;
     totalDuties30: string;
     totalDuties31: string;
+    totalDuties32: string;
     totalTaxes1: string;
     totalTaxes2: string;
     totalTaxes3: string;
@@ -96,6 +97,8 @@ export interface AccountingJson {
     totalTaxes29: string;
     totalTaxes30: string;
     totalTaxes31: string;
+    totalTaxes32: string;
+    totalTaxes33: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -129,6 +132,9 @@ export interface AccountingJson {
     totalVat31: string;
     totalVat32: string;
     totalVat33: string;
+    totalVat34: string;
+    totalVat35: string;
+    totalVat36: string;
   };
   documents: {
     code: string;
@@ -163,6 +169,32 @@ export interface AccountingJson {
     value12: string;
     tribute13: string;
     value13: string;
+    tribute14: string;
+    value14: string;
+    tribute15: string;
+    value15: string;
+    tribute16: string;
+    value16: string;
+    tribute17: string;
+    value17: string;
+    tribute18: string;
+    value18: string;
+    tribute19: string;
+    value19: string;
+    tribute20: string;
+    value20: string;
+    tribute21: string;
+    value21: string;
+    tribute22: string;
+    value22: string;
+    tribute23: string;
+    value23: string;
+    tribute24: string;
+    value24: string;
+    tribute25: string;
+    value25: string;
+    tribute26: string;
+    value26: string;
   };
   vat: {
     tribute1: string;
@@ -365,6 +397,16 @@ export interface AccountingJson {
     taxableValue40: string;
     rate40: string;
     letterOfIntent40: string;
+    tribute41: string;
+    value41: string;
+    taxableValue41: string;
+    rate41: string;
+    letterOfIntent41: string;
+    tribute42: string;
+    value42: string;
+    taxableValue42: string;
+    rate42: string;
+    letterOfIntent42: string;
   };
 }
 
@@ -442,6 +484,7 @@ class AccountingPDFConverter {
       input.statement.totalDuties29?.trim() ||
       input.statement.totalDuties30?.trim() ||
       input.statement.totalDuties31?.trim() ||
+      input.statement.totalDuties32?.trim() ||
       '';
 
     const totalDuties =
@@ -481,6 +524,8 @@ class AccountingPDFConverter {
       input.statement.totalTaxes29?.trim() ||
       input.statement.totalTaxes30?.trim() ||
       input.statement.totalTaxes31?.trim() ||
+      input.statement.totalTaxes32?.trim() ||
+      input.statement.totalTaxes33?.trim() ||
       '';
 
     const totalTaxes =
@@ -522,6 +567,9 @@ class AccountingPDFConverter {
       input.statement.totalVat31?.trim() ||
       input.statement.totalVat32?.trim() ||
       input.statement.totalVat33?.trim() ||
+      input.statement.totalVat34?.trim() ||
+      input.statement.totalVat35?.trim() ||
+      input.statement.totalVat36?.trim() ||
       '';
 
     const totalVatToBePaid =
@@ -816,20 +864,50 @@ class AccountingPDFConverter {
         rate: input.vat?.rate40 || '',
         letterOfIntent: input.vat?.letterOfIntent40 || '',
       },
+      {
+        tribute: input.vat?.tribute41 || '',
+        value: input.vat?.value41 || '',
+        taxableValue: input.vat?.taxableValue41 || '',
+        rate: input.vat?.rate41 || '',
+        letterOfIntent: input.vat?.letterOfIntent41 || '',
+      },
+      {
+        tribute: input.vat?.tribute42 || '',
+        value: input.vat?.value42 || '',
+        taxableValue: input.vat?.taxableValue42 || '',
+        rate: input.vat?.rate42 || '',
+        letterOfIntent: input.vat?.letterOfIntent42 || '',
+      },
     ];
 
-    const vatExemption = vatLiquidation.find((il) => il.tribute == '406');
+    const vatExemption = vatLiquidation.filter((il) => il.tribute == '406');
 
-    const vatExemptionValue = vatExemption
-      ? Number(Number(vatExemption.value.replace(',', '.')).toFixed(2))
+    const vatExemptionValue = vatExemption.length
+      ? Number(
+      vatExemption
+        .reduce((acc, tax) => {
+          return (acc += Number(
+            Number(tax.value.replace(',', '.')).toFixed(2),
+          ));
+        }, 0)
+        .toFixed(2),
+    )
       : undefined;
 
-    const vatExemptionTaxableValue = vatExemption
-      ? Number(Number(vatExemption.taxableValue.replace(',', '.')).toFixed(2))
+    const vatExemptionTaxableValue = vatExemption.length
+      ? Number(
+      vatExemption
+        .reduce((acc, tax) => {
+          return (acc += Number(
+            Number(tax.taxableValue.replace(',', '.')).toFixed(2),
+          ));
+        }, 0)
+        .toFixed(2),
+    )
       : undefined;
 
-    const letterOfIntent = vatExemption
-      ? vatExemption.letterOfIntent
+    const letterOfIntent = vatExemption.length
+      ? vatExemption[0].letterOfIntent
       : undefined;
 
     const taxB00Vat22Liquidation = vatLiquidation.find(
@@ -925,18 +1003,86 @@ class AccountingPDFConverter {
         tribute: input.taxes?.tribute13 || '',
         value: input.taxes?.value13 || '',
       },
+      {
+        tribute: input.taxes?.tribute14 || '',
+        value: input.taxes?.value14 || '',
+      },
+      {
+        tribute: input.taxes?.tribute15 || '',
+        value: input.taxes?.value15 || '',
+      },
+      {
+        tribute: input.taxes?.tribute16 || '',
+        value: input.taxes?.value16 || '',
+      },
+      {
+        tribute: input.taxes?.tribute17 || '',
+        value: input.taxes?.value17 || '',
+      },
+      {
+        tribute: input.taxes?.tribute18 || '',
+        value: input.taxes?.value18 || '',
+      },
+      {
+        tribute: input.taxes?.tribute19 || '',
+        value: input.taxes?.value19 || '',
+      },
+      {
+        tribute: input.taxes?.tribute20 || '',
+        value: input.taxes?.value20 || '',
+      },
+      {
+        tribute: input.taxes?.tribute21 || '',
+        value: input.taxes?.value21 || '',
+      },
+      {
+        tribute: input.taxes?.tribute22 || '',
+        value: input.taxes?.value22 || '',
+      },
+      {
+        tribute: input.taxes?.tribute23 || '',
+        value: input.taxes?.value23 || '',
+      },
+      {
+        tribute: input.taxes?.tribute24 || '',
+        value: input.taxes?.value24 || '',
+      },
+      {
+        tribute: input.taxes?.tribute25 || '',
+        value: input.taxes?.value25 || '',
+      },
+      {
+        tribute: input.taxes?.tribute26 || '',
+        value: input.taxes?.value26 || '',
+      },
     ];
 
-    const tax931Liquidation = taxLiquidation.find((il) => il.tribute == '931');
+    const tax931Liquidation = taxLiquidation.filter((il) => il.tribute == '931');
 
-    const tax931 = tax931Liquidation
-      ? Number(Number(tax931Liquidation.value.replace(',', '.')).toFixed(2))
+    const tax931 = tax931Liquidation.length
+      ? Number(
+      tax931Liquidation
+        .reduce((acc, tax) => {
+          return (acc += Number(
+            Number(tax.value.replace(',', '.')).toFixed(2),
+          ));
+        }, 0)
+        .toFixed(2),
+    )
       : undefined;
 
-    const tax123Liquidation = taxLiquidation.find((il) => il.tribute == '123');
+    const tax123Liquidation = taxLiquidation.filter((il) => il.tribute == '123');
 
-    const tax123 = tax123Liquidation
-      ? Number(Number(tax123Liquidation.value.replace(',', '.')).toFixed(2))
+    const tax123 = tax123Liquidation.length
+      ? Number(
+      tax123Liquidation
+        .reduce((acc, tax) => {
+          return (acc += Number(
+            Number(tax.value.replace(',', '.')).toFixed(2),
+          ));
+        }, 0)
+        .toFixed(2),
+    )
       : undefined;
 
     const taxA30Liquidation = taxLiquidation.find((il) => il.tribute == 'A30');
@@ -1004,6 +1150,15 @@ class AccountingPDFConverter {
       throw new Error('Missing total taxes');
     }
 
+    if(Number(totalTaxes) != Number(taxLiquidation.reduce((prev, acc) => {
+      if(!isNaN(Number(Number(acc.value.replace(',', '.')).toFixed(2))))
+        prev += Number(Number(acc.value.replace(',', '.')).toFixed(2))
+      return prev
+    },
+    0).toFixed(2))) {
+      throw new Error('Missing tax mapping')
+    }
+
     if (
       totalVatToBePaid &&
       taxB00Vat22 == undefined &&
@@ -1012,6 +1167,10 @@ class AccountingPDFConverter {
       taxB00Vat00 == undefined
     ) {
       throw new Error('Missing VAT tax');
+    }
+
+    if(Number(((vatExemptionValue || 0) + (taxB00Vat00 || 0) + (taxB00Vat04 || 0) + (taxB00Vat10 || 0) + (taxB00Vat22 || 0)).toFixed(2)) != totalVatToBePaid) {
+      throw new Error('Missing vat mapping')
     }
 
     return {
