@@ -884,26 +884,26 @@ class AccountingPDFConverter {
 
     const vatExemptionValue = vatExemption.length
       ? Number(
-      vatExemption
-        .reduce((acc, tax) => {
-          return (acc += Number(
-            Number(tax.value.replace(',', '.')).toFixed(2),
-          ));
-        }, 0)
-        .toFixed(2),
-    )
+          vatExemption
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.value.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
       : undefined;
 
     const vatExemptionTaxableValue = vatExemption.length
       ? Number(
-      vatExemption
-        .reduce((acc, tax) => {
-          return (acc += Number(
-            Number(tax.taxableValue.replace(',', '.')).toFixed(2),
-          ));
-        }, 0)
-        .toFixed(2),
-    )
+          vatExemption
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.taxableValue.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
       : undefined;
 
     const letterOfIntent = vatExemption.length
@@ -1057,32 +1057,36 @@ class AccountingPDFConverter {
       },
     ];
 
-    const tax931Liquidation = taxLiquidation.filter((il) => il.tribute == '931');
+    const tax931Liquidation = taxLiquidation.filter(
+      (il) => il.tribute == '931',
+    );
 
     const tax931 = tax931Liquidation.length
       ? Number(
-      tax931Liquidation
-        .reduce((acc, tax) => {
-          return (acc += Number(
-            Number(tax.value.replace(',', '.')).toFixed(2),
-          ));
-        }, 0)
-        .toFixed(2),
-    )
+          tax931Liquidation
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.value.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
       : undefined;
 
-    const tax123Liquidation = taxLiquidation.filter((il) => il.tribute == '123');
+    const tax123Liquidation = taxLiquidation.filter(
+      (il) => il.tribute == '123',
+    );
 
     const tax123 = tax123Liquidation.length
       ? Number(
-      tax123Liquidation
-        .reduce((acc, tax) => {
-          return (acc += Number(
-            Number(tax.value.replace(',', '.')).toFixed(2),
-          ));
-        }, 0)
-        .toFixed(2),
-    )
+          tax123Liquidation
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.value.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
       : undefined;
 
     const taxA30Liquidation = taxLiquidation.find((il) => il.tribute == 'A30');
@@ -1150,13 +1154,19 @@ class AccountingPDFConverter {
       throw new Error('Missing total taxes');
     }
 
-    if(Number(totalTaxes) != Number(taxLiquidation.reduce((prev, acc) => {
-      if(!isNaN(Number(Number(acc.value.replace(',', '.')).toFixed(2))))
-        prev += Number(Number(acc.value.replace(',', '.')).toFixed(2))
-      return prev
-    },
-    0).toFixed(2))) {
-      throw new Error('Missing tax mapping')
+    if (
+      Number(totalTaxes) !=
+      Number(
+        taxLiquidation
+          .reduce((prev, acc) => {
+            if (!isNaN(Number(Number(acc.value.replace(',', '.')).toFixed(2))))
+              prev += Number(Number(acc.value.replace(',', '.')).toFixed(2));
+            return prev;
+          }, 0)
+          .toFixed(2),
+      )
+    ) {
+      throw new Error('Missing tax mapping');
     }
 
     if (
@@ -1169,8 +1179,18 @@ class AccountingPDFConverter {
       throw new Error('Missing VAT tax');
     }
 
-    if(Number(((vatExemptionValue || 0) + (taxB00Vat00 || 0) + (taxB00Vat04 || 0) + (taxB00Vat10 || 0) + (taxB00Vat22 || 0)).toFixed(2)) != totalVatToBePaid) {
-      throw new Error('Missing vat mapping')
+    if (
+      Number(
+        (
+          (vatExemptionValue || 0) +
+          (taxB00Vat00 || 0) +
+          (taxB00Vat04 || 0) +
+          (taxB00Vat10 || 0) +
+          (taxB00Vat22 || 0)
+        ).toFixed(2),
+      ) != totalVatToBePaid
+    ) {
+      throw new Error('Missing vat mapping');
     }
 
     return {
