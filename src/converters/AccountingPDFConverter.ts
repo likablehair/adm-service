@@ -1199,7 +1199,7 @@ class AccountingPDFConverter {
       totalDuties,
       totalTaxes,
       totalVatToBePaid,
-      vatExemption: !!vatExemption,
+      vatExemption: !!vatExemption.length,
       vatExemptionValue,
       vatExemptionTaxableValue,
       letterOfIntent,
