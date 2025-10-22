@@ -1006,7 +1006,12 @@ class AccountingPDFConverter {
         )
       : undefined;
 
-    const taxLiquidation: { tribute: string; value: string; taxableValue: string; quantity: string }[] = [
+    const taxLiquidation: {
+      tribute: string;
+      value: string;
+      taxableValue: string;
+      quantity: string;
+    }[] = [
       {
         tribute: input.taxes?.tribute1 || '',
         taxableValue: input.taxes?.taxableValue1 || '',
