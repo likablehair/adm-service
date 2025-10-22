@@ -17,7 +17,11 @@ export type AccountingStatementMapped = {
   taxB00Vat04: number | undefined;
   taxB00Vat10: number | undefined;
   tax931: number | undefined;
+  tax931TaxableValue: number | undefined;
+  tax931Quantity: number | undefined;
   tax123: number | undefined;
+  tax123TaxableValue: number | undefined;
+  tax123Quantity: number | undefined;
   taxA30: number | undefined;
   taxA35: number | undefined;
   totalSeaTaxes: number | undefined;
@@ -145,56 +149,108 @@ export interface AccountingJson {
   taxes: {
     tribute1: string;
     value1: string;
+    taxableValue1: string;
+    quantity1: string;
     tribute2: string;
     value2: string;
+    taxableValue2: string;
+    quantity2: string;
     tribute3: string;
     value3: string;
+    taxableValue3: string;
+    quantity3: string;
     tribute4: string;
     value4: string;
+    taxableValue4: string;
+    quantity4: string;
     tribute5: string;
     value5: string;
+    taxableValue5: string;
+    quantity5: string;
     tribute6: string;
     value6: string;
+    taxableValue6: string;
+    quantity6: string;
     tribute7: string;
     value7: string;
+    taxableValue7: string;
+    quantity7: string;
     tribute8: string;
     value8: string;
+    taxableValue8: string;
+    quantity8: string;
     tribute9: string;
     value9: string;
+    taxableValue9: string;
+    quantity9: string;
     tribute10: string;
     value10: string;
+    taxableValue10: string;
+    quantity10: string;
     tribute11: string;
     value11: string;
+    taxableValue11: string;
+    quantity11: string;
     tribute12: string;
     value12: string;
+    taxableValue12: string;
+    quantity12: string;
     tribute13: string;
     value13: string;
+    taxableValue13: string;
+    quantity13: string;
     tribute14: string;
     value14: string;
+    taxableValue14: string;
+    quantity14: string;
     tribute15: string;
     value15: string;
+    taxableValue15: string;
+    quantity15: string;
     tribute16: string;
     value16: string;
+    taxableValue16: string;
+    quantity16: string;
     tribute17: string;
     value17: string;
+    taxableValue17: string;
+    quantity17: string;
     tribute18: string;
     value18: string;
+    taxableValue18: string;
+    quantity18: string;
     tribute19: string;
     value19: string;
+    taxableValue19: string;
+    quantity19: string;
     tribute20: string;
     value20: string;
+    taxableValue20: string;
+    quantity20: string;
     tribute21: string;
     value21: string;
+    taxableValue21: string;
+    quantity21: string;
     tribute22: string;
     value22: string;
+    taxableValue22: string;
+    quantity22: string;
     tribute23: string;
     value23: string;
+    taxableValue23: string;
+    quantity23: string;
     tribute24: string;
     value24: string;
+    taxableValue24: string;
+    quantity24: string;
     tribute25: string;
     value25: string;
+    taxableValue25: string;
+    quantity25: string;
     tribute26: string;
     value26: string;
+    taxableValue26: string;
+    quantity26: string;
   };
   vat: {
     tribute1: string;
@@ -950,109 +1006,161 @@ class AccountingPDFConverter {
         )
       : undefined;
 
-    const taxLiquidation: { tribute: string; value: string }[] = [
+    const taxLiquidation: { tribute: string; value: string; taxableValue: string; quantity: string }[] = [
       {
         tribute: input.taxes?.tribute1 || '',
+        taxableValue: input.taxes?.taxableValue1 || '',
+        quantity: input.taxes?.quantity1 || '',
         value: input.taxes?.value1 || '',
       },
       {
         tribute: input.taxes?.tribute2 || '',
+        taxableValue: input.taxes?.taxableValue2 || '',
+        quantity: input.taxes?.quantity2 || '',
         value: input.taxes?.value2 || '',
       },
       {
         tribute: input.taxes?.tribute3 || '',
+        taxableValue: input.taxes?.taxableValue3 || '',
+        quantity: input.taxes?.quantity3 || '',
         value: input.taxes?.value3 || '',
       },
       {
         tribute: input.taxes?.tribute4 || '',
+        taxableValue: input.taxes?.taxableValue4 || '',
+        quantity: input.taxes?.quantity4 || '',
         value: input.taxes?.value4 || '',
       },
       {
         tribute: input.taxes?.tribute5 || '',
+        taxableValue: input.taxes?.taxableValue5 || '',
+        quantity: input.taxes?.quantity5 || '',
         value: input.taxes?.value5 || '',
       },
       {
         tribute: input.taxes?.tribute6 || '',
+        taxableValue: input.taxes?.taxableValue6 || '',
+        quantity: input.taxes?.quantity6 || '',
         value: input.taxes?.value6 || '',
       },
       {
         tribute: input.taxes?.tribute7 || '',
+        taxableValue: input.taxes?.taxableValue7 || '',
+        quantity: input.taxes?.quantity7 || '',
         value: input.taxes?.value7 || '',
       },
       {
         tribute: input.taxes?.tribute8 || '',
+        taxableValue: input.taxes?.taxableValue8 || '',
+        quantity: input.taxes?.quantity8 || '',
         value: input.taxes?.value8 || '',
       },
       {
         tribute: input.taxes?.tribute9 || '',
+        taxableValue: input.taxes?.taxableValue9 || '',
+        quantity: input.taxes?.quantity9 || '',
         value: input.taxes?.value9 || '',
       },
       {
         tribute: input.taxes?.tribute10 || '',
+        taxableValue: input.taxes?.taxableValue10 || '',
+        quantity: input.taxes?.quantity10 || '',
         value: input.taxes?.value10 || '',
       },
       {
         tribute: input.taxes?.tribute11 || '',
+        taxableValue: input.taxes?.taxableValue11 || '',
+        quantity: input.taxes?.quantity11 || '',
         value: input.taxes?.value11 || '',
       },
       {
         tribute: input.taxes?.tribute12 || '',
+        taxableValue: input.taxes?.taxableValue12 || '',
+        quantity: input.taxes?.quantity12 || '',
         value: input.taxes?.value12 || '',
       },
       {
         tribute: input.taxes?.tribute13 || '',
+        taxableValue: input.taxes?.taxableValue13 || '',
+        quantity: input.taxes?.quantity13 || '',
         value: input.taxes?.value13 || '',
       },
       {
         tribute: input.taxes?.tribute14 || '',
+        taxableValue: input.taxes?.taxableValue14 || '',
+        quantity: input.taxes?.quantity14 || '',
         value: input.taxes?.value14 || '',
       },
       {
         tribute: input.taxes?.tribute15 || '',
+        taxableValue: input.taxes?.taxableValue15 || '',
+        quantity: input.taxes?.quantity15 || '',
         value: input.taxes?.value15 || '',
       },
       {
         tribute: input.taxes?.tribute16 || '',
+        taxableValue: input.taxes?.taxableValue16 || '',
+        quantity: input.taxes?.quantity16 || '',
         value: input.taxes?.value16 || '',
       },
       {
         tribute: input.taxes?.tribute17 || '',
+        taxableValue: input.taxes?.taxableValue17 || '',
+        quantity: input.taxes?.quantity17 || '',
         value: input.taxes?.value17 || '',
       },
       {
         tribute: input.taxes?.tribute18 || '',
+        taxableValue: input.taxes?.taxableValue18 || '',
+        quantity: input.taxes?.quantity18 || '',
         value: input.taxes?.value18 || '',
       },
       {
         tribute: input.taxes?.tribute19 || '',
+        taxableValue: input.taxes?.taxableValue19 || '',
+        quantity: input.taxes?.quantity19 || '',
         value: input.taxes?.value19 || '',
       },
       {
         tribute: input.taxes?.tribute20 || '',
+        taxableValue: input.taxes?.taxableValue20 || '',
+        quantity: input.taxes?.quantity20 || '',
         value: input.taxes?.value20 || '',
       },
       {
         tribute: input.taxes?.tribute21 || '',
+        taxableValue: input.taxes?.taxableValue21 || '',
+        quantity: input.taxes?.quantity21 || '',
         value: input.taxes?.value21 || '',
       },
       {
         tribute: input.taxes?.tribute22 || '',
+        taxableValue: input.taxes?.taxableValue22 || '',
+        quantity: input.taxes?.quantity22 || '',
         value: input.taxes?.value22 || '',
       },
       {
         tribute: input.taxes?.tribute23 || '',
+        taxableValue: input.taxes?.taxableValue23 || '',
+        quantity: input.taxes?.quantity23 || '',
         value: input.taxes?.value23 || '',
       },
       {
         tribute: input.taxes?.tribute24 || '',
+        taxableValue: input.taxes?.taxableValue24 || '',
+        quantity: input.taxes?.quantity24 || '',
         value: input.taxes?.value24 || '',
       },
       {
         tribute: input.taxes?.tribute25 || '',
+        taxableValue: input.taxes?.taxableValue25 || '',
+        quantity: input.taxes?.quantity25 || '',
         value: input.taxes?.value25 || '',
       },
       {
         tribute: input.taxes?.tribute26 || '',
+        taxableValue: input.taxes?.taxableValue26 || '',
+        quantity: input.taxes?.quantity26 || '',
         value: input.taxes?.value26 || '',
       },
     ];
@@ -1073,6 +1181,30 @@ class AccountingPDFConverter {
         )
       : undefined;
 
+    const tax931TaxableValue = tax931Liquidation.length
+      ? Number(
+          tax931Liquidation
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.taxableValue.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
+      : undefined;
+
+    const tax931Quantity = tax931Liquidation.length
+      ? Number(
+          tax931Liquidation
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.quantity.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
+      : undefined;
+
     const tax123Liquidation = taxLiquidation.filter(
       (il) => il.tribute == '123',
     );
@@ -1083,6 +1215,30 @@ class AccountingPDFConverter {
             .reduce((acc, tax) => {
               return (acc += Number(
                 Number(tax.value.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
+      : undefined;
+
+    const tax123TaxableValue = tax123Liquidation.length
+      ? Number(
+          tax123Liquidation
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.taxableValue.replace(',', '.')).toFixed(2),
+              ));
+            }, 0)
+            .toFixed(2),
+        )
+      : undefined;
+
+    const tax123Quantity = tax123Liquidation.length
+      ? Number(
+          tax123Liquidation
+            .reduce((acc, tax) => {
+              return (acc += Number(
+                Number(tax.quantity.replace(',', '.')).toFixed(2),
               ));
             }, 0)
             .toFixed(2),
@@ -1207,7 +1363,11 @@ class AccountingPDFConverter {
       taxB00Vat10,
       taxB00Vat04,
       tax931,
+      tax931TaxableValue,
+      tax931Quantity,
       tax123,
+      tax123TaxableValue,
+      tax123Quantity,
       taxA30,
       taxA35,
       totalSeaTaxes,

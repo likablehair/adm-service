@@ -1929,8 +1929,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue1',
+    xRange: [6.247, 6.247],
+    yRange: [32.253, 32.253],
+  },
+  {
+    entity: 'taxes',
     column: 'value1',
     xRange: [14.423, 14.423],
+    yRange: [32.253, 32.253],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity1',
+    xRange: [18.511, 18.511],
     yRange: [32.253, 32.253],
   },
   {
@@ -1941,8 +1953,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue2',
+    xRange: [6.247, 6.247],
+    yRange: [33.15, 33.15],
+  },
+  {
+    entity: 'taxes',
     column: 'value2',
     xRange: [14.423, 14.423],
+    yRange: [33.15, 33.15],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity2',
+    xRange: [18.511, 18.511],
     yRange: [33.15, 33.15],
   },
   {
@@ -1953,8 +1977,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue3',
+    xRange: [6.247, 6.247],
+    yRange: [34.047, 34.047],
+  },
+  {
+    entity: 'taxes',
     column: 'value3',
     xRange: [14.423, 14.423],
+    yRange: [34.047, 34.047],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity3',
+    xRange: [18.511, 18.511],
     yRange: [34.047, 34.047],
   },
   {
@@ -1965,8 +2001,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue4',
+    xRange: [6.247, 6.247],
+    yRange: [34.943, 34.943],
+  },
+  {
+    entity: 'taxes',
     column: 'value4',
     xRange: [14.423, 14.423],
+    yRange: [34.943, 34.943],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity4',
+    xRange: [18.511, 18.511],
     yRange: [34.943, 34.943],
   },
   {
@@ -1977,8 +2025,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue5',
+    xRange: [6.247, 6.247],
+    yRange: [31.356, 31.356],
+  },
+  {
+    entity: 'taxes',
     column: 'value5',
     xRange: [14.423, 14.423],
+    yRange: [31.356, 31.356],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity5',
+    xRange: [18.511, 18.511],
     yRange: [31.356, 31.356],
   },
   {
@@ -1989,8 +2049,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue6',
+    xRange: [6.247, 6.247],
+    yRange: [35.84, 35.84],
+  },
+  {
+    entity: 'taxes',
     column: 'value6',
     xRange: [14.423, 14.423],
+    yRange: [35.84, 35.84],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity6',
+    xRange: [18.511, 18.511],
     yRange: [35.84, 35.84],
   },
   {
@@ -2001,8 +2073,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue7',
+    xRange: [6.247, 6.247],
+    yRange: [36.737, 36.737],
+  },
+  {
+    entity: 'taxes',
     column: 'value7',
     xRange: [14.423, 14.423],
+    yRange: [36.737, 36.737],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity7',
+    xRange: [18.511, 18.511],
     yRange: [36.737, 36.737],
   },
   {
@@ -2013,8 +2097,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue8',
+    xRange: [6.247, 6.247],
+    yRange: [37.634, 37.634],
+  },
+  {
+    entity: 'taxes',
     column: 'value8',
     xRange: [14.423, 14.423],
+    yRange: [37.634, 37.634],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity8',
+    xRange: [18.511, 18.511],
     yRange: [37.634, 37.634],
   },
   {
@@ -2025,8 +2121,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue9',
+    xRange: [6.247, 6.247],
+    yRange: [7.930999999999999, 7.930999999999999],
+  },
+  {
+    entity: 'taxes',
     column: 'value9',
     xRange: [14.423, 14.423],
+    yRange: [7.930999999999999, 7.930999999999999],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity9',
+    xRange: [18.511, 18.511],
     yRange: [7.930999999999999, 7.930999999999999],
   },
   {
@@ -2037,8 +2145,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue10',
+    xRange: [6.247, 6.247],
+    yRange: [38.531, 38.531],
+  },
+  {
+    entity: 'taxes',
     column: 'value10',
     xRange: [14.423, 14.423],
+    yRange: [38.531, 38.531],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity10',
+    xRange: [18.511, 18.511],
     yRange: [38.531, 38.531],
   },
   {
@@ -2049,8 +2169,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue11',
+    xRange: [6.247, 6.247],
+    yRange: [39.427, 39.427],
+  },
+  {
+    entity: 'taxes',
     column: 'value11',
     xRange: [14.423, 14.423],
+    yRange: [39.427, 39.427],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity11',
+    xRange: [18.511, 18.511],
     yRange: [39.427, 39.427],
   },
   {
@@ -2061,8 +2193,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue12',
+    xRange: [6.247, 6.247],
+    yRange: [31.598, 31.598],
+  },
+  {
+    entity: 'taxes',
     column: 'value12',
     xRange: [14.423, 14.423],
+    yRange: [31.598, 31.598],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity12',
+    xRange: [18.511, 18.511],
     yRange: [31.598, 31.598],
   },
   {
@@ -2073,8 +2217,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue13',
+    xRange: [6.247, 6.247],
+    yRange: [32.494, 32.494],
+  },
+  {
+    entity: 'taxes',
     column: 'value13',
     xRange: [14.423, 14.423],
+    yRange: [32.494, 32.494],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity13',
+    xRange: [18.511, 18.511],
     yRange: [32.494, 32.494],
   },
   {
@@ -2085,8 +2241,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue14',
+    xRange: [6.247, 6.247],
+    yRange: [32.106, 32.106],
+  },
+  {
+    entity: 'taxes',
     column: 'value14',
     xRange: [14.423, 14.423],
+    yRange: [32.106, 32.106],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity14',
+    xRange: [18.511, 18.511],
     yRange: [32.106, 32.106],
   },
   {
@@ -2097,8 +2265,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue15',
+    xRange: [6.247, 6.247],
+    yRange: [33.003, 33.003],
+  },
+  {
+    entity: 'taxes',
     column: 'value15',
     xRange: [14.423, 14.423],
+    yRange: [33.003, 33.003],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity15',
+    xRange: [18.511, 18.511],
     yRange: [33.003, 33.003],
   },
   {
@@ -2109,8 +2289,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue16',
+    xRange: [6.247, 6.247],
+    yRange: [30.701, 30.701],
+  },
+  {
+    entity: 'taxes',
     column: 'value16',
     xRange: [14.423, 14.423],
+    yRange: [30.701, 30.701],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity16',
+    xRange: [18.511, 18.511],
     yRange: [30.701, 30.701],
   },
   {
@@ -2121,8 +2313,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue17',
+    xRange: [6.247, 6.247],
+    yRange: [33.9, 33.9],
+  },
+  {
+    entity: 'taxes',
     column: 'value17',
     xRange: [14.423, 14.423],
+    yRange: [33.9, 33.9],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity17',
+    xRange: [18.511, 18.511],
     yRange: [33.9, 33.9],
   },
   {
@@ -2133,8 +2337,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue18',
+    xRange: [6.247, 6.247],
+    yRange: [34.797, 34.797],
+  },
+  {
+    entity: 'taxes',
     column: 'value18',
     xRange: [14.423, 14.423],
+    yRange: [34.797, 34.797],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity18',
+    xRange: [18.511, 18.511],
     yRange: [34.797, 34.797],
   },
   {
@@ -2145,8 +2361,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue19',
+    xRange: [6.247, 6.247],
+    yRange: [33.391, 33.391],
+  },
+  {
+    entity: 'taxes',
     column: 'value19',
     xRange: [14.423, 14.423],
+    yRange: [33.391, 33.391],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity19',
+    xRange: [18.511, 18.511],
     yRange: [33.391, 33.391],
   },
   {
@@ -2157,8 +2385,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue20',
+    xRange: [6.247, 6.247],
+    yRange: [35.693, 35.693],
+  },
+  {
+    entity: 'taxes',
     column: 'value20',
     xRange: [14.423, 14.423],
+    yRange: [35.693, 35.693],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity20',
+    xRange: [18.511, 18.511],
     yRange: [35.693, 35.693],
   },
   {
@@ -2169,8 +2409,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue21',
+    xRange: [6.247, 6.247],
+    yRange: [34.288, 34.288],
+  },
+  {
+    entity: 'taxes',
     column: 'value21',
     xRange: [14.423, 14.423],
+    yRange: [34.288, 34.288],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity21',
+    xRange: [18.511, 18.511],
     yRange: [34.288, 34.288],
   },
   {
@@ -2181,8 +2433,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue22',
+    xRange: [6.247, 6.247],
+    yRange: [7.034, 7.034],
+  },
+  {
+    entity: 'taxes',
     column: 'value22',
     xRange: [14.423, 14.423],
+    yRange: [7.034, 7.034],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity22',
+    xRange: [18.511, 18.511],
     yRange: [7.034, 7.034],
   },
   {
@@ -2193,8 +2457,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue23',
+    xRange: [6.247, 6.247],
+    yRange: [36.59, 36.59],
+  },
+  {
+    entity: 'taxes',
     column: 'value23',
     xRange: [14.423, 14.423],
+    yRange: [36.59, 36.59],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity23',
+    xRange: [18.511, 18.511],
     yRange: [36.59, 36.59],
   },
   {
@@ -2205,8 +2481,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue24',
+    xRange: [6.247, 6.247],
+    yRange: [35.185, 35.185],
+  },
+  {
+    entity: 'taxes',
     column: 'value24',
     xRange: [14.423, 14.423],
+    yRange: [35.185, 35.185],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity24',
+    xRange: [18.511, 18.511],
     yRange: [35.185, 35.185],
   },
   {
@@ -2217,8 +2505,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue25',
+    xRange: [6.247, 6.247],
+    yRange: [36.082, 36.082],
+  },
+  {
+    entity: 'taxes',
     column: 'value25',
     xRange: [14.423, 14.423],
+    yRange: [36.082, 36.082],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity25',
+    xRange: [18.511, 18.511],
     yRange: [36.082, 36.082],
   },
   {
@@ -2229,8 +2529,20 @@ export const _cells: {
   },
   {
     entity: 'taxes',
+    column: 'taxableValue26',
+    xRange: [6.247, 6.247],
+    yRange: [36.978, 36.978],
+  },
+  {
+    entity: 'taxes',
     column: 'value26',
     xRange: [14.423, 14.423],
+    yRange: [36.978, 36.978],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity26',
+    xRange: [18.511, 18.511],
     yRange: [36.978, 36.978],
   },
 ];
