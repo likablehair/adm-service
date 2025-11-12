@@ -641,7 +641,7 @@ export const _cells: {
     xRange: [17.281, 17.281],
     yRange: [13.496, 13.496],
   },
-    {
+  {
     entity: 'declaration',
     column: 'acceptanceDate4',
     xRange: [17.281, 17.281],
@@ -725,7 +725,7 @@ export const _cells: {
     xRange: [17.281, 17.281],
     yRange: [14.587, 14.587],
   },
-    {
+  {
     entity: 'declaration',
     column: 'exchangeRate4',
     xRange: [17.281, 17.281],
