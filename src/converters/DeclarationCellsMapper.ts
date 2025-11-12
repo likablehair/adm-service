@@ -619,6 +619,12 @@ export const _cells: {
   },
   {
     entity: 'declaration',
+    column: 'date4',
+    xRange: [11.966, 11.966],
+    yRange: [13.871, 13.871],
+  },
+  {
+    entity: 'declaration',
     column: 'acceptanceDate1',
     xRange: [17.281, 17.281],
     yRange: [13.121, 13.121],
@@ -634,6 +640,12 @@ export const _cells: {
     column: 'acceptanceDate3',
     xRange: [17.281, 17.281],
     yRange: [13.496, 13.496],
+  },
+    {
+    entity: 'declaration',
+    column: 'acceptanceDate4',
+    xRange: [17.281, 17.281],
+    yRange: [13.871, 13.871],
   },
   {
     entity: 'declaration',
@@ -667,6 +679,12 @@ export const _cells: {
   },
   {
     entity: 'declaration',
+    column: 'totalGrossWeight4',
+    xRange: [6.304, 6.304],
+    yRange: [16.742, 16.742],
+  },
+  {
+    entity: 'declaration',
     column: 'invoiceValueAndCurrency1',
     xRange: [11.966, 11.966],
     yRange: [15.242, 15.242],
@@ -685,6 +703,12 @@ export const _cells: {
   },
   {
     entity: 'declaration',
+    column: 'invoiceValueAndCurrency4',
+    xRange: [11.966, 11.966],
+    yRange: [16.742, 16.742],
+  },
+  {
+    entity: 'declaration',
     column: 'exchangeRate1',
     xRange: [17.281, 17.281],
     yRange: [15.242, 15.242],
@@ -700,6 +724,12 @@ export const _cells: {
     column: 'exchangeRate3',
     xRange: [17.281, 17.281],
     yRange: [14.587, 14.587],
+  },
+    {
+    entity: 'declaration',
+    column: 'exchangeRate4',
+    xRange: [17.281, 17.281],
+    yRange: [16.742, 16.742],
   },
   {
     entity: 'declaration',

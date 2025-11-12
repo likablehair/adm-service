@@ -73,18 +73,23 @@ export interface DeclarationJson {
     date1: string;
     date2: string;
     date3: string;
+    date4: string;
     acceptanceDate1: string;
     acceptanceDate2: string;
     acceptanceDate3: string;
+    acceptanceDate4: string;
     invoiceValueAndCurrency1: string;
     invoiceValueAndCurrency2: string;
     invoiceValueAndCurrency3: string;
+    invoiceValueAndCurrency4: string;
     exchangeRate1: string;
     exchangeRate2: string;
     exchangeRate3: string;
+    exchangeRate4: string;
     totalGrossWeight1: string;
     totalGrossWeight2: string;
     totalGrossWeight3: string;
+    totalGrossWeight4: string;
     incoterm1: string;
     incoterm2: string;
     incoterm3: string;
@@ -347,12 +352,14 @@ class PDFConverter {
       input.declaration?.date1 ||
       input.declaration?.date2 ||
       input.declaration?.date3 ||
+      input.declaration?.date4 ||
       '';
 
     const acceptanceDate: string =
       input.declaration?.acceptanceDate1 ||
       input.declaration?.acceptanceDate2 ||
       input.declaration?.acceptanceDate3 ||
+      input.declaration?.acceptanceDate4 ||
       '';
 
     const releaseDate: string = input.declaration?.releaseDate1 || '';
@@ -363,24 +370,28 @@ class PDFConverter {
       input.declaration?.totalGrossWeight1 ||
       input.declaration?.totalGrossWeight2 ||
       input.declaration?.totalGrossWeight3 ||
+      input.declaration?.totalGrossWeight4 ||
       '';
 
     const invoiceValue: string =
       input.declaration?.invoiceValueAndCurrency1?.split(' ')[0] ||
       input.declaration?.invoiceValueAndCurrency2?.split(' ')[0] ||
       input.declaration?.invoiceValueAndCurrency3?.split(' ')[0] ||
+      input.declaration?.invoiceValueAndCurrency4?.split(' ')[0] ||
       '';
 
     const currency: string =
       input.declaration?.invoiceValueAndCurrency1?.split(' ')[1] ||
       input.declaration?.invoiceValueAndCurrency2?.split(' ')[1] ||
       input.declaration?.invoiceValueAndCurrency3?.split(' ')[1] ||
+      input.declaration?.invoiceValueAndCurrency4?.split(' ')[1] ||
       '';
 
     const exchangeRate: string =
       input.declaration?.exchangeRate1 ||
       input.declaration?.exchangeRate2 ||
       input.declaration?.exchangeRate3 ||
+      input.declaration?.exchangeRate4 ||
       '';
 
     const incoterm: string =
