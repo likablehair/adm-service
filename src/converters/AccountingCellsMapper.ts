@@ -249,6 +249,12 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'totalDuties33',
+    xRange: [29.874, 29.874],
+    yRange: [30.166, 30.166],
+  },
+  {
+    entity: 'statement',
     column: 'totalTaxes1',
     xRange: [30.531, 30.531],
     yRange: [35.824, 35.824],
@@ -444,6 +450,12 @@ export const _cells: {
     column: 'totalTaxes33',
     xRange: [30.531, 30.531],
     yRange: [36.962, 36.962],
+  },
+  {
+    entity: 'statement',
+    column: 'totalTaxes34',
+    xRange: [30.531, 30.531],
+    yRange: [33.736, 33.736],
   },
   {
     entity: 'statement',
@@ -660,6 +672,12 @@ export const _cells: {
     column: 'totalVat36',
     xRange: [29.5, 29.5],
     yRange: [42.326, 42.326],
+  },
+  {
+    entity: 'statement',
+    column: 'totalVat37',
+    xRange: [29.5, 29.5],
+    yRange: [38.204, 38.204],
   },
   {
     entity: 'vat',
@@ -1920,6 +1938,66 @@ export const _cells: {
     column: 'letterOfIntent42',
     xRange: [22.599, 22.599],
     yRange: [41.43, 41.43],
+  },
+  {
+    entity: 'vat',
+    column: 'tribute43',
+    xRange: [2.159, 2.159],
+    yRange: [36.41, 36.41],
+  },
+  {
+    entity: 'vat',
+    column: 'value43',
+    xRange: [14.423, 14.423],
+    yRange: [36.41, 36.41],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue43',
+    xRange: [6.247, 6.247],
+    yRange: [36.41, 36.41],
+  },
+  {
+    entity: 'vat',
+    column: 'rate43',
+    xRange: [10.335, 10.335],
+    yRange: [36.41, 36.41],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent43',
+    xRange: [22.599, 22.599],
+    yRange: [36.41, 36.41],
+  },
+  {
+    entity: 'vat',
+    column: 'tribute44',
+    xRange: [2.159, 2.159],
+    yRange: [37.307, 37.307],
+  },
+  {
+    entity: 'vat',
+    column: 'value44',
+    xRange: [14.423, 14.423],
+    yRange: [37.307, 37.307],
+  },
+  {
+    entity: 'vat',
+    column: 'taxableValue44',
+    xRange: [6.247, 6.247],
+    yRange: [37.307, 37.307],
+  },
+  {
+    entity: 'vat',
+    column: 'rate44',
+    xRange: [10.335, 10.335],
+    yRange: [37.307, 37.307],
+  },
+  {
+    entity: 'vat',
+    column: 'letterOfIntent44',
+    xRange: [22.599, 22.599],
+    yRange: [37.307, 37.307],
   },
   {
     entity: 'taxes',
