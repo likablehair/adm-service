@@ -142,6 +142,7 @@ export interface AccountingJson {
     totalVat35: string;
     totalVat36: string;
     totalVat37: string;
+    totalVat38: string;
   };
   documents: {
     code: string;
@@ -642,6 +643,7 @@ class AccountingPDFConverter {
       input.statement.totalVat35?.trim() ||
       input.statement.totalVat36?.trim() ||
       input.statement.totalVat37?.trim() ||
+      input.statement.totalVat38?.trim() ||
       '';
 
     const totalVatToBePaid =

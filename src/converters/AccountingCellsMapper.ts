@@ -680,6 +680,12 @@ export const _cells: {
     yRange: [38.204, 38.204],
   },
   {
+    entity: 'statement',
+    column: 'totalVat38',
+    xRange: [29.5, 29.5],
+    yRange: [37.307, 37.307],
+  },
+  {
     entity: 'vat',
     column: 'tribute1',
     xRange: [2.159, 2.159],
