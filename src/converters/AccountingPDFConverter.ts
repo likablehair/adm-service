@@ -816,7 +816,6 @@ class AccountingPDFConverter {
         ? Number(Number(totalVatToBePaidString.replace(',', '.')).toFixed(2))
         : undefined;
 
-
     const taxLiquidation: {
       tribute: string;
       value: string;
@@ -1663,7 +1662,7 @@ class AccountingPDFConverter {
       Number(totalTaxes) !=
       Number(
         taxLiquidation
-          .filter(tax => tax.tribute != 'B00' && tax.tribute != '406')
+          .filter((tax) => tax.tribute != 'B00' && tax.tribute != '406')
           .reduce((prev, acc) => {
             if (!isNaN(Number(Number(acc.value.replace(',', '.')).toFixed(2))))
               prev += Number(Number(acc.value.replace(',', '.')).toFixed(2));
