@@ -71,6 +71,11 @@ export interface AccountingJson {
     totalDuties31: string;
     totalDuties32: string;
     totalDuties33: string;
+    totalDuties34: string;
+    totalDuties35: string;
+    totalDuties36: string;
+    totalDuties37: string;
+    totalDuties38: string;
     totalTaxes1: string;
     totalTaxes2: string;
     totalTaxes3: string;
@@ -105,6 +110,11 @@ export interface AccountingJson {
     totalTaxes32: string;
     totalTaxes33: string;
     totalTaxes34: string;
+    totalTaxes35: string;
+    totalTaxes36: string;
+    totalTaxes37: string;
+    totalTaxes38: string;
+    totalTaxes39: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -143,6 +153,10 @@ export interface AccountingJson {
     totalVat36: string;
     totalVat37: string;
     totalVat38: string;
+    totalVat39: string;
+    totalVat40: string;
+    totalVat41: string;
+    totalVat42: string;
   };
   documents: {
     code: string;
@@ -154,329 +168,466 @@ export interface AccountingJson {
     tribute1: string;
     value1: string;
     taxableValue1: string;
-    quantity1: string;
-    tribute2: string;
-    value2: string;
-    taxableValue2: string;
-    quantity2: string;
-    tribute3: string;
-    value3: string;
-    taxableValue3: string;
-    quantity3: string;
-    tribute4: string;
-    value4: string;
-    taxableValue4: string;
-    quantity4: string;
-    tribute5: string;
-    value5: string;
-    taxableValue5: string;
-    quantity5: string;
-    tribute6: string;
-    value6: string;
-    taxableValue6: string;
-    quantity6: string;
-    tribute7: string;
-    value7: string;
-    taxableValue7: string;
-    quantity7: string;
-    tribute8: string;
-    value8: string;
-    taxableValue8: string;
-    quantity8: string;
-    tribute9: string;
-    value9: string;
-    taxableValue9: string;
-    quantity9: string;
-    tribute10: string;
-    value10: string;
-    taxableValue10: string;
-    quantity10: string;
-    tribute11: string;
-    value11: string;
-    taxableValue11: string;
-    quantity11: string;
-    tribute12: string;
-    value12: string;
-    taxableValue12: string;
-    quantity12: string;
-    tribute13: string;
-    value13: string;
-    taxableValue13: string;
-    quantity13: string;
-    tribute14: string;
-    value14: string;
-    taxableValue14: string;
-    quantity14: string;
-    tribute15: string;
-    value15: string;
-    taxableValue15: string;
-    quantity15: string;
-    tribute16: string;
-    value16: string;
-    taxableValue16: string;
-    quantity16: string;
-    tribute17: string;
-    value17: string;
-    taxableValue17: string;
-    quantity17: string;
-    tribute18: string;
-    value18: string;
-    taxableValue18: string;
-    quantity18: string;
-    tribute19: string;
-    value19: string;
-    taxableValue19: string;
-    quantity19: string;
-    tribute20: string;
-    value20: string;
-    taxableValue20: string;
-    quantity20: string;
-    tribute21: string;
-    value21: string;
-    taxableValue21: string;
-    quantity21: string;
-    tribute22: string;
-    value22: string;
-    taxableValue22: string;
-    quantity22: string;
-    tribute23: string;
-    value23: string;
-    taxableValue23: string;
-    quantity23: string;
-    tribute24: string;
-    value24: string;
-    taxableValue24: string;
-    quantity24: string;
-    tribute25: string;
-    value25: string;
-    taxableValue25: string;
-    quantity25: string;
-    tribute26: string;
-    value26: string;
-    taxableValue26: string;
-    quantity26: string;
-  };
-  vat: {
-    tribute1: string;
-    value1: string;
-    taxableValue1: string;
     rate1: string;
     letterOfIntent1: string;
+    quantity1: string;
     tribute2: string;
     value2: string;
     taxableValue2: string;
     rate2: string;
     letterOfIntent2: string;
+    quantity2: string;
     tribute3: string;
     value3: string;
     taxableValue3: string;
     rate3: string;
     letterOfIntent3: string;
+    quantity3: string;
     tribute4: string;
     value4: string;
     taxableValue4: string;
     rate4: string;
     letterOfIntent4: string;
+    quantity4: string;
     tribute5: string;
     value5: string;
     taxableValue5: string;
     rate5: string;
     letterOfIntent5: string;
+    quantity5: string;
     tribute6: string;
     value6: string;
     taxableValue6: string;
     rate6: string;
     letterOfIntent6: string;
+    quantity6: string;
     tribute7: string;
     value7: string;
     taxableValue7: string;
     rate7: string;
     letterOfIntent7: string;
+    quantity7: string;
     tribute8: string;
     value8: string;
     taxableValue8: string;
     rate8: string;
     letterOfIntent8: string;
+    quantity8: string;
     tribute9: string;
     value9: string;
     taxableValue9: string;
     rate9: string;
     letterOfIntent9: string;
+    quantity9: string;
     tribute10: string;
     value10: string;
     taxableValue10: string;
     rate10: string;
     letterOfIntent10: string;
+    quantity10: string;
     tribute11: string;
     value11: string;
     taxableValue11: string;
     rate11: string;
     letterOfIntent11: string;
+    quantity11: string;
     tribute12: string;
     value12: string;
     taxableValue12: string;
     rate12: string;
     letterOfIntent12: string;
+    quantity12: string;
     tribute13: string;
     value13: string;
     taxableValue13: string;
     rate13: string;
     letterOfIntent13: string;
+    quantity13: string;
     tribute14: string;
     value14: string;
     taxableValue14: string;
     rate14: string;
     letterOfIntent14: string;
+    quantity14: string;
     tribute15: string;
     value15: string;
     taxableValue15: string;
     rate15: string;
     letterOfIntent15: string;
+    quantity15: string;
     tribute16: string;
     value16: string;
     taxableValue16: string;
     rate16: string;
     letterOfIntent16: string;
+    quantity16: string;
     tribute17: string;
     value17: string;
     taxableValue17: string;
     rate17: string;
     letterOfIntent17: string;
+    quantity17: string;
     tribute18: string;
     value18: string;
     taxableValue18: string;
     rate18: string;
     letterOfIntent18: string;
+    quantity18: string;
     tribute19: string;
     value19: string;
     taxableValue19: string;
     rate19: string;
     letterOfIntent19: string;
+    quantity19: string;
     tribute20: string;
     value20: string;
     taxableValue20: string;
     rate20: string;
     letterOfIntent20: string;
+    quantity20: string;
     tribute21: string;
     value21: string;
     taxableValue21: string;
     rate21: string;
     letterOfIntent21: string;
+    quantity21: string;
     tribute22: string;
     value22: string;
     taxableValue22: string;
     rate22: string;
     letterOfIntent22: string;
+    quantity22: string;
     tribute23: string;
     value23: string;
     taxableValue23: string;
     rate23: string;
     letterOfIntent23: string;
+    quantity23: string;
     tribute24: string;
     value24: string;
     taxableValue24: string;
     rate24: string;
     letterOfIntent24: string;
+    quantity24: string;
     tribute25: string;
     value25: string;
     taxableValue25: string;
     rate25: string;
     letterOfIntent25: string;
+    quantity25: string;
     tribute26: string;
     value26: string;
     taxableValue26: string;
     rate26: string;
     letterOfIntent26: string;
+    quantity26: string;
     tribute27: string;
     value27: string;
     taxableValue27: string;
     rate27: string;
     letterOfIntent27: string;
+    quantity27: string;
     tribute28: string;
     value28: string;
     taxableValue28: string;
     rate28: string;
     letterOfIntent28: string;
+    quantity28: string;
     tribute29: string;
     value29: string;
     taxableValue29: string;
     rate29: string;
     letterOfIntent29: string;
+    quantity29: string;
     tribute30: string;
     value30: string;
     taxableValue30: string;
     rate30: string;
     letterOfIntent30: string;
+    quantity30: string;
     tribute31: string;
     value31: string;
     taxableValue31: string;
     rate31: string;
     letterOfIntent31: string;
+    quantity31: string;
+
     tribute32: string;
     value32: string;
     taxableValue32: string;
     rate32: string;
     letterOfIntent32: string;
+    quantity32: string;
     tribute33: string;
     value33: string;
     taxableValue33: string;
     rate33: string;
     letterOfIntent33: string;
+    quantity33: string;
     tribute34: string;
     value34: string;
     taxableValue34: string;
     rate34: string;
     letterOfIntent34: string;
+    quantity34: string;
     tribute35: string;
     value35: string;
     taxableValue35: string;
     rate35: string;
     letterOfIntent35: string;
+    quantity35: string;
     tribute36: string;
     value36: string;
     taxableValue36: string;
     rate36: string;
     letterOfIntent36: string;
+    quantity36: string;
     tribute37: string;
     value37: string;
     taxableValue37: string;
     rate37: string;
     letterOfIntent37: string;
+    quantity37: string;
     tribute38: string;
     value38: string;
     taxableValue38: string;
     rate38: string;
     letterOfIntent38: string;
+    quantity38: string;
     tribute39: string;
     value39: string;
     taxableValue39: string;
     rate39: string;
     letterOfIntent39: string;
+    quantity39: string;
     tribute40: string;
     value40: string;
     taxableValue40: string;
     rate40: string;
     letterOfIntent40: string;
+    quantity40: string;
     tribute41: string;
     value41: string;
     taxableValue41: string;
     rate41: string;
     letterOfIntent41: string;
+    quantity41: string;
     tribute42: string;
     value42: string;
     taxableValue42: string;
     rate42: string;
     letterOfIntent42: string;
+    quantity42: string;
     tribute43: string;
     value43: string;
     taxableValue43: string;
     rate43: string;
     letterOfIntent43: string;
+    quantity43: string;
     tribute44: string;
     value44: string;
     taxableValue44: string;
     rate44: string;
     letterOfIntent44: string;
+    quantity44: string;
+    tribute45: string;
+    value45: string;
+    taxableValue45: string;
+    rate45: string;
+    letterOfIntent45: string;
+    quantity45: string;
+    tribute46: string;
+    value46: string;
+    taxableValue46: string;
+    rate46: string;
+    letterOfIntent46: string;
+    quantity46: string;
+    tribute47: string;
+    value47: string;
+    taxableValue47: string;
+    rate47: string;
+    letterOfIntent47: string;
+    quantity47: string;
+    tribute48: string;
+    value48: string;
+    taxableValue48: string;
+    rate48: string;
+    letterOfIntent48: string;
+    quantity48: string;
+    tribute49: string;
+    value49: string;
+    taxableValue49: string;
+    rate49: string;
+    letterOfIntent49: string;
+    quantity49: string;
+    tribute50: string;
+    value50: string;
+    taxableValue50: string;
+    rate50: string;
+    letterOfIntent50: string;
+    quantity50: string;
+    tribute51: string;
+    value51: string;
+    taxableValue51: string;
+    rate51: string;
+    letterOfIntent51: string;
+    quantity51: string;
+    tribute52: string;
+    value52: string;
+    taxableValue52: string;
+    rate52: string;
+    letterOfIntent52: string;
+    quantity52: string;
+    tribute53: string;
+    value53: string;
+    taxableValue53: string;
+    rate53: string;
+    letterOfIntent53: string;
+    quantity53: string;
+    tribute54: string;
+    value54: string;
+    taxableValue54: string;
+    rate54: string;
+    letterOfIntent54: string;
+    quantity54: string;
+    tribute55: string;
+    value55: string;
+    taxableValue55: string;
+    rate55: string;
+    letterOfIntent55: string;
+    quantity55: string;
+    tribute56: string;
+    value56: string;
+    taxableValue56: string;
+    rate56: string;
+    letterOfIntent56: string;
+    quantity56: string;
+    tribute57: string;
+    value57: string;
+    taxableValue57: string;
+    rate57: string;
+    letterOfIntent57: string;
+    quantity57: string;
+    tribute58: string;
+    value58: string;
+    taxableValue58: string;
+    rate58: string;
+    letterOfIntent58: string;
+    quantity58: string;
+    tribute59: string;
+    value59: string;
+    taxableValue59: string;
+    rate59: string;
+    letterOfIntent59: string;
+    quantity59: string;
+    tribute60: string;
+    value60: string;
+    taxableValue60: string;
+    rate60: string;
+    letterOfIntent60: string;
+    quantity60: string;
+    tribute61: string;
+    value61: string;
+    taxableValue61: string;
+    rate61: string;
+    letterOfIntent61: string;
+    quantity61: string;
+    tribute62: string;
+    value62: string;
+    taxableValue62: string;
+    rate62: string;
+    letterOfIntent62: string;
+    quantity62: string;
+    tribute63: string;
+    value63: string;
+    taxableValue63: string;
+    rate63: string;
+    letterOfIntent63: string;
+    quantity63: string;
+    tribute64: string;
+    value64: string;
+    taxableValue64: string;
+    rate64: string;
+    letterOfIntent64: string;
+    quantity64: string;
+    tribute65: string;
+    value65: string;
+    taxableValue65: string;
+    rate65: string;
+    letterOfIntent65: string;
+    quantity65: string;
+    tribute66: string;
+    value66: string;
+    taxableValue66: string;
+    rate66: string;
+    letterOfIntent66: string;
+    quantity66: string;
+    tribute67: string;
+    value67: string;
+    taxableValue67: string;
+    rate67: string;
+    letterOfIntent67: string;
+    quantity67: string;
+    tribute68: string;
+    value68: string;
+    taxableValue68: string;
+    rate68: string;
+    letterOfIntent68: string;
+    quantity68: string;
+    tribute69: string;
+    value69: string;
+    taxableValue69: string;
+    rate69: string;
+    letterOfIntent69: string;
+    quantity69: string;
+    tribute70: string;
+    value70: string;
+    taxableValue70: string;
+    rate70: string;
+    letterOfIntent70: string;
+    quantity70: string;
+    tribute71: string;
+    value71: string;
+    taxableValue71: string;
+    rate71: string;
+    letterOfIntent71: string;
+    quantity71: string;
+    tribute72: string;
+    value72: string;
+    taxableValue72: string;
+    rate72: string;
+    letterOfIntent72: string;
+    quantity72: string;
+    tribute73: string;
+    value73: string;
+    taxableValue73: string;
+    rate73: string;
+    letterOfIntent73: string;
+    quantity73: string;
+    tribute74: string;
+    value74: string;
+    taxableValue74: string;
+    rate74: string;
+    letterOfIntent74: string;
+    quantity74: string;
+    tribute75: string;
+    value75: string;
+    taxableValue75: string;
+    rate75: string;
+    letterOfIntent75: string;
+    quantity75: string;
+    tribute76: string;
+    value76: string;
+    taxableValue76: string;
+    rate76: string;
+    letterOfIntent76: string;
+    quantity76: string;
+    tribute77: string;
+    value77: string;
+    taxableValue77: string;
+    rate77: string;
+    letterOfIntent77: string;
+    quantity77: string;
   };
 }
 
@@ -556,6 +707,11 @@ class AccountingPDFConverter {
       input.statement.totalDuties31?.trim() ||
       input.statement.totalDuties32?.trim() ||
       input.statement.totalDuties33?.trim() ||
+      input.statement.totalDuties34?.trim() ||
+      input.statement.totalDuties35?.trim() ||
+      input.statement.totalDuties36?.trim() ||
+      input.statement.totalDuties37?.trim() ||
+      input.statement.totalDuties38?.trim() ||
       '';
 
     const totalDuties =
@@ -598,6 +754,11 @@ class AccountingPDFConverter {
       input.statement.totalTaxes32?.trim() ||
       input.statement.totalTaxes33?.trim() ||
       input.statement.totalTaxes34?.trim() ||
+      input.statement.totalTaxes35?.trim() ||
+      input.statement.totalTaxes36?.trim() ||
+      input.statement.totalTaxes37?.trim() ||
+      input.statement.totalTaxes38?.trim() ||
+      input.statement.totalTaxes39?.trim() ||
       '';
 
     const totalTaxes =
@@ -644,6 +805,10 @@ class AccountingPDFConverter {
       input.statement.totalVat36?.trim() ||
       input.statement.totalVat37?.trim() ||
       input.statement.totalVat38?.trim() ||
+      input.statement.totalVat39?.trim() ||
+      input.statement.totalVat40?.trim() ||
+      input.statement.totalVat41?.trim() ||
+      input.statement.totalVat42?.trim() ||
       '';
 
     const totalVatToBePaid =
@@ -651,324 +816,635 @@ class AccountingPDFConverter {
         ? Number(Number(totalVatToBePaidString.replace(',', '.')).toFixed(2))
         : undefined;
 
-    const vatLiquidation: {
+
+    const taxLiquidation: {
       tribute: string;
       value: string;
       taxableValue: string;
+      quantity: string;
       rate: string;
       letterOfIntent: string;
     }[] = [
       {
-        tribute: input.vat?.tribute1 || '',
-        value: input.vat?.value1 || '',
-        taxableValue: input.vat?.taxableValue1 || '',
-        rate: input.vat?.rate1 || '',
-        letterOfIntent: input.vat?.letterOfIntent1 || '',
+        tribute: input.taxes?.tribute1 || '',
+        taxableValue: input.taxes?.taxableValue1 || '',
+        quantity: input.taxes?.quantity1 || '',
+        value: input.taxes?.value1 || '',
+        rate: input.taxes?.rate1 || '',
+        letterOfIntent: input.taxes?.letterOfIntent1 || '',
       },
       {
-        tribute: input.vat?.tribute2 || '',
-        value: input.vat?.value2 || '',
-        taxableValue: input.vat?.taxableValue2 || '',
-        rate: input.vat?.rate2 || '',
-        letterOfIntent: input.vat?.letterOfIntent2 || '',
+        tribute: input.taxes?.tribute2 || '',
+        taxableValue: input.taxes?.taxableValue2 || '',
+        quantity: input.taxes?.quantity2 || '',
+        value: input.taxes?.value2 || '',
+        rate: input.taxes?.rate2 || '',
+        letterOfIntent: input.taxes?.letterOfIntent2 || '',
       },
       {
-        tribute: input.vat?.tribute3 || '',
-        value: input.vat?.value3 || '',
-        taxableValue: input.vat?.taxableValue3 || '',
-        rate: input.vat?.rate3 || '',
-        letterOfIntent: input.vat?.letterOfIntent3 || '',
+        tribute: input.taxes?.tribute3 || '',
+        taxableValue: input.taxes?.taxableValue3 || '',
+        quantity: input.taxes?.quantity3 || '',
+        value: input.taxes?.value3 || '',
+        rate: input.taxes?.rate3 || '',
+        letterOfIntent: input.taxes?.letterOfIntent3 || '',
       },
       {
-        tribute: input.vat?.tribute4 || '',
-        value: input.vat?.value4 || '',
-        taxableValue: input.vat?.taxableValue4 || '',
-        rate: input.vat?.rate4 || '',
-        letterOfIntent: input.vat?.letterOfIntent4 || '',
+        tribute: input.taxes?.tribute4 || '',
+        taxableValue: input.taxes?.taxableValue4 || '',
+        quantity: input.taxes?.quantity4 || '',
+        value: input.taxes?.value4 || '',
+        rate: input.taxes?.rate4 || '',
+        letterOfIntent: input.taxes?.letterOfIntent4 || '',
       },
       {
-        tribute: input.vat?.tribute5 || '',
-        value: input.vat?.value5 || '',
-        taxableValue: input.vat?.taxableValue5 || '',
-        rate: input.vat?.rate5 || '',
-        letterOfIntent: input.vat?.letterOfIntent5 || '',
+        tribute: input.taxes?.tribute5 || '',
+        taxableValue: input.taxes?.taxableValue5 || '',
+        quantity: input.taxes?.quantity5 || '',
+        value: input.taxes?.value5 || '',
+        rate: input.taxes?.rate5 || '',
+        letterOfIntent: input.taxes?.letterOfIntent5 || '',
       },
       {
-        tribute: input.vat?.tribute6 || '',
-        value: input.vat?.value6 || '',
-        taxableValue: input.vat?.taxableValue6 || '',
-        rate: input.vat?.rate6 || '',
-        letterOfIntent: input.vat?.letterOfIntent6 || '',
+        tribute: input.taxes?.tribute6 || '',
+        taxableValue: input.taxes?.taxableValue6 || '',
+        quantity: input.taxes?.quantity6 || '',
+        value: input.taxes?.value6 || '',
+        rate: input.taxes?.rate6 || '',
+        letterOfIntent: input.taxes?.letterOfIntent6 || '',
       },
       {
-        tribute: input.vat?.tribute7 || '',
-        value: input.vat?.value7 || '',
-        taxableValue: input.vat?.taxableValue7 || '',
-        rate: input.vat?.rate7 || '',
-        letterOfIntent: input.vat?.letterOfIntent7 || '',
+        tribute: input.taxes?.tribute7 || '',
+        taxableValue: input.taxes?.taxableValue7 || '',
+        quantity: input.taxes?.quantity7 || '',
+        value: input.taxes?.value7 || '',
+        rate: input.taxes?.rate7 || '',
+        letterOfIntent: input.taxes?.letterOfIntent7 || '',
       },
       {
-        tribute: input.vat?.tribute8 || '',
-        value: input.vat?.value8 || '',
-        taxableValue: input.vat?.taxableValue8 || '',
-        rate: input.vat?.rate8 || '',
-        letterOfIntent: input.vat?.letterOfIntent8 || '',
+        tribute: input.taxes?.tribute8 || '',
+        taxableValue: input.taxes?.taxableValue8 || '',
+        quantity: input.taxes?.quantity8 || '',
+        value: input.taxes?.value8 || '',
+        rate: input.taxes?.rate8 || '',
+        letterOfIntent: input.taxes?.letterOfIntent8 || '',
       },
       {
-        tribute: input.vat?.tribute9 || '',
-        value: input.vat?.value9 || '',
-        taxableValue: input.vat?.taxableValue9 || '',
-        rate: input.vat?.rate9 || '',
-        letterOfIntent: input.vat?.letterOfIntent9 || '',
+        tribute: input.taxes?.tribute9 || '',
+        taxableValue: input.taxes?.taxableValue9 || '',
+        quantity: input.taxes?.quantity9 || '',
+        value: input.taxes?.value9 || '',
+        rate: input.taxes?.rate9 || '',
+        letterOfIntent: input.taxes?.letterOfIntent9 || '',
       },
       {
-        tribute: input.vat?.tribute10 || '',
-        value: input.vat?.value10 || '',
-        taxableValue: input.vat?.taxableValue10 || '',
-        rate: input.vat?.rate10 || '',
-        letterOfIntent: input.vat?.letterOfIntent10 || '',
+        tribute: input.taxes?.tribute10 || '',
+        taxableValue: input.taxes?.taxableValue10 || '',
+        quantity: input.taxes?.quantity10 || '',
+        value: input.taxes?.value10 || '',
+        rate: input.taxes?.rate10 || '',
+        letterOfIntent: input.taxes?.letterOfIntent10 || '',
       },
       {
-        tribute: input.vat?.tribute11 || '',
-        value: input.vat?.value11 || '',
-        taxableValue: input.vat?.taxableValue11 || '',
-        rate: input.vat?.rate11 || '',
-        letterOfIntent: input.vat?.letterOfIntent11 || '',
+        tribute: input.taxes?.tribute11 || '',
+        taxableValue: input.taxes?.taxableValue11 || '',
+        quantity: input.taxes?.quantity11 || '',
+        value: input.taxes?.value11 || '',
+        rate: input.taxes?.rate11 || '',
+        letterOfIntent: input.taxes?.letterOfIntent11 || '',
       },
       {
-        tribute: input.vat?.tribute12 || '',
-        value: input.vat?.value12 || '',
-        taxableValue: input.vat?.taxableValue12 || '',
-        rate: input.vat?.rate12 || '',
-        letterOfIntent: input.vat?.letterOfIntent12 || '',
+        tribute: input.taxes?.tribute12 || '',
+        taxableValue: input.taxes?.taxableValue12 || '',
+        quantity: input.taxes?.quantity12 || '',
+        value: input.taxes?.value12 || '',
+        rate: input.taxes?.rate12 || '',
+        letterOfIntent: input.taxes?.letterOfIntent12 || '',
       },
       {
-        tribute: input.vat?.tribute13 || '',
-        value: input.vat?.value13 || '',
-        taxableValue: input.vat?.taxableValue13 || '',
-        rate: input.vat?.rate13 || '',
-        letterOfIntent: input.vat?.letterOfIntent13 || '',
+        tribute: input.taxes?.tribute13 || '',
+        taxableValue: input.taxes?.taxableValue13 || '',
+        quantity: input.taxes?.quantity13 || '',
+        value: input.taxes?.value13 || '',
+        rate: input.taxes?.rate13 || '',
+        letterOfIntent: input.taxes?.letterOfIntent13 || '',
       },
       {
-        tribute: input.vat?.tribute14 || '',
-        value: input.vat?.value14 || '',
-        taxableValue: input.vat?.taxableValue14 || '',
-        rate: input.vat?.rate14 || '',
-        letterOfIntent: input.vat?.letterOfIntent14 || '',
+        tribute: input.taxes?.tribute14 || '',
+        taxableValue: input.taxes?.taxableValue14 || '',
+        quantity: input.taxes?.quantity14 || '',
+        value: input.taxes?.value14 || '',
+        rate: input.taxes?.rate14 || '',
+        letterOfIntent: input.taxes?.letterOfIntent14 || '',
       },
       {
-        tribute: input.vat?.tribute15 || '',
-        value: input.vat?.value15 || '',
-        taxableValue: input.vat?.taxableValue15 || '',
-        rate: input.vat?.rate15 || '',
-        letterOfIntent: input.vat?.letterOfIntent15 || '',
+        tribute: input.taxes?.tribute15 || '',
+        taxableValue: input.taxes?.taxableValue15 || '',
+        quantity: input.taxes?.quantity15 || '',
+        value: input.taxes?.value15 || '',
+        rate: input.taxes?.rate15 || '',
+        letterOfIntent: input.taxes?.letterOfIntent15 || '',
       },
       {
-        tribute: input.vat?.tribute16 || '',
-        value: input.vat?.value16 || '',
-        taxableValue: input.vat?.taxableValue16 || '',
-        rate: input.vat?.rate16 || '',
-        letterOfIntent: input.vat?.letterOfIntent16 || '',
+        tribute: input.taxes?.tribute16 || '',
+        taxableValue: input.taxes?.taxableValue16 || '',
+        quantity: input.taxes?.quantity16 || '',
+        value: input.taxes?.value16 || '',
+        rate: input.taxes?.rate16 || '',
+        letterOfIntent: input.taxes?.letterOfIntent16 || '',
       },
       {
-        tribute: input.vat?.tribute17 || '',
-        value: input.vat?.value17 || '',
-        taxableValue: input.vat?.taxableValue17 || '',
-        rate: input.vat?.rate17 || '',
-        letterOfIntent: input.vat?.letterOfIntent17 || '',
+        tribute: input.taxes?.tribute17 || '',
+        taxableValue: input.taxes?.taxableValue17 || '',
+        quantity: input.taxes?.quantity17 || '',
+        value: input.taxes?.value17 || '',
+        rate: input.taxes?.rate17 || '',
+        letterOfIntent: input.taxes?.letterOfIntent17 || '',
       },
       {
-        tribute: input.vat?.tribute18 || '',
-        value: input.vat?.value18 || '',
-        taxableValue: input.vat?.taxableValue18 || '',
-        rate: input.vat?.rate18 || '',
-        letterOfIntent: input.vat?.letterOfIntent18 || '',
+        tribute: input.taxes?.tribute18 || '',
+        taxableValue: input.taxes?.taxableValue18 || '',
+        quantity: input.taxes?.quantity18 || '',
+        value: input.taxes?.value18 || '',
+        rate: input.taxes?.rate18 || '',
+        letterOfIntent: input.taxes?.letterOfIntent18 || '',
       },
       {
-        tribute: input.vat?.tribute19 || '',
-        value: input.vat?.value19 || '',
-        taxableValue: input.vat?.taxableValue19 || '',
-        rate: input.vat?.rate19 || '',
-        letterOfIntent: input.vat?.letterOfIntent19 || '',
+        tribute: input.taxes?.tribute19 || '',
+        taxableValue: input.taxes?.taxableValue19 || '',
+        quantity: input.taxes?.quantity19 || '',
+        value: input.taxes?.value19 || '',
+        rate: input.taxes?.rate19 || '',
+        letterOfIntent: input.taxes?.letterOfIntent19 || '',
       },
       {
-        tribute: input.vat?.tribute20 || '',
-        value: input.vat?.value20 || '',
-        taxableValue: input.vat?.taxableValue20 || '',
-        rate: input.vat?.rate20 || '',
-        letterOfIntent: input.vat?.letterOfIntent20 || '',
+        tribute: input.taxes?.tribute20 || '',
+        taxableValue: input.taxes?.taxableValue20 || '',
+        quantity: input.taxes?.quantity20 || '',
+        value: input.taxes?.value20 || '',
+        rate: input.taxes?.rate20 || '',
+        letterOfIntent: input.taxes?.letterOfIntent20 || '',
       },
       {
-        tribute: input.vat?.tribute21 || '',
-        value: input.vat?.value21 || '',
-        taxableValue: input.vat?.taxableValue21 || '',
-        rate: input.vat?.rate21 || '',
-        letterOfIntent: input.vat?.letterOfIntent21 || '',
+        tribute: input.taxes?.tribute21 || '',
+        taxableValue: input.taxes?.taxableValue21 || '',
+        quantity: input.taxes?.quantity21 || '',
+        value: input.taxes?.value21 || '',
+        rate: input.taxes?.rate21 || '',
+        letterOfIntent: input.taxes?.letterOfIntent21 || '',
       },
       {
-        tribute: input.vat?.tribute22 || '',
-        value: input.vat?.value22 || '',
-        taxableValue: input.vat?.taxableValue22 || '',
-        rate: input.vat?.rate22 || '',
-        letterOfIntent: input.vat?.letterOfIntent22 || '',
+        tribute: input.taxes?.tribute22 || '',
+        taxableValue: input.taxes?.taxableValue22 || '',
+        quantity: input.taxes?.quantity22 || '',
+        value: input.taxes?.value22 || '',
+        rate: input.taxes?.rate22 || '',
+        letterOfIntent: input.taxes?.letterOfIntent22 || '',
       },
       {
-        tribute: input.vat?.tribute23 || '',
-        value: input.vat?.value23 || '',
-        taxableValue: input.vat?.taxableValue23 || '',
-        rate: input.vat?.rate23 || '',
-        letterOfIntent: input.vat?.letterOfIntent23 || '',
+        tribute: input.taxes?.tribute23 || '',
+        taxableValue: input.taxes?.taxableValue23 || '',
+        quantity: input.taxes?.quantity23 || '',
+        value: input.taxes?.value23 || '',
+        rate: input.taxes?.rate23 || '',
+        letterOfIntent: input.taxes?.letterOfIntent23 || '',
       },
       {
-        tribute: input.vat?.tribute24 || '',
-        value: input.vat?.value24 || '',
-        taxableValue: input.vat?.taxableValue24 || '',
-        rate: input.vat?.rate24 || '',
-        letterOfIntent: input.vat?.letterOfIntent24 || '',
+        tribute: input.taxes?.tribute24 || '',
+        taxableValue: input.taxes?.taxableValue24 || '',
+        quantity: input.taxes?.quantity24 || '',
+        value: input.taxes?.value24 || '',
+        rate: input.taxes?.rate24 || '',
+        letterOfIntent: input.taxes?.letterOfIntent24 || '',
       },
       {
-        tribute: input.vat?.tribute25 || '',
-        value: input.vat?.value25 || '',
-        taxableValue: input.vat?.taxableValue25 || '',
-        rate: input.vat?.rate25 || '',
-        letterOfIntent: input.vat?.letterOfIntent25 || '',
+        tribute: input.taxes?.tribute25 || '',
+        taxableValue: input.taxes?.taxableValue25 || '',
+        quantity: input.taxes?.quantity25 || '',
+        value: input.taxes?.value25 || '',
+        rate: input.taxes?.rate25 || '',
+        letterOfIntent: input.taxes?.letterOfIntent25 || '',
       },
       {
-        tribute: input.vat?.tribute26 || '',
-        value: input.vat?.value26 || '',
-        taxableValue: input.vat?.taxableValue26 || '',
-        rate: input.vat?.rate26 || '',
-        letterOfIntent: input.vat?.letterOfIntent26 || '',
+        tribute: input.taxes?.tribute26 || '',
+        taxableValue: input.taxes?.taxableValue26 || '',
+        quantity: input.taxes?.quantity26 || '',
+        value: input.taxes?.value26 || '',
+        rate: input.taxes?.rate26 || '',
+        letterOfIntent: input.taxes?.letterOfIntent26 || '',
       },
       {
-        tribute: input.vat?.tribute27 || '',
-        value: input.vat?.value27 || '',
-        taxableValue: input.vat?.taxableValue27 || '',
-        rate: input.vat?.rate27 || '',
-        letterOfIntent: input.vat?.letterOfIntent27 || '',
+        tribute: input.taxes?.tribute27 || '',
+        taxableValue: input.taxes?.taxableValue27 || '',
+        quantity: input.taxes?.quantity27 || '',
+        value: input.taxes?.value27 || '',
+        rate: input.taxes?.rate27 || '',
+        letterOfIntent: input.taxes?.letterOfIntent27 || '',
       },
       {
-        tribute: input.vat?.tribute28 || '',
-        value: input.vat?.value28 || '',
-        taxableValue: input.vat?.taxableValue28 || '',
-        rate: input.vat?.rate28 || '',
-        letterOfIntent: input.vat?.letterOfIntent28 || '',
+        tribute: input.taxes?.tribute28 || '',
+        taxableValue: input.taxes?.taxableValue28 || '',
+        quantity: input.taxes?.quantity28 || '',
+        value: input.taxes?.value28 || '',
+        rate: input.taxes?.rate28 || '',
+        letterOfIntent: input.taxes?.letterOfIntent28 || '',
       },
       {
-        tribute: input.vat?.tribute29 || '',
-        value: input.vat?.value29 || '',
-        taxableValue: input.vat?.taxableValue29 || '',
-        rate: input.vat?.rate29 || '',
-        letterOfIntent: input.vat?.letterOfIntent29 || '',
+        tribute: input.taxes?.tribute29 || '',
+        taxableValue: input.taxes?.taxableValue29 || '',
+        quantity: input.taxes?.quantity29 || '',
+        value: input.taxes?.value29 || '',
+        rate: input.taxes?.rate29 || '',
+        letterOfIntent: input.taxes?.letterOfIntent29 || '',
       },
       {
-        tribute: input.vat?.tribute30 || '',
-        value: input.vat?.value30 || '',
-        taxableValue: input.vat?.taxableValue30 || '',
-        rate: input.vat?.rate30 || '',
-        letterOfIntent: input.vat?.letterOfIntent30 || '',
+        tribute: input.taxes?.tribute30 || '',
+        taxableValue: input.taxes?.taxableValue30 || '',
+        quantity: input.taxes?.quantity30 || '',
+        value: input.taxes?.value30 || '',
+        rate: input.taxes?.rate30 || '',
+        letterOfIntent: input.taxes?.letterOfIntent30 || '',
       },
       {
-        tribute: input.vat?.tribute31 || '',
-        value: input.vat?.value31 || '',
-        taxableValue: input.vat?.taxableValue31 || '',
-        rate: input.vat?.rate31 || '',
-        letterOfIntent: input.vat?.letterOfIntent31 || '',
+        tribute: input.taxes?.tribute31 || '',
+        taxableValue: input.taxes?.taxableValue31 || '',
+        quantity: input.taxes?.quantity31 || '',
+        value: input.taxes?.value31 || '',
+        rate: input.taxes?.rate31 || '',
+        letterOfIntent: input.taxes?.letterOfIntent31 || '',
+      },
+
+      {
+        tribute: input.taxes?.tribute32 || '',
+        value: input.taxes?.value32 || '',
+        taxableValue: input.taxes?.taxableValue32 || '',
+        rate: input.taxes?.rate32 || '',
+        letterOfIntent: input.taxes?.letterOfIntent32 || '',
+        quantity: input.taxes?.quantity32 || '',
       },
       {
-        tribute: input.vat?.tribute32 || '',
-        value: input.vat?.value32 || '',
-        taxableValue: input.vat?.taxableValue32 || '',
-        rate: input.vat?.rate32 || '',
-        letterOfIntent: input.vat?.letterOfIntent32 || '',
+        tribute: input.taxes?.tribute33 || '',
+        value: input.taxes?.value33 || '',
+        taxableValue: input.taxes?.taxableValue33 || '',
+        rate: input.taxes?.rate33 || '',
+        letterOfIntent: input.taxes?.letterOfIntent33 || '',
+        quantity: input.taxes?.quantity33 || '',
       },
       {
-        tribute: input.vat?.tribute33 || '',
-        value: input.vat?.value33 || '',
-        taxableValue: input.vat?.taxableValue33 || '',
-        rate: input.vat?.rate33 || '',
-        letterOfIntent: input.vat?.letterOfIntent33 || '',
+        tribute: input.taxes?.tribute34 || '',
+        value: input.taxes?.value34 || '',
+        taxableValue: input.taxes?.taxableValue34 || '',
+        rate: input.taxes?.rate34 || '',
+        letterOfIntent: input.taxes?.letterOfIntent34 || '',
+        quantity: input.taxes?.quantity34 || '',
       },
       {
-        tribute: input.vat?.tribute34 || '',
-        value: input.vat?.value34 || '',
-        taxableValue: input.vat?.taxableValue34 || '',
-        rate: input.vat?.rate34 || '',
-        letterOfIntent: input.vat?.letterOfIntent34 || '',
+        tribute: input.taxes?.tribute35 || '',
+        value: input.taxes?.value35 || '',
+        taxableValue: input.taxes?.taxableValue35 || '',
+        rate: input.taxes?.rate35 || '',
+        letterOfIntent: input.taxes?.letterOfIntent35 || '',
+        quantity: input.taxes?.quantity35 || '',
       },
       {
-        tribute: input.vat?.tribute35 || '',
-        value: input.vat?.value35 || '',
-        taxableValue: input.vat?.taxableValue35 || '',
-        rate: input.vat?.rate35 || '',
-        letterOfIntent: input.vat?.letterOfIntent35 || '',
+        tribute: input.taxes?.tribute36 || '',
+        value: input.taxes?.value36 || '',
+        taxableValue: input.taxes?.taxableValue36 || '',
+        rate: input.taxes?.rate36 || '',
+        letterOfIntent: input.taxes?.letterOfIntent36 || '',
+        quantity: input.taxes?.quantity36 || '',
       },
       {
-        tribute: input.vat?.tribute36 || '',
-        value: input.vat?.value36 || '',
-        taxableValue: input.vat?.taxableValue36 || '',
-        rate: input.vat?.rate36 || '',
-        letterOfIntent: input.vat?.letterOfIntent36 || '',
+        tribute: input.taxes?.tribute37 || '',
+        value: input.taxes?.value37 || '',
+        taxableValue: input.taxes?.taxableValue37 || '',
+        rate: input.taxes?.rate37 || '',
+        letterOfIntent: input.taxes?.letterOfIntent37 || '',
+        quantity: input.taxes?.quantity37 || '',
       },
       {
-        tribute: input.vat?.tribute37 || '',
-        value: input.vat?.value37 || '',
-        taxableValue: input.vat?.taxableValue37 || '',
-        rate: input.vat?.rate37 || '',
-        letterOfIntent: input.vat?.letterOfIntent37 || '',
+        tribute: input.taxes?.tribute38 || '',
+        value: input.taxes?.value38 || '',
+        taxableValue: input.taxes?.taxableValue38 || '',
+        rate: input.taxes?.rate38 || '',
+        letterOfIntent: input.taxes?.letterOfIntent38 || '',
+        quantity: input.taxes?.quantity38 || '',
       },
       {
-        tribute: input.vat?.tribute38 || '',
-        value: input.vat?.value38 || '',
-        taxableValue: input.vat?.taxableValue38 || '',
-        rate: input.vat?.rate38 || '',
-        letterOfIntent: input.vat?.letterOfIntent38 || '',
+        tribute: input.taxes?.tribute39 || '',
+        value: input.taxes?.value39 || '',
+        taxableValue: input.taxes?.taxableValue39 || '',
+        rate: input.taxes?.rate39 || '',
+        letterOfIntent: input.taxes?.letterOfIntent39 || '',
+        quantity: input.taxes?.quantity39 || '',
       },
       {
-        tribute: input.vat?.tribute39 || '',
-        value: input.vat?.value39 || '',
-        taxableValue: input.vat?.taxableValue39 || '',
-        rate: input.vat?.rate39 || '',
-        letterOfIntent: input.vat?.letterOfIntent39 || '',
+        tribute: input.taxes?.tribute40 || '',
+        value: input.taxes?.value40 || '',
+        taxableValue: input.taxes?.taxableValue40 || '',
+        rate: input.taxes?.rate40 || '',
+        letterOfIntent: input.taxes?.letterOfIntent40 || '',
+        quantity: input.taxes?.quantity40 || '',
       },
       {
-        tribute: input.vat?.tribute40 || '',
-        value: input.vat?.value40 || '',
-        taxableValue: input.vat?.taxableValue40 || '',
-        rate: input.vat?.rate40 || '',
-        letterOfIntent: input.vat?.letterOfIntent40 || '',
+        tribute: input.taxes?.tribute41 || '',
+        value: input.taxes?.value41 || '',
+        taxableValue: input.taxes?.taxableValue41 || '',
+        rate: input.taxes?.rate41 || '',
+        letterOfIntent: input.taxes?.letterOfIntent41 || '',
+        quantity: input.taxes?.quantity41 || '',
       },
       {
-        tribute: input.vat?.tribute41 || '',
-        value: input.vat?.value41 || '',
-        taxableValue: input.vat?.taxableValue41 || '',
-        rate: input.vat?.rate41 || '',
-        letterOfIntent: input.vat?.letterOfIntent41 || '',
+        tribute: input.taxes?.tribute42 || '',
+        value: input.taxes?.value42 || '',
+        taxableValue: input.taxes?.taxableValue42 || '',
+        rate: input.taxes?.rate42 || '',
+        letterOfIntent: input.taxes?.letterOfIntent42 || '',
+        quantity: input.taxes?.quantity42 || '',
       },
       {
-        tribute: input.vat?.tribute42 || '',
-        value: input.vat?.value42 || '',
-        taxableValue: input.vat?.taxableValue42 || '',
-        rate: input.vat?.rate42 || '',
-        letterOfIntent: input.vat?.letterOfIntent42 || '',
+        tribute: input.taxes?.tribute43 || '',
+        value: input.taxes?.value43 || '',
+        taxableValue: input.taxes?.taxableValue43 || '',
+        rate: input.taxes?.rate43 || '',
+        letterOfIntent: input.taxes?.letterOfIntent43 || '',
+        quantity: input.taxes?.quantity43 || '',
       },
       {
-        tribute: input.vat?.tribute43 || '',
-        value: input.vat?.value43 || '',
-        taxableValue: input.vat?.taxableValue43 || '',
-        rate: input.vat?.rate43 || '',
-        letterOfIntent: input.vat?.letterOfIntent43 || '',
+        tribute: input.taxes?.tribute44 || '',
+        value: input.taxes?.value44 || '',
+        taxableValue: input.taxes?.taxableValue44 || '',
+        rate: input.taxes?.rate44 || '',
+        letterOfIntent: input.taxes?.letterOfIntent44 || '',
+        quantity: input.taxes?.quantity44 || '',
       },
       {
-        tribute: input.vat?.tribute44 || '',
-        value: input.vat?.value44 || '',
-        taxableValue: input.vat?.taxableValue44 || '',
-        rate: input.vat?.rate44 || '',
-        letterOfIntent: input.vat?.letterOfIntent44 || '',
+        tribute: input.taxes?.tribute45 || '',
+        value: input.taxes?.value45 || '',
+        taxableValue: input.taxes?.taxableValue45 || '',
+        rate: input.taxes?.rate45 || '',
+        letterOfIntent: input.taxes?.letterOfIntent45 || '',
+        quantity: input.taxes?.quantity45 || '',
+      },
+      {
+        tribute: input.taxes?.tribute46 || '',
+        value: input.taxes?.value46 || '',
+        taxableValue: input.taxes?.taxableValue46 || '',
+        rate: input.taxes?.rate46 || '',
+        letterOfIntent: input.taxes?.letterOfIntent46 || '',
+        quantity: input.taxes?.quantity46 || '',
+      },
+      {
+        tribute: input.taxes?.tribute47 || '',
+        value: input.taxes?.value47 || '',
+        taxableValue: input.taxes?.taxableValue47 || '',
+        rate: input.taxes?.rate47 || '',
+        letterOfIntent: input.taxes?.letterOfIntent47 || '',
+        quantity: input.taxes?.quantity47 || '',
+      },
+      {
+        tribute: input.taxes?.tribute48 || '',
+        value: input.taxes?.value48 || '',
+        taxableValue: input.taxes?.taxableValue48 || '',
+        rate: input.taxes?.rate48 || '',
+        letterOfIntent: input.taxes?.letterOfIntent48 || '',
+        quantity: input.taxes?.quantity48 || '',
+      },
+      {
+        tribute: input.taxes?.tribute49 || '',
+        value: input.taxes?.value49 || '',
+        taxableValue: input.taxes?.taxableValue49 || '',
+        rate: input.taxes?.rate49 || '',
+        letterOfIntent: input.taxes?.letterOfIntent49 || '',
+        quantity: input.taxes?.quantity49 || '',
+      },
+      {
+        tribute: input.taxes?.tribute50 || '',
+        value: input.taxes?.value50 || '',
+        taxableValue: input.taxes?.taxableValue50 || '',
+        rate: input.taxes?.rate50 || '',
+        letterOfIntent: input.taxes?.letterOfIntent50 || '',
+        quantity: input.taxes?.quantity50 || '',
+      },
+      {
+        tribute: input.taxes?.tribute51 || '',
+        value: input.taxes?.value51 || '',
+        taxableValue: input.taxes?.taxableValue51 || '',
+        rate: input.taxes?.rate51 || '',
+        letterOfIntent: input.taxes?.letterOfIntent51 || '',
+        quantity: input.taxes?.quantity51 || '',
+      },
+      {
+        tribute: input.taxes?.tribute52 || '',
+        value: input.taxes?.value52 || '',
+        taxableValue: input.taxes?.taxableValue52 || '',
+        rate: input.taxes?.rate52 || '',
+        letterOfIntent: input.taxes?.letterOfIntent52 || '',
+        quantity: input.taxes?.quantity52 || '',
+      },
+      {
+        tribute: input.taxes?.tribute53 || '',
+        value: input.taxes?.value53 || '',
+        taxableValue: input.taxes?.taxableValue53 || '',
+        rate: input.taxes?.rate53 || '',
+        letterOfIntent: input.taxes?.letterOfIntent53 || '',
+        quantity: input.taxes?.quantity53 || '',
+      },
+      {
+        tribute: input.taxes?.tribute54 || '',
+        value: input.taxes?.value54 || '',
+        taxableValue: input.taxes?.taxableValue54 || '',
+        rate: input.taxes?.rate54 || '',
+        letterOfIntent: input.taxes?.letterOfIntent54 || '',
+        quantity: input.taxes?.quantity54 || '',
+      },
+      {
+        tribute: input.taxes?.tribute55 || '',
+        value: input.taxes?.value55 || '',
+        taxableValue: input.taxes?.taxableValue55 || '',
+        rate: input.taxes?.rate55 || '',
+        letterOfIntent: input.taxes?.letterOfIntent55 || '',
+        quantity: input.taxes?.quantity55 || '',
+      },
+      {
+        tribute: input.taxes?.tribute56 || '',
+        value: input.taxes?.value56 || '',
+        taxableValue: input.taxes?.taxableValue56 || '',
+        rate: input.taxes?.rate56 || '',
+        letterOfIntent: input.taxes?.letterOfIntent56 || '',
+        quantity: input.taxes?.quantity56 || '',
+      },
+      {
+        tribute: input.taxes?.tribute57 || '',
+        value: input.taxes?.value57 || '',
+        taxableValue: input.taxes?.taxableValue57 || '',
+        rate: input.taxes?.rate57 || '',
+        letterOfIntent: input.taxes?.letterOfIntent57 || '',
+        quantity: input.taxes?.quantity57 || '',
+      },
+      {
+        tribute: input.taxes?.tribute58 || '',
+        value: input.taxes?.value58 || '',
+        taxableValue: input.taxes?.taxableValue58 || '',
+        rate: input.taxes?.rate58 || '',
+        letterOfIntent: input.taxes?.letterOfIntent58 || '',
+        quantity: input.taxes?.quantity58 || '',
+      },
+      {
+        tribute: input.taxes?.tribute59 || '',
+        value: input.taxes?.value59 || '',
+        taxableValue: input.taxes?.taxableValue59 || '',
+        rate: input.taxes?.rate59 || '',
+        letterOfIntent: input.taxes?.letterOfIntent59 || '',
+        quantity: input.taxes?.quantity59 || '',
+      },
+      {
+        tribute: input.taxes?.tribute60 || '',
+        value: input.taxes?.value60 || '',
+        taxableValue: input.taxes?.taxableValue60 || '',
+        rate: input.taxes?.rate60 || '',
+        letterOfIntent: input.taxes?.letterOfIntent60 || '',
+        quantity: input.taxes?.quantity60 || '',
+      },
+      {
+        tribute: input.taxes?.tribute61 || '',
+        value: input.taxes?.value61 || '',
+        taxableValue: input.taxes?.taxableValue61 || '',
+        rate: input.taxes?.rate61 || '',
+        letterOfIntent: input.taxes?.letterOfIntent61 || '',
+        quantity: input.taxes?.quantity61 || '',
+      },
+      {
+        tribute: input.taxes?.tribute62 || '',
+        value: input.taxes?.value62 || '',
+        taxableValue: input.taxes?.taxableValue62 || '',
+        rate: input.taxes?.rate62 || '',
+        letterOfIntent: input.taxes?.letterOfIntent62 || '',
+        quantity: input.taxes?.quantity62 || '',
+      },
+      {
+        tribute: input.taxes?.tribute63 || '',
+        value: input.taxes?.value63 || '',
+        taxableValue: input.taxes?.taxableValue63 || '',
+        rate: input.taxes?.rate63 || '',
+        letterOfIntent: input.taxes?.letterOfIntent63 || '',
+        quantity: input.taxes?.quantity63 || '',
+      },
+      {
+        tribute: input.taxes?.tribute64 || '',
+        value: input.taxes?.value64 || '',
+        taxableValue: input.taxes?.taxableValue64 || '',
+        rate: input.taxes?.rate64 || '',
+        letterOfIntent: input.taxes?.letterOfIntent64 || '',
+        quantity: input.taxes?.quantity64 || '',
+      },
+      {
+        tribute: input.taxes?.tribute65 || '',
+        value: input.taxes?.value65 || '',
+        taxableValue: input.taxes?.taxableValue65 || '',
+        rate: input.taxes?.rate65 || '',
+        letterOfIntent: input.taxes?.letterOfIntent65 || '',
+        quantity: input.taxes?.quantity65 || '',
+      },
+      {
+        tribute: input.taxes?.tribute66 || '',
+        value: input.taxes?.value66 || '',
+        taxableValue: input.taxes?.taxableValue66 || '',
+        rate: input.taxes?.rate66 || '',
+        letterOfIntent: input.taxes?.letterOfIntent66 || '',
+        quantity: input.taxes?.quantity66 || '',
+      },
+      {
+        tribute: input.taxes?.tribute67 || '',
+        value: input.taxes?.value67 || '',
+        taxableValue: input.taxes?.taxableValue67 || '',
+        rate: input.taxes?.rate67 || '',
+        letterOfIntent: input.taxes?.letterOfIntent67 || '',
+        quantity: input.taxes?.quantity67 || '',
+      },
+      {
+        tribute: input.taxes?.tribute68 || '',
+        value: input.taxes?.value68 || '',
+        taxableValue: input.taxes?.taxableValue68 || '',
+        rate: input.taxes?.rate68 || '',
+        letterOfIntent: input.taxes?.letterOfIntent68 || '',
+        quantity: input.taxes?.quantity68 || '',
+      },
+      {
+        tribute: input.taxes?.tribute69 || '',
+        value: input.taxes?.value69 || '',
+        taxableValue: input.taxes?.taxableValue69 || '',
+        rate: input.taxes?.rate69 || '',
+        letterOfIntent: input.taxes?.letterOfIntent69 || '',
+        quantity: input.taxes?.quantity69 || '',
+      },
+      {
+        tribute: input.taxes?.tribute70 || '',
+        value: input.taxes?.value70 || '',
+        taxableValue: input.taxes?.taxableValue70 || '',
+        rate: input.taxes?.rate70 || '',
+        letterOfIntent: input.taxes?.letterOfIntent70 || '',
+        quantity: input.taxes?.quantity70 || '',
+      },
+      {
+        tribute: input.taxes?.tribute71 || '',
+        value: input.taxes?.value71 || '',
+        taxableValue: input.taxes?.taxableValue71 || '',
+        rate: input.taxes?.rate71 || '',
+        letterOfIntent: input.taxes?.letterOfIntent71 || '',
+        quantity: input.taxes?.quantity71 || '',
+      },
+      {
+        tribute: input.taxes?.tribute72 || '',
+        value: input.taxes?.value72 || '',
+        taxableValue: input.taxes?.taxableValue72 || '',
+        rate: input.taxes?.rate72 || '',
+        letterOfIntent: input.taxes?.letterOfIntent72 || '',
+        quantity: input.taxes?.quantity72 || '',
+      },
+      {
+        tribute: input.taxes?.tribute73 || '',
+        value: input.taxes?.value73 || '',
+        taxableValue: input.taxes?.taxableValue73 || '',
+        rate: input.taxes?.rate73 || '',
+        letterOfIntent: input.taxes?.letterOfIntent73 || '',
+        quantity: input.taxes?.quantity73 || '',
+      },
+      {
+        tribute: input.taxes?.tribute74 || '',
+        value: input.taxes?.value74 || '',
+        taxableValue: input.taxes?.taxableValue74 || '',
+        rate: input.taxes?.rate74 || '',
+        letterOfIntent: input.taxes?.letterOfIntent74 || '',
+        quantity: input.taxes?.quantity74 || '',
+      },
+      {
+        tribute: input.taxes?.tribute75 || '',
+        value: input.taxes?.value75 || '',
+        taxableValue: input.taxes?.taxableValue75 || '',
+        rate: input.taxes?.rate75 || '',
+        letterOfIntent: input.taxes?.letterOfIntent75 || '',
+        quantity: input.taxes?.quantity75 || '',
+      },
+      {
+        tribute: input.taxes?.tribute76 || '',
+        value: input.taxes?.value76 || '',
+        taxableValue: input.taxes?.taxableValue76 || '',
+        rate: input.taxes?.rate76 || '',
+        letterOfIntent: input.taxes?.letterOfIntent76 || '',
+        quantity: input.taxes?.quantity76 || '',
+      },
+      {
+        tribute: input.taxes?.tribute77 || '',
+        value: input.taxes?.value77 || '',
+        taxableValue: input.taxes?.taxableValue77 || '',
+        rate: input.taxes?.rate77 || '',
+        letterOfIntent: input.taxes?.letterOfIntent77 || '',
+        quantity: input.taxes?.quantity77 || '',
       },
     ];
 
-    const vatExemption = vatLiquidation.filter((il) => il.tribute == '406');
+    const vatExemption = taxLiquidation.filter((il) => il.tribute == '406');
 
     const vatExemptionValue = vatExemption.length
       ? Number(
@@ -998,7 +1474,7 @@ class AccountingPDFConverter {
       ? vatExemption[0].letterOfIntent
       : undefined;
 
-    const taxB00Vat22Liquidation = vatLiquidation.find(
+    const taxB00Vat22Liquidation = taxLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '22,00' || il.rate == '0,22'),
     );
 
@@ -1008,7 +1484,7 @@ class AccountingPDFConverter {
         )
       : undefined;
 
-    const taxB00Vat10Liquidation = vatLiquidation.find(
+    const taxB00Vat10Liquidation = taxLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '10,00' || il.rate == '0,10'),
     );
 
@@ -1018,7 +1494,7 @@ class AccountingPDFConverter {
         )
       : undefined;
 
-    const taxB00Vat04Liquidation = vatLiquidation.find(
+    const taxB00Vat04Liquidation = taxLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '4,00' || il.rate == '0,04'),
     );
 
@@ -1028,7 +1504,7 @@ class AccountingPDFConverter {
         )
       : undefined;
 
-    const taxB00Vat00Liquidation = vatLiquidation.find(
+    const taxB00Vat00Liquidation = taxLiquidation.find(
       (il) => il.tribute == 'B00' && (il.rate == '0,00' || il.rate == '0,00'),
     );
 
@@ -1037,170 +1513,6 @@ class AccountingPDFConverter {
           Number(taxB00Vat00Liquidation.value.replace(',', '.')).toFixed(2),
         )
       : undefined;
-
-    const taxLiquidation: {
-      tribute: string;
-      value: string;
-      taxableValue: string;
-      quantity: string;
-    }[] = [
-      {
-        tribute: input.taxes?.tribute1 || '',
-        taxableValue: input.taxes?.taxableValue1 || '',
-        quantity: input.taxes?.quantity1 || '',
-        value: input.taxes?.value1 || '',
-      },
-      {
-        tribute: input.taxes?.tribute2 || '',
-        taxableValue: input.taxes?.taxableValue2 || '',
-        quantity: input.taxes?.quantity2 || '',
-        value: input.taxes?.value2 || '',
-      },
-      {
-        tribute: input.taxes?.tribute3 || '',
-        taxableValue: input.taxes?.taxableValue3 || '',
-        quantity: input.taxes?.quantity3 || '',
-        value: input.taxes?.value3 || '',
-      },
-      {
-        tribute: input.taxes?.tribute4 || '',
-        taxableValue: input.taxes?.taxableValue4 || '',
-        quantity: input.taxes?.quantity4 || '',
-        value: input.taxes?.value4 || '',
-      },
-      {
-        tribute: input.taxes?.tribute5 || '',
-        taxableValue: input.taxes?.taxableValue5 || '',
-        quantity: input.taxes?.quantity5 || '',
-        value: input.taxes?.value5 || '',
-      },
-      {
-        tribute: input.taxes?.tribute6 || '',
-        taxableValue: input.taxes?.taxableValue6 || '',
-        quantity: input.taxes?.quantity6 || '',
-        value: input.taxes?.value6 || '',
-      },
-      {
-        tribute: input.taxes?.tribute7 || '',
-        taxableValue: input.taxes?.taxableValue7 || '',
-        quantity: input.taxes?.quantity7 || '',
-        value: input.taxes?.value7 || '',
-      },
-      {
-        tribute: input.taxes?.tribute8 || '',
-        taxableValue: input.taxes?.taxableValue8 || '',
-        quantity: input.taxes?.quantity8 || '',
-        value: input.taxes?.value8 || '',
-      },
-      {
-        tribute: input.taxes?.tribute9 || '',
-        taxableValue: input.taxes?.taxableValue9 || '',
-        quantity: input.taxes?.quantity9 || '',
-        value: input.taxes?.value9 || '',
-      },
-      {
-        tribute: input.taxes?.tribute10 || '',
-        taxableValue: input.taxes?.taxableValue10 || '',
-        quantity: input.taxes?.quantity10 || '',
-        value: input.taxes?.value10 || '',
-      },
-      {
-        tribute: input.taxes?.tribute11 || '',
-        taxableValue: input.taxes?.taxableValue11 || '',
-        quantity: input.taxes?.quantity11 || '',
-        value: input.taxes?.value11 || '',
-      },
-      {
-        tribute: input.taxes?.tribute12 || '',
-        taxableValue: input.taxes?.taxableValue12 || '',
-        quantity: input.taxes?.quantity12 || '',
-        value: input.taxes?.value12 || '',
-      },
-      {
-        tribute: input.taxes?.tribute13 || '',
-        taxableValue: input.taxes?.taxableValue13 || '',
-        quantity: input.taxes?.quantity13 || '',
-        value: input.taxes?.value13 || '',
-      },
-      {
-        tribute: input.taxes?.tribute14 || '',
-        taxableValue: input.taxes?.taxableValue14 || '',
-        quantity: input.taxes?.quantity14 || '',
-        value: input.taxes?.value14 || '',
-      },
-      {
-        tribute: input.taxes?.tribute15 || '',
-        taxableValue: input.taxes?.taxableValue15 || '',
-        quantity: input.taxes?.quantity15 || '',
-        value: input.taxes?.value15 || '',
-      },
-      {
-        tribute: input.taxes?.tribute16 || '',
-        taxableValue: input.taxes?.taxableValue16 || '',
-        quantity: input.taxes?.quantity16 || '',
-        value: input.taxes?.value16 || '',
-      },
-      {
-        tribute: input.taxes?.tribute17 || '',
-        taxableValue: input.taxes?.taxableValue17 || '',
-        quantity: input.taxes?.quantity17 || '',
-        value: input.taxes?.value17 || '',
-      },
-      {
-        tribute: input.taxes?.tribute18 || '',
-        taxableValue: input.taxes?.taxableValue18 || '',
-        quantity: input.taxes?.quantity18 || '',
-        value: input.taxes?.value18 || '',
-      },
-      {
-        tribute: input.taxes?.tribute19 || '',
-        taxableValue: input.taxes?.taxableValue19 || '',
-        quantity: input.taxes?.quantity19 || '',
-        value: input.taxes?.value19 || '',
-      },
-      {
-        tribute: input.taxes?.tribute20 || '',
-        taxableValue: input.taxes?.taxableValue20 || '',
-        quantity: input.taxes?.quantity20 || '',
-        value: input.taxes?.value20 || '',
-      },
-      {
-        tribute: input.taxes?.tribute21 || '',
-        taxableValue: input.taxes?.taxableValue21 || '',
-        quantity: input.taxes?.quantity21 || '',
-        value: input.taxes?.value21 || '',
-      },
-      {
-        tribute: input.taxes?.tribute22 || '',
-        taxableValue: input.taxes?.taxableValue22 || '',
-        quantity: input.taxes?.quantity22 || '',
-        value: input.taxes?.value22 || '',
-      },
-      {
-        tribute: input.taxes?.tribute23 || '',
-        taxableValue: input.taxes?.taxableValue23 || '',
-        quantity: input.taxes?.quantity23 || '',
-        value: input.taxes?.value23 || '',
-      },
-      {
-        tribute: input.taxes?.tribute24 || '',
-        taxableValue: input.taxes?.taxableValue24 || '',
-        quantity: input.taxes?.quantity24 || '',
-        value: input.taxes?.value24 || '',
-      },
-      {
-        tribute: input.taxes?.tribute25 || '',
-        taxableValue: input.taxes?.taxableValue25 || '',
-        quantity: input.taxes?.quantity25 || '',
-        value: input.taxes?.value25 || '',
-      },
-      {
-        tribute: input.taxes?.tribute26 || '',
-        taxableValue: input.taxes?.taxableValue26 || '',
-        quantity: input.taxes?.quantity26 || '',
-        value: input.taxes?.value26 || '',
-      },
-    ];
 
     const tax931Liquidation = taxLiquidation.filter(
       (il) => il.tribute == '931',
@@ -1351,6 +1663,7 @@ class AccountingPDFConverter {
       Number(totalTaxes) !=
       Number(
         taxLiquidation
+          .filter(tax => tax.tribute != 'B00' && tax.tribute != '406')
           .reduce((prev, acc) => {
             if (!isNaN(Number(Number(acc.value.replace(',', '.')).toFixed(2))))
               prev += Number(Number(acc.value.replace(',', '.')).toFixed(2));
