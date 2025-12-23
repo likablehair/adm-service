@@ -8,7 +8,11 @@ import OldDaeDatPDFConverter, {
   OldDaeDatStatementMapped,
 } from 'src/converters/OldDaeDatPDFConverter';
 import { AdmFile } from './prospettoSintesi.manager';
-import { DAE_DAT_PDF_TYPES, DaeDatMissingError, DaeDatResult } from './daeDat.manager';
+import {
+  DAE_DAT_PDF_TYPES,
+  DaeDatMissingError,
+  DaeDatResult,
+} from './daeDat.manager';
 
 export type OldImportDaeDatResult = {
   file: AdmFile;
@@ -25,9 +29,10 @@ export default class DaeDatManager {
         params.data.xml.mrn,
         downloadedPDF,
       );
-      const daeDatStatementMapped: OldDaeDatStatementMapped = await this.convert({
-        data: { buffer: savedPDF.buffer },
-      });
+      const daeDatStatementMapped: OldDaeDatStatementMapped =
+        await this.convert({
+          data: { buffer: savedPDF.buffer },
+        });
 
       return {
         file: {

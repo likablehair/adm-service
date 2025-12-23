@@ -76,12 +76,8 @@ export {
   DaeDatMissingError,
 } from './managers/daeDat.manager';
 
-export type {
-  OldImportDaeDatResult
-} from './managers/oldDaeDat.manager';
-export {
-  default as OldDaeDatManager,
-} from './managers/oldDaeDat.manager';
+export type { OldImportDaeDatResult } from './managers/oldDaeDat.manager';
+export { default as OldDaeDatManager } from './managers/oldDaeDat.manager';
 
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';
 
