@@ -21,11 +21,13 @@ export type { Enquiry } from './requests/destinatariAutorizzati/listaDestautTINR
 export type { AdmDeclarationMapped } from './converters/XMLConverter';
 export type { AccountingStatementMapped } from './converters/AccountingPDFConverter';
 export type { DaeDatStatementMapped } from './converters/DaeDatPDFConverter';
+export type { OldDaeDatStatementMapped } from './converters/OldDaeDatPDFConverter';
 
 export { default as XMLConverter } from './converters/XMLConverter';
 export { default as PDFConverter } from './converters/PDFConverter';
 export { default as AccountingPDFConverter } from './converters/AccountingPDFConverter';
 export { default as DaeDatPDFConverter } from './converters/DaeDatPDFConverter';
+export { default as OldDaeDatPDFConverter } from './converters/OldDaeDatPDFConverter';
 
 export type {
   MRNProcessed,
@@ -73,6 +75,13 @@ export {
   default as DaeDatManager,
   DaeDatMissingError,
 } from './managers/daeDat.manager';
+
+export type {
+  OldImportDaeDatResult
+} from './managers/oldDaeDat.manager';
+export {
+  default as OldDaeDatManager,
+} from './managers/oldDaeDat.manager';
 
 export type { RichiestaIvisto } from './requests/exportService/richiestaIvistoRequest';
 

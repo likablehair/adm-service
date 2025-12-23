@@ -1,11 +1,11 @@
 import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
-import { _cells } from './DaeDatCellsMapper';
+import { _cells } from './OldDaeDatCellsMapper';
 import * as fsPromises from 'fs/promises';
 import { createId } from '@paralleldrive/cuid2';
 import { documentCodeList } from 'src/utils/documentCodes';
 
-export type DaeDatStatementMapped = {
+export type OldDaeDatStatementMapped = {
   consignee: {
     companyName: string;
     companyAddress: string;
@@ -34,7 +34,7 @@ export type DaeDatStatementMapped = {
   }[];
 };
 
-export interface DaeDatJson {
+export interface OldDaeDatJson {
   statement: {
     releaseDate: string;
     customsExitOffice: string;
@@ -119,7 +119,7 @@ export interface DaeDatJson {
   }[];
 }
 
-class DaeDatPDFConverter {
+class OldDaeDatPDFConverter {
   private getMappedPosition(
     x: number,
     y: number,
@@ -149,10 +149,10 @@ class DaeDatPDFConverter {
     return {};
   }
   private map(
-    input: DaeDatJson,
+    input: OldDaeDatJson,
     documentsNumber: number,
     numberOfGoodsPages: number = 0,
-  ): DaeDatStatementMapped {
+  ): OldDaeDatStatementMapped {
     const releaseDate = input.statement.releaseDate?.trim() || '';
 
     const totalPackages =
@@ -397,7 +397,7 @@ class DaeDatPDFConverter {
 
   public async run(params: {
     data: { path: string } | { buffer: Buffer };
-  }): Promise<DaeDatStatementMapped> {
+  }): Promise<OldDaeDatStatementMapped> {
     const pdfParser = new PDFParser();
 
     let path = createId();
@@ -558,4 +558,4 @@ class DaeDatPDFConverter {
     }
   }
 }
-export default DaeDatPDFConverter;
+export default OldDaeDatPDFConverter;
