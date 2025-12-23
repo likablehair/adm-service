@@ -197,7 +197,8 @@ class DaeDatPDFConverter {
 
     const customsExitOffice = input.statement.customsExitOffice?.trim() || '';
 
-    const customsExportOffice = input.statement.customsExportOffice?.trim() || '';
+    const customsExportOffice =
+      input.statement.customsExportOffice?.trim() || '';
 
     const releaseCode = input.statement.releaseCode?.trim() || '';
 
@@ -215,10 +216,11 @@ class DaeDatPDFConverter {
 
     const transportMode = input.statement.transportMode?.trim() || '-1';
 
-    const transitNetworkCountry = input.statement.transitNetworkCountry?.trim() || '';
+    const transitNetworkCountry =
+      input.statement.transitNetworkCountry?.trim() || '';
 
     const goods = input.goods.map((good) => {
-      const statisticValueString = 
+      const statisticValueString =
         good.statisticValue1?.trim() ||
         good.statisticValue2?.trim() ||
         good.statisticValue3?.trim() ||
@@ -246,11 +248,11 @@ class DaeDatPDFConverter {
         good.netWeight1?.trim() ||
         '';
 
-      let ncCode = 
+      let ncCode =
         good.ncCode1?.trim() ||
         good.ncCode2?.trim() ||
         good.ncCode3?.trim() ||
-        good.ncCode4?.trim() || 
+        good.ncCode4?.trim() ||
         good.ncCode5?.trim() ||
         good.ncCode6?.trim() ||
         good.ncCode7?.trim() ||
@@ -272,7 +274,7 @@ class DaeDatPDFConverter {
         good.description5,
       ];
 
-      const requestedRegime = 
+      const requestedRegime =
         good.requestedRegime1?.trim() ||
         good.requestedRegime2?.trim() ||
         good.requestedRegime3?.trim() ||
@@ -286,7 +288,7 @@ class DaeDatPDFConverter {
         good.requestedRegime11?.trim() ||
         '';
 
-      const previousRegime = 
+      const previousRegime =
         good.previousRegime1?.trim() ||
         good.previousRegime2?.trim() ||
         good.previousRegime3?.trim() ||
@@ -320,9 +322,9 @@ class DaeDatPDFConverter {
         good.documents11,
         good.documents12,
         good.documents13,
-      ]
+      ];
 
-      const documentsString = this.convertArrayToString(documentsArray) 
+      const documentsString = this.convertArrayToString(documentsArray);
 
       const documents = this.convertDocumentsStringToArray(documentsString);
 
@@ -351,28 +353,34 @@ class DaeDatPDFConverter {
         good.additionalDocuments22,
         good.additionalDocuments23,
         good.additionalDocuments24,
-      ]
+      ];
 
-      const additionalDocumentsString = this.convertArrayToString(additionalDocumentsArray)
+      const additionalDocumentsString = this.convertArrayToString(
+        additionalDocumentsArray,
+      );
 
-      const additionalDocuments = this.convertDocumentsStringToArray(additionalDocumentsString);
+      const additionalDocuments = this.convertDocumentsStringToArray(
+        additionalDocumentsString,
+      );
 
-      const formattedDocuments: { code: string; identifier: string }[] =
-        [...documents, ...additionalDocuments].map((doc) => {
-          const documentCode = doc.split(/\s*[-–]\s*(.*)/).map((el) => el.trim());
+      const formattedDocuments: { code: string; identifier: string }[] = [
+        ...documents,
+        ...additionalDocuments,
+      ].map((doc) => {
+        const documentCode = doc.split(/\s*[-–]\s*(.*)/).map((el) => el.trim());
 
-          const code = documentCode[0];
-          let identifier = documentCode[1];
+        const code = documentCode[0];
+        let identifier = documentCode[1];
 
-          if (identifier) {
-            identifier = identifier.replace(/(\s*\/+)$/, '').trim();
-          }
+        if (identifier) {
+          identifier = identifier.replace(/(\s*\/+)$/, '').trim();
+        }
 
-          return {
-            code,
-            identifier: !identifier || identifier === '' ? '-' : identifier,
-          };
-        });
+        return {
+          code,
+          identifier: !identifier || identifier === '' ? '-' : identifier,
+        };
+      });
 
       return this.convertAsterisksToZero({
         customsRegime,
@@ -391,7 +399,7 @@ class DaeDatPDFConverter {
       throw new Error('Missing mapping for goods');
     }
 
-    if (goods.some(g => !g.ncCode)) {
+    if (goods.some((g) => !g.ncCode)) {
       throw new Error('Missing NC Code for goods');
     }
 
@@ -463,7 +471,9 @@ class DaeDatPDFConverter {
     return object;
   }
 
-  private convertDocumentsStringToArray(documentString: string | undefined): string[] {
+  private convertDocumentsStringToArray(
+    documentString: string | undefined,
+  ): string[] {
     if (!documentString) return [];
 
     const docCodes = documentCodeList.map((doc) => this.escapeRegExp(doc.code));
@@ -544,10 +554,7 @@ class DaeDatPDFConverter {
               //console.log({ "page": i + 1, "x": textElement.x, "y": textElement.y, "text": text })
 
               const mappedPosition: { entity?: string; column?: string } =
-                this.getMappedPosition(
-                  textElement.x,
-                  textElement.y,
-                );
+                this.getMappedPosition(textElement.x, textElement.y);
 
               if (!mappedPosition.column || !text.trim()) {
                 continue;
@@ -611,9 +618,9 @@ class DaeDatPDFConverter {
             good.documents11,
             good.documents12,
             good.documents13,
-          ]
+          ];
 
-          const documentsString = this.convertArrayToString(documentsArray) 
+          const documentsString = this.convertArrayToString(documentsArray);
 
           const additionalDocumentsArray = [
             good.additionalDocuments1,
@@ -640,12 +647,16 @@ class DaeDatPDFConverter {
             good.additionalDocuments22,
             good.additionalDocuments23,
             good.additionalDocuments24,
-          ]
+          ];
 
-          const additionalDocumentsString = this.convertArrayToString(additionalDocumentsArray) 
+          const additionalDocumentsString = this.convertArrayToString(
+            additionalDocumentsArray,
+          );
 
           return (
-            acc + this.convertDocumentsStringToArray(documentsString).length + this.convertDocumentsStringToArray(additionalDocumentsString).length
+            acc +
+            this.convertDocumentsStringToArray(documentsString).length +
+            this.convertDocumentsStringToArray(additionalDocumentsString).length
           );
         },
         0,

@@ -88,7 +88,7 @@ export const _cells: {
     xRange: [16.125, 16.125],
     yRange: [23.198, 23.198],
   },
-    {
+  {
     entity: 'goods',
     column: 'requestedRegime7',
     xRange: [16.125, 16.125],
