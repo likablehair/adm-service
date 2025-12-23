@@ -14,7 +14,6 @@ export type DaeDatStatementMapped = {
     country: string;
   };
   customsExitOffice: string;
-  customsExportOffice: string;
   totalPackages: string;
   totalGrossWeight: string;
   totalStatisticValue: number;
@@ -39,18 +38,36 @@ export interface DaeDatJson {
   statement: {
     releaseDate: string;
     customsExitOffice: string;
-    customsExportOffice: string;
     totalGrossWeight: string;
-    totalPackages: string;
+    totalPackages1: string;
+    totalPackages2: string;
+    totalPackages3: string;
     releaseCode: string;
-    transitNetworkCountry: string;
+    transitNetworkCountry1: string;
+    transitNetworkCountry2: string;
+    transitNetworkCountry3: string;
+    transitNetworkCountry4: string;
+    transitNetworkCountry5: string;
+    transitNetworkCountry6: string;
+    transitNetworkCountry7: string;
+    transitNetworkCountry8: string;
+    transitNetworkCountry9: string;
+    transitNetworkCountry10: string;
+    transitNetworkCountry11: string;
+    transitNetworkCountry12: string;
+    transitNetworkCountry13: string;
+    transitNetworkCountry14: string;
+    transitNetworkCountry15: string;
+    transitNetworkCountry16: string;
+    transitNetworkCountry17: string;
     transportMode: string;
   };
   consignee: {
     companyName: string;
     companyAddress: string;
     postalCode: string;
-    cityAndCountry: string;
+    city: string;
+    country: string;
   };
   goods: {
     nr1: string;
@@ -77,82 +94,28 @@ export interface DaeDatJson {
     netWeight8: string;
     netWeight9: string;
     netWeight10: string;
-    netWeight11: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
     ncCode4: string;
     ncCode5: string;
     ncCode6: string;
-    ncCode7: string;
-    ncCode8: string;
-    ncCode9: string;
-    ncCode10: string;
-    ncCode11: string;
     description1: string;
     description2: string;
     description3: string;
     description4: string;
     description5: string;
-    requestedRegime1: string;
-    requestedRegime2: string;
-    requestedRegime3: string;
-    requestedRegime4: string;
-    requestedRegime5: string;
-    requestedRegime6: string;
-    requestedRegime7: string;
-    requestedRegime8: string;
-    requestedRegime9: string;
-    requestedRegime10: string;
-    requestedRegime11: string;
-    previousRegime1: string;
-    previousRegime2: string;
-    previousRegime3: string;
-    previousRegime4: string;
-    previousRegime5: string;
-    previousRegime6: string;
-    previousRegime7: string;
-    previousRegime8: string;
-    previousRegime9: string;
-    previousRegime10: string;
-    previousRegime11: string;
-    documents1: string;
-    documents2: string;
-    documents3: string;
-    documents4: string;
-    documents5: string;
-    documents6: string;
-    documents7: string;
-    documents8: string;
-    documents9: string;
-    documents10: string;
-    documents11: string;
-    documents12: string;
-    documents13: string;
-    additionalDocuments1: string;
-    additionalDocuments2: string;
-    additionalDocuments3: string;
-    additionalDocuments4: string;
-    additionalDocuments5: string;
-    additionalDocuments6: string;
-    additionalDocuments7: string;
-    additionalDocuments8: string;
-    additionalDocuments9: string;
-    additionalDocuments10: string;
-    additionalDocuments11: string;
-    additionalDocuments12: string;
-    additionalDocuments13: string;
-    additionalDocuments14: string;
-    additionalDocuments15: string;
-    additionalDocuments16: string;
-    additionalDocuments17: string;
-    additionalDocuments18: string;
-    additionalDocuments19: string;
-    additionalDocuments20: string;
-    additionalDocuments21: string;
-    additionalDocuments22: string;
-    additionalDocuments23: string;
-    additionalDocuments24: string;
+    customsRegime1: string;
+    customsRegime2: string;
+    customsRegime3: string;
+    customsRegime4: string;
+    customsRegime5: string;
+    customsRegime6: string;
+    customsRegime7: string;
+    customsRegime8: string;
+    customsRegime9: string;
+    customsRegime10: string;
+    codeIdentifier: string;
   }[];
 }
 
@@ -160,6 +123,7 @@ class DaeDatPDFConverter {
   private getMappedPosition(
     x: number,
     y: number,
+    isMappingDocuments: boolean,
   ): { entity?: string; column?: string } {
     const _x = x.toFixed(3);
     const _y = y.toFixed(3);
@@ -168,15 +132,17 @@ class DaeDatPDFConverter {
     _cells[Number(_xy)] = { xRange: [x, x], yRange: [y, y] };
 
     for (const cell in _cells) {
-      if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
-        const { xRange, yRange, entity, column } = _cells[cell];
-        if (
-          x >= xRange[0] &&
-          x <= xRange[1] &&
-          y >= yRange[0] &&
-          y <= yRange[1]
-        ) {
-          return { entity, column };
+      if (isMappingDocuments || _cells[cell].column != 'codeIdentifier') {
+        if (Object.prototype.hasOwnProperty.call(_cells, cell)) {
+          const { xRange, yRange, entity, column } = _cells[cell];
+          if (
+            x >= xRange[0] &&
+            x <= xRange[1] &&
+            y >= yRange[0] &&
+            y <= yRange[1]
+          ) {
+            return { entity, column };
+          }
         }
       }
     }
@@ -187,17 +153,17 @@ class DaeDatPDFConverter {
     documentsNumber: number,
     numberOfGoodsPages: number = 0,
   ): DaeDatStatementMapped {
-    const unformattedReleaseDate = input.statement.releaseDate?.trim() || '';
-    const [year, month, day] = unformattedReleaseDate.split('/');
-    const releaseDate = `${day}/${month}/${year}`;
+    const releaseDate = input.statement.releaseDate?.trim() || '';
 
-    const totalPackages = input.statement.totalPackages?.trim() || '';
+    const totalPackages =
+      input.statement.totalPackages1?.trim() ||
+      input.statement.totalPackages2?.trim() ||
+      input.statement.totalPackages3?.trim() ||
+      '';
 
     const totalGrossWeight = input.statement.totalGrossWeight?.trim() || '';
 
     const customsExitOffice = input.statement.customsExitOffice?.trim() || '';
-
-    const customsExportOffice = input.statement.customsExportOffice?.trim() || '';
 
     const releaseCode = input.statement.releaseCode?.trim() || '';
 
@@ -207,18 +173,34 @@ class DaeDatPDFConverter {
 
     const postalCode = input.consignee.postalCode?.trim() || '0';
 
-    const cityAndCountry = input.consignee.cityAndCountry?.trim() || '';
+    const city = input.consignee.city?.trim() || '';
 
-    const city = cityAndCountry.split('-')[0].trim() || '';
-
-    const country = cityAndCountry.split('-')[1].trim() || '';
+    const country = input.consignee.country?.trim() || '';
 
     const transportMode = input.statement.transportMode?.trim() || '-1';
 
-    const transitNetworkCountry = input.statement.transitNetworkCountry?.trim() || '';
+    const transitNetworkCountry =
+      input.statement.transitNetworkCountry1?.trim() ||
+      input.statement.transitNetworkCountry2?.trim() ||
+      input.statement.transitNetworkCountry3?.trim() ||
+      input.statement.transitNetworkCountry4?.trim() ||
+      input.statement.transitNetworkCountry5?.trim() ||
+      input.statement.transitNetworkCountry6?.trim() ||
+      input.statement.transitNetworkCountry7?.trim() ||
+      input.statement.transitNetworkCountry8?.trim() ||
+      input.statement.transitNetworkCountry9?.trim() ||
+      input.statement.transitNetworkCountry10?.trim() ||
+      input.statement.transitNetworkCountry11?.trim() ||
+      input.statement.transitNetworkCountry12?.trim() ||
+      input.statement.transitNetworkCountry13?.trim() ||
+      input.statement.transitNetworkCountry14?.trim() ||
+      input.statement.transitNetworkCountry15?.trim() ||
+      input.statement.transitNetworkCountry16?.trim() ||
+      input.statement.transitNetworkCountry17?.trim() ||
+      '';
 
     const goods = input.goods.map((good) => {
-      const statisticValueString = 
+      const statisticValueString =
         good.statisticValue1?.trim() ||
         good.statisticValue2?.trim() ||
         good.statisticValue3?.trim() ||
@@ -233,7 +215,6 @@ class DaeDatPDFConverter {
         '';
 
       const netWeight =
-        good.netWeight11?.trim() ||
         good.netWeight10?.trim() ||
         good.netWeight9?.trim() ||
         good.netWeight8?.trim() ||
@@ -246,18 +227,13 @@ class DaeDatPDFConverter {
         good.netWeight1?.trim() ||
         '';
 
-      let ncCode = 
+      let ncCode =
         good.ncCode1?.trim() ||
         good.ncCode2?.trim() ||
         good.ncCode3?.trim() ||
-        good.ncCode4?.trim() || 
+        good.ncCode4?.trim() ||
         good.ncCode5?.trim() ||
         good.ncCode6?.trim() ||
-        good.ncCode7?.trim() ||
-        good.ncCode8?.trim() ||
-        good.ncCode9?.trim() ||
-        good.ncCode10?.trim() ||
-        good.ncCode11?.trim() ||
         '';
 
       ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8);
@@ -272,100 +248,40 @@ class DaeDatPDFConverter {
         good.description5,
       ];
 
-      const requestedRegime = 
-        good.requestedRegime1?.trim() ||
-        good.requestedRegime2?.trim() ||
-        good.requestedRegime3?.trim() ||
-        good.requestedRegime4?.trim() ||
-        good.requestedRegime5?.trim() ||
-        good.requestedRegime6?.trim() ||
-        good.requestedRegime7?.trim() ||
-        good.requestedRegime8?.trim() ||
-        good.requestedRegime9?.trim() ||
-        good.requestedRegime10?.trim() ||
-        good.requestedRegime11?.trim() ||
+      let customsRegime =
+        good.customsRegime1?.trim() ||
+        good.customsRegime2?.trim() ||
+        good.customsRegime3?.trim() ||
+        good.customsRegime4?.trim() ||
+        good.customsRegime5?.trim() ||
+        good.customsRegime6?.trim() ||
+        good.customsRegime7?.trim() ||
+        good.customsRegime8?.trim() ||
+        good.customsRegime9?.trim() ||
+        good.customsRegime10?.trim() ||
         '';
 
-      const previousRegime = 
-        good.previousRegime1?.trim() ||
-        good.previousRegime2?.trim() ||
-        good.previousRegime3?.trim() ||
-        good.previousRegime4?.trim() ||
-        good.previousRegime5?.trim() ||
-        good.previousRegime6?.trim() ||
-        good.previousRegime7?.trim() ||
-        good.previousRegime8?.trim() ||
-        good.previousRegime9?.trim() ||
-        good.previousRegime10?.trim() ||
-        good.previousRegime11?.trim() ||
-        '';
+      const requestedRegime = customsRegime.slice(0, 2).trim();
 
-      const customsRegime = `${requestedRegime}${previousRegime}`;
+      const previousRegime = customsRegime.slice(-2).trim();
+
+      customsRegime = `${requestedRegime}${previousRegime}`;
 
       const statisticValue: number = Number(
         statisticValueString.replace(',', '.'),
       );
 
-      const documentsArray = [
-        good.documents1,
-        good.documents2,
-        good.documents3,
-        good.documents4,
-        good.documents5,
-        good.documents6,
-        good.documents7,
-        good.documents8,
-        good.documents9,
-        good.documents10,
-        good.documents11,
-        good.documents12,
-        good.documents13,
-      ]
-
-      const documentsString = this.convertArrayToString(documentsArray) 
-
-      const documents = this.convertDocumentsStringToArray(documentsString);
-
-      const additionalDocumentsArray = [
-        good.additionalDocuments1,
-        good.additionalDocuments2,
-        good.additionalDocuments3,
-        good.additionalDocuments4,
-        good.additionalDocuments5,
-        good.additionalDocuments6,
-        good.additionalDocuments7,
-        good.additionalDocuments8,
-        good.additionalDocuments9,
-        good.additionalDocuments10,
-        good.additionalDocuments11,
-        good.additionalDocuments12,
-        good.additionalDocuments13,
-        good.additionalDocuments14,
-        good.additionalDocuments15,
-        good.additionalDocuments16,
-        good.additionalDocuments17,
-        good.additionalDocuments18,
-        good.additionalDocuments19,
-        good.additionalDocuments20,
-        good.additionalDocuments21,
-        good.additionalDocuments22,
-        good.additionalDocuments23,
-        good.additionalDocuments24,
-      ]
-
-      const additionalDocumentsString = this.convertArrayToString(additionalDocumentsArray)
-
-      const additionalDocuments = this.convertDocumentsStringToArray(additionalDocumentsString);
+      const documents = this.convertDocumentsStringToArray(good.codeIdentifier);
 
       const formattedDocuments: { code: string; identifier: string }[] =
-        [...documents, ...additionalDocuments].map((doc) => {
-          const documentCode = doc.split(/\s*[-–]\s*(.*)/).map((el) => el.trim());
+        documents.map((doc) => {
+          const documentCode = doc.split(/[ ]?-(.*)/).map((el) => el.trim());
 
           const code = documentCode[0];
           let identifier = documentCode[1];
 
           if (identifier) {
-            identifier = identifier.replace(/(\s*\/+)$/, '').trim();
+            identifier = identifier.replace(/( \/|\/)$/, '').trim();
           }
 
           return {
@@ -391,10 +307,6 @@ class DaeDatPDFConverter {
       throw new Error('Missing mapping for goods');
     }
 
-    if (goods.some(g => !g.ncCode)) {
-      throw new Error('Missing NC Code for goods');
-    }
-
     const localDocumentsNumber =
       goods.reduce((acc, good) => {
         return acc + (good.documents.length || 0);
@@ -416,7 +328,6 @@ class DaeDatPDFConverter {
       totalPackages,
       totalGrossWeight,
       customsExitOffice,
-      customsExportOffice,
       totalStatisticValue,
       releaseCode,
       transitNetworkCountry,
@@ -463,13 +374,11 @@ class DaeDatPDFConverter {
     return object;
   }
 
-  private convertDocumentsStringToArray(documentString: string | undefined): string[] {
-    if (!documentString) return [];
-
+  private convertDocumentsStringToArray(documentString: string): string[] {
     const docCodes = documentCodeList.map((doc) => this.escapeRegExp(doc.code));
     const joinedDocCodes = docCodes.join('|');
     const regex = new RegExp(
-      `(${joinedDocCodes})\\s*[-–]\\s*.*?(?=\\s*(?:${joinedDocCodes})\\b|\\s*$)`,
+      `(${joinedDocCodes})\\s*-\\s*.*?(?=\\s*(?:${joinedDocCodes})\\b|\\s*$)`,
       'g',
     );
 
@@ -529,9 +438,19 @@ class DaeDatPDFConverter {
         pagesNumber = pages.length;
 
         for (let i = 0; i < pages.length; i++) {
+          let isMappingDocuments: boolean = false;
+          let countDocumentPosition: number = 0;
+
           const page = pages[i];
           if (page.Texts) {
             const goodObject: any = {};
+
+            const totalNumberOfDocumentPositions: number =
+              i === 0
+                ? 0
+                : page.Texts.filter((textElement: any) => {
+                    return textElement.x === 1.125;
+                  }).length;
 
             for (let j = 0; j < page.Texts.length; j++) {
               const textElement = page.Texts[j];
@@ -543,10 +462,19 @@ class DaeDatPDFConverter {
 
               //console.log({ "page": i + 1, "x": textElement.x, "y": textElement.y, "text": text })
 
+              if (textElement.x === 1.125 && i > 0) {
+                countDocumentPosition += 1;
+              }
+
+              if (countDocumentPosition > 0 && textElement.x === 1.125) {
+                isMappingDocuments = true;
+              }
+
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(
                   textElement.x,
                   textElement.y,
+                  isMappingDocuments,
                 );
 
               if (!mappedPosition.column || !text.trim()) {
@@ -557,7 +485,19 @@ class DaeDatPDFConverter {
                     daeDatEntity[mappedPosition.entity] = [];
 
                   if (Array.isArray(daeDatEntity[mappedPosition.entity])) {
-                    goodObject[mappedPosition.column] = text.trim();
+                    if (mappedPosition.column === 'codeIdentifier') {
+                      if (
+                        countDocumentPosition < totalNumberOfDocumentPositions
+                      ) {
+                        if (!goodObject[mappedPosition.column]) {
+                          goodObject[mappedPosition.column] = text.trim();
+                        } else {
+                          goodObject[mappedPosition.column] += text.trim();
+                        }
+                      }
+                    } else {
+                      goodObject[mappedPosition.column] = text.trim();
+                    }
 
                     const lastItem =
                       daeDatEntity[mappedPosition.entity].slice(-1)[0];
@@ -597,55 +537,8 @@ class DaeDatPDFConverter {
 
       numberOfDocuments = daeDatEntity.goods.reduce(
         (acc: number, good: any) => {
-          const documentsArray = [
-            good.documents1,
-            good.documents2,
-            good.documents3,
-            good.documents4,
-            good.documents5,
-            good.documents6,
-            good.documents7,
-            good.documents8,
-            good.documents9,
-            good.documents10,
-            good.documents11,
-            good.documents12,
-            good.documents13,
-          ]
-
-          const documentsString = this.convertArrayToString(documentsArray) 
-
-          const additionalDocumentsArray = [
-            good.additionalDocuments1,
-            good.additionalDocuments2,
-            good.additionalDocuments3,
-            good.additionalDocuments4,
-            good.additionalDocuments5,
-            good.additionalDocuments6,
-            good.additionalDocuments7,
-            good.additionalDocuments8,
-            good.additionalDocuments9,
-            good.additionalDocuments10,
-            good.additionalDocuments11,
-            good.additionalDocuments12,
-            good.additionalDocuments13,
-            good.additionalDocuments14,
-            good.additionalDocuments15,
-            good.additionalDocuments16,
-            good.additionalDocuments17,
-            good.additionalDocuments18,
-            good.additionalDocuments19,
-            good.additionalDocuments20,
-            good.additionalDocuments21,
-            good.additionalDocuments22,
-            good.additionalDocuments23,
-            good.additionalDocuments24,
-          ]
-
-          const additionalDocumentsString = this.convertArrayToString(additionalDocumentsArray) 
-
           return (
-            acc + this.convertDocumentsStringToArray(documentsString).length + this.convertDocumentsStringToArray(additionalDocumentsString).length
+            acc + this.convertDocumentsStringToArray(good.codeIdentifier).length
           );
         },
         0,
