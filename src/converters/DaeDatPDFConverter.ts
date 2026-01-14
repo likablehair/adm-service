@@ -42,7 +42,8 @@ export interface DaeDatJson {
     customsExportOffice: string;
     totalGrossWeight: string;
     totalPackages: string;
-    releaseCode: string;
+    releaseCode1: string;
+    releaseCode2: string;
     transitNetworkCountry: string;
     transportMode: string;
   };
@@ -51,6 +52,8 @@ export interface DaeDatJson {
     companyAddress: string;
     postalCode: string;
     cityAndCountry: string;
+    city: string;
+    country: string;
   };
   goods: {
     nr1: string;
@@ -67,6 +70,8 @@ export interface DaeDatJson {
     statisticValue9: string;
     statisticValue10: string;
     statisticValue11: string;
+    statisticValue12: string;
+    statisticValue13: string;
     netWeight1: string;
     netWeight2: string;
     netWeight3: string;
@@ -78,6 +83,8 @@ export interface DaeDatJson {
     netWeight9: string;
     netWeight10: string;
     netWeight11: string;
+    netWeight12: string;
+    netWeight13: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
@@ -89,11 +96,15 @@ export interface DaeDatJson {
     ncCode9: string;
     ncCode10: string;
     ncCode11: string;
+    ncCode12: string;
+    ncCode13: string;
     description1: string;
     description2: string;
     description3: string;
     description4: string;
     description5: string;
+    description6: string;
+    description7: string;
     requestedRegime1: string;
     requestedRegime2: string;
     requestedRegime3: string;
@@ -105,6 +116,8 @@ export interface DaeDatJson {
     requestedRegime9: string;
     requestedRegime10: string;
     requestedRegime11: string;
+    requestedRegime12: string;
+    requestedRegime13: string;
     previousRegime1: string;
     previousRegime2: string;
     previousRegime3: string;
@@ -116,6 +129,8 @@ export interface DaeDatJson {
     previousRegime9: string;
     previousRegime10: string;
     previousRegime11: string;
+    previousRegime12: string;
+    previousRegime13: string;
     documents1: string;
     documents2: string;
     documents3: string;
@@ -129,6 +144,8 @@ export interface DaeDatJson {
     documents11: string;
     documents12: string;
     documents13: string;
+    documents14: string;
+    documents15: string;
     additionalDocuments1: string;
     additionalDocuments2: string;
     additionalDocuments3: string;
@@ -153,6 +170,9 @@ export interface DaeDatJson {
     additionalDocuments22: string;
     additionalDocuments23: string;
     additionalDocuments24: string;
+    additionalDocuments25: string;
+    additionalDocuments26: string;
+    additionalDocuments27: string;
   }[];
 }
 
@@ -200,7 +220,10 @@ class DaeDatPDFConverter {
     const customsExportOffice =
       input.statement.customsExportOffice?.trim() || '';
 
-    const releaseCode = input.statement.releaseCode?.trim() || '';
+    const releaseCode =
+      input.statement.releaseCode1?.trim() ||
+      input.statement.releaseCode2?.trim() ||
+      '';
 
     const companyName = input.consignee.companyName?.trim() || '';
 
@@ -209,10 +232,13 @@ class DaeDatPDFConverter {
     const postalCode = input.consignee.postalCode?.trim() || '0';
 
     const cityAndCountry = input.consignee.cityAndCountry?.trim() || '';
+    const consigneeCity = input.consignee.city?.trim() || '';
+    const consigneeCountry = input.consignee.country?.trim() || '';
 
-    const city = cityAndCountry.split('-')[0].trim() || '';
+    const city = consigneeCity || cityAndCountry.split('-')[0].trim() || '';
 
-    const country = cityAndCountry.split('-')[1].trim() || '';
+    const country =
+      consigneeCountry || cityAndCountry.split('-')[1].trim() || '';
 
     const transportMode = input.statement.transportMode?.trim() || '-1';
 
@@ -232,9 +258,13 @@ class DaeDatPDFConverter {
         good.statisticValue9?.trim() ||
         good.statisticValue10?.trim() ||
         good.statisticValue11?.trim() ||
+        good.statisticValue12?.trim() ||
+        good.statisticValue13?.trim() ||
         '';
 
       const netWeight =
+        good.netWeight13?.trim() ||
+        good.netWeight12?.trim() ||
         good.netWeight11?.trim() ||
         good.netWeight10?.trim() ||
         good.netWeight9?.trim() ||
@@ -260,6 +290,8 @@ class DaeDatPDFConverter {
         good.ncCode9?.trim() ||
         good.ncCode10?.trim() ||
         good.ncCode11?.trim() ||
+        good.ncCode12?.trim() ||
+        good.ncCode13?.trim() ||
         '';
 
       ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8);
@@ -272,6 +304,8 @@ class DaeDatPDFConverter {
         good.description3,
         good.description4,
         good.description5,
+        good.description6,
+        good.description7,
       ];
 
       const requestedRegime =
@@ -286,6 +320,8 @@ class DaeDatPDFConverter {
         good.requestedRegime9?.trim() ||
         good.requestedRegime10?.trim() ||
         good.requestedRegime11?.trim() ||
+        good.requestedRegime12?.trim() ||
+        good.requestedRegime13?.trim() ||
         '';
 
       const previousRegime =
@@ -300,6 +336,8 @@ class DaeDatPDFConverter {
         good.previousRegime9?.trim() ||
         good.previousRegime10?.trim() ||
         good.previousRegime11?.trim() ||
+        good.previousRegime12?.trim() ||
+        good.previousRegime13?.trim() ||
         '';
 
       const customsRegime = `${requestedRegime}${previousRegime}`;
@@ -322,6 +360,22 @@ class DaeDatPDFConverter {
         good.documents11,
         good.documents12,
         good.documents13,
+        good.documents14,
+        good.documents15,
+        ...(good.statisticValue1 ||
+        good.statisticValue2 ||
+        good.statisticValue3 ||
+        good.statisticValue4 ||
+        good.statisticValue5 ||
+        good.statisticValue6 ||
+        good.statisticValue7 ||
+        good.statisticValue8 ||
+        good.statisticValue9 ||
+        good.statisticValue10 ||
+        good.statisticValue11 ||
+        good.statisticValue12
+          ? [good.statisticValue13]
+          : []),
       ];
 
       const documentsString = this.convertArrayToString(documentsArray);
@@ -353,6 +407,9 @@ class DaeDatPDFConverter {
         good.additionalDocuments22,
         good.additionalDocuments23,
         good.additionalDocuments24,
+        good.additionalDocuments25,
+        good.additionalDocuments26,
+        good.additionalDocuments27,
       ];
 
       const additionalDocumentsString = this.convertArrayToString(
@@ -618,6 +675,22 @@ class DaeDatPDFConverter {
             good.documents11,
             good.documents12,
             good.documents13,
+            good.documents14,
+            good.documents15,
+            ...(good.statisticValue1 ||
+            good.statisticValue2 ||
+            good.statisticValue3 ||
+            good.statisticValue4 ||
+            good.statisticValue5 ||
+            good.statisticValue6 ||
+            good.statisticValue7 ||
+            good.statisticValue8 ||
+            good.statisticValue9 ||
+            good.statisticValue10 ||
+            good.statisticValue11 ||
+            good.statisticValue12
+              ? [good.statisticValue13]
+              : []),
           ];
 
           const documentsString = this.convertArrayToString(documentsArray);
@@ -647,6 +720,9 @@ class DaeDatPDFConverter {
             good.additionalDocuments22,
             good.additionalDocuments23,
             good.additionalDocuments24,
+            good.additionalDocuments25,
+            good.additionalDocuments26,
+            good.additionalDocuments27,
           ];
 
           const additionalDocumentsString = this.convertArrayToString(

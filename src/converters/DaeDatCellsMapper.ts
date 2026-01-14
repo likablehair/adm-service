@@ -30,9 +30,15 @@ export const _cells: {
   },
   {
     entity: 'statement',
-    column: 'releaseCode',
+    column: 'releaseCode1',
     xRange: [13.125, 13.125],
     yRange: [43.977, 43.977],
+  },
+  {
+    entity: 'statement',
+    column: 'releaseCode2',
+    xRange: [13.75, 13.75],
+    yRange: [43.917, 43.917],
   },
   {
     entity: 'statement',
@@ -120,6 +126,18 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'requestedRegime12',
+    xRange: [16.125, 16.125],
+    yRange: [26.198, 26.198],
+  },
+  {
+    entity: 'goods',
+    column: 'requestedRegime13',
+    xRange: [16.125, 16.125],
+    yRange: [27.198, 27.198],
+  },
+  {
+    entity: 'goods',
     column: 'previousRegime1',
     xRange: [28.25, 28.25],
     yRange: [21.698, 21.698],
@@ -184,6 +202,18 @@ export const _cells: {
     xRange: [28.25, 28.25],
     yRange: [25.448, 25.448],
   },
+  {
+    entity: 'goods',
+    column: 'previousRegime12',
+    xRange: [28.25, 28.25],
+    yRange: [26.198, 26.198],
+  },
+  {
+    entity: 'goods',
+    column: 'previousRegime13',
+    xRange: [28.25, 28.25],
+    yRange: [27.198, 27.198],
+  },
 
   {
     entity: 'consignee',
@@ -208,6 +238,18 @@ export const _cells: {
     column: 'cityAndCountry',
     xRange: [4.375, 4.375],
     yRange: [10.605, 10.605],
+  },
+  {
+    entity: 'consignee',
+    column: 'city',
+    xRange: [4.375, 4.375],
+    yRange: [10.724, 10.724],
+  },
+  {
+    entity: 'consignee',
+    column: 'country',
+    xRange: [7.375, 7.375],
+    yRange: [10.724, 10.724],
   },
 
   {
@@ -296,6 +338,18 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'statisticValue12',
+    xRange: [16.125, 16.125],
+    yRange: [24.541, 24.541],
+  },
+  {
+    entity: 'goods',
+    column: 'statisticValue13',
+    xRange: [16.125, 16.125],
+    yRange: [25.541, 25.541],
+  },
+  {
+    entity: 'goods',
     column: 'netWeight1',
     xRange: [28.25, 28.25],
     yRange: [20.885, 20.885],
@@ -359,6 +413,18 @@ export const _cells: {
     column: 'netWeight11',
     xRange: [28.25, 28.25],
     yRange: [24.635, 24.635],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight12',
+    xRange: [28.25, 28.25],
+    yRange: [25.385, 25.385],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight13',
+    xRange: [28.25, 28.25],
+    yRange: [26.385, 26.385],
   },
   {
     entity: 'goods',
@@ -428,6 +494,18 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'ncCode12',
+    xRange: [16.125, 16.125],
+    yRange: [23.729, 23.729],
+  },
+  {
+    entity: 'goods',
+    column: 'ncCode13',
+    xRange: [16.125, 16.125],
+    yRange: [24.729, 24.729],
+  },
+  {
+    entity: 'goods',
     column: 'description1',
     xRange: [16.125, 16.125],
     yRange: [16.23, 16.23],
@@ -455,6 +533,18 @@ export const _cells: {
     column: 'description5',
     xRange: [16.125, 16.125],
     yRange: [18.242, 18.242],
+  },
+  {
+    entity: 'goods',
+    column: 'description6',
+    xRange: [16.125, 16.125],
+    yRange: [18.746, 18.746],
+  },
+  {
+    entity: 'goods',
+    column: 'description7',
+    xRange: [16.125, 16.125],
+    yRange: [19.249, 19.249],
   },
   {
     entity: 'goods',
@@ -533,6 +623,18 @@ export const _cells: {
     column: 'documents13',
     xRange: [16.125, 16.125],
     yRange: [28.354, 28.354],
+  },
+  {
+    entity: 'goods',
+    column: 'documents14',
+    xRange: [16.125, 16.125],
+    yRange: [29.291, 29.291],
+  },
+  {
+    entity: 'goods',
+    column: 'documents15',
+    xRange: [16.125, 16.125],
+    yRange: [30.541, 30.541],
   },
   {
     entity: 'goods',
@@ -677,5 +779,23 @@ export const _cells: {
     column: 'additionalDocuments24',
     xRange: [1, 1],
     yRange: [32.042, 32.042],
+  },
+  {
+    entity: 'goods',
+    column: 'additionalDocuments25',
+    xRange: [1, 1],
+    yRange: [33.104, 33.104],
+  },
+  {
+    entity: 'goods',
+    column: 'additionalDocuments26',
+    xRange: [1, 1],
+    yRange: [24.854, 24.854],
+  },
+  {
+    entity: 'goods',
+    column: 'additionalDocuments27',
+    xRange: [1, 1],
+    yRange: [34.854, 34.854],
   },
 ];
