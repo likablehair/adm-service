@@ -422,7 +422,7 @@ class PDFConverter {
           good.goodDetailString == 'Dettaglio Articolo n°' &&
           good.goodCodeString == 'Codice merce'
         ) {
-          const nr = good.nr
+          const nr = good.nr;
 
           const ncCode =
             input.declaration?.track == 'H7'
