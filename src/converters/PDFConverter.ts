@@ -152,6 +152,7 @@ export interface DeclarationJson {
     postalCode7: string;
   };
   goods: {
+    nr: string;
     goodCodeString: string;
     goodDetailString: string;
     ncCode: string;
@@ -421,6 +422,8 @@ class PDFConverter {
           good.goodDetailString == 'Dettaglio Articolo n°' &&
           good.goodCodeString == 'Codice merce'
         ) {
+          const nr = good.nr
+
           const ncCode =
             input.declaration?.track == 'H7'
               ? good.ncCode
@@ -511,6 +514,7 @@ class PDFConverter {
           const documents = good.documents;
 
           return this.convertAsterisksToZero({
+            nr,
             ncCode,
             taricCode,
             identificationCode: good.ncCode,

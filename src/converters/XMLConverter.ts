@@ -127,6 +127,7 @@ export type AdmDeclarationMapped = {
     postalCode: string;
   };
   goods: {
+    nr: string;
     ncCode: string;
     taricCode: string;
     identificationCode: string;
@@ -222,6 +223,7 @@ export default class XMLConverter {
     const articoloH1 = jsonData.Messaggio.DichiarazioneH1.DatiH1.ArticoloH1;
 
     const goods: {
+      nr: string;
       ncCode: string;
       taricCode: string;
       identificationCode: string;
@@ -258,6 +260,7 @@ export default class XMLConverter {
       );
 
       goods.push({
+        nr: articoli[i].InformazioniMessaggio.NumeroArticolo,
         ncCode: articoli[i].IdentificazioneMerci.CodiceNC,
         taricCode: articoli[i].IdentificazioneMerci.CodiceTaric,
         identificationCode:
