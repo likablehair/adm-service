@@ -743,21 +743,6 @@ export default class AdmRobotProcessAutomationManager {
       const url =
         'https://www.adm.gov.it/portale/notifica-di-esportazione-del-m.r.n.-movement-reference-number-';
 
-      await this._retry({
-        promiseFactory: () => page.goto(url),
-        retryCount: 5,
-        retryMs: 500,
-      });
-
-      await page.waitForSelector('aria/Google');
-      await page.click('aria/Google');
-      await page.waitForSelector(
-        'xpath///*[@id="_it_sogei_portlet_cookie_portlet_GestioneCookies_submitDogCookiesButton"]/span',
-      );
-      await page.click(
-        'xpath///*[@id="_it_sogei_portlet_cookie_portlet_GestioneCookies_submitDogCookiesButton"]/span',
-      );
-
       await new Promise((resolve) => setTimeout(resolve, 2000));
       await this._retry({
         promiseFactory: () => page.goto(url),
@@ -769,23 +754,13 @@ export default class AdmRobotProcessAutomationManager {
         'xpath///*[@id="_it_smc_sogei_info_dogane_aes_web_InfoDoganeAesPortlet_INSTANCE_Sh48LEXuB3mL_mrn"]',
         params.mrn,
       );
-      await page.waitForFunction(() => {
-        const btn = document.querySelector(
-          'button.btn-primary-adm span.lfr-btn-label',
-        );
-        return btn && btn !== null;
-      });
-
-      await this._retry({
-        promiseFactory: async () => {
-          const [response] = await Promise.all([
-            page.waitForNavigation(),
-            page.click('button.btn-primary-adm span.lfr-btn-label'),
-          ]);
-          return response;
-        },
-        retryCount: 3,
-        retryMs: 500,
+      await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll('button'));
+        const target = buttons.find(b => b.innerText.includes('Procedi'));
+        if (target) {
+          target.click();
+          return
+        }
       });
 
       const filePath = `${params.mrn}_screenshot.pdf`;
