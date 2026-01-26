@@ -756,10 +756,10 @@ export default class AdmRobotProcessAutomationManager {
       );
       await page.evaluate(() => {
         const buttons = Array.from(document.querySelectorAll('button'));
-        const target = buttons.find(b => b.innerText.includes('Procedi'));
+        const target = buttons.find((b) => b.innerText.includes('Procedi'));
         if (target) {
           target.click();
-          return
+          return;
         }
       });
 
