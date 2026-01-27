@@ -755,13 +755,34 @@ export default class AdmRobotProcessAutomationManager {
         params.mrn,
       );
       await page.evaluate(() => {
-        const buttons = Array.from(document.querySelectorAll('button'));
-        const target = buttons.find((b) => b.innerText.includes('Procedi'));
-        if (target) {
-          target.click();
-          return;
-        }
+        const selectorsToRemove = [
+          '#cookiebar-tra',
+          '.modal-backdrop',
+          '.fade.show',
+          '#cookieMgmt',
+          '.cookiebar',
+        ];
+
+        selectorsToRemove.forEach((sel) => {
+          const els = document.querySelectorAll(sel);
+          els.forEach((el) => el.remove());
+        });
       });
+
+      const formIdSelector = 'form[id$="_IlForm0"]';
+      const inputSelector = 'input[id$="_mrn"]';
+      const submitBtnSelector = `${formIdSelector} button[type="submit"]`;
+
+      await page.waitForSelector(inputSelector, {
+        visible: true,
+        timeout: 5000,
+      });
+      await page.type(inputSelector, params.mrn, { delay: 100 });
+
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }),
+        page.click(submitBtnSelector),
+      ]);
 
       const filePath = `${params.mrn}_screenshot.pdf`;
 
