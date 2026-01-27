@@ -749,11 +749,7 @@ export default class AdmRobotProcessAutomationManager {
         retryCount: 5,
         retryMs: 500,
       });
-
-      await page.type(
-        'xpath///*[@id="_it_smc_sogei_info_dogane_aes_web_InfoDoganeAesPortlet_INSTANCE_Sh48LEXuB3mL_mrn"]',
-        params.mrn,
-      );
+      
       await page.evaluate(() => {
         const selectorsToRemove = [
           '#cookiebar-tra',
