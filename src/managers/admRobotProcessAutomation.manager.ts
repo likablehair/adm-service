@@ -749,7 +749,7 @@ export default class AdmRobotProcessAutomationManager {
         retryCount: 5,
         retryMs: 500,
       });
-      
+
       await page.evaluate(() => {
         const selectorsToRemove = [
           '#cookiebar-tra',
