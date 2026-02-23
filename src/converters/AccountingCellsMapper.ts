@@ -3541,4 +3541,40 @@ export const _cells: {
     xRange: [18.511, 18.511],
     yRange: [8.828, 8.828],
   },
+  {
+    entity: 'taxes',
+    column: 'tribute78',
+    xRange: [2.159, 2.159],
+    yRange: [32.856, 32.856],
+  },
+  {
+    entity: 'taxes',
+    column: 'taxableValue78',
+    xRange: [6.247, 6.247],
+    yRange: [32.856, 32.856],
+  },
+  {
+    entity: 'taxes',
+    column: 'value78',
+    xRange: [14.423, 14.423],
+    yRange: [32.856, 32.856],
+  },
+  {
+    entity: 'taxes',
+    column: 'rate78',
+    xRange: [10.335, 10.335],
+    yRange: [32.856, 32.856],
+  },
+  {
+    entity: 'taxes',
+    column: 'letterOfIntent78',
+    xRange: [22.599, 22.599],
+    yRange: [32.856, 32.856],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity78',
+    xRange: [18.511, 18.511],
+    yRange: [32.856, 32.856],
+  },
 ];

@@ -72,6 +72,7 @@ export interface DaeDatJson {
     statisticValue11: string;
     statisticValue12: string;
     statisticValue13: string;
+    statisticValue14: string;
     netWeight1: string;
     netWeight2: string;
     netWeight3: string;
@@ -85,6 +86,7 @@ export interface DaeDatJson {
     netWeight11: string;
     netWeight12: string;
     netWeight13: string;
+    netWeight14: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
@@ -98,6 +100,7 @@ export interface DaeDatJson {
     ncCode11: string;
     ncCode12: string;
     ncCode13: string;
+    ncCode14: string;
     description1: string;
     description2: string;
     description3: string;
@@ -118,6 +121,7 @@ export interface DaeDatJson {
     requestedRegime11: string;
     requestedRegime12: string;
     requestedRegime13: string;
+    requestedRegime14: string;
     previousRegime1: string;
     previousRegime2: string;
     previousRegime3: string;
@@ -131,6 +135,7 @@ export interface DaeDatJson {
     previousRegime11: string;
     previousRegime12: string;
     previousRegime13: string;
+    previousRegime14: string;
     documents1: string;
     documents2: string;
     documents3: string;
@@ -260,9 +265,11 @@ class DaeDatPDFConverter {
         good.statisticValue11?.trim() ||
         good.statisticValue12?.trim() ||
         good.statisticValue13?.trim() ||
+        good.statisticValue14?.trim() ||
         '';
 
       const netWeight =
+        good.netWeight14?.trim() ||
         good.netWeight13?.trim() ||
         good.netWeight12?.trim() ||
         good.netWeight11?.trim() ||
@@ -292,6 +299,7 @@ class DaeDatPDFConverter {
         good.ncCode11?.trim() ||
         good.ncCode12?.trim() ||
         good.ncCode13?.trim() ||
+        good.ncCode14?.trim() ||
         '';
 
       ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8);
@@ -322,6 +330,7 @@ class DaeDatPDFConverter {
         good.requestedRegime11?.trim() ||
         good.requestedRegime12?.trim() ||
         good.requestedRegime13?.trim() ||
+        good.requestedRegime14?.trim() ||
         '';
 
       const previousRegime =
@@ -338,6 +347,7 @@ class DaeDatPDFConverter {
         good.previousRegime11?.trim() ||
         good.previousRegime12?.trim() ||
         good.previousRegime13?.trim() ||
+        good.previousRegime14?.trim() ||
         '';
 
       const customsRegime = `${requestedRegime}${previousRegime}`;

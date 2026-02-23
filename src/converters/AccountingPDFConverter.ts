@@ -628,6 +628,12 @@ export interface AccountingJson {
     rate77: string;
     letterOfIntent77: string;
     quantity77: string;
+    tribute78: string;
+    value78: string;
+    taxableValue78: string;
+    rate78: string;
+    letterOfIntent78: string;
+    quantity78: string;
   };
 }
 
@@ -1440,6 +1446,14 @@ class AccountingPDFConverter {
         rate: input.taxes?.rate77 || '',
         letterOfIntent: input.taxes?.letterOfIntent77 || '',
         quantity: input.taxes?.quantity77 || '',
+      },
+      {
+        tribute: input.taxes?.tribute78 || '',
+        value: input.taxes?.value78 || '',
+        taxableValue: input.taxes?.taxableValue78 || '',
+        rate: input.taxes?.rate78 || '',
+        letterOfIntent: input.taxes?.letterOfIntent78 || '',
+        quantity: input.taxes?.quantity78 || '',
       },
     ];
 
