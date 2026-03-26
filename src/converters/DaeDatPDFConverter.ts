@@ -73,6 +73,7 @@ export interface DaeDatJson {
     statisticValue12: string;
     statisticValue13: string;
     statisticValue14: string;
+    statisticValue15: string;
     netWeight1: string;
     netWeight2: string;
     netWeight3: string;
@@ -87,6 +88,7 @@ export interface DaeDatJson {
     netWeight12: string;
     netWeight13: string;
     netWeight14: string;
+    netWeight15: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
@@ -101,6 +103,7 @@ export interface DaeDatJson {
     ncCode12: string;
     ncCode13: string;
     ncCode14: string;
+    ncCode15: string;
     description1: string;
     description2: string;
     description3: string;
@@ -122,6 +125,7 @@ export interface DaeDatJson {
     requestedRegime12: string;
     requestedRegime13: string;
     requestedRegime14: string;
+    requestedRegime15: string;
     previousRegime1: string;
     previousRegime2: string;
     previousRegime3: string;
@@ -136,6 +140,7 @@ export interface DaeDatJson {
     previousRegime12: string;
     previousRegime13: string;
     previousRegime14: string;
+    previousRegime15: string;
     documents1: string;
     documents2: string;
     documents3: string;
@@ -151,6 +156,8 @@ export interface DaeDatJson {
     documents13: string;
     documents14: string;
     documents15: string;
+    documents16: string;
+    documents17: string;
     additionalDocuments1: string;
     additionalDocuments2: string;
     additionalDocuments3: string;
@@ -178,6 +185,12 @@ export interface DaeDatJson {
     additionalDocuments25: string;
     additionalDocuments26: string;
     additionalDocuments27: string;
+    additionalDocuments28: string;
+    additionalDocuments29: string;
+    additionalDocuments30: string;
+    additionalDocuments31: string;
+    additionalDocuments32: string;
+    additionalDocuments33: string;
   }[];
 }
 
@@ -266,9 +279,11 @@ class DaeDatPDFConverter {
         good.statisticValue12?.trim() ||
         good.statisticValue13?.trim() ||
         good.statisticValue14?.trim() ||
+        good.statisticValue15?.trim() ||
         '';
 
       const netWeight =
+        good.netWeight15?.trim() ||
         good.netWeight14?.trim() ||
         good.netWeight13?.trim() ||
         good.netWeight12?.trim() ||
@@ -300,6 +315,7 @@ class DaeDatPDFConverter {
         good.ncCode12?.trim() ||
         good.ncCode13?.trim() ||
         good.ncCode14?.trim() ||
+        good.ncCode15?.trim() ||
         '';
 
       ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8);
@@ -331,6 +347,7 @@ class DaeDatPDFConverter {
         good.requestedRegime12?.trim() ||
         good.requestedRegime13?.trim() ||
         good.requestedRegime14?.trim() ||
+        good.requestedRegime15?.trim() ||
         '';
 
       const previousRegime =
@@ -348,6 +365,7 @@ class DaeDatPDFConverter {
         good.previousRegime12?.trim() ||
         good.previousRegime13?.trim() ||
         good.previousRegime14?.trim() ||
+        good.previousRegime15?.trim() ||
         '';
 
       const customsRegime = `${requestedRegime}${previousRegime}`;
@@ -372,6 +390,8 @@ class DaeDatPDFConverter {
         good.documents13,
         good.documents14,
         good.documents15,
+        good.documents16,
+        good.documents17,
         ...(good.statisticValue1 ||
         good.statisticValue2 ||
         good.statisticValue3 ||
@@ -420,6 +440,12 @@ class DaeDatPDFConverter {
         good.additionalDocuments25,
         good.additionalDocuments26,
         good.additionalDocuments27,
+        good.additionalDocuments28,
+        good.additionalDocuments29,
+        good.additionalDocuments30,
+        good.additionalDocuments31,
+        good.additionalDocuments32,
+        good.additionalDocuments33,
       ];
 
       const additionalDocumentsString = this.convertArrayToString(
@@ -687,6 +713,8 @@ class DaeDatPDFConverter {
             good.documents13,
             good.documents14,
             good.documents15,
+            good.documents16,
+            good.documents17,
             ...(good.statisticValue1 ||
             good.statisticValue2 ||
             good.statisticValue3 ||
@@ -733,6 +761,12 @@ class DaeDatPDFConverter {
             good.additionalDocuments25,
             good.additionalDocuments26,
             good.additionalDocuments27,
+            good.additionalDocuments28,
+            good.additionalDocuments29,
+            good.additionalDocuments30,
+            good.additionalDocuments31,
+            good.additionalDocuments32,
+            good.additionalDocuments33,
           ];
 
           const additionalDocumentsString = this.convertArrayToString(
