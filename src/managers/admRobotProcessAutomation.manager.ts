@@ -775,10 +775,12 @@ export default class AdmRobotProcessAutomationManager {
       });
       await page.type(inputSelector, params.mrn, { delay: 100 });
 
-      await Promise.all([
-        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 15000 }),
-        page.click(submitBtnSelector),
-      ]);
+      await page.click(submitBtnSelector);
+
+      await page.waitForSelector('.datiins', {
+        visible: true,
+        timeout: 15000,
+      });
 
       const filePath = `${params.mrn}_screenshot.pdf`;
 
