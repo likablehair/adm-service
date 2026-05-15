@@ -241,21 +241,39 @@ export const _cells: {
 
   {
     entity: 'consignee',
-    column: 'companyName',
+    column: 'companyName1',
     xRange: [4.375, 4.375],
     yRange: [8.849, 8.849],
   },
   {
     entity: 'consignee',
-    column: 'companyAddress',
+    column: 'companyName2',
+    xRange: [4.375, 4.375],
+    yRange: [8.599, 8.599],
+  },
+  {
+    entity: 'consignee',
+    column: 'companyAddress1',
     xRange: [4.375, 4.375],
     yRange: [9.474, 9.474],
   },
   {
     entity: 'consignee',
-    column: 'postalCode',
+    column: 'companyAddress2',
+    xRange: [4.375, 4.375],
+    yRange: [9.412, 9.412],
+  },
+  {
+    entity: 'consignee',
+    column: 'postalCode1',
     xRange: [4.375, 4.375],
     yRange: [10.099, 10.099],
+  },
+  {
+    entity: 'consignee',
+    column: 'postalCode2',
+    xRange: [4.375, 4.375],
+    yRange: [10.162, 10.162],
   },
   {
     entity: 'consignee',
@@ -265,15 +283,27 @@ export const _cells: {
   },
   {
     entity: 'consignee',
-    column: 'city',
+    column: 'city1',
     xRange: [4.375, 4.375],
     yRange: [10.724, 10.724],
   },
   {
     entity: 'consignee',
-    column: 'country',
+    column: 'city2',
+    xRange: [4.375, 4.375],
+    yRange: [10.912, 10.912],
+  },
+  {
+    entity: 'consignee',
+    column: 'country1',
     xRange: [7.375, 7.375],
     yRange: [10.724, 10.724],
+  },
+  {
+    entity: 'consignee',
+    column: 'country2',
+    xRange: [13.75, 13.75],
+    yRange: [10.912, 10.912],
   },
 
   {

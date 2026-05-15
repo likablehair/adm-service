@@ -48,12 +48,17 @@ export interface DaeDatJson {
     transportMode: string;
   };
   consignee: {
-    companyName: string;
-    companyAddress: string;
-    postalCode: string;
+    companyName1: string;
+    companyName2: string;
+    companyAddress1: string;
+    companyAddress2: string;
+    postalCode1: string;
+    postalCode2: string;
     cityAndCountry: string;
-    city: string;
-    country: string;
+    city1: string;
+    city2: string;
+    country1: string;
+    country2: string;
   };
   goods: {
     nr1: string;
@@ -243,20 +248,36 @@ class DaeDatPDFConverter {
       input.statement.releaseCode2?.trim() ||
       '';
 
-    const companyName = input.consignee.companyName?.trim() || '';
+    const companyName = 
+      input.consignee.companyName1?.trim() ||
+      input.consignee.companyName2?.trim() ||
+      '';
 
-    const companyAddress = input.consignee.companyAddress?.trim() || '';
+    const companyAddress = 
+      input.consignee.companyAddress1?.trim() ||
+      input.consignee.companyAddress2?.trim() ||
+      '';
 
-    const postalCode = input.consignee.postalCode?.trim() || '0';
+    const postalCode = 
+      input.consignee.postalCode1?.trim() ||
+      input.consignee.postalCode2?.trim() ||
+      '0';
 
     const cityAndCountry = input.consignee.cityAndCountry?.trim() || '';
-    const consigneeCity = input.consignee.city?.trim() || '';
-    const consigneeCountry = input.consignee.country?.trim() || '';
+    
+    const consigneeCity = 
+      input.consignee.city1?.trim() ||
+      input.consignee.city2?.trim() || 
+      '';
+      
+    const consigneeCountry = 
+      input.consignee.country1?.trim() ||
+      input.consignee.country2?.trim() || 
+      '';
 
-    const city = consigneeCity || cityAndCountry.split('-')[0].trim() || '';
+    const city = consigneeCity || cityAndCountry.split('-')[0]?.trim() || '';
 
-    const country =
-      consigneeCountry || cityAndCountry.split('-')[1].trim() || '';
+    const country = consigneeCountry || cityAndCountry.split('-')[1]?.trim() || '';
 
     const transportMode = input.statement.transportMode?.trim() || '-1';
 
