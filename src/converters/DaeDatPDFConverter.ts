@@ -248,36 +248,35 @@ class DaeDatPDFConverter {
       input.statement.releaseCode2?.trim() ||
       '';
 
-    const companyName = 
+    const companyName =
       input.consignee.companyName1?.trim() ||
       input.consignee.companyName2?.trim() ||
       '';
 
-    const companyAddress = 
+    const companyAddress =
       input.consignee.companyAddress1?.trim() ||
       input.consignee.companyAddress2?.trim() ||
       '';
 
-    const postalCode = 
+    const postalCode =
       input.consignee.postalCode1?.trim() ||
       input.consignee.postalCode2?.trim() ||
       '0';
 
     const cityAndCountry = input.consignee.cityAndCountry?.trim() || '';
-    
-    const consigneeCity = 
-      input.consignee.city1?.trim() ||
-      input.consignee.city2?.trim() || 
-      '';
-      
-    const consigneeCountry = 
+
+    const consigneeCity =
+      input.consignee.city1?.trim() || input.consignee.city2?.trim() || '';
+
+    const consigneeCountry =
       input.consignee.country1?.trim() ||
-      input.consignee.country2?.trim() || 
+      input.consignee.country2?.trim() ||
       '';
 
     const city = consigneeCity || cityAndCountry.split('-')[0]?.trim() || '';
 
-    const country = consigneeCountry || cityAndCountry.split('-')[1]?.trim() || '';
+    const country =
+      consigneeCountry || cityAndCountry.split('-')[1]?.trim() || '';
 
     const transportMode = input.statement.transportMode?.trim() || '-1';
 
