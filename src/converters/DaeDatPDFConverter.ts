@@ -238,7 +238,6 @@ class DaeDatPDFConverter {
     documentsNumber: number,
     numberOfGoodsPages: number = 0,
   ): DaeDatStatementMapped {
-    console.log(input)
     const unformattedReleaseDate = input.statement.releaseDate?.trim() || '';
     const [year, month, day] = unformattedReleaseDate.split('/');
     const releaseDate = `${day}/${month}/${year}`;
