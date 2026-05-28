@@ -150,6 +150,12 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'requestedRegime16',
+    xRange: [16.125, 16.125],
+    yRange: [28.198, 28.198],
+  },
+  {
+    entity: 'goods',
     column: 'previousRegime1',
     xRange: [28.25, 28.25],
     yRange: [21.698, 21.698],
@@ -237,6 +243,12 @@ export const _cells: {
     column: 'previousRegime15',
     xRange: [28.25, 28.25],
     yRange: [27.448, 27.448],
+  },
+  {
+    entity: 'goods',
+    column: 'previousRegime16',
+    xRange: [28.25, 28.25],
+    yRange: [28.198, 28.198],
   },
 
   {
@@ -416,6 +428,12 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'statisticValue16',
+    xRange: [16.125, 16.125],
+    yRange: [26.541, 26.541],
+  },
+  {
+    entity: 'goods',
     column: 'netWeight1',
     xRange: [28.25, 28.25],
     yRange: [20.885, 20.885],
@@ -503,6 +521,12 @@ export const _cells: {
     column: 'netWeight15',
     xRange: [28.25, 28.25],
     yRange: [26.635, 26.635],
+  },
+  {
+    entity: 'goods',
+    column: 'netWeight16',
+    xRange: [28.25, 28.25],
+    yRange: [27.385, 27.385],
   },
   {
     entity: 'goods',
@@ -596,6 +620,12 @@ export const _cells: {
   },
   {
     entity: 'goods',
+    column: 'ncCode16',
+    xRange: [16.125, 16.125],
+    yRange: [25.729, 25.729],
+  },
+  {
+    entity: 'goods',
     column: 'description1',
     xRange: [16.125, 16.125],
     yRange: [16.23, 16.23],
@@ -635,6 +665,12 @@ export const _cells: {
     column: 'description7',
     xRange: [16.125, 16.125],
     yRange: [19.249, 19.249],
+  },
+  {
+    entity: 'goods',
+    column: 'description8',
+    xRange: [16.125, 16.125],
+    yRange: [19.752, 19.752],
   },
   {
     entity: 'goods',
@@ -735,6 +771,12 @@ export const _cells: {
   {
     entity: 'goods',
     column: 'documents17',
+    xRange: [16.125, 16.125],
+    yRange: [30.291, 30.291],
+  },
+  {
+    entity: 'goods',
+    column: 'documents18',
     xRange: [16.125, 16.125],
     yRange: [30.541, 30.541],
   },
@@ -935,5 +977,11 @@ export const _cells: {
     column: 'additionalDocuments33',
     xRange: [1, 1],
     yRange: [34.854, 34.854],
+  },
+  {
+    entity: 'goods',
+    column: 'additionalDocuments34',
+    xRange: [1, 1],
+    yRange: [34.979, 34.979],
   },
 ];

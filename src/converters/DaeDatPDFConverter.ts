@@ -79,6 +79,7 @@ export interface DaeDatJson {
     statisticValue13: string;
     statisticValue14: string;
     statisticValue15: string;
+    statisticValue16: string;
     netWeight1: string;
     netWeight2: string;
     netWeight3: string;
@@ -94,6 +95,7 @@ export interface DaeDatJson {
     netWeight13: string;
     netWeight14: string;
     netWeight15: string;
+    netWeight16: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
@@ -109,6 +111,7 @@ export interface DaeDatJson {
     ncCode13: string;
     ncCode14: string;
     ncCode15: string;
+    ncCode16: string;
     description1: string;
     description2: string;
     description3: string;
@@ -116,6 +119,7 @@ export interface DaeDatJson {
     description5: string;
     description6: string;
     description7: string;
+    description8: string;
     requestedRegime1: string;
     requestedRegime2: string;
     requestedRegime3: string;
@@ -131,6 +135,7 @@ export interface DaeDatJson {
     requestedRegime13: string;
     requestedRegime14: string;
     requestedRegime15: string;
+    requestedRegime16: string;
     previousRegime1: string;
     previousRegime2: string;
     previousRegime3: string;
@@ -146,6 +151,7 @@ export interface DaeDatJson {
     previousRegime13: string;
     previousRegime14: string;
     previousRegime15: string;
+    previousRegime16: string;
     documents1: string;
     documents2: string;
     documents3: string;
@@ -163,6 +169,7 @@ export interface DaeDatJson {
     documents15: string;
     documents16: string;
     documents17: string;
+    documents18: string;
     additionalDocuments1: string;
     additionalDocuments2: string;
     additionalDocuments3: string;
@@ -196,6 +203,7 @@ export interface DaeDatJson {
     additionalDocuments31: string;
     additionalDocuments32: string;
     additionalDocuments33: string;
+    additionalDocuments34: string;
   }[];
 }
 
@@ -230,6 +238,7 @@ class DaeDatPDFConverter {
     documentsNumber: number,
     numberOfGoodsPages: number = 0,
   ): DaeDatStatementMapped {
+    console.log(input)
     const unformattedReleaseDate = input.statement.releaseDate?.trim() || '';
     const [year, month, day] = unformattedReleaseDate.split('/');
     const releaseDate = `${day}/${month}/${year}`;
@@ -300,9 +309,11 @@ class DaeDatPDFConverter {
         good.statisticValue13?.trim() ||
         good.statisticValue14?.trim() ||
         good.statisticValue15?.trim() ||
+        good.statisticValue16?.trim() ||
         '';
 
       const netWeight =
+        good.netWeight16?.trim() ||
         good.netWeight15?.trim() ||
         good.netWeight14?.trim() ||
         good.netWeight13?.trim() ||
@@ -336,6 +347,7 @@ class DaeDatPDFConverter {
         good.ncCode13?.trim() ||
         good.ncCode14?.trim() ||
         good.ncCode15?.trim() ||
+        good.ncCode16?.trim() ||
         '';
 
       ncCode = ncCode.replace(/[\s/]/g, '').slice(0, 8);
@@ -350,6 +362,7 @@ class DaeDatPDFConverter {
         good.description5,
         good.description6,
         good.description7,
+        good.description8,
       ];
 
       const requestedRegime =
@@ -368,6 +381,7 @@ class DaeDatPDFConverter {
         good.requestedRegime13?.trim() ||
         good.requestedRegime14?.trim() ||
         good.requestedRegime15?.trim() ||
+        good.requestedRegime16?.trim() ||
         '';
 
       const previousRegime =
@@ -386,6 +400,7 @@ class DaeDatPDFConverter {
         good.previousRegime13?.trim() ||
         good.previousRegime14?.trim() ||
         good.previousRegime15?.trim() ||
+        good.previousRegime16?.trim() ||
         '';
 
       const customsRegime = `${requestedRegime}${previousRegime}`;
@@ -412,6 +427,7 @@ class DaeDatPDFConverter {
         good.documents15,
         good.documents16,
         good.documents17,
+        good.documents18,
         ...(good.statisticValue1 ||
         good.statisticValue2 ||
         good.statisticValue3 ||
@@ -466,6 +482,7 @@ class DaeDatPDFConverter {
         good.additionalDocuments31,
         good.additionalDocuments32,
         good.additionalDocuments33,
+        good.additionalDocuments34,
       ];
 
       const additionalDocumentsString = this.convertArrayToString(
@@ -735,6 +752,7 @@ class DaeDatPDFConverter {
             good.documents15,
             good.documents16,
             good.documents17,
+            good.documents18,
             ...(good.statisticValue1 ||
             good.statisticValue2 ||
             good.statisticValue3 ||
@@ -787,6 +805,7 @@ class DaeDatPDFConverter {
             good.additionalDocuments31,
             good.additionalDocuments32,
             good.additionalDocuments33,
+            good.additionalDocuments34,
           ];
 
           const additionalDocumentsString = this.convertArrayToString(
