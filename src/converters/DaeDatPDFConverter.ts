@@ -152,58 +152,8 @@ export interface DaeDatJson {
     previousRegime14: string;
     previousRegime15: string;
     previousRegime16: string;
-    documents1: string;
-    documents2: string;
-    documents3: string;
-    documents4: string;
-    documents5: string;
-    documents6: string;
-    documents7: string;
-    documents8: string;
-    documents9: string;
-    documents10: string;
-    documents11: string;
-    documents12: string;
-    documents13: string;
-    documents14: string;
-    documents15: string;
-    documents16: string;
-    documents17: string;
-    documents18: string;
-    additionalDocuments1: string;
-    additionalDocuments2: string;
-    additionalDocuments3: string;
-    additionalDocuments4: string;
-    additionalDocuments5: string;
-    additionalDocuments6: string;
-    additionalDocuments7: string;
-    additionalDocuments8: string;
-    additionalDocuments9: string;
-    additionalDocuments10: string;
-    additionalDocuments11: string;
-    additionalDocuments12: string;
-    additionalDocuments13: string;
-    additionalDocuments14: string;
-    additionalDocuments15: string;
-    additionalDocuments16: string;
-    additionalDocuments17: string;
-    additionalDocuments18: string;
-    additionalDocuments19: string;
-    additionalDocuments20: string;
-    additionalDocuments21: string;
-    additionalDocuments22: string;
-    additionalDocuments23: string;
-    additionalDocuments24: string;
-    additionalDocuments25: string;
-    additionalDocuments26: string;
-    additionalDocuments27: string;
-    additionalDocuments28: string;
-    additionalDocuments29: string;
-    additionalDocuments30: string;
-    additionalDocuments31: string;
-    additionalDocuments32: string;
-    additionalDocuments33: string;
-    additionalDocuments34: string;
+    dynamicDocuments: string;
+    dynamicAddDocs: string;
   }[];
 }
 
@@ -235,7 +185,6 @@ class DaeDatPDFConverter {
   }
   private map(
     input: DaeDatJson,
-    documentsNumber: number,
     numberOfGoodsPages: number = 0,
   ): DaeDatStatementMapped {
     const unformattedReleaseDate = input.statement.releaseDate?.trim() || '';
@@ -408,89 +357,10 @@ class DaeDatPDFConverter {
         statisticValueString.replace(',', '.'),
       );
 
-      const documentsArray = [
-        good.documents1,
-        good.documents2,
-        good.documents3,
-        good.documents4,
-        good.documents5,
-        good.documents6,
-        good.documents7,
-        good.documents8,
-        good.documents9,
-        good.documents10,
-        good.documents11,
-        good.documents12,
-        good.documents13,
-        good.documents14,
-        good.documents15,
-        good.documents16,
-        good.documents17,
-        good.documents18,
-        ...(good.statisticValue1 ||
-        good.statisticValue2 ||
-        good.statisticValue3 ||
-        good.statisticValue4 ||
-        good.statisticValue5 ||
-        good.statisticValue6 ||
-        good.statisticValue7 ||
-        good.statisticValue8 ||
-        good.statisticValue9 ||
-        good.statisticValue10 ||
-        good.statisticValue11 ||
-        good.statisticValue12
-          ? [good.statisticValue13]
-          : []),
-      ];
 
-      const documentsString = this.convertArrayToString(documentsArray);
+      const documents = this.convertDocumentsStringToArray(good.dynamicDocuments);
 
-      const documents = this.convertDocumentsStringToArray(documentsString);
-
-      const additionalDocumentsArray = [
-        good.additionalDocuments1,
-        good.additionalDocuments2,
-        good.additionalDocuments3,
-        good.additionalDocuments4,
-        good.additionalDocuments5,
-        good.additionalDocuments6,
-        good.additionalDocuments7,
-        good.additionalDocuments8,
-        good.additionalDocuments9,
-        good.additionalDocuments10,
-        good.additionalDocuments11,
-        good.additionalDocuments12,
-        good.additionalDocuments13,
-        good.additionalDocuments14,
-        good.additionalDocuments15,
-        good.additionalDocuments16,
-        good.additionalDocuments17,
-        good.additionalDocuments18,
-        good.additionalDocuments19,
-        good.additionalDocuments20,
-        good.additionalDocuments21,
-        good.additionalDocuments22,
-        good.additionalDocuments23,
-        good.additionalDocuments24,
-        good.additionalDocuments25,
-        good.additionalDocuments26,
-        good.additionalDocuments27,
-        good.additionalDocuments28,
-        good.additionalDocuments29,
-        good.additionalDocuments30,
-        good.additionalDocuments31,
-        good.additionalDocuments32,
-        good.additionalDocuments33,
-        good.additionalDocuments34,
-      ];
-
-      const additionalDocumentsString = this.convertArrayToString(
-        additionalDocumentsArray,
-      );
-
-      const additionalDocuments = this.convertDocumentsStringToArray(
-        additionalDocumentsString,
-      );
+      const additionalDocuments = this.convertDocumentsStringToArray(good.dynamicAddDocs);
 
       const formattedDocuments: { code: string; identifier: string }[] = [
         ...documents,
@@ -530,15 +400,6 @@ class DaeDatPDFConverter {
 
     if (goods.some((g) => !g.ncCode)) {
       throw new Error('Missing NC Code for goods');
-    }
-
-    const localDocumentsNumber =
-      goods.reduce((acc, good) => {
-        return acc + (good.documents.length || 0);
-      }, 0) || 0;
-
-    if (localDocumentsNumber !== documentsNumber) {
-      throw new Error('Missing mapping for documents');
     }
 
     const totalStatisticValue =
@@ -661,7 +522,6 @@ class DaeDatPDFConverter {
         consignee: {},
       };
 
-      let numberOfDocuments: number = 0;
       let pagesNumber: number = 0;
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
@@ -671,6 +531,8 @@ class DaeDatPDFConverter {
           const page = pages[i];
           if (page.Texts) {
             const goodObject: any = {};
+            let isTrackingDocs = false;
+            let regimeYThreshold = 0;
 
             for (let j = 0; j < page.Texts.length; j++) {
               const textElement = page.Texts[j];
@@ -684,6 +546,35 @@ class DaeDatPDFConverter {
 
               const mappedPosition: { entity?: string; column?: string } =
                 this.getMappedPosition(textElement.x, textElement.y);
+
+              if (mappedPosition.column?.startsWith('previousRegime')) {
+                isTrackingDocs = true;
+                regimeYThreshold = textElement.y;
+              }
+
+              if (text.includes('UNIONE EUROPEA')) {
+                isTrackingDocs = false;
+              }
+
+              if (isTrackingDocs && textElement.y > regimeYThreshold) {
+                const x = textElement.x;
+                
+                if (x == 16.125) {
+                  const currentDocs = goodObject.dynamicDocuments;
+                  goodObject.dynamicDocuments = currentDocs 
+                    ? `${currentDocs} ${text.trim()}` 
+                    : text.trim();
+                  continue;
+                }
+                
+                if (x == 1) {
+                  const currentAddDocs = goodObject.dynamicAddDocs;
+                  goodObject.dynamicAddDocs = currentAddDocs 
+                    ? `${currentAddDocs} ${text.trim()}` 
+                    : text.trim();
+                  continue;
+                }
+              }
 
               if (!mappedPosition.column || !text.trim()) {
                 continue;
@@ -731,98 +622,8 @@ class DaeDatPDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      numberOfDocuments = daeDatEntity.goods.reduce(
-        (acc: number, good: any) => {
-          const documentsArray = [
-            good.documents1,
-            good.documents2,
-            good.documents3,
-            good.documents4,
-            good.documents5,
-            good.documents6,
-            good.documents7,
-            good.documents8,
-            good.documents9,
-            good.documents10,
-            good.documents11,
-            good.documents12,
-            good.documents13,
-            good.documents14,
-            good.documents15,
-            good.documents16,
-            good.documents17,
-            good.documents18,
-            ...(good.statisticValue1 ||
-            good.statisticValue2 ||
-            good.statisticValue3 ||
-            good.statisticValue4 ||
-            good.statisticValue5 ||
-            good.statisticValue6 ||
-            good.statisticValue7 ||
-            good.statisticValue8 ||
-            good.statisticValue9 ||
-            good.statisticValue10 ||
-            good.statisticValue11 ||
-            good.statisticValue12
-              ? [good.statisticValue13]
-              : []),
-          ];
-
-          const documentsString = this.convertArrayToString(documentsArray);
-
-          const additionalDocumentsArray = [
-            good.additionalDocuments1,
-            good.additionalDocuments2,
-            good.additionalDocuments3,
-            good.additionalDocuments4,
-            good.additionalDocuments5,
-            good.additionalDocuments6,
-            good.additionalDocuments7,
-            good.additionalDocuments8,
-            good.additionalDocuments9,
-            good.additionalDocuments10,
-            good.additionalDocuments11,
-            good.additionalDocuments12,
-            good.additionalDocuments13,
-            good.additionalDocuments14,
-            good.additionalDocuments15,
-            good.additionalDocuments16,
-            good.additionalDocuments17,
-            good.additionalDocuments18,
-            good.additionalDocuments19,
-            good.additionalDocuments20,
-            good.additionalDocuments21,
-            good.additionalDocuments22,
-            good.additionalDocuments23,
-            good.additionalDocuments24,
-            good.additionalDocuments25,
-            good.additionalDocuments26,
-            good.additionalDocuments27,
-            good.additionalDocuments28,
-            good.additionalDocuments29,
-            good.additionalDocuments30,
-            good.additionalDocuments31,
-            good.additionalDocuments32,
-            good.additionalDocuments33,
-            good.additionalDocuments34,
-          ];
-
-          const additionalDocumentsString = this.convertArrayToString(
-            additionalDocumentsArray,
-          );
-
-          return (
-            acc +
-            this.convertDocumentsStringToArray(documentsString).length +
-            this.convertDocumentsStringToArray(additionalDocumentsString).length
-          );
-        },
-        0,
-      );
-
       const accountingStatementMapped = this.map(
         daeDatEntity,
-        numberOfDocuments,
         pagesNumber - 1,
       );
 
