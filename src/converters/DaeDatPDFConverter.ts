@@ -357,10 +357,13 @@ class DaeDatPDFConverter {
         statisticValueString.replace(',', '.'),
       );
 
+      const documents = this.convertDocumentsStringToArray(
+        good.dynamicDocuments,
+      );
 
-      const documents = this.convertDocumentsStringToArray(good.dynamicDocuments);
-
-      const additionalDocuments = this.convertDocumentsStringToArray(good.dynamicAddDocs);
+      const additionalDocuments = this.convertDocumentsStringToArray(
+        good.dynamicAddDocs,
+      );
 
       const formattedDocuments: { code: string; identifier: string }[] = [
         ...documents,
@@ -558,19 +561,19 @@ class DaeDatPDFConverter {
 
               if (isTrackingDocs && textElement.y > regimeYThreshold) {
                 const x = textElement.x;
-                
+
                 if (x == 16.125) {
                   const currentDocs = goodObject.dynamicDocuments;
-                  goodObject.dynamicDocuments = currentDocs 
-                    ? `${currentDocs} ${text.trim()}` 
+                  goodObject.dynamicDocuments = currentDocs
+                    ? `${currentDocs} ${text.trim()}`
                     : text.trim();
                   continue;
                 }
-                
+
                 if (x == 1) {
                   const currentAddDocs = goodObject.dynamicAddDocs;
-                  goodObject.dynamicAddDocs = currentAddDocs 
-                    ? `${currentAddDocs} ${text.trim()}` 
+                  goodObject.dynamicAddDocs = currentAddDocs
+                    ? `${currentAddDocs} ${text.trim()}`
                     : text.trim();
                   continue;
                 }
@@ -622,10 +625,7 @@ class DaeDatPDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      const accountingStatementMapped = this.map(
-        daeDatEntity,
-        pagesNumber - 1,
-      );
+      const accountingStatementMapped = this.map(daeDatEntity, pagesNumber - 1);
 
       await fsPromises.unlink(path);
       return accountingStatementMapped;
