@@ -294,6 +294,9 @@ export default class AdmRobotProcessAutomationManager {
     type: DeclarationType;
     subjectType?: SubjectType;
   }): Promise<AggregatedSearchType[]> {
+    let currentAction = 'Initializing variables';
+    let currentProcessingDate = 'Unknown';
+
     try {
       const { type, subjectType } = params;
       let dateFrom = new Date();
@@ -330,12 +333,15 @@ export default class AdmRobotProcessAutomationManager {
 
       //Test
       while (iterationDate <= dateTo) {
+        currentProcessingDate = iterationDate.toISOString().split('T')[0];
+
         const ricercaAggregataContentXPath =
           'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata"]';
 
         const ricercaAggregataTabXPath =
           'xpath///*[@id="formAvan:accordionTab:tabRicercaAggregata_header"]';
 
+        currentAction = 'Checking if Ricerca Aggregata tab is hidden';
         const isHidden = await params.page
           .waitForSelector(ricercaAggregataContentXPath, {
             hidden: true,
@@ -344,6 +350,7 @@ export default class AdmRobotProcessAutomationManager {
           .catch(() => false);
 
         if (isHidden) {
+          currentAction = 'Opening Ricerca Aggregata tab';
           await params.page.waitForSelector(ricercaAggregataTabXPath);
           await params.page.click(ricercaAggregataTabXPath);
 
@@ -358,6 +365,7 @@ export default class AdmRobotProcessAutomationManager {
         const dateFromInputXPath =
           'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneDa"]/button';
 
+        currentAction = 'Opening Date From input';
         await params.page.waitForSelector(dateFromInputXPath);
         await params.page.click(dateFromInputXPath);
 
@@ -365,6 +373,8 @@ export default class AdmRobotProcessAutomationManager {
 
         const datePickerCalendarXPath =
           'xpath///*[@id="ui-datepicker-div"]/table';
+        
+        currentAction = 'Waiting for Date From calendar';
         await params.page.waitForSelector(datePickerCalendarXPath);
 
         const day = iterationDate.getDate();
@@ -385,6 +395,7 @@ export default class AdmRobotProcessAutomationManager {
 
           //Iterate over the months
           for (let i = 0; i < dateDifferenceIteration; i++) {
+            currentAction = `Clicking previous month for Date From (Iteration ${i + 1}/${dateDifferenceIteration})`;
             await params.page.waitForSelector(previousMonthButtonXPath);
             await params.page.click(previousMonthButtonXPath);
 
@@ -396,6 +407,7 @@ export default class AdmRobotProcessAutomationManager {
 
           //Iterate over the months
           for (let i = 0; i < Math.abs(dateDifferenceIteration); i++) {
+            currentAction = `Clicking next month for Date From (Iteration ${i + 1}/${Math.abs(dateDifferenceIteration)})`;
             await params.page.waitForSelector(nextMonthButtonXPath);
             await params.page.click(nextMonthButtonXPath);
 
@@ -413,11 +425,13 @@ export default class AdmRobotProcessAutomationManager {
           datePosition.row
         }]/td[${datePosition.column}]`;
 
+        currentAction = `Selecting Date From cell (Row: ${datePosition.row}, Col: ${datePosition.column})`;
         await params.page.waitForSelector(dateCellXPath);
         await params.page.click(dateCellXPath);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
+        currentAction = 'Closing Date From input form';
         await params.page.click(dateFromInputXPath); // close the date from input form
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -426,11 +440,13 @@ export default class AdmRobotProcessAutomationManager {
         const dateToInputXPath =
           'xpath///*[@id="formAvan:accordionTab:dataRegistrazioneA"]/button';
 
+        currentAction = 'Opening Date To input';
         await params.page.waitForSelector(dateToInputXPath);
         await params.page.click(dateToInputXPath);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
+        currentAction = 'Waiting for Date To calendar';
         await params.page.waitForSelector(datePickerCalendarXPath);
 
         const toDay = iterationDate.getDate();
@@ -452,6 +468,7 @@ export default class AdmRobotProcessAutomationManager {
 
           //Iterate over the months
           for (let i = 0; i < toDateDifferenceIteration; i++) {
+            currentAction = `Clicking previous month for Date To (Iteration ${i + 1}/${toDateDifferenceIteration})`;
             await params.page.waitForSelector(toPreviousMonthButtonXPath);
             await params.page.click(toPreviousMonthButtonXPath);
 
@@ -463,6 +480,7 @@ export default class AdmRobotProcessAutomationManager {
 
           //Iterate over the months
           for (let i = 0; i < Math.abs(toDateDifferenceIteration); i++) {
+            currentAction = `Clicking next month for Date To (Iteration ${i + 1}/${Math.abs(toDateDifferenceIteration)})`;
             await params.page.waitForSelector(toNextMonthButtonXPath);
             await params.page.click(toNextMonthButtonXPath);
 
@@ -479,17 +497,20 @@ export default class AdmRobotProcessAutomationManager {
           toDatePosition.row
         }]/td[${toDatePosition.column}]`;
 
+        currentAction = `Selecting Date To cell (Row: ${toDatePosition.row}, Col: ${toDatePosition.column})`;
         await params.page.waitForSelector(toDateCellXPath);
         await params.page.click(toDateCellXPath);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
+        currentAction = 'Closing Date To input form';
         await params.page.click(dateToInputXPath); // close the date to input form
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
         const dropdownLabelScopeCSS =
           '#formAvan\\:accordionTab\\:menuTipoOperazione_label';
 
+        currentAction = 'Opening Operation Type dropdown';
         await params.page.waitForSelector(dropdownLabelScopeCSS, {
           visible: true,
         });
@@ -497,6 +518,7 @@ export default class AdmRobotProcessAutomationManager {
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
+        currentAction = `Selecting Operation Type option: ${type}`;
         const dropdownOptionScopeXPath = `li[data-label='${type == 'export' ? 'Esportazione' : type == 'import' ? 'Importazione' : 'Transito'}']`;
         await params.page.waitForSelector(dropdownOptionScopeXPath, {
           visible: true,
@@ -508,6 +530,7 @@ export default class AdmRobotProcessAutomationManager {
         const dropdownLabelSubjectCSS =
           '#formAvan\\:accordionTab\\:tipologiaSoggetto_label';
 
+        currentAction = 'Opening Subject Type dropdown';
         await params.page.waitForSelector(dropdownLabelSubjectCSS, {
           visible: true,
         });
@@ -523,6 +546,7 @@ export default class AdmRobotProcessAutomationManager {
               ? 'exporter'
               : 'transiter';
 
+        currentAction = `Selecting Subject Type option: ${subject}`;
         const dropdownOptionSubjectXPath = `li[data-label='${subject == 'representative' ? 'Rappresentante' : subject == 'transiter' ? 'Titolare transito' : subject == 'declarant' ? 'Dichiarante' : subject == 'importer' ? 'Importatore' : 'Esportatore'}']`;
         await params.page.waitForSelector(dropdownOptionSubjectXPath, {
           visible: true,
@@ -531,12 +555,14 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.click(dropdownOptionSubjectXPath);
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
+        currentAction = 'Clicking Ricerca Aggregata (Search) button';
         await params.page.waitForSelector(ricercaAggregataButtonXPath);
         await params.page.click(ricercaAggregataButtonXPath);
 
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
         //Wait for the table, otherwise the result will be always 0
+        currentAction = 'Waiting for Results Table visibility';
         const resultTableCss = '#formResult div.ui-datatable';
         const tableVisible = await params.page
           .waitForSelector(resultTableCss, {
@@ -552,6 +578,7 @@ export default class AdmRobotProcessAutomationManager {
           );
 
           //Close the search tab
+          currentAction = 'Closing Ricerca Aggregata tab (No results)';
           await params.page.waitForSelector(ricercaAggregataTabXPath);
           await params.page.click(ricercaAggregataTabXPath);
 
@@ -561,6 +588,7 @@ export default class AdmRobotProcessAutomationManager {
           continue;
         }
 
+        currentAction = 'Evaluating results found text';
         const resultFoundText = await params.page.evaluate(() => {
           const resultFoundText = document.querySelector(
             '#formResult\\:panelRisultati_content',
@@ -585,11 +613,14 @@ export default class AdmRobotProcessAutomationManager {
           rowsPerPageValue = 30;
           const rowsPerPageDropdownCss =
             '#formResult select.ui-paginator-rpp-options';
+            
+          currentAction = 'Opening Rows Per Page dropdown';
           await params.page.waitForSelector(rowsPerPageDropdownCss);
           await params.page.click(rowsPerPageDropdownCss);
 
           await new Promise((resolve) => setTimeout(resolve, 1500));
 
+          currentAction = `Selecting ${rowsPerPageValue} Rows Per Page`;
           await params.page.select(
             rowsPerPageDropdownCss,
             rowsPerPageValue.toString(),
@@ -606,8 +637,10 @@ export default class AdmRobotProcessAutomationManager {
           const contentPanelDataXPath =
             'xpath///*[@id="formResult:dataResult_data"]';
 
+          currentAction = `Waiting for Table Data Content (Page ${i + 1}/${iterationNumber})`;
           await params.page.waitForSelector(contentPanelDataXPath);
 
+          currentAction = `Evaluating Table Data (Page ${i + 1}/${iterationNumber})`;
           const tableData = await params.page.evaluate(() => {
             const rows = document.querySelectorAll(
               '#formResult\\:dataResult_data tr',
@@ -653,6 +686,7 @@ export default class AdmRobotProcessAutomationManager {
           declarationTableData = [...declarationTableData, ...tableData];
 
           if (i < iterationNumber - 1) {
+            currentAction = `Clicking Next Page button (Page ${i + 1} to ${i + 2})`;
             const nextPageButtonXPath =
               'xpath///*[@id="formResult:dataResult_paginator_bottom"]/a[3]';
             await params.page.waitForSelector(nextPageButtonXPath);
@@ -660,6 +694,7 @@ export default class AdmRobotProcessAutomationManager {
           }
         }
 
+        currentAction = 'Mapping declaration table headers';
         const loopDeclarations = declarationTableData.map((declaration) => {
           return this._mapDeclarationTableHeaders({
             declarationTableRow: declaration,
@@ -681,12 +716,14 @@ export default class AdmRobotProcessAutomationManager {
         );
 
         if (iterationNumber > 1) {
+          currentAction = 'Clicking Paginator First button to reset table';
           const paginatorFirstButtonCss = '#formResult .ui-paginator-first';
           await params.page.waitForSelector(paginatorFirstButtonCss);
           await params.page.click(paginatorFirstButtonCss);
         }
 
         //Close the search tab
+        currentAction = 'Closing Ricerca Aggregata tab (End of iteration)';
         await params.page.waitForSelector(ricercaAggregataTabXPath);
         await params.page.click(ricercaAggregataTabXPath);
 
@@ -707,7 +744,19 @@ export default class AdmRobotProcessAutomationManager {
         localError = new Error('Unknown error');
       }
 
-      localError.message = `aggregatedSearch: ${localError.message}`;
+      localError.message = `aggregatedSearch FAILED. 
+      Action: [ ${currentAction} ] 
+      Date Processing: [ ${currentProcessingDate} ]
+      Original Error: ${localError.message}`;
+
+      try {
+        const timestamp = new Date().getTime();
+        const fileName = `error-screenshot-${timestamp}.png`;
+        await params.page.screenshot({ path: fileName });
+        console.error(`[DEBUG] Error screenshot saved as ${fileName}`);
+      } catch (screenshotError) {
+        console.error('[DEBUG] Failed to take error screenshot:', screenshotError);
+      }
 
       throw localError;
     }
