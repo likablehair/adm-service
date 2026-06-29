@@ -373,7 +373,7 @@ export default class AdmRobotProcessAutomationManager {
 
         const datePickerCalendarXPath =
           'xpath///*[@id="ui-datepicker-div"]/table';
-        
+
         currentAction = 'Waiting for Date From calendar';
         await params.page.waitForSelector(datePickerCalendarXPath);
 
@@ -613,7 +613,7 @@ export default class AdmRobotProcessAutomationManager {
           rowsPerPageValue = 30;
           const rowsPerPageDropdownCss =
             '#formResult select.ui-paginator-rpp-options';
-            
+
           currentAction = 'Opening Rows Per Page dropdown';
           await params.page.waitForSelector(rowsPerPageDropdownCss);
           await params.page.click(rowsPerPageDropdownCss);
@@ -755,7 +755,10 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.screenshot({ path: fileName });
         console.error(`[DEBUG] Error screenshot saved as ${fileName}`);
       } catch (screenshotError) {
-        console.error('[DEBUG] Failed to take error screenshot:', screenshotError);
+        console.error(
+          '[DEBUG] Failed to take error screenshot:',
+          screenshotError,
+        );
       }
 
       throw localError;
