@@ -559,7 +559,27 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.waitForSelector(ricercaAggregataButtonXPath);
         await params.page.click(ricercaAggregataButtonXPath);
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        currentAction = 'Waiting for all ADM Loading overlays to disappear';
+        try {
+          await params.page.waitForFunction(
+            () => {
+              const loaders = document.querySelectorAll('.ui-blockui-content');
+              for (let i = 0; i < loaders.length; i++) {
+                if (window.getComputedStyle(loaders[i]).display !== 'none') {
+                  return false;
+                }
+              }
+              return true;
+            },
+            { timeout: 20000 },
+          );
+        } catch (e) {
+          console.warn(
+            '[DEBUG] Timeout waiting for loading mask, moving forward anyway.',
+          );
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         //Wait for the table, otherwise the result will be always 0
         currentAction = 'Waiting for Results Table visibility';
