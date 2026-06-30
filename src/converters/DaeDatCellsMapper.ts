@@ -6,6 +6,12 @@ export const _cells: {
 }[] = [
   {
     entity: 'statement',
+    column: 'type',
+    xRange: [18.625, 18.625],
+    yRange: [4.289, 4.289],
+  },
+  {
+    entity: 'statement',
     column: 'releaseDate',
     xRange: [8.813, 8.813],
     yRange: [46.289, 46.289],

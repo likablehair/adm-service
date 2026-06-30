@@ -13,6 +13,7 @@ export type OldDaeDatStatementMapped = {
     city: string;
     country: string;
   };
+  type: string;
   customsExitOffice: string;
   totalPackages: string;
   totalGrossWeight: string;
@@ -36,6 +37,7 @@ export type OldDaeDatStatementMapped = {
 
 export interface OldDaeDatJson {
   statement: {
+    type: string;
     releaseDate: string;
     customsExitOffice: string;
     totalGrossWeight: string;
@@ -153,6 +155,8 @@ class OldDaeDatPDFConverter {
     documentsNumber: number,
     numberOfGoodsPages: number = 0,
   ): OldDaeDatStatementMapped {
+    const type = input.statement.type?.trim() || '';
+
     const releaseDate = input.statement.releaseDate?.trim() || '';
 
     const totalPackages =
@@ -316,6 +320,10 @@ class OldDaeDatPDFConverter {
       throw new Error('Missing mapping for documents');
     }
 
+    if (!type || type == '') {
+      throw new Error('Missing declaration type');
+    }
+
     const totalStatisticValue =
       Math.round(
         goods.reduce((acc, good) => {
@@ -324,6 +332,7 @@ class OldDaeDatPDFConverter {
       ) / 100;
 
     return this.convertAsterisksToZero({
+      type,
       releaseDate,
       totalPackages,
       totalGrossWeight,

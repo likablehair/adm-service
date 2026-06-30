@@ -13,6 +13,7 @@ export type DaeDatStatementMapped = {
     city: string;
     country: string;
   };
+  type: string;
   customsExitOffice: string;
   customsExportOffice: string;
   totalPackages: string;
@@ -37,6 +38,7 @@ export type DaeDatStatementMapped = {
 
 export interface DaeDatJson {
   statement: {
+    type: string;
     releaseDate: string;
     customsExitOffice: string;
     customsExportOffice: string;
@@ -187,6 +189,8 @@ class DaeDatPDFConverter {
     input: DaeDatJson,
     numberOfGoodsPages: number = 0,
   ): DaeDatStatementMapped {
+    const type = input.statement.type?.trim() || '';
+
     const unformattedReleaseDate = input.statement.releaseDate?.trim() || '';
     const [year, month, day] = unformattedReleaseDate.split('/');
     const releaseDate = `${day}/${month}/${year}`;
@@ -405,6 +409,10 @@ class DaeDatPDFConverter {
       throw new Error('Missing NC Code for goods');
     }
 
+    if (!type || type == '') {
+      throw new Error('Missing declaration type');
+    }
+
     const totalStatisticValue =
       Math.round(
         goods.reduce((acc, good) => {
@@ -413,6 +421,7 @@ class DaeDatPDFConverter {
       ) / 100;
 
     return this.convertAsterisksToZero({
+      type,
       releaseDate,
       totalPackages,
       totalGrossWeight,
