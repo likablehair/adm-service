@@ -427,13 +427,20 @@ export default class AdmRobotProcessAutomationManager {
 
         currentAction = `Selecting Date From cell (Row: ${datePosition.row}, Col: ${datePosition.column})`;
         await params.page.waitForSelector(dateCellXPath);
-        await params.page.click(dateCellXPath);
-
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await this._retry({
+          promiseFactory: () => params.page.click(dateCellXPath),
+          retryCount: 5,
+          retryMs: 1000,
+        });
+        await this._waitForADMLoader(params.page, currentAction);
 
         currentAction = 'Closing Date From input form';
-        await params.page.click(dateFromInputXPath); // close the date from input form
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await this._retry({
+          promiseFactory: () => params.page.click(dateFromInputXPath),
+          retryCount: 3,
+          retryMs: 1000,
+        });
+        await this._waitForADMLoader(params.page, currentAction);
 
         // Date To
 
@@ -499,14 +506,20 @@ export default class AdmRobotProcessAutomationManager {
 
         currentAction = `Selecting Date To cell (Row: ${toDatePosition.row}, Col: ${toDatePosition.column})`;
         await params.page.waitForSelector(toDateCellXPath);
-        await params.page.click(toDateCellXPath);
-
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await this._retry({
+          promiseFactory: () => params.page.click(toDateCellXPath),
+          retryCount: 5,
+          retryMs: 1000,
+        });
+        await this._waitForADMLoader(params.page, currentAction);
 
         currentAction = 'Closing Date To input form';
-        await params.page.click(dateToInputXPath); // close the date to input form
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
+        await this._retry({
+          promiseFactory: () => params.page.click(dateToInputXPath),
+          retryCount: 3,
+          retryMs: 1000,
+        });
+        await this._waitForADMLoader(params.page, currentAction);
         const dropdownLabelScopeCSS =
           '#formAvan\\:accordionTab\\:menuTipoOperazione_label';
 
@@ -514,9 +527,12 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.waitForSelector(dropdownLabelScopeCSS, {
           visible: true,
         });
-        await params.page.click(dropdownLabelScopeCSS);
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await this._retry({
+          promiseFactory: () => params.page.click(dropdownLabelScopeCSS),
+          retryCount: 3,
+          retryMs: 1000,
+        });
 
         currentAction = `Selecting Operation Type option: ${type}`;
         const dropdownOptionScopeXPath = `li[data-label='${type == 'export' ? 'Esportazione' : type == 'import' ? 'Importazione' : 'Transito'}']`;
@@ -524,8 +540,13 @@ export default class AdmRobotProcessAutomationManager {
           visible: true,
         });
 
-        await params.page.click(dropdownOptionScopeXPath);
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await this._retry({
+          promiseFactory: () => params.page.click(dropdownOptionScopeXPath),
+          retryCount: 3,
+          retryMs: 1000,
+        });
+
+        await this._waitForADMLoader(params.page, currentAction);
 
         const dropdownLabelSubjectCSS =
           '#formAvan\\:accordionTab\\:tipologiaSoggetto_label';
@@ -534,9 +555,12 @@ export default class AdmRobotProcessAutomationManager {
         await params.page.waitForSelector(dropdownLabelSubjectCSS, {
           visible: true,
         });
-        await params.page.click(dropdownLabelSubjectCSS);
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await this._retry({
+          promiseFactory: () => params.page.click(dropdownLabelSubjectCSS),
+          retryCount: 3,
+          retryMs: 1000,
+        });
 
         const subject: SubjectType = subjectType
           ? subjectType
@@ -548,12 +572,20 @@ export default class AdmRobotProcessAutomationManager {
 
         currentAction = `Selecting Subject Type option: ${subject}`;
         const dropdownOptionSubjectXPath = `li[data-label='${subject == 'representative' ? 'Rappresentante' : subject == 'transiter' ? 'Titolare transito' : subject == 'declarant' ? 'Dichiarante' : subject == 'importer' ? 'Importatore' : 'Esportatore'}']`;
-        await params.page.waitForSelector(dropdownOptionSubjectXPath, {
-          visible: true,
+
+        await this._retry({
+          promiseFactory: async () => {
+            await params.page.waitForSelector(dropdownOptionSubjectXPath, {
+              visible: true,
+              timeout: 5000,
+            });
+            await params.page.click(dropdownOptionSubjectXPath);
+          },
+          retryCount: 5,
+          retryMs: 1000,
         });
 
-        await params.page.click(dropdownOptionSubjectXPath);
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await this._waitForADMLoader(params.page, currentAction);
 
         currentAction = 'Clicking Ricerca Aggregata (Search) button';
         await params.page.waitForSelector(ricercaAggregataButtonXPath);
@@ -983,6 +1015,38 @@ export default class AdmRobotProcessAutomationManager {
         retryCount: retryCount - 1,
         retryMs: retryMs,
       });
+    }
+  }
+
+  private async _waitForADMLoader(page: Page, actionName: string = 'Action') {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    try {
+      await page.waitForFunction(
+        () => {
+          const loaders = document.querySelectorAll(
+            '.ui-blockui-content, .ui-widget-overlay',
+          );
+          for (let i = 0; i < loaders.length; i++) {
+            const style = window.getComputedStyle(loaders[i]);
+            if (
+              style.display !== 'none' &&
+              style.visibility !== 'hidden' &&
+              style.opacity !== '0'
+            ) {
+              return false;
+            }
+          }
+          return true;
+        },
+        { timeout: 25000 },
+      );
+    } catch (e) {
+      console.warn(
+        `[DEBUG] Loader wait timeout after ${actionName}. Moving forward.`,
+      );
+      const timestamp = new Date().getTime();
+      await page.screenshot({ path: `stuck-loader-${timestamp}.png` });
     }
   }
 }
