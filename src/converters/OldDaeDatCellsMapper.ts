@@ -30,8 +30,14 @@ export const _cells: {
   },
   {
     entity: 'statement',
-    column: 'releaseCode',
+    column: 'releaseCode1',
     xRange: [13.313, 13.313],
+    yRange: [45.292, 45.292],
+  },
+  {
+    entity: 'statement',
+    column: 'releaseCode2',
+    xRange: [13.75, 13.75],
     yRange: [45.292, 45.292],
   },
   {
@@ -152,6 +158,12 @@ export const _cells: {
     entity: 'statement',
     column: 'transitNetworkCountry17',
     xRange: [32.376, 32.376],
+    yRange: [9.651, 9.651],
+  },
+  {
+    entity: 'statement',
+    column: 'transitNetworkCountry18',
+    xRange: [32.25, 32.25],
     yRange: [9.651, 9.651],
   },
   {

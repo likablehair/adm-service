@@ -44,7 +44,8 @@ export interface OldDaeDatJson {
     totalPackages1: string;
     totalPackages2: string;
     totalPackages3: string;
-    releaseCode: string;
+    releaseCode1: string;
+    releaseCode2: string;
     transitNetworkCountry1: string;
     transitNetworkCountry2: string;
     transitNetworkCountry3: string;
@@ -62,6 +63,7 @@ export interface OldDaeDatJson {
     transitNetworkCountry15: string;
     transitNetworkCountry16: string;
     transitNetworkCountry17: string;
+    transitNetworkCountry18: string;
     transportMode: string;
   };
   consignee: {
@@ -169,7 +171,10 @@ class OldDaeDatPDFConverter {
 
     const customsExitOffice = input.statement.customsExitOffice?.trim() || '';
 
-    const releaseCode = input.statement.releaseCode?.trim() || '';
+    const releaseCode = 
+      input.statement.releaseCode1?.trim() ||
+      input.statement.releaseCode2?.trim() ||
+       '';
 
     const companyName = input.consignee.companyName?.trim() || '';
 
@@ -201,6 +206,7 @@ class OldDaeDatPDFConverter {
       input.statement.transitNetworkCountry15?.trim() ||
       input.statement.transitNetworkCountry16?.trim() ||
       input.statement.transitNetworkCountry17?.trim() ||
+      input.statement.transitNetworkCountry18?.trim() ||
       '';
 
     const goods = input.goods.map((good) => {
