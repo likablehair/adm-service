@@ -97,6 +97,7 @@ export interface DeclarationJson {
     incoterm5: string;
     incoterm6: string;
     incoterm7: string;
+    incoterm8: string;
     originCountry1: string;
     originCountry2: string;
     originCountry3: string;
@@ -105,6 +106,7 @@ export interface DeclarationJson {
     originCountry6: string;
     originCountry7: string;
     originCountry8: string;
+    originCountry9: string;
     releaseDate1: string;
     releaseCode1: string;
     mrn: string;
@@ -118,6 +120,8 @@ export interface DeclarationJson {
     companyName4: string;
     companyName5: string;
     companyName6: string;
+    companyName7: string;
+    companyName8: string;
     vatNumber: string;
     country1: string;
     country2: string;
@@ -126,6 +130,7 @@ export interface DeclarationJson {
     country5: string;
     country6: string;
     country7: string;
+    country8: string;
     address1: string;
     address2: string;
     address3: string;
@@ -134,6 +139,8 @@ export interface DeclarationJson {
     address6: string;
     address7: string;
     address8: string;
+    address9: string;
+    address10: string;
     city1: string;
     city2: string;
     city3: string;
@@ -143,6 +150,7 @@ export interface DeclarationJson {
     city7: string;
     city8: string;
     city9: string;
+    city10: string;
     postalCode1: string;
     postalCode2: string;
     postalCode3: string;
@@ -150,6 +158,7 @@ export interface DeclarationJson {
     postalCode5: string;
     postalCode6: string;
     postalCode7: string;
+    postalCode8: string;
   };
   goods: {
     nr: string;
@@ -172,6 +181,9 @@ export interface DeclarationJson {
     description10: string;
     description11: string;
     description12: string;
+    description13: string;
+    description14: string;
+    description15: string;
     country1: string;
     country2: string;
     country3: string;
@@ -182,6 +194,7 @@ export interface DeclarationJson {
     country8: string;
     country9: string;
     country10: string;
+    country11: string;
     prefixedCountry1: string;
     prefixedCountry2: string;
     prefixedCountry3: string;
@@ -192,6 +205,7 @@ export interface DeclarationJson {
     prefixedCountry8: string;
     prefixedCountry9: string;
     prefixedCountry10: string;
+    prefixedCountry11: string;
     netWeight: string;
     grossWeight: string;
     customsRegime: string;
@@ -206,6 +220,7 @@ export interface DeclarationJson {
     price7: string;
     price8: string;
     price9: string;
+    price10: string;
     statisticValue1: string;
     statisticValue2: string;
     statisticValue3: string;
@@ -215,6 +230,7 @@ export interface DeclarationJson {
     statisticValue7: string;
     statisticValue8: string;
     statisticValue9: string;
+    statisticValue10: string;
     page: number;
     documents: {
       code: string;
@@ -267,6 +283,8 @@ class PDFConverter {
       input.supplier?.companyName4,
       input.supplier?.companyName5,
       input.supplier?.companyName6,
+      input.supplier?.companyName7,
+      input.supplier?.companyName8,
     ].filter((item): item is string => typeof item === 'string');
 
     const address: string[] = [
@@ -278,6 +296,8 @@ class PDFConverter {
       input.supplier?.address6,
       input.supplier?.address7,
       input.supplier?.address8,
+      input.supplier?.address9,
+      input.supplier?.address10,
     ].filter((item): item is string => typeof item === 'string');
 
     const city: string[] = [
@@ -290,6 +310,7 @@ class PDFConverter {
       input.supplier?.city7,
       input.supplier?.city8,
       input.supplier?.city9,
+      input.supplier?.city10,
     ].filter((item): item is string => typeof item === 'string');
 
     let country: string =
@@ -300,6 +321,7 @@ class PDFConverter {
       input.supplier?.country5?.trim() ||
       input.supplier?.country6?.trim() ||
       input.supplier?.country7?.trim() ||
+      input.supplier?.country8?.trim() ||
       '';
 
     const postalCode: string =
@@ -310,6 +332,7 @@ class PDFConverter {
       input.supplier?.postalCode5?.trim() ||
       input.supplier?.postalCode6?.trim() ||
       input.supplier?.postalCode7?.trim() ||
+      input.supplier?.postalCode8?.trim() ||
       '';
 
     const eoriCode = input.supplier?.vatNumber?.trim() || '';
@@ -403,6 +426,7 @@ class PDFConverter {
       input.declaration?.incoterm5 ||
       input.declaration?.incoterm6 ||
       input.declaration?.incoterm7 ||
+      input.declaration?.incoterm8 ||
       '';
 
     const originCountryAlpha2: string =
@@ -414,6 +438,7 @@ class PDFConverter {
       input.declaration?.originCountry6 ||
       input.declaration?.originCountry7 ||
       input.declaration?.originCountry8 ||
+      input.declaration?.originCountry9 ||
       '';
 
     const goods = input.goods
@@ -457,6 +482,9 @@ class PDFConverter {
             good.description10,
             good.description11,
             good.description12,
+            good.description13,
+            good.description14,
+            good.description15,
           ];
 
           const country: string =
@@ -470,6 +498,7 @@ class PDFConverter {
             good.country8?.trim() ||
             good.country9?.trim() ||
             good.country10?.trim() ||
+            good.country11?.trim() ||
             good.prefixedCountry1?.trim() ||
             good.prefixedCountry2?.trim() ||
             good.prefixedCountry3?.trim() ||
@@ -480,6 +509,7 @@ class PDFConverter {
             good.prefixedCountry8?.trim() ||
             good.prefixedCountry9?.trim() ||
             good.prefixedCountry10?.trim() ||
+            good.prefixedCountry11?.trim() ||
             '';
 
           const priceString: string =
@@ -492,6 +522,7 @@ class PDFConverter {
             good.price7?.trim() ||
             good.price8?.trim() ||
             good.price9?.trim() ||
+            good.price10?.trim() ||
             '';
 
           const statisticValueString: string =
@@ -504,6 +535,7 @@ class PDFConverter {
             good.statisticValue7?.trim() ||
             good.statisticValue8?.trim() ||
             good.statisticValue9?.trim() ||
+            good.statisticValue10?.trim() ||
             '';
 
           const price: number = Number(priceString.replace(',', '.'));

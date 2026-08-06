@@ -285,6 +285,12 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'totalDuties39',
+    xRange: [29.874, 29.874],
+    yRange: [31.062, 31.062],
+  },
+  {
+    entity: 'statement',
     column: 'totalTaxes1',
     xRange: [30.531, 30.531],
     yRange: [35.824, 35.824],
@@ -516,6 +522,12 @@ export const _cells: {
     column: 'totalTaxes39',
     xRange: [30.531, 30.531],
     yRange: [9.708, 9.708],
+  },
+  {
+    entity: 'statement',
+    column: 'totalTaxes40',
+    xRange: [30.531, 30.531],
+    yRange: [34.633, 34.633],
   },
   {
     entity: 'statement',
@@ -768,6 +780,12 @@ export const _cells: {
     column: 'totalVat42',
     xRange: [29.5, 29.5],
     yRange: [14.176, 14.176],
+  },
+  {
+    entity: 'statement',
+    column: 'totalVat43',
+    xRange: [29.5, 29.5],
+    yRange: [39.101, 39.101],
   },
   {
     entity: 'taxes',
@@ -3576,5 +3594,41 @@ export const _cells: {
     column: 'quantity78',
     xRange: [18.511, 18.511],
     yRange: [32.856, 32.856],
+  },
+  {
+    entity: 'taxes',
+    column: 'tribute79',
+    xRange: [2.159, 2.159],
+    yRange: [38.204, 38.204],
+  },
+  {
+    entity: 'taxes',
+    column: 'taxableValue79',
+    xRange: [6.247, 6.247],
+    yRange: [38.204, 38.204],
+  },
+  {
+    entity: 'taxes',
+    column: 'value79',
+    xRange: [14.423, 14.423],
+    yRange: [38.204, 38.204],
+  },
+  {
+    entity: 'taxes',
+    column: 'rate79',
+    xRange: [10.335, 10.335],
+    yRange: [38.204, 38.204],
+  },
+  {
+    entity: 'taxes',
+    column: 'letterOfIntent79',
+    xRange: [22.599, 22.599],
+    yRange: [38.204, 38.204],
+  },
+  {
+    entity: 'taxes',
+    column: 'quantity79',
+    xRange: [18.511, 18.511],
+    yRange: [38.204, 38.204],
   },
 ];

@@ -76,6 +76,7 @@ export interface AccountingJson {
     totalDuties36: string;
     totalDuties37: string;
     totalDuties38: string;
+    totalDuties39: string;
     totalTaxes1: string;
     totalTaxes2: string;
     totalTaxes3: string;
@@ -115,6 +116,7 @@ export interface AccountingJson {
     totalTaxes37: string;
     totalTaxes38: string;
     totalTaxes39: string;
+    totalTaxes40: string;
     totalVat1: string;
     totalVat2: string;
     totalVat3: string;
@@ -157,6 +159,7 @@ export interface AccountingJson {
     totalVat40: string;
     totalVat41: string;
     totalVat42: string;
+    totalVat43: string;
   };
   documents: {
     code: string;
@@ -634,6 +637,12 @@ export interface AccountingJson {
     rate78: string;
     letterOfIntent78: string;
     quantity78: string;
+    tribute79: string;
+    value79: string;
+    taxableValue79: string;
+    rate79: string;
+    letterOfIntent79: string;
+    quantity79: string;
   };
 }
 
@@ -718,6 +727,7 @@ class AccountingPDFConverter {
       input.statement.totalDuties36?.trim() ||
       input.statement.totalDuties37?.trim() ||
       input.statement.totalDuties38?.trim() ||
+      input.statement.totalDuties39?.trim() ||
       '';
 
     const totalDuties =
@@ -765,6 +775,7 @@ class AccountingPDFConverter {
       input.statement.totalTaxes37?.trim() ||
       input.statement.totalTaxes38?.trim() ||
       input.statement.totalTaxes39?.trim() ||
+      input.statement.totalTaxes40?.trim() ||
       '';
 
     const totalTaxes =
@@ -815,6 +826,7 @@ class AccountingPDFConverter {
       input.statement.totalVat40?.trim() ||
       input.statement.totalVat41?.trim() ||
       input.statement.totalVat42?.trim() ||
+      input.statement.totalVat43?.trim() ||
       '';
 
     const totalVatToBePaid =
@@ -1454,6 +1466,14 @@ class AccountingPDFConverter {
         rate: input.taxes?.rate78 || '',
         letterOfIntent: input.taxes?.letterOfIntent78 || '',
         quantity: input.taxes?.quantity78 || '',
+      },
+      {
+        tribute: input.taxes?.tribute79 || '',
+        value: input.taxes?.value79 || '',
+        taxableValue: input.taxes?.taxableValue79 || '',
+        rate: input.taxes?.rate79 || '',
+        letterOfIntent: input.taxes?.letterOfIntent79 || '',
+        quantity: input.taxes?.quantity79 || '',
       },
     ];
 
