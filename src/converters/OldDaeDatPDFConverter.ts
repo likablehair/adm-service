@@ -171,10 +171,10 @@ class OldDaeDatPDFConverter {
 
     const customsExitOffice = input.statement.customsExitOffice?.trim() || '';
 
-    const releaseCode = 
+    const releaseCode =
       input.statement.releaseCode1?.trim() ||
       input.statement.releaseCode2?.trim() ||
-       '';
+      '';
 
     const companyName = input.consignee.companyName?.trim() || '';
 
