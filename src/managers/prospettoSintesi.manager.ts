@@ -5,6 +5,8 @@ import RichiestaProspettoSintesiRequest, {
 } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
+import { ValidationOptions } from 'src/validation/validator';
+import { assertMrnMatches, requireNode } from 'src/utils/payload';
 import { AdmDeclarationMapped, PDFConverter } from 'src/main';
 import { DAE_DAT_PDF_TYPES } from './daeDat.manager';
 
@@ -47,7 +49,9 @@ export const ProspettoSintesiMissingError = 'Prospetto Sintesi not present';
 
 export default class ProspettoSintesiManager {
   async import(
-    params: ProcessRequest<RichiestaProspettoSintesi>,
+    params: ProcessRequest<RichiestaProspettoSintesi> & {
+      validation?: ValidationOptions;
+    },
   ): Promise<ImportProspettoSintesiResult> {
     try {
       const downloadedPDF: string = await this.download(params);
@@ -57,6 +61,7 @@ export default class ProspettoSintesiManager {
       );
       const admDeclarationMapped: AdmDeclarationMapped = await this.convert({
         data: { buffer: savedPDF.buffer },
+        validation: params.validation,
       });
 
       return {
@@ -170,9 +175,23 @@ export default class ProspettoSintesiManager {
       const parsed = await parseStringPromise(xmlContent, {
         explicitArray: false,
       });
-      const downloaded = parsed['ns0:DownloadProspetto'];
-      const data = downloaded.output.datiDichiarazione;
-      const attachment = downloaded.output.allegato;
+      const downloaded = requireNode(
+        parsed,
+        'ns0:DownloadProspetto',
+        'ProspettoSintesi',
+      );
+      const data = requireNode(
+        downloaded,
+        'output.datiDichiarazione',
+        'ProspettoSintesi',
+      );
+      const attachment = requireNode(
+        downloaded,
+        'output.allegato',
+        'ProspettoSintesi',
+      );
+      requireNode(attachment, 'contenuto', 'ProspettoSintesi');
+      assertMrnMatches(mrn, data.mrn, 'ProspettoSintesi');
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
 
       const result: ProspettoSintesiResult = {
@@ -204,7 +223,10 @@ export default class ProspettoSintesiManager {
     }
   }
 
-  async convert(params: { data: { path: string } | { buffer: Buffer } }) {
+  async convert(params: {
+    data: { path: string } | { buffer: Buffer };
+    validation?: ValidationOptions;
+  }) {
     const converterPDF = new PDFConverter();
     return await converterPDF.run(params);
   }

@@ -4,6 +4,7 @@ import RichiestaProspettoSvincoloRequest, {
 } from 'src/requests/ponImport/richiestaProspettoSvincoloRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
+import { assertMrnMatches, requireNode } from 'src/utils/payload';
 import { AdmFile } from './prospettoSintesi.manager';
 
 export type ProspettoSvincoloResult = {
@@ -141,9 +142,23 @@ export default class ProspettoSvincoloManager {
       const parsed = await parseStringPromise(xmlContent, {
         explicitArray: false,
       });
-      const downloaded = parsed['ns0:RichiestaProspettoSvincolo'];
-      const data = downloaded.output.dichiarazione;
-      const attachment = downloaded.output.prospettoSvincolo;
+      const downloaded = requireNode(
+        parsed,
+        'ns0:RichiestaProspettoSvincolo',
+        'ProspettoSvincolo',
+      );
+      const data = requireNode(
+        downloaded,
+        'output.dichiarazione',
+        'ProspettoSvincolo',
+      );
+      const attachment = requireNode(
+        downloaded,
+        'output.prospettoSvincolo',
+        'ProspettoSvincolo',
+      );
+      requireNode(attachment, 'contenuto', 'ProspettoSvincolo');
+      assertMrnMatches(mrn, data.mrn, 'ProspettoSvincolo');
       let goodOutcomes = downloaded.output.articoli;
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
 

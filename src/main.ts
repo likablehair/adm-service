@@ -86,3 +86,47 @@ export {
   default as IvistoManager,
   IvistoMissingError,
 } from './managers/ivisto.manager';
+
+export type {
+  ValidationIssue,
+  ValidationScope,
+  ValidationReason,
+  ValidationContext,
+} from './validation/errors';
+export { AdmValidationError, isAdmValidationError } from './validation/errors';
+
+export type { ValidationMode, ValidationOptions } from './validation/validator';
+export { DEFAULT_VALIDATION_MODE, isMissing } from './validation/validator';
+
+export type {
+  Requirement,
+  FieldRequirements,
+  DocumentProfile,
+} from './validation/rules';
+export {
+  IMPORT_PROFILES,
+  IMPORT_FALLBACK_PROFILE,
+  DAE_DAT_PROFILE,
+  DAE_DAT_TYPES_WITHOUT_TRANSPORT_MODE,
+  OLD_DAE_DAT_PROFILE,
+  ACCOUNTING_PROFILE,
+  TRACKS_WEIGHED_NET,
+  getImportProfile,
+  isWeighedNet,
+  resolveDeclaredWeight,
+  withDaeDatType,
+} from './validation/rules';
+
+export {
+  parseDecimal,
+  convertArrayToString,
+  splitCityAndCountry,
+} from './utils/values';
+
+export {
+  validateImportDeclaration,
+  validateDaeDat,
+  validateAccounting,
+} from './validation/documents';
+
+export { AdmPayloadError } from './utils/payload';

@@ -20,6 +20,8 @@ import RichiestaDaeDatRequest from 'src/requests/ponImport/richiestaDaeDatReques
 import DaeDatManager, { DaeDatResult } from 'src/managers/daeDat.manager';
 import { AccountingStatementMapped } from 'src/converters/AccountingPDFConverter';
 import { DaeDatStatementMapped } from 'src/converters/DaeDatPDFConverter';
+import OldDaeDatManager from 'src/managers/oldDaeDat.manager';
+import { OldDaeDatStatementMapped } from 'src/converters/OldDaeDatPDFConverter';
 import { IvistoResult } from 'src/main';
 
 test('RichiestaIvistoRequest', async () => {
@@ -710,5 +712,96 @@ test(
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
     expect(daeDatStatementMapped).toBeDefined();
+  },
+);
+
+test(
+  'Import Old DaeDat',
+  {
+    timeout: 15000,
+  },
+  async () => {
+    const certificatePath = import.meta.env.VITE_CERTIFICATE_URL;
+    if (!certificatePath) {
+      console.error('ERROR: CERTIFICATE_URL not found');
+      return;
+    }
+
+    const certificatePassphrase = import.meta.env.VITE_CERTIFICATE_PASSPHRASE;
+    if (!certificatePassphrase) {
+      console.error('ERROR: CERTIFICATE_PASSPHRASE not found');
+      return;
+    }
+
+    const mrn = import.meta.env.VITE_MRN_EXPORT_OLD_TEST;
+    if (!mrn) {
+      console.error('ERROR: MRN_EXPORT_OLD_TEST not found');
+      return;
+    }
+
+    const dichiarante = import.meta.env.VITE_EXPORT_DICHIARANTE_TEST;
+    if (!dichiarante) {
+      console.error('ERROR: EXPORT_DICHIARANTE_TEST not found');
+      return;
+    }
+
+    const otpPWD = import.meta.env.VITE_ARUBA_OTP_PWD;
+    const user = import.meta.env.VITE_ARUBA_USER;
+    const userPWD = import.meta.env.VITE_ARUBA_USER_PWD;
+    const delegatedUser = import.meta.env.VITE_ARUBA_DELEGATED_USER;
+    const delegatedPassword = import.meta.env.VITE_ARUBA_DELEGATED_PASSWORD;
+    const delegatedDomain = import.meta.env.VITE_ARUBA_DELEGATED_DOMAIN;
+    const typeOtpAuth = import.meta.env.VITE_ARUBA_TYPE_OTP_AUTH;
+
+    const admCertificate = fs.readFileSync(certificatePath);
+
+    const manager = new OldDaeDatManager();
+    const params = {
+      data: {
+        xml: {
+          mrn,
+        },
+        dichiarante,
+      },
+      security: {
+        admCertificate: {
+          passphrase: certificatePassphrase,
+          file: admCertificate,
+        },
+        identity: {
+          otpPWD,
+          user,
+          userPWD,
+          delegatedUser,
+          delegatedPassword,
+          typeOtpAuth,
+          delegatedDomain,
+        },
+      },
+    };
+    const downloadedPDF = await manager.download(params);
+
+    const result: DaeDatResult = await manager.save(
+      params.data.xml.mrn,
+      downloadedPDF,
+    );
+    const oldDaeDatStatementMapped: OldDaeDatStatementMapped =
+      await manager.convert({
+        data: { buffer: result.buffer },
+      });
+
+    expect(result.exit.code).toBe('CM_000');
+    expect(result.exit.message).toBe('Operazione effettuata con successo');
+    expect(oldDaeDatStatementMapped).toBeDefined();
+
+    expect(oldDaeDatStatementMapped.goods.map((good) => good.nr)).toEqual(
+      oldDaeDatStatementMapped.goods.map((_good, index) => String(index + 1)),
+    );
+    // La massa netta sta 1.250 sotto la massa lorda: leggendo la riga
+    expect(
+      oldDaeDatStatementMapped.goods.every(
+        (good) => good.netWeight !== undefined,
+      ),
+    ).toBe(true);
   },
 );

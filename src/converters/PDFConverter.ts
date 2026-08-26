@@ -1,8 +1,15 @@
 import { _cells } from './DeclarationCellsMapper';
 import PDFParser from 'pdf2json';
-import * as fsPromises from 'fs/promises';
 import { AdmDeclarationMapped } from './XMLConverter';
-import { createId } from '@paralleldrive/cuid2';
+import {
+  columnsInReadingOrder,
+  convertArrayToString,
+  convertAsterisksToZero,
+  parseDecimal,
+} from 'src/utils/values';
+import { resolveDeclaredWeight } from 'src/validation/rules';
+import { validateImportDeclaration } from 'src/validation/documents';
+import { ValidationOptions } from 'src/validation/validator';
 
 export type DeclarationRawJson = {
   Transcoder: string;
@@ -184,6 +191,14 @@ export interface DeclarationJson {
     description13: string;
     description14: string;
     description15: string;
+    description16: string;
+    description17: string;
+    description18: string;
+    description19: string;
+    description20: string;
+    description21: string;
+    description22: string;
+    description23: string;
     country1: string;
     country2: string;
     country3: string;
@@ -195,6 +210,10 @@ export interface DeclarationJson {
     country9: string;
     country10: string;
     country11: string;
+    country12: string;
+    country13: string;
+    country14: string;
+    country15: string;
     prefixedCountry1: string;
     prefixedCountry2: string;
     prefixedCountry3: string;
@@ -206,6 +225,10 @@ export interface DeclarationJson {
     prefixedCountry9: string;
     prefixedCountry10: string;
     prefixedCountry11: string;
+    prefixedCountry12: string;
+    prefixedCountry13: string;
+    prefixedCountry14: string;
+    prefixedCountry15: string;
     netWeight: string;
     grossWeight: string;
     customsRegime: string;
@@ -221,6 +244,10 @@ export interface DeclarationJson {
     price8: string;
     price9: string;
     price10: string;
+    price11: string;
+    price12: string;
+    price13: string;
+    price14: string;
     statisticValue1: string;
     statisticValue2: string;
     statisticValue3: string;
@@ -231,6 +258,10 @@ export interface DeclarationJson {
     statisticValue8: string;
     statisticValue9: string;
     statisticValue10: string;
+    statisticValue11: string;
+    statisticValue12: string;
+    statisticValue13: string;
+    statisticValue14: string;
     page: number;
     documents: {
       code: string;
@@ -242,6 +273,23 @@ export interface DeclarationJson {
     identifier: string;
   }[];
 }
+
+const SUPPLIER_COMPANYNAME_COLUMNS = columnsInReadingOrder(
+  _cells,
+  'supplier',
+  'companyName',
+);
+const SUPPLIER_ADDRESS_COLUMNS = columnsInReadingOrder(
+  _cells,
+  'supplier',
+  'address',
+);
+const SUPPLIER_CITY_COLUMNS = columnsInReadingOrder(_cells, 'supplier', 'city');
+const GOOD_DESCRIPTION_COLUMNS = columnsInReadingOrder(
+  _cells,
+  'goods',
+  'description',
+);
 
 class PDFConverter {
   private getMappedPosition(
@@ -275,43 +323,22 @@ class PDFConverter {
   private map(
     input: DeclarationJson,
     documentsNumber: number,
+    options?: ValidationOptions,
   ): AdmDeclarationMapped {
-    const companyNameArray: string[] = [
-      input.supplier?.companyName1,
-      input.supplier?.companyName2,
-      input.supplier?.companyName3,
-      input.supplier?.companyName4,
-      input.supplier?.companyName5,
-      input.supplier?.companyName6,
-      input.supplier?.companyName7,
-      input.supplier?.companyName8,
-    ].filter((item): item is string => typeof item === 'string');
+    const companyNameArray = SUPPLIER_COMPANYNAME_COLUMNS.map(
+      (column) =>
+        (input.supplier as Record<string, string> | undefined)?.[column],
+    );
 
-    const address: string[] = [
-      input.supplier?.address1,
-      input.supplier?.address2,
-      input.supplier?.address3,
-      input.supplier?.address4,
-      input.supplier?.address5,
-      input.supplier?.address6,
-      input.supplier?.address7,
-      input.supplier?.address8,
-      input.supplier?.address9,
-      input.supplier?.address10,
-    ].filter((item): item is string => typeof item === 'string');
+    const address = SUPPLIER_ADDRESS_COLUMNS.map(
+      (column) =>
+        (input.supplier as Record<string, string> | undefined)?.[column],
+    );
 
-    const city: string[] = [
-      input.supplier?.city1,
-      input.supplier?.city2,
-      input.supplier?.city3,
-      input.supplier?.city4,
-      input.supplier?.city5,
-      input.supplier?.city6,
-      input.supplier?.city7,
-      input.supplier?.city8,
-      input.supplier?.city9,
-      input.supplier?.city10,
-    ].filter((item): item is string => typeof item === 'string');
+    const city = SUPPLIER_CITY_COLUMNS.map(
+      (column) =>
+        (input.supplier as Record<string, string> | undefined)?.[column],
+    );
 
     let country: string =
       input.supplier?.country1?.trim() ||
@@ -341,10 +368,10 @@ class PDFConverter {
       vatNumber: string = '';
 
     if (
-      this.convertArrayToString(companyNameArray) == '' &&
+      convertArrayToString(companyNameArray) == '' &&
       country == '' &&
-      this.convertArrayToString(address) == '' &&
-      this.convertArrayToString(city) == '' &&
+      convertArrayToString(address) == '' &&
+      convertArrayToString(city) == '' &&
       postalCode == '' &&
       eoriCode != ''
     ) {
@@ -352,21 +379,23 @@ class PDFConverter {
       vatNumber = /^[A-Za-z]{2}/.test(eoriCode) ? eoriCode.slice(2) : eoriCode;
       country = /^[A-Za-z]{2}/.test(eoriCode) ? eoriCode.slice(0, 2) : 'IT';
     } else {
-      companyName = this.convertArrayToString(companyNameArray);
+      companyName = convertArrayToString(companyNameArray);
       if (eoriCode != '') {
         vatNumber = eoriCode.replace(/[a-zA-Z]/g, '');
       }
     }
 
-    const supplier = this.convertAsterisksToZero(
-      {
-        companyName,
-        vatNumber,
-        country,
-        address: this.convertArrayToString(address),
-        city: this.convertArrayToString(city),
-        postalCode,
-      },
+    const supplierRaw = {
+      companyName,
+      vatNumber,
+      country,
+      address: convertArrayToString(address),
+      city: convertArrayToString(city),
+      postalCode,
+    };
+
+    const supplier = convertAsterisksToZero(
+      { ...supplierRaw },
       'city',
       'postalCode',
       'address',
@@ -390,14 +419,14 @@ class PDFConverter {
 
     const releaseCode: string = input.declaration?.releaseCode1 || '';
 
-    const totalGrossWeight: string =
+    const totalGrossWeightString: string =
       input.declaration?.totalGrossWeight1 ||
       input.declaration?.totalGrossWeight2 ||
       input.declaration?.totalGrossWeight3 ||
       input.declaration?.totalGrossWeight4 ||
       '';
 
-    const invoiceValue: string =
+    const invoiceValueString: string =
       input.declaration?.invoiceValueAndCurrency1?.split(' ')[0] ||
       input.declaration?.invoiceValueAndCurrency2?.split(' ')[0] ||
       input.declaration?.invoiceValueAndCurrency3?.split(' ')[0] ||
@@ -411,12 +440,16 @@ class PDFConverter {
       input.declaration?.invoiceValueAndCurrency4?.split(' ')[1] ||
       '';
 
-    const exchangeRate: string =
+    const exchangeRateString: string =
       input.declaration?.exchangeRate1 ||
       input.declaration?.exchangeRate2 ||
       input.declaration?.exchangeRate3 ||
       input.declaration?.exchangeRate4 ||
       '';
+
+    const totalGrossWeight = parseDecimal(totalGrossWeightString);
+    const invoiceValue = parseDecimal(invoiceValueString);
+    const exchangeRate = parseDecimal(exchangeRateString);
 
     const incoterm: string =
       input.declaration?.incoterm1 ||
@@ -441,6 +474,10 @@ class PDFConverter {
       input.declaration?.originCountry9 ||
       '';
 
+    const track = input.declaration?.track || '';
+    const mrn = input.declaration?.mrn || '';
+    const version = input.declaration?.version || '';
+
     const goods = input.goods
       ?.map((good) => {
         if (
@@ -449,43 +486,21 @@ class PDFConverter {
         ) {
           const nr = good.nr;
 
-          const ncCode =
-            input.declaration?.track == 'H7'
-              ? good.ncCode
-              : good.ncCode.slice(0, -2);
+          const ncCode = track == 'H7' ? good.ncCode : good.ncCode.slice(0, -2);
 
-          const taricCode =
-            input.declaration?.track == 'H7' ? '' : good.ncCode.slice(-2);
+          const taricCode = track == 'H7' ? '' : good.ncCode.slice(-2);
 
           const requestedRegime =
-            input.declaration?.track == 'H7'
-              ? ''
-              : good.customsRegime.slice(0, 2).trim();
+            track == 'H7' ? '' : good.customsRegime.slice(0, 2).trim();
 
           const previousRegime =
-            input.declaration?.track == 'H7'
-              ? ''
-              : good.customsRegime.slice(-2).trim();
+            track == 'H7' ? '' : good.customsRegime.slice(-2).trim();
 
           const customsRegime = `${requestedRegime}${previousRegime}`;
 
-          const description: string[] = [
-            good.description1,
-            good.description2,
-            good.description3,
-            good.description4,
-            good.description5,
-            good.description6,
-            good.description7,
-            good.description8,
-            good.description9,
-            good.description10,
-            good.description11,
-            good.description12,
-            good.description13,
-            good.description14,
-            good.description15,
-          ];
+          const description = GOOD_DESCRIPTION_COLUMNS.map(
+            (column) => (good as unknown as Record<string, string>)[column],
+          );
 
           const country: string =
             good.country1?.trim() ||
@@ -499,6 +514,10 @@ class PDFConverter {
             good.country9?.trim() ||
             good.country10?.trim() ||
             good.country11?.trim() ||
+            good.country12?.trim() ||
+            good.country13?.trim() ||
+            good.country14?.trim() ||
+            good.country15?.trim() ||
             good.prefixedCountry1?.trim() ||
             good.prefixedCountry2?.trim() ||
             good.prefixedCountry3?.trim() ||
@@ -510,6 +529,10 @@ class PDFConverter {
             good.prefixedCountry9?.trim() ||
             good.prefixedCountry10?.trim() ||
             good.prefixedCountry11?.trim() ||
+            good.prefixedCountry12?.trim() ||
+            good.prefixedCountry13?.trim() ||
+            good.prefixedCountry14?.trim() ||
+            good.prefixedCountry15?.trim() ||
             '';
 
           const priceString: string =
@@ -523,6 +546,10 @@ class PDFConverter {
             good.price8?.trim() ||
             good.price9?.trim() ||
             good.price10?.trim() ||
+            good.price11?.trim() ||
+            good.price12?.trim() ||
+            good.price13?.trim() ||
+            good.price14?.trim() ||
             '';
 
           const statisticValueString: string =
@@ -536,26 +563,37 @@ class PDFConverter {
             good.statisticValue8?.trim() ||
             good.statisticValue9?.trim() ||
             good.statisticValue10?.trim() ||
+            good.statisticValue11?.trim() ||
+            good.statisticValue12?.trim() ||
+            good.statisticValue13?.trim() ||
+            good.statisticValue14?.trim() ||
             '';
 
-          const price: number = Number(priceString.replace(',', '.'));
-          const statisticValue: number = Number(
-            statisticValueString.replace(',', '.'),
-          );
+          const price = parseDecimal(priceString);
+          const statisticValue = parseDecimal(statisticValueString);
 
           const documents = good.documents;
 
-          return this.convertAsterisksToZero({
+          const normalised = convertAsterisksToZero({
+            netWeight: good.netWeight,
+            grossWeight: good.grossWeight,
+          });
+
+          const netWeight = parseDecimal(normalised.netWeight);
+          const grossWeight = parseDecimal(normalised.grossWeight);
+
+          return {
             nr,
             ncCode,
             taricCode,
             identificationCode: good.ncCode,
             releaseCode: good.releaseCode,
             releaseDate: good.releaseDate,
-            description: this.convertArrayToString(description),
+            description: convertArrayToString(description),
             country,
-            netWeight: good.netWeight,
-            grossWeight: good.grossWeight,
+            netWeight,
+            grossWeight,
+            weight: resolveDeclaredWeight(track, netWeight, grossWeight),
             price,
             statisticValue,
             customsRegime,
@@ -563,7 +601,7 @@ class PDFConverter {
             previousRegime,
             documents,
             page: good.page,
-          });
+          };
         }
         return undefined;
       })
@@ -579,13 +617,43 @@ class PDFConverter {
       throw new Error('Missing mapping for documents');
     }
 
-    if (originCountryAlpha2 == '' && input.declaration?.track != 'H7') {
+    if (originCountryAlpha2 == '' && track != 'H7') {
       throw new Error('Missing mapping for origin country');
     }
 
-    return this.convertAsterisksToZero({
-      mrn: input.declaration?.mrn || '',
-      version: input.declaration?.version || '',
+    if (goods.length === 0) {
+      throw new Error('No article was extracted from the declaration');
+    }
+
+    const validationIssues = validateImportDeclaration(
+      {
+        mrn,
+        version,
+        track,
+        date,
+        acceptanceDate,
+        releaseDate,
+        releaseCode,
+        totalGrossWeight,
+        invoiceValue,
+        currency,
+        exchangeRate,
+        incoterm,
+        originCountryAlpha2,
+        supplier: supplierRaw,
+        goods,
+      },
+      { ...options, source: 'pdf' },
+    );
+
+    const numberedGoods = goods.map((good, index) => ({
+      ...good,
+      nr: good.nr?.trim() || String(index + 1),
+    }));
+
+    return convertAsterisksToZero({
+      mrn,
+      version,
       date,
       acceptanceDate,
       releaseCode,
@@ -596,48 +664,22 @@ class PDFConverter {
       exchangeRate,
       incoterm,
       originCountryAlpha2,
-      track: input.declaration?.track || '',
+      track,
       supplier,
-      goods,
+      goods: numberedGoods,
       documents,
+      validationIssues,
     });
-  }
-  private convertArrayToString(array: string[]): string {
-    return array
-      .filter((el) => !!el)
-      .map((el) => el.trim())
-      .join(' ');
-  }
-  private convertAsterisksToZero<T extends Record<string, unknown>>(
-    object: T,
-    ...keysToConvertVoidToZero: (keyof T)[]
-  ): T {
-    for (const key in object) {
-      if (Object.prototype.hasOwnProperty.call(object, key)) {
-        const element = object[key];
-        if (
-          element === '*' ||
-          (keysToConvertVoidToZero.includes(key) && element === '')
-        ) {
-          //GENERALLY NOT SAFE, BUT ADDED IF
-          object[key] = '0' as T[typeof key];
-        }
-      }
-    }
-
-    return object;
   }
   public async run(params: {
     data: { path: string } | { buffer: Buffer };
+    validation?: ValidationOptions;
   }): Promise<AdmDeclarationMapped> {
     const pdfParser = new PDFParser();
 
-    let path = createId();
-    if ('buffer' in params.data) {
-      await fsPromises.writeFile(path, params.data.buffer);
-    } else {
-      path = params.data.path;
-    }
+    const cleanUp = async () => {
+      pdfParser.destroy();
+    };
 
     const loadDeclarationFromPDF = new Promise<DeclarationRawJson>(
       (resolve, reject) => {
@@ -650,7 +692,11 @@ class PDFConverter {
           resolve(pdfData);
         });
 
-        pdfParser.loadPDF(path);
+        if ('buffer' in params.data) {
+          pdfParser.parseBuffer(params.data.buffer);
+        } else {
+          pdfParser.loadPDF(params.data.path);
+        }
       },
     );
 
@@ -862,11 +908,12 @@ class PDFConverter {
       const admDeclarationMapped = this.map(
         parsedDeclarationEntity,
         countNumber,
+        params.validation,
       );
-      await fsPromises.unlink(path);
+      await cleanUp();
       return admDeclarationMapped;
     } catch (error) {
-      await fsPromises.unlink(path);
+      await cleanUp();
       throw new Error('parsing PDF declarations:' + error); // Returning an empty object
     }
   }

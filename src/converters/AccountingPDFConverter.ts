@@ -1,8 +1,9 @@
 import { _cells } from './AccountingCellsMapper';
 import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
-import * as fsPromises from 'fs/promises';
-import { createId } from '@paralleldrive/cuid2';
+import { validateAccounting } from 'src/validation/documents';
+import { ValidationOptions } from 'src/validation/validator';
+import { ValidationIssue } from 'src/validation/errors';
 
 export type AccountingStatementMapped = {
   version: string;
@@ -16,6 +17,7 @@ export type AccountingStatementMapped = {
   taxB00Vat22: number | undefined;
   taxB00Vat04: number | undefined;
   taxB00Vat10: number | undefined;
+  taxB00Vat00: number | undefined;
   tax931: number | undefined;
   tax931TaxableValue: number | undefined;
   tax931Quantity: number | undefined;
@@ -30,6 +32,7 @@ export type AccountingStatementMapped = {
     code: string;
     identifier: string;
   }[];
+  validationIssues?: ValidationIssue[];
 };
 
 export interface AccountingJson {
@@ -679,6 +682,7 @@ class AccountingPDFConverter {
     input: AccountingJson,
     seaTaxCodes: string[],
     documentsNumber: number,
+    options?: ValidationOptions,
   ): AccountingStatementMapped {
     const version: string = input.statement.version || '';
 
@@ -1538,7 +1542,7 @@ class AccountingPDFConverter {
       : undefined;
 
     const taxB00Vat00Liquidation = taxLiquidation.find(
-      (il) => il.tribute == 'B00' && (il.rate == '0,00' || il.rate == '0,00'),
+      (il) => il.tribute == 'B00' && (il.rate == '0,00' || il.rate == '0'),
     );
 
     const taxB00Vat00 = taxB00Vat00Liquidation
@@ -1732,7 +1736,7 @@ class AccountingPDFConverter {
       throw new Error('Missing vat mapping');
     }
 
-    return {
+    const statement = {
       rectificationOrCancellationDate,
       version,
       totalDuties,
@@ -1745,6 +1749,7 @@ class AccountingPDFConverter {
       taxB00Vat22,
       taxB00Vat10,
       taxB00Vat04,
+      taxB00Vat00,
       tax931,
       tax931TaxableValue,
       tax931Quantity,
@@ -1756,18 +1761,21 @@ class AccountingPDFConverter {
       totalSeaTaxes,
       documents,
     };
+
+    return {
+      ...statement,
+      validationIssues: validateAccounting(statement, options),
+    };
   }
   public async run(params: {
     data: ({ path: string } | { buffer: Buffer }) & { seaTaxCodes: string[] };
+    validation?: ValidationOptions;
   }): Promise<AccountingStatementMapped> {
     const pdfParser = new PDFParser();
 
-    let path = createId();
-    if ('buffer' in params.data) {
-      await fsPromises.writeFile(path, params.data.buffer);
-    } else {
-      path = params.data.path;
-    }
+    const cleanUp = async () => {
+      pdfParser.destroy();
+    };
 
     const loadDeclarationFromPDF = new Promise<DeclarationRawJson>(
       (resolve, reject) => {
@@ -1780,7 +1788,11 @@ class AccountingPDFConverter {
           resolve(pdfData);
         });
 
-        pdfParser.loadPDF(path);
+        if ('buffer' in params.data) {
+          pdfParser.parseBuffer(params.data.buffer);
+        } else {
+          pdfParser.loadPDF(params.data.path);
+        }
       },
     );
 
@@ -1893,11 +1905,12 @@ class AccountingPDFConverter {
         accountingEntity,
         params.data.seaTaxCodes,
         countNumber,
+        params.validation,
       );
-      await fsPromises.unlink(path);
+      await cleanUp();
       return accountingStatementMapped;
     } catch (error) {
-      await fsPromises.unlink(path);
+      await cleanUp();
       throw new Error('parsing PDF Accounting:' + error); // Returning an empty object
     }
   }

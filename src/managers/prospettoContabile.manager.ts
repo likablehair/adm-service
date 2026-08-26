@@ -2,6 +2,8 @@ import { ProcessRequest } from 'src/requests/baseRequest';
 import { RichiestaProspettoSintesi } from 'src/requests/ponImport/richiestaProspettoSintesiRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
+import { ValidationOptions } from 'src/validation/validator';
+import { assertMrnMatches, requireNode } from 'src/utils/payload';
 import { AdmFile, ProspettoSintesiResult } from 'src/main';
 import RichiestaProspettoContabileRequest from 'src/requests/ponImport/richiestaProspettoContabileRequest';
 import DownloadProspettoContabile from 'src/requests/ponImport/downloadProspettoContabileRequest';
@@ -20,6 +22,7 @@ export default class ProspettoContabileManager {
   async import(
     params: ProcessRequest<RichiestaProspettoSintesi> & {
       data: { seaTaxCodes: string[] };
+      validation?: ValidationOptions;
     },
   ): Promise<ImportProspettoContabileResult> {
     try {
@@ -34,6 +37,7 @@ export default class ProspettoContabileManager {
             buffer: savedPDF.buffer,
             seaTaxCodes: params.data.seaTaxCodes,
           },
+          validation: params.validation,
         });
 
       return {
@@ -148,9 +152,23 @@ export default class ProspettoContabileManager {
       const parsed = await parseStringPromise(xmlContent, {
         explicitArray: false,
       });
-      const downloaded = parsed['ns0:DownloadProspetto'];
-      const data = downloaded.output.datiDichiarazione;
-      const attachment = downloaded.output.allegato;
+      const downloaded = requireNode(
+        parsed,
+        'ns0:DownloadProspetto',
+        'ProspettoContabile',
+      );
+      const data = requireNode(
+        downloaded,
+        'output.datiDichiarazione',
+        'ProspettoContabile',
+      );
+      const attachment = requireNode(
+        downloaded,
+        'output.allegato',
+        'ProspettoContabile',
+      );
+      requireNode(attachment, 'contenuto', 'ProspettoContabile');
+      assertMrnMatches(mrn, data.mrn, 'ProspettoContabile');
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
 
       const result: ProspettoSintesiResult = {
@@ -184,6 +202,7 @@ export default class ProspettoContabileManager {
 
   async convert(params: {
     data: ({ path: string } | { buffer: Buffer }) & { seaTaxCodes: string[] };
+    validation?: ValidationOptions;
   }) {
     const converterPDF = new AccountingPDFConverter();
     return await converterPDF.run(params);

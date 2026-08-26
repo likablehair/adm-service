@@ -4,6 +4,8 @@ import RichiestaDaeDatRequest, {
 } from 'src/requests/ponImport/richiestaDaeDatRequest';
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
+import { ValidationOptions } from 'src/validation/validator';
+import { assertMrnMatches, requireNode } from 'src/utils/payload';
 import DaeDatPDFConverter, {
   DaeDatStatementMapped,
 } from 'src/converters/DaeDatPDFConverter';
@@ -32,7 +34,9 @@ export const DaeDatMissingError = 'DaeDat not present';
 
 export default class DaeDatManager {
   async import(
-    params: ProcessRequest<RichiestaDaeDat>,
+    params: ProcessRequest<RichiestaDaeDat> & {
+      validation?: ValidationOptions;
+    },
   ): Promise<ImportDaeDatResult> {
     try {
       const downloadedPDF: string = await this.download(params);
@@ -42,6 +46,7 @@ export default class DaeDatManager {
       );
       const daeDatStatementMapped: DaeDatStatementMapped = await this.convert({
         data: { buffer: savedPDF.buffer },
+        validation: params.validation,
       });
 
       return {
@@ -120,9 +125,11 @@ export default class DaeDatManager {
       const parsed = await parseStringPromise(xmlContent, {
         explicitArray: false,
       });
-      const downloaded = parsed['ns0:RichiestaDaeDat'];
-      const data = downloaded.output.dichiarazione;
-      const attachment = downloaded.output.daeDat;
+      const downloaded = requireNode(parsed, 'ns0:RichiestaDaeDat', 'DaeDat');
+      const data = requireNode(downloaded, 'output.dichiarazione', 'DaeDat');
+      const attachment = requireNode(downloaded, 'output.daeDat', 'DaeDat');
+      requireNode(attachment, 'contenuto', 'DaeDat');
+      assertMrnMatches(mrn, data.mrn, 'DaeDat');
       const pdfType = attachment.tipoPdf;
       const pdfContent = Buffer.from(attachment.contenuto, 'base64');
 
@@ -159,7 +166,10 @@ export default class DaeDatManager {
     }
   }
 
-  async convert(params: { data: { path: string } | { buffer: Buffer } }) {
+  async convert(params: {
+    data: { path: string } | { buffer: Buffer };
+    validation?: ValidationOptions;
+  }) {
     const converterPDF = new DaeDatPDFConverter();
     return await converterPDF.run(params);
   }

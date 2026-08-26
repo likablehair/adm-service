@@ -112,10 +112,10 @@ export type AdmDeclarationMapped = {
   track: string;
   releaseDate: string;
   releaseCode: string;
-  totalGrossWeight: string;
-  invoiceValue: string;
+  totalGrossWeight: number | undefined;
+  invoiceValue: number | undefined;
   currency: string;
-  exchangeRate: string;
+  exchangeRate: number | undefined;
   incoterm: string;
   originCountryAlpha2: string;
   supplier: {
@@ -135,10 +135,11 @@ export type AdmDeclarationMapped = {
     releaseCode: string;
     description: string;
     country: string;
-    netWeight: string;
-    grossWeight: string;
-    price: number;
-    statisticValue: number;
+    netWeight: number | undefined;
+    grossWeight: number | undefined;
+    weight: number | undefined;
+    price: number | undefined;
+    statisticValue: number | undefined;
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
@@ -152,9 +153,15 @@ export type AdmDeclarationMapped = {
     code: string;
     identifier: string;
   }[];
+  validationIssues?: ValidationIssue[];
 };
 
 import { parseStringPromise } from 'xml2js';
+import { parseDecimal } from 'src/utils/values';
+import { resolveDeclaredWeight } from 'src/validation/rules';
+import { validateImportDeclaration } from 'src/validation/documents';
+import { ValidationOptions } from 'src/validation/validator';
+import { ValidationIssue } from 'src/validation/errors';
 
 export default class XMLConverter {
   constructor() {}
@@ -162,6 +169,8 @@ export default class XMLConverter {
   async run(params: {
     xmlFilePath?: string;
     xmlData?: string;
+    track?: string;
+    validation?: ValidationOptions;
   }): Promise<AdmDeclarationMapped> {
     try {
       let data: string;
@@ -170,7 +179,7 @@ export default class XMLConverter {
       else data = params.xmlData;
 
       const jsonData = await parseStringPromise(data, { explicitArray: false });
-      const result = this.map(jsonData);
+      const result = this.map(jsonData, params.track, params.validation);
 
       return result;
     } catch (error: unknown) {
@@ -189,10 +198,21 @@ export default class XMLConverter {
     }
   }
 
-  async map(jsonData: Dichiarazione): Promise<AdmDeclarationMapped> {
-    const esportatore =
-      jsonData.Messaggio.DichiarazioneH1.DatiH1.IntestazioneH1.Parti
-        .Esportatore;
+  async map(
+    jsonData: Dichiarazione,
+    track: string = 'H1',
+    options?: ValidationOptions,
+  ): Promise<AdmDeclarationMapped> {
+    const intestazione =
+      jsonData?.Messaggio?.DichiarazioneH1?.DatiH1?.IntestazioneH1;
+
+    if (!intestazione?.Parti?.Esportatore) {
+      throw new Error(
+        'Unexpected declaration payload: IntestazioneH1.Parti.Esportatore not found',
+      );
+    }
+
+    const esportatore = intestazione.Parti.Esportatore;
 
     const data: AdmDeclarationMapped = {
       mrn: '',
@@ -201,11 +221,11 @@ export default class XMLConverter {
       acceptanceDate: '',
       releaseCode: '',
       releaseDate: '',
-      track: 'H1',
-      totalGrossWeight: '',
-      invoiceValue: '',
+      track,
+      totalGrossWeight: undefined,
+      invoiceValue: undefined,
       currency: '',
-      exchangeRate: '',
+      exchangeRate: undefined,
       incoterm: '',
       originCountryAlpha2: '',
       supplier: {
@@ -231,10 +251,11 @@ export default class XMLConverter {
       releaseCode: string;
       description: string;
       country: string;
-      netWeight: string;
-      grossWeight: string;
-      price: number;
-      statisticValue: number;
+      netWeight: number | undefined;
+      grossWeight: number | undefined;
+      weight: number | undefined;
+      price: number | undefined;
+      statisticValue: number | undefined;
       customsRegime: string | '';
       requestedRegime: string | '';
       previousRegime: string | '';
@@ -248,45 +269,56 @@ export default class XMLConverter {
     const articoli = await this.ensureArray(articoloH1);
 
     for (let i = 0; i < articoli.length; i++) {
-      const statisticValue = Number(
-        articoli[i].AltriDati.ValoreStatistico?.trim().replace(',', '.'),
-      );
+      const articolo = articoli[i];
+      const merci = articolo.IdentificazioneMerci;
+      const regime = articolo.InformazioniMessaggio?.RegimeDoganale;
 
-      const price = Number(
-        articoli[i].InformazioniValoreImposte.PrezzoArticolo?.trim().replace(
-          ',',
-          '.',
-        ),
+      const statisticValue = parseDecimal(articolo.AltriDati?.ValoreStatistico);
+      const price = parseDecimal(
+        articolo.InformazioniValoreImposte?.PrezzoArticolo,
       );
+      const netWeight = parseDecimal(merci?.MassaNetta);
+      const grossWeight = parseDecimal(merci?.MassaLorda);
+
+      const requestedRegime = regime?.RegimeRichiesto || '';
+      const previousRegime = regime?.RegimePrecedente || '';
 
       goods.push({
-        nr: articoli[i].InformazioniMessaggio.NumeroArticolo,
-        ncCode: articoli[i].IdentificazioneMerci.CodiceNC,
-        taricCode: articoli[i].IdentificazioneMerci.CodiceTaric,
-        identificationCode:
-          articoli[i].IdentificazioneMerci.CodiceNC +
-          articoli[i].IdentificazioneMerci.CodiceTaric,
+        nr: articolo.InformazioniMessaggio?.NumeroArticolo || '',
+        ncCode: merci?.CodiceNC || '',
+        taricCode: merci?.CodiceTaric || '',
+        identificationCode: `${merci?.CodiceNC || ''}${merci?.CodiceTaric || ''}`,
         releaseCode: '',
         releaseDate: '',
-        description: articoli[i].IdentificazioneMerci.DescrizioneMerci,
+        description: merci?.DescrizioneMerci || '',
         country: esportatore.Paese,
-        netWeight: articoli[i].IdentificazioneMerci.MassaNetta,
-        grossWeight: articoli[i].IdentificazioneMerci.MassaLorda,
+        netWeight,
+        grossWeight,
+        weight: resolveDeclaredWeight(track, netWeight, grossWeight),
         price,
         statisticValue,
-        customsRegime:
-          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto +
-          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
-        requestedRegime:
-          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimeRichiesto,
-        previousRegime:
-          articoli[i].InformazioniMessaggio.RegimeDoganale.RegimePrecedente,
+        customsRegime: `${requestedRegime}${previousRegime}`,
+        requestedRegime,
+        previousRegime,
         page: i + 1,
         documents: [],
       });
     }
 
-    data.goods = goods;
+    if (goods.length === 0) {
+      throw new Error('No article was extracted from the declaration');
+    }
+
+    data.validationIssues = validateImportDeclaration(
+      { ...data, goods },
+      { ...options, source: 'xml' },
+    );
+
+    data.goods = goods.map((good, index) => ({
+      ...good,
+      nr: good.nr?.trim() || String(index + 1),
+    }));
+
     return data;
   }
 

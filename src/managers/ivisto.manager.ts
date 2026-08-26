@@ -1,5 +1,6 @@
 import { parseStringPromise } from 'xml2js';
 import * as fsPromises from 'fs/promises';
+import { assertMrnMatches } from 'src/utils/payload';
 import { ProcessRequest, RichiestaIvisto } from 'src/main';
 import RichiestaIvistoRequest from 'src/requests/exportService/richiestaIvistoRequest';
 import { AdmFile } from 'src/main';
@@ -69,6 +70,9 @@ export default class IvistoManager {
     const xmlContent = await fsPromises.readFile(xmlFilePath, 'utf8');
     await fsPromises.unlink(xmlFilePath);
     const ivistoMapped = await this.map(xmlContent);
+
+    assertMrnMatches(params.mrn, ivistoMapped.exportOperation.mrn, 'Ivisto');
+
     return {
       ivistoMapped,
       file: {
@@ -87,7 +91,54 @@ export default class IvistoManager {
       explicitArray: false,
     });
 
-    const ieCC599C = jsonResult['ie:CC599C'];
+    const ieCC599C = jsonResult?.['ie:CC599C'];
+
+    if (!ieCC599C) {
+      throw new Error('Unexpected IVISTO payload: ie:CC599C node not found');
+    }
+
+    const missingNodes = [
+      'ExportOperation',
+      'CustomsOfficeOfExport',
+      'CustomsOfficeOfExitActual',
+      'ExitControlResult',
+    ].filter((node) => !ieCC599C[node]);
+
+    if (missingNodes.length > 0) {
+      throw new Error(
+        `Unexpected IVISTO payload: missing ${missingNodes.join(', ')}`,
+      );
+    }
+
+    const missingValues = [
+      ['ExportOperation.MRN', ieCC599C.ExportOperation.MRN],
+      [
+        'CustomsOfficeOfExport.referenceNumber',
+        ieCC599C.CustomsOfficeOfExport.referenceNumber,
+      ],
+      [
+        'CustomsOfficeOfExitActual.referenceNumber',
+        ieCC599C.CustomsOfficeOfExitActual.referenceNumber,
+      ],
+      ['ExitControlResult.code', ieCC599C.ExitControlResult.code],
+      ['ExitControlResult.exitDate', ieCC599C.ExitControlResult.exitDate],
+    ]
+      .filter(([, value]) => !value)
+      .map(([path]) => path);
+
+    if (missingValues.length > 0) {
+      throw new Error(
+        `Unexpected IVISTO payload: missing ${missingValues.join(', ')}`,
+      );
+    }
+
+    const transit = Number(ieCC599C.ExportOperation.transit);
+
+    if (!Number.isFinite(transit)) {
+      throw new Error(
+        `Unexpected IVISTO payload: transit is not a number (${ieCC599C.ExportOperation.transit})`,
+      );
+    }
 
     const result = {
       messageSender: ieCC599C.messageSender,
@@ -97,7 +148,7 @@ export default class IvistoManager {
       messageType: ieCC599C.messageType,
       exportOperation: {
         mrn: ieCC599C.ExportOperation.MRN,
-        transit: Number(ieCC599C.ExportOperation.transit),
+        transit,
       },
       customsOfficeOfExport: {
         referenceNumber: ieCC599C.CustomsOfficeOfExport.referenceNumber,

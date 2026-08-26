@@ -1,8 +1,15 @@
 import PDFParser from 'pdf2json';
 import { DeclarationRawJson } from './PDFConverter';
 import { _cells } from './OldDaeDatCellsMapper';
-import * as fsPromises from 'fs/promises';
-import { createId } from '@paralleldrive/cuid2';
+import {
+  columnsInReadingOrder,
+  convertArrayToString,
+  convertAsterisksToZero,
+  parseDecimal,
+} from 'src/utils/values';
+import { validateDaeDat } from 'src/validation/documents';
+import { ValidationOptions } from 'src/validation/validator';
+import { ValidationIssue } from 'src/validation/errors';
 import { documentCodeList } from 'src/utils/documentCodes';
 
 export type OldDaeDatStatementMapped = {
@@ -15,24 +22,26 @@ export type OldDaeDatStatementMapped = {
   };
   type: string;
   customsExitOffice: string;
-  totalPackages: string;
-  totalGrossWeight: string;
+  totalPackages: number | undefined;
+  totalGrossWeight: number | undefined;
   totalStatisticValue: number;
   releaseDate: string;
   releaseCode: string;
   transitNetworkCountry: string;
   transportMode: number;
   goods: {
+    nr: string;
     customsRegime: string;
     requestedRegime: string;
     previousRegime: string;
-    statisticValue: number;
-    netWeight: string;
+    statisticValue: number | undefined;
+    netWeight: number | undefined;
     ncCode: string;
     description: string;
     identificationCode: string;
     documents: { code: string; identifier: string }[];
   }[];
+  validationIssues?: ValidationIssue[];
 };
 
 export interface OldDaeDatJson {
@@ -74,9 +83,9 @@ export interface OldDaeDatJson {
     country: string;
   };
   goods: {
-    nr1: string;
-    nr2: string;
-    nr3: string;
+    pageMarker1: string;
+    pageMarker2: string;
+    pageMarker3: string;
     statisticValue1: string;
     statisticValue2: string;
     statisticValue3: string;
@@ -88,6 +97,10 @@ export interface OldDaeDatJson {
     statisticValue9: string;
     statisticValue10: string;
     statisticValue11: string;
+    statisticValue12: string;
+    statisticValue13: string;
+    statisticValue14: string;
+    statisticValue15: string;
     netWeight1: string;
     netWeight2: string;
     netWeight3: string;
@@ -98,6 +111,11 @@ export interface OldDaeDatJson {
     netWeight8: string;
     netWeight9: string;
     netWeight10: string;
+    netWeight11: string;
+    netWeight12: string;
+    netWeight13: string;
+    netWeight14: string;
+    netWeight15: string;
     ncCode1: string;
     ncCode2: string;
     ncCode3: string;
@@ -119,9 +137,26 @@ export interface OldDaeDatJson {
     customsRegime8: string;
     customsRegime9: string;
     customsRegime10: string;
+    customsRegime11: string;
+    customsRegime12: string;
+    customsRegime13: string;
+    customsRegime14: string;
+    customsRegime15: string;
     codeIdentifier: string;
   }[];
 }
+
+const GOOD_DESCRIPTION_COLUMNS = columnsInReadingOrder(
+  _cells,
+  'goods',
+  'description',
+);
+
+const GOOD_NET_WEIGHT_COLUMNS = columnsInReadingOrder(
+  _cells,
+  'goods',
+  'netWeight',
+);
 
 class OldDaeDatPDFConverter {
   private getMappedPosition(
@@ -154,20 +189,21 @@ class OldDaeDatPDFConverter {
   }
   private map(
     input: OldDaeDatJson,
-    documentsNumber: number,
     numberOfGoodsPages: number = 0,
+    options?: ValidationOptions,
   ): OldDaeDatStatementMapped {
     const type = input.statement.type?.trim() || '';
 
     const releaseDate = input.statement.releaseDate?.trim() || '';
 
-    const totalPackages =
+    const totalPackages = parseDecimal(
       input.statement.totalPackages1?.trim() ||
-      input.statement.totalPackages2?.trim() ||
-      input.statement.totalPackages3?.trim() ||
-      '';
+        input.statement.totalPackages2?.trim() ||
+        input.statement.totalPackages3?.trim() ||
+        '',
+    );
 
-    const totalGrossWeight = input.statement.totalGrossWeight?.trim() || '';
+    const totalGrossWeight = parseDecimal(input.statement.totalGrossWeight);
 
     const customsExitOffice = input.statement.customsExitOffice?.trim() || '';
 
@@ -180,7 +216,7 @@ class OldDaeDatPDFConverter {
 
     const companyAddress = input.consignee.companyAddress?.trim() || '';
 
-    const postalCode = input.consignee.postalCode?.trim() || '0';
+    const postalCode = input.consignee.postalCode?.trim() || '';
 
     const city = input.consignee.city?.trim() || '';
 
@@ -209,7 +245,7 @@ class OldDaeDatPDFConverter {
       input.statement.transitNetworkCountry18?.trim() ||
       '';
 
-    const goods = input.goods.map((good) => {
+    const goods = input.goods.map((good, index) => {
       const statisticValueString =
         good.statisticValue1?.trim() ||
         good.statisticValue2?.trim() ||
@@ -222,20 +258,19 @@ class OldDaeDatPDFConverter {
         good.statisticValue9?.trim() ||
         good.statisticValue10?.trim() ||
         good.statisticValue11?.trim() ||
+        good.statisticValue12?.trim() ||
+        good.statisticValue13?.trim() ||
+        good.statisticValue14?.trim() ||
+        good.statisticValue15?.trim() ||
         '';
 
       const netWeight =
-        good.netWeight10?.trim() ||
-        good.netWeight9?.trim() ||
-        good.netWeight8?.trim() ||
-        good.netWeight7?.trim() ||
-        good.netWeight6?.trim() ||
-        good.netWeight5?.trim() ||
-        good.netWeight4?.trim() ||
-        good.netWeight3?.trim() ||
-        good.netWeight2?.trim() ||
-        good.netWeight1?.trim() ||
-        '';
+        GOOD_NET_WEIGHT_COLUMNS.map(
+          (column) => (good as unknown as Record<string, string>)[column],
+        )
+          .map((value) => value?.trim())
+          .filter((value) => !!value)
+          .slice(-1)[0] ?? '';
 
       let ncCode =
         good.ncCode1?.trim() ||
@@ -250,13 +285,9 @@ class OldDaeDatPDFConverter {
 
       const identificationCode = ncCode;
 
-      const description = [
-        good.description1,
-        good.description2,
-        good.description3,
-        good.description4,
-        good.description5,
-      ];
+      const description = GOOD_DESCRIPTION_COLUMNS.map(
+        (column) => (good as unknown as Record<string, string>)[column],
+      );
 
       let customsRegime =
         good.customsRegime1?.trim() ||
@@ -269,6 +300,11 @@ class OldDaeDatPDFConverter {
         good.customsRegime8?.trim() ||
         good.customsRegime9?.trim() ||
         good.customsRegime10?.trim() ||
+        good.customsRegime11?.trim() ||
+        good.customsRegime12?.trim() ||
+        good.customsRegime13?.trim() ||
+        good.customsRegime14?.trim() ||
+        good.customsRegime15?.trim() ||
         '';
 
       const requestedRegime = customsRegime.slice(0, 2).trim();
@@ -277,9 +313,8 @@ class OldDaeDatPDFConverter {
 
       customsRegime = `${requestedRegime}${previousRegime}`;
 
-      const statisticValue: number = Number(
-        statisticValueString.replace(',', '.'),
-      );
+      const statisticValue = parseDecimal(statisticValueString);
+      const nr = String(index + 1);
 
       const documents = this.convertDocumentsStringToArray(good.codeIdentifier);
 
@@ -300,44 +335,68 @@ class OldDaeDatPDFConverter {
           };
         });
 
-      return this.convertAsterisksToZero({
+      return {
+        nr,
+        documentsSource: good.codeIdentifier,
         customsRegime,
         requestedRegime,
         previousRegime,
         statisticValue,
-        netWeight,
+        netWeight: parseDecimal(
+          convertAsterisksToZero({ netWeight }).netWeight,
+        ),
         ncCode,
         identificationCode,
-        description: this.convertArrayToString(description),
+        description: convertArrayToString(description),
         documents: formattedDocuments,
-      });
+      };
     });
 
     if (numberOfGoodsPages !== goods.length) {
       throw new Error('Missing mapping for goods');
     }
 
-    const localDocumentsNumber =
-      goods.reduce((acc, good) => {
-        return acc + (good.documents.length || 0);
-      }, 0) || 0;
-
-    if (localDocumentsNumber !== documentsNumber) {
-      throw new Error('Missing mapping for documents');
+    if (goods.some((g) => !g.ncCode)) {
+      throw new Error('Missing NC Code for goods');
     }
 
     if (!type || type == '') {
       throw new Error('Missing declaration type');
     }
 
+    if (goods.length === 0) {
+      throw new Error('No article was extracted from the declaration');
+    }
+
     const totalStatisticValue =
       Math.round(
-        goods.reduce((acc, good) => {
-          return acc + Number(good.statisticValue);
-        }, 0) * 100,
+        goods.reduce((acc, good) => acc + (good.statisticValue ?? 0), 0) * 100,
       ) / 100;
 
-    return this.convertAsterisksToZero({
+    const validationIssues = validateDaeDat(
+      {
+        type,
+        releaseDate,
+        releaseCode,
+        customsExitOffice,
+        totalPackages,
+        totalGrossWeight,
+        totalStatisticValue,
+        transitNetworkCountry,
+        transportMode: Number(transportMode),
+        consignee: {
+          companyName,
+          companyAddress,
+          postalCode,
+          city,
+          country,
+        },
+        goods,
+      },
+      { ...options, layout: 'old' },
+    );
+
+    return convertAsterisksToZero({
       type,
       releaseDate,
       totalPackages,
@@ -347,46 +406,16 @@ class OldDaeDatPDFConverter {
       releaseCode,
       transitNetworkCountry,
       transportMode: Number(transportMode),
-      consignee: this.convertAsterisksToZero(
-        {
-          companyName,
-          companyAddress,
-          postalCode: postalCode == '*' || postalCode == '' ? '0' : postalCode,
-          city,
-          country,
-        },
-        'city',
-        'postalCode',
-      ),
+      validationIssues,
+      consignee: {
+        companyName,
+        companyAddress,
+        postalCode: postalCode == '*' ? '' : postalCode,
+        city: city == '*' ? '' : city,
+        country,
+      },
       goods,
     });
-  }
-
-  private convertArrayToString(array: string[]): string {
-    return array
-      .filter((el) => !!el)
-      .map((el) => el.trim())
-      .join(' ');
-  }
-
-  private convertAsterisksToZero<T extends Record<string, unknown>>(
-    object: T,
-    ...keysToConvertVoidToZero: (keyof T)[]
-  ): T {
-    for (const key in object) {
-      if (Object.prototype.hasOwnProperty.call(object, key)) {
-        const element = object[key];
-        if (
-          element === '*' ||
-          (keysToConvertVoidToZero.includes(key) && element === '')
-        ) {
-          //GENERALLY NOT SAFE, BUT ADDED IF
-          object[key] = '0' as T[typeof key];
-        }
-      }
-    }
-
-    return object;
   }
 
   private convertDocumentsStringToArray(documentString: string): string[] {
@@ -412,15 +441,13 @@ class OldDaeDatPDFConverter {
 
   public async run(params: {
     data: { path: string } | { buffer: Buffer };
+    validation?: ValidationOptions;
   }): Promise<OldDaeDatStatementMapped> {
     const pdfParser = new PDFParser();
 
-    let path = createId();
-    if ('buffer' in params.data) {
-      await fsPromises.writeFile(path, params.data.buffer);
-    } else {
-      path = params.data.path;
-    }
+    const cleanUp = async () => {
+      pdfParser.destroy();
+    };
 
     const loadDeclarationFromPDF = new Promise<DeclarationRawJson>(
       (resolve, reject) => {
@@ -433,7 +460,11 @@ class OldDaeDatPDFConverter {
           resolve(pdfData);
         });
 
-        pdfParser.loadPDF(path);
+        if ('buffer' in params.data) {
+          pdfParser.parseBuffer(params.data.buffer);
+        } else {
+          pdfParser.loadPDF(params.data.path);
+        }
       },
     );
 
@@ -446,7 +477,6 @@ class OldDaeDatPDFConverter {
         consignee: {},
       };
 
-      let numberOfDocuments: number = 0;
       let pagesNumber: number = 0;
       if (!!declarationRawJson && declarationRawJson.Pages) {
         const pages = declarationRawJson.Pages;
@@ -517,20 +547,21 @@ class OldDaeDatPDFConverter {
                     const lastItem =
                       daeDatEntity[mappedPosition.entity].slice(-1)[0];
 
+                    const markers = [
+                      goodObject.pageMarker1,
+                      goodObject.pageMarker2,
+                      goodObject.pageMarker3,
+                    ];
+
                     const isNewItem =
                       !lastItem ||
-                      (!!lastItem.nr1 &&
-                        lastItem.nr1 !== goodObject.nr1 &&
-                        lastItem.nr1 !== goodObject.nr2 &&
-                        lastItem.nr1 !== goodObject.nr3) ||
-                      (!!lastItem.nr2 &&
-                        lastItem.nr2 !== goodObject.nr1 &&
-                        lastItem.nr2 !== goodObject.nr2 &&
-                        lastItem.nr2 !== goodObject.nr3) ||
-                      (!!lastItem.nr3 &&
-                        lastItem.nr3 !== goodObject.nr1 &&
-                        lastItem.nr3 !== goodObject.nr2 &&
-                        lastItem.nr3 !== goodObject.nr3);
+                      [
+                        lastItem.pageMarker1,
+                        lastItem.pageMarker2,
+                        lastItem.pageMarker3,
+                      ].some(
+                        (marker) => !!marker && !markers.includes(marker),
+                      );
 
                     if (isNewItem)
                       daeDatEntity[mappedPosition.entity].push(goodObject);
@@ -550,25 +581,16 @@ class OldDaeDatPDFConverter {
         throw new Error('No Pages found in the PDF.');
       }
 
-      numberOfDocuments = daeDatEntity.goods.reduce(
-        (acc: number, good: any) => {
-          return (
-            acc + this.convertDocumentsStringToArray(good.codeIdentifier).length
-          );
-        },
-        0,
-      );
-
       const accountingStatementMapped = this.map(
         daeDatEntity,
-        numberOfDocuments,
         pagesNumber - 1,
+        params.validation,
       );
 
-      await fsPromises.unlink(path);
+      await cleanUp();
       return accountingStatementMapped;
     } catch (error) {
-      await fsPromises.unlink(path);
+      await cleanUp();
       throw new Error('parsing PDF DAE/DAT:' + error); // Returning an empty object
     }
   }
