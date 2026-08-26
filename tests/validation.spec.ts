@@ -641,16 +641,12 @@ describe('validateDaeDat', () => {
     const issues = validateDaeDat(daeDat({ transportMode: -1 }));
 
     expect(
-      issues.some(
-        (i) => i.field === 'transportMode' && i.reason === 'missing',
-      ),
+      issues.some((i) => i.field === 'transportMode' && i.reason === 'missing'),
     ).toBe(true);
   });
 
   test('a CO says nothing about the transport mode it never carries', () => {
-    const issues = validateDaeDat(
-      daeDat({ type: 'CO', transportMode: -1 }),
-    );
+    const issues = validateDaeDat(daeDat({ type: 'CO', transportMode: -1 }));
 
     expect(issues.some((i) => i.field === 'transportMode')).toBe(false);
   });

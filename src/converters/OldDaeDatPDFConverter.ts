@@ -559,9 +559,7 @@ class OldDaeDatPDFConverter {
                         lastItem.pageMarker1,
                         lastItem.pageMarker2,
                         lastItem.pageMarker3,
-                      ].some(
-                        (marker) => !!marker && !markers.includes(marker),
-                      );
+                      ].some((marker) => !!marker && !markers.includes(marker));
 
                     if (isNewItem)
                       daeDatEntity[mappedPosition.entity].push(goodObject);

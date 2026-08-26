@@ -370,8 +370,7 @@ class DaeDatPDFConverter {
       const customsRegime = `${requestedRegime}${previousRegime}`;
 
       const statisticValue = parseDecimal(statisticValueString);
-      const nr =
-        good.nr1?.trim() || good.nr2?.trim() || good.nr3?.trim() || '';
+      const nr = good.nr1?.trim() || good.nr2?.trim() || good.nr3?.trim() || '';
 
       const documents = this.convertDocumentsStringToArray(
         good.dynamicDocuments,
