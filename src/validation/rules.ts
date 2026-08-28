@@ -71,7 +71,10 @@ const H1: DocumentProfile = {
 };
 
 const H1V6: DocumentProfile = {
-  declaration: IMPORT_BASE_DECLARATION,
+  declaration: {
+    ...IMPORT_BASE_DECLARATION,
+    exchangeRate: 'optional',
+  },
   party: IMPORT_BASE_PARTY,
   good: IMPORT_BASE_GOOD,
 };

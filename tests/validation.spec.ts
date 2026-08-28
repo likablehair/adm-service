@@ -348,7 +348,17 @@ describe('validateImportDeclaration', () => {
     ).toBe(true);
   });
 
-  test('H1v6 wants both the invoice value and the exchange rate', () => {
+  test('H1 still wants the exchange rate', () => {
+    const issues = validateImportDeclaration(
+      declaration({ track: 'H1', exchangeRate: undefined }),
+    );
+
+    expect(
+      issues.some((i) => i.field === 'exchangeRate' && i.reason === 'missing'),
+    ).toBe(true);
+  });
+
+  test('H1v6 wants the invoice value but not the exchange rate', () => {
     const issues = validateImportDeclaration(
       declaration({
         track: 'H1v6',
@@ -360,9 +370,8 @@ describe('validateImportDeclaration', () => {
     expect(
       issues.some((i) => i.field === 'invoiceValue' && i.reason === 'missing'),
     ).toBe(true);
-    expect(
-      issues.some((i) => i.field === 'exchangeRate' && i.reason === 'missing'),
-    ).toBe(true);
+    // Da agosto 2026 ADM non lo stampa piu' su questo tracciato.
+    expect(issues.some((i) => i.field === 'exchangeRate')).toBe(false);
   });
 
   test('H1 wants both regimes on every article', () => {
