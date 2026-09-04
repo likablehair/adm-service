@@ -439,6 +439,8 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
+    // await fs.promises.mkdir('output', { recursive: true });
+    // await fs.promises.writeFile(`output/${params.data.xml.mrn}_prospettoSintesi.pdf`, result.buffer);
     const admDeclarationMapped: AdmDeclarationMapped = await manager.convert({
       data: { buffer: result.buffer },
     });
@@ -547,6 +549,8 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
+    // await fs.promises.mkdir('output', { recursive: true });
+    // await fs.promises.writeFile(`output/${params.data.xml.mrn}_prospettoContabile.pdf`, result.buffer);
     const accountingStatementMapped: AccountingStatementMapped =
       await manager.convert({
         data: { buffer: result.buffer, seaTaxCodes },
@@ -629,6 +633,8 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
+    // await fs.promises.mkdir('output', { recursive: true });
+    // await fs.promises.writeFile(`output/${params.data.xml.mrn}_prospettoSvincolo.pdf`, result.buffer);
 
     expect(result.exit.code).toBe('CM_000');
     expect(result.exit.message).toBe('Operazione effettuata con successo');
@@ -705,6 +711,8 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
+    // await fs.promises.mkdir('output', { recursive: true });
+    // await fs.promises.writeFile(`output/${params.data.xml.mrn}_daeDat.pdf`, result.buffer);
     const daeDatStatementMapped: DaeDatStatementMapped = await manager.convert({
       data: { buffer: result.buffer },
     });
@@ -785,6 +793,8 @@ test(
       params.data.xml.mrn,
       downloadedPDF,
     );
+    // await fs.promises.mkdir('output', { recursive: true });
+    // await fs.promises.writeFile(`output/${params.data.xml.mrn}_oldDaeDat.pdf`, result.buffer);
     const oldDaeDatStatementMapped: OldDaeDatStatementMapped =
       await manager.convert({
         data: { buffer: result.buffer },
