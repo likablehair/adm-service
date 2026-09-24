@@ -12,6 +12,12 @@ export const _cells: {
   },
   {
     entity: 'statement',
+    column: 'acceptanceDate',
+    xRange: [30.75, 30.75],
+    yRange: [5.792, 5.792],
+  },
+  {
+    entity: 'statement',
     column: 'releaseDate',
     xRange: [8.813, 8.813],
     yRange: [46.289, 46.289],

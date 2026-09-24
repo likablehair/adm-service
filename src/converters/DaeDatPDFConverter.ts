@@ -7,6 +7,7 @@ import {
   convertAsterisksToZero,
   parseDecimal,
   splitCityAndCountry,
+  toDayMonthYear,
 } from 'src/utils/values';
 import { validateDaeDat } from 'src/validation/documents';
 import { ValidationOptions } from 'src/validation/validator';
@@ -27,6 +28,7 @@ export type DaeDatStatementMapped = {
   totalPackages: number | undefined;
   totalGrossWeight: number | undefined;
   totalStatisticValue: number;
+  acceptanceDate: string;
   releaseDate: string;
   releaseCode: string;
   transitNetworkCountry: string;
@@ -49,6 +51,7 @@ export type DaeDatStatementMapped = {
 export interface DaeDatJson {
   statement: {
     type: string;
+    acceptanceDate: string;
     releaseDate: string;
     customsExitOffice: string;
     customsExportOffice: string;
@@ -208,10 +211,9 @@ class DaeDatPDFConverter {
   ): DaeDatStatementMapped {
     const type = input.statement.type?.trim() || '';
 
-    const unformattedReleaseDate = input.statement.releaseDate?.trim() || '';
-    const [year, month, day] = unformattedReleaseDate.split('/');
-    const releaseDate =
-      !!year && !!month && !!day ? `${day}/${month}/${year}` : '';
+    const acceptanceDate = toDayMonthYear(input.statement.acceptanceDate);
+
+    const releaseDate = toDayMonthYear(input.statement.releaseDate);
 
     const totalPackages = parseDecimal(input.statement.totalPackages);
 
@@ -450,6 +452,7 @@ class DaeDatPDFConverter {
     const validationIssues = validateDaeDat(
       {
         type,
+        acceptanceDate,
         releaseDate,
         releaseCode,
         customsExitOffice,
@@ -472,6 +475,7 @@ class DaeDatPDFConverter {
 
     return convertAsterisksToZero({
       type,
+      acceptanceDate,
       releaseDate,
       totalPackages,
       totalGrossWeight,

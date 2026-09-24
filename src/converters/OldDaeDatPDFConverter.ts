@@ -6,6 +6,7 @@ import {
   convertArrayToString,
   convertAsterisksToZero,
   parseDecimal,
+  toDayMonthYear,
 } from 'src/utils/values';
 import { validateDaeDat } from 'src/validation/documents';
 import { ValidationOptions } from 'src/validation/validator';
@@ -194,7 +195,7 @@ class OldDaeDatPDFConverter {
   ): OldDaeDatStatementMapped {
     const type = input.statement.type?.trim() || '';
 
-    const releaseDate = input.statement.releaseDate?.trim() || '';
+    const releaseDate = toDayMonthYear(input.statement.releaseDate);
 
     const totalPackages = parseDecimal(
       input.statement.totalPackages1?.trim() ||

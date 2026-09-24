@@ -145,6 +145,7 @@ export function validateImportDeclaration(
 
 export type DaeDatToValidate = {
   type: string;
+  acceptanceDate?: string;
   releaseDate: string;
   releaseCode: string;
   customsExitOffice: string;
@@ -191,6 +192,7 @@ export function validateDaeDat(
       scope: 'declaration',
       values: {
         type: statement.type,
+        acceptanceDate: statement.acceptanceDate,
         releaseDate: statement.releaseDate,
         releaseCode: statement.releaseCode,
         customsExitOffice: statement.customsExitOffice,

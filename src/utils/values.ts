@@ -49,6 +49,18 @@ export function parseDecimal(value: string | undefined): number | undefined {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
+export function toDayMonthYear(value: string | undefined): string {
+  const trimmed = value?.trim() ?? '';
+
+  const yearFirst = trimmed.match(/^(\d{4})[/-](\d{2})[/-](\d{2})/);
+  if (yearFirst) return `${yearFirst[3]}/${yearFirst[2]}/${yearFirst[1]}`;
+
+  const dayFirst = trimmed.match(/^(\d{2})[/-](\d{2})[/-](\d{4})/);
+  if (dayFirst) return `${dayFirst[1]}/${dayFirst[2]}/${dayFirst[3]}`;
+
+  return trimmed;
+}
+
 export function columnsInReadingOrder(
   cells: {
     entity?: string;

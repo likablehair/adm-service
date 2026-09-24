@@ -177,7 +177,8 @@ export function getImportProfile(track: string): DocumentProfile {
 const DAE_DAT_BASE: DocumentProfile = {
   declaration: {
     type: 'required',
-    releaseDate: 'required',
+    acceptanceDate: 'required',
+    releaseDate: 'optional',
     releaseCode: 'required',
     customsExitOffice: 'required',
     customsExportOffice: 'optional',
@@ -213,6 +214,8 @@ export const OLD_DAE_DAT_PROFILE: DocumentProfile = {
   ...DAE_DAT_BASE,
   declaration: {
     ...DAE_DAT_BASE.declaration,
+    acceptanceDate: 'absent',
+    releaseDate: 'required',
     customsExportOffice: 'optional',
   },
 };

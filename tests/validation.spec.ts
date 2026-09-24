@@ -12,6 +12,7 @@ import {
   convertAsterisksToZero,
   parseDecimal,
   splitCityAndCountry,
+  toDayMonthYear,
 } from 'src/utils/values';
 import { isWeighedNet, resolveDeclaredWeight } from 'src/validation/rules';
 
@@ -608,6 +609,7 @@ describe('validateDaeDat', () => {
   function daeDat(overrides: Partial<DaeDatToValidate> = {}): DaeDatToValidate {
     return {
       type: 'DAE',
+      acceptanceDate: '11/03/2024',
       releaseDate: '13/03/2024',
       releaseCode: 'A',
       customsExitOffice: 'ITQTC04',
@@ -644,6 +646,32 @@ describe('validateDaeDat', () => {
 
   test('a complete DAE reports nothing', () => {
     expect(validateDaeDat(daeDat())).toEqual([]);
+  });
+
+  test('a DAE with no release date is still complete', () => {
+    expect(validateDaeDat(daeDat({ releaseDate: '' }))).toEqual([]);
+  });
+
+  test('the old layout needs the release date and no acceptance date', () => {
+    const issues = validateDaeDat(
+      daeDat({ acceptanceDate: undefined, releaseDate: '' }),
+      { layout: 'old' },
+    );
+
+    expect(
+      issues.some((i) => i.field === 'releaseDate' && i.reason === 'missing'),
+    ).toBe(true);
+    expect(issues.some((i) => i.field === 'acceptanceDate')).toBe(false);
+  });
+
+  test('a DAE acceptance date not in dd/MM/yyyy is invalid', () => {
+    const issues = validateDaeDat(daeDat({ acceptanceDate: '2024/03/11' }));
+
+    expect(
+      issues.some(
+        (i) => i.field === 'acceptanceDate' && i.reason === 'invalid',
+      ),
+    ).toBe(true);
   });
 
   test('an EX with no transport mode reports it', () => {
@@ -839,11 +867,13 @@ describe('validateDaeDat', () => {
     expect(issues.filter((i) => i.field === 'goods[0].documents')).toEqual([]);
   });
 
-  test('reports an empty release date instead of a broken one', () => {
-    const issues = validateDaeDat(daeDat({ releaseDate: '' }));
+  test('reports an empty acceptance date instead of a broken one', () => {
+    const issues = validateDaeDat(daeDat({ acceptanceDate: '' }));
 
     expect(
-      issues.some((i) => i.field === 'releaseDate' && i.reason === 'missing'),
+      issues.some(
+        (i) => i.field === 'acceptanceDate' && i.reason === 'missing',
+      ),
     ).toBe(true);
   });
 });
@@ -921,5 +951,26 @@ describe('splitCityAndCountry', () => {
   test('says nothing about an empty cell', () => {
     expect(splitCityAndCountry('')).toEqual({ city: '', country: '' });
     expect(splitCityAndCountry(undefined)).toEqual({ city: '', country: '' });
+  });
+});
+
+describe('toDayMonthYear', () => {
+  test('turns the year-first date of the DAE into dd/MM/yyyy', () => {
+    expect(toDayMonthYear('2026/09/04')).toBe('04/09/2026');
+    expect(toDayMonthYear(' 2026-09-04 ')).toBe('04/09/2026');
+  });
+
+  test('keeps a date that is already dd/MM/yyyy', () => {
+    expect(toDayMonthYear('04/09/2026')).toBe('04/09/2026');
+  });
+
+  test('ignores the time after the date', () => {
+    expect(toDayMonthYear('2026/09/04 10:17:13')).toBe('04/09/2026');
+  });
+
+  test('hands back what it cannot read, so validation can flag it', () => {
+    expect(toDayMonthYear('Dispensa')).toBe('Dispensa');
+    expect(toDayMonthYear('')).toBe('');
+    expect(toDayMonthYear(undefined)).toBe('');
   });
 });
