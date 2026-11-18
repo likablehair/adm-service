@@ -177,7 +177,7 @@ export default class AdmRobotProcessAutomationManager {
       }
 
       localError.message = `getMRNList: ${localError.message}`;
-      throw error;
+      throw localError;
     }
   }
 
@@ -195,10 +195,11 @@ export default class AdmRobotProcessAutomationManager {
         retryMs: 500,
       });
 
-      await params.page.type('input[name="IDToken1"]', params.username);
-      await params.page.type('input[name="IDToken2"]', params.password);
+      await params.page.type('#tab-1 input[name="IDToken1"]', params.username);
+      await params.page.type('#tab-1 input[name="IDToken2"]', params.password);
 
-      const accessButtonXPath = 'xpath///form//button';
+      const accessButtonXPath =
+        'xpath///*[@id="tab-1"]//button[normalize-space()="Accedi"]';
 
       await params.page.waitForSelector(accessButtonXPath);
 
@@ -214,7 +215,7 @@ export default class AdmRobotProcessAutomationManager {
         retryMs: 500,
       });
 
-      const cookies = await params.page.cookies();
+      const cookies = await params.page.browser().cookies();
 
       return cookies;
     } catch (error: unknown) {
@@ -242,7 +243,7 @@ export default class AdmRobotProcessAutomationManager {
       await params.page.goto(url);
       const dropdownLabelDichiaranteCSS =
         '#formDel label.ui-selectonemenu-label';
-      const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante}[role="option"]`;
+      const dropdownOptionDichiaranteXPath = `aria/${params.dichiarante.trim()}[role="option"]`;
       const buttonConfirmXPath = 'xpath///*[@id="formDel:idGoto"]/span';
 
       await params.page.waitForSelector(dropdownLabelDichiaranteCSS, {

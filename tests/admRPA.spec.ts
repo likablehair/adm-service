@@ -24,7 +24,7 @@ test('MRN List', { timeout: 200000 }, async () => {
   const admRPA = new AdmRobotProcessAutomationManager();
   await admRPA.getMRNList({
     dichiarante,
-    dateFrom: new Date('2024-11-29'),
+    dateFrom: new Date('2026-11-16'),
     security: {
       username: admUsername,
       password: admPassword,
@@ -34,7 +34,7 @@ test('MRN List', { timeout: 200000 }, async () => {
 
   await admRPA.getMRNList({
     dichiarante,
-    dateFrom: new Date('2024-11-29'),
+    dateFrom: new Date('2026-11-16'),
     security: {
       username: admUsername,
       password: admPassword,
